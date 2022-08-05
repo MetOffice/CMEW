@@ -1,0 +1,27 @@
+#!jinja2
+[scheduler]
+    UTC mode = True
+
+[task parameters]
+    metrics = radiation_budget
+
+[scheduling]
+    [[graph]]
+        R1 = configure => process<metrics>
+
+[runtime]
+    [[root]]
+        script = rose task-run
+        env-script = "eval $(rose task-env)"
+
+    [[configure]]
+        platform = localhost
+        [[[environment]]]
+            ROSE_TASK_APP = configure
+
+    [[process<metrics>]]
+        inherit = None, COMPUTE
+        [[[environment]]]
+            ROSE_TASK_APP = process
+
+{% include 'site/' ~ SITE ~ '.cylc' %}

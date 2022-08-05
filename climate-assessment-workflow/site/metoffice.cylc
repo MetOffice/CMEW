@@ -1,0 +1,6 @@
+[runtime]
+    [[COMPUTE]]
+        platform = spice
+        [[[directives]]]
+            --wckey = CAW
+            --export = None
