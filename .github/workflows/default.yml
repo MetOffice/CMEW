@@ -29,7 +29,7 @@ jobs:
       - name: Create environment to build documentation
         run: |
           conda update conda
-          conda create --name caw sphinx=4.4.0 sphinxsphinx_rtd_theme=1.0.0
+          conda create --name caw sphinx=4.4.0 sphinx_rtd_theme=1.0.0
           eval "$(conda shell.bash hook)"
           conda activate caw
 
