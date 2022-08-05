@@ -3,14 +3,18 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to the Climate Assessment Workflow (CAW)'s documentation!
-=================================================================
+Welcome to the Climate Assessment Workflow's documentation!
+===========================================================
 
 .. toctree::
    :maxdepth: 1
    :caption: Contents
 
-
+   about
+   assessment_areas
+   user_guide/index.rst
+   support
+   glossary
 
 Indices and tables
 ------------------
