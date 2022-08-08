@@ -29,17 +29,29 @@ jobs:
       - name: Create environment
         run: |
           conda update conda
-          conda create --name caw --channel conda-forge cylc-flow=8 cylc-rose metomi-rose=2 sphinx=4.4.0 sphinx_rtd_theme=1.0.0
+          conda create --name caw --file .github/workflows/caw.lock
           eval "$(conda shell.bash hook)"
           conda activate caw
 
-      - name: Validate code
+      - name: Validate Cylc workflow
         run: |
           eval "$(conda shell.bash hook)"
           conda activate caw
           cd climate-assessment-workflow
           cylc validate . -O metoffice
+
+      - name: Run Cylc configuration linter
+        run: |
+          eval "$(conda shell.bash hook)"
+          conda activate caw
+          cd climate-assessment-workflow
           cylc lint
+
+      - name: Validate Rose suite configuration metadata
+        run: |
+          eval "$(conda shell.bash hook)"
+          conda activate caw
+          cd climate-assessment-workflow
           rose metadata-check -C meta/
 
       - name: Build documentation
