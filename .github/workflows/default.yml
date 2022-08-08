@@ -26,12 +26,21 @@ jobs:
       # can access it
       - uses: actions/checkout@v2
 
-      - name: Create environment to build documentation
+      - name: Create environment
         run: |
           conda update conda
-          conda create --name caw --channel conda-forge sphinx=4.4.0 sphinx_rtd_theme=1.0.0
+          conda create --name caw --channel conda-forge cylc-flow=8 cylc-rose metomi-rose=2 sphinx=4.4.0 sphinx_rtd_theme=1.0.0
           eval "$(conda shell.bash hook)"
           conda activate caw
+
+      - name: Validate code
+        run: |
+          eval "$(conda shell.bash hook)"
+          conda activate caw
+          cd climate-assessment-workflow
+          cylc validate . -O metoffice
+          cylc lint
+          rose metadata-check -C meta/
 
       - name: Build documentation
         run: |
