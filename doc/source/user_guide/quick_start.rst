@@ -14,13 +14,8 @@ Quick Start
     cd climate-assessment-workflow/climate-assessment-workflow
     rose edit
 
-* Validate the |CAW| for the appropriate site; for example, for the Met
-  Office::
-
-    cylc validate . -O metoffice
-
-* Run the |CAW|, where ``<run-name>`` is a unique run name relevant to the
-  current configuration::
+* Run the |CAW| at the Met Office, where ``<run-name>`` is a unique run name
+  relevant to the current configuration::
 
     cylc install --run-name=<run-name> -O metoffice
     cylc play climate-assessment-workflow/<run-name>
