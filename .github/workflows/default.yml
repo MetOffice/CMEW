@@ -47,20 +47,23 @@ jobs:
           cd climate-assessment-workflow
           cylc lint
 
-      - name: Validate Rose suite configuration metadata
-        run: |
-          eval "$(conda shell.bash hook)"
-          conda activate caw
-          cd climate-assessment-workflow
-          rose metadata-check -C meta/
-
       - name: Validate format of Rose suite configuration files
         run: |
           eval "$(conda shell.bash hook)"
           conda activate caw
           cd climate-assessment-workflow
           output="$(rose config-dump)"
-          if [[ $output ]]; then exit 1; else exit 0; fi
+          msg="Run 'rose config-dump' to re-dump the Rose configuration files"
+          msg="${msg} in the common format, then commit the changes."
+          # The '-z' option returns true if 'output' is empty.
+          if [[ -z ${output} ]]; then exit 0; else echo ${msg} && exit 1; fi
+
+      - name: Validate Rose suite configuration metadata
+        run: |
+          eval "$(conda shell.bash hook)"
+          conda activate caw
+          cd climate-assessment-workflow
+          rose metadata-check -C meta/
 
       - name: Build documentation
         run: |
