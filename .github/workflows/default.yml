@@ -56,7 +56,7 @@ jobs:
           msg="Run 'rose config-dump' to re-dump the Rose configuration files"
           msg="${msg} in the common format, then commit the changes."
           # The '-z' option returns true if 'output' is empty.
-          if [[ -z ${output} ]]; then exit 0; else echo ${msg} && exit 1; fi
+          if [[ -z "${output}" ]]; then exit 0; else echo "${msg}" && exit 1; fi
 
       - name: Validate Rose suite configuration metadata
         run: |
