@@ -1,0 +1,5 @@
+[runtime]
+    [[COMPUTE]]
+        platform = spice
+        [[[directives]]]
+            --wckey = CAW
