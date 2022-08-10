@@ -7,12 +7,19 @@
 
 [scheduling]
     [[graph]]
-        R1 = configure => process<metrics>
+        R1 = install_cold => configure => process<metrics>
 
 [runtime]
     [[root]]
         script = rose task-run
         env-script = "eval $(rose task-env)"
+        [[[environment]]]
+            MODULE_NAME = {{ MODULE_NAME }}
+
+    [[install_cold]]
+        platform = localhost
+        [[[environment]]]
+            SITE = {{ SITE }}
 
     [[configure]]
         platform = localhost
