@@ -1,6 +1,6 @@
 #!/bin/bash -l
 #
-# Usage python_env COMMAND
+# Usage metoffice-env COMMAND
 #
 # ENVIRONMENT
 #   MODULE_NAME         The name of the module to load
@@ -9,7 +9,7 @@
 #   QUIET_MODE          Don't print confirmation messages
 #
 # OPTIONS
-#   COMMAND         The command to execute with options
+#   COMMAND             The command to execute with options
 set -eu
 
 module_count(){
@@ -32,8 +32,8 @@ export PYTHONNOUSERSITE=True
 
 safe_load "${MODULE_NAME}"
 
-# If it has been set then prepend PYTHONPATH_PREPEND to PYTHONPATH to extend the
-# python environment.
+# If PYTHONPATH_PREPEN has been set, prepend it to PYTHONPATH to extend the
+# Python environment.
 if [[ ! -z ${PYTHONPATH_PREPEND:-} ]]; then
     echo "[INFO] Prepending the following to PYTHONPATH: ${PYTHONPATH_PREPEND}"
     export PYTHONPATH=${PYTHONPATH_PREPEND}:${PYTHONPATH:-}
