@@ -1,0 +1,89 @@
+#!/usr/bin/env python
+"""
+Code used to generate the required user configuration file for
+ESMValTool.
+"""
+import os
+
+import esmvalcore.experimental as esmvaltool
+import yaml
+
+USER_CONFIG_PATH = os.environ["USER_CONFIG_PATH"]
+
+
+def main():
+    """
+    Write the updated configuration values to the file defined by
+    ``USER_CONFIG_PATH``.
+    """
+    # Get the default configuration values from ESMValTool.
+    config_values = dict(esmvaltool.CFG)
+
+    # Get the configuration values defined in the environrment for the
+    # ``configure`` task.
+    config_values_from_task_env = get_config_values_from_task_env()
+
+    # Update the default configuration values.
+    config_values.update(config_values_from_task_env)
+
+    # Write the updated configuration values to the file defined by
+    # 'USER_CONFIG_PATH'.
+    write_yaml(USER_CONFIG_PATH, config_values)
+
+
+def get_config_values_from_task_env():
+    """
+    Return the configuration values defined in the environrment for the
+    ``configure`` task.
+    """
+    config_values_from_task_env = {
+        "auxiliary_data_dir": "",
+        "config_file": USER_CONFIG_PATH,
+        "download_dir": "",
+        "drs": {
+            "ana4mips": os.environ["DRS_ANA4MIPS"],
+            "CMIP3": os.environ["DRS_CMIP3"],
+            "CMIP5": os.environ["DRS_CMIP5"],
+            "CMIP6": os.environ["DRS_CMIP6"],
+            "CORDEX": os.environ["DRS_CORDEX"],
+            "native6": os.environ["DRS_NATIVE6"],
+            "OBS": os.environ["DRS_OBS"],
+            "obs4MIPs": os.environ["DRS_OBS4MIPS"],
+            "OBS6": os.environ["DRS_OBS6"],
+        },
+        "extra_facets_dir": [],
+        "output_dir": os.environ["CYLC_WORKFLOW_SHARE_DIR"],
+        "rootpath": {
+            "ana4mips": os.environ["ROOTPATH_ANA4MIPS"],
+            "CMIP3": os.environ["ROOTPATH_CMIP3"],
+            "CMIP5": os.environ["ROOTPATH_CMIP5"],
+            "CMIP6": os.environ["ROOTPATH_CMIP6"],
+            "CORDEX": os.environ["ROOTPATH_CORDEX"],
+            "native6": os.environ["ROOTPATH_NATIVE6"],
+            "OBS": os.environ["ROOTPATH_OBS"],
+            "obs4MIPs": os.environ["ROOTPATH_OBS4MIPS"],
+            "OBS6": os.environ["ROOTPATH_OBS6"],
+            "RAWOBS": os.environ["ROOTPATH_RAWOBS"],
+        },
+    }
+    return config_values_from_task_env
+
+
+def write_yaml(file_path, contents):
+    """
+    Write the contents specified by ``contents`` to the YAML
+    file specified by ``file_path``.
+
+    Parameters
+    ----------
+    file_path: string
+        The full path to the YAML file to write the contents to.
+    contents: dictionary
+        The contents to write to the YAML file.
+    """
+    with open(file_path, "w") as file_handle:
+        yaml.dump(contents, file_handle, default_flow_style=False)
+
+
+if __name__ == "__main__":
+    main()
