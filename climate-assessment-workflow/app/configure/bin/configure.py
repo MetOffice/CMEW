@@ -32,7 +32,7 @@ def main():
     # Get the default configuration values from ESMValTool.
     config_values = dict(esmvaltool.CFG)
 
-    # Get the configuration values defined in the environrment for the
+    # Get the configuration values defined in the environment for the
     # ``configure`` task.
     config_values_from_task_env = get_config_values_from_task_env()
 
@@ -46,9 +46,17 @@ def main():
 
 def get_config_values_from_task_env():
     """
-    Return the configuration values defined in the environrment for the
+    Return the configuration values defined in the environment for the
     ``configure`` task.
     """
+    # Note that 'auxiliary_data_dir', 'download_dir' and
+    # 'extra_facets_dir' are set to empty values and cannot currently be
+    # configured. However, 'download_dir' is used only when using the
+    # automatic download feature via ESMValTool (which we do not intend
+    # to use here) and 'extra_facets_dir' is not available in the
+    # default configuration file provided by ESMValTool v2.6.0.
+    # 'auxiliary_data_dir' is used by some recipes to look for
+    # additional datasets, so may need to be configured in the future.
     config_values_from_task_env = {
         "auxiliary_data_dir": "",
         "config_file": USER_CONFIG_PATH,
