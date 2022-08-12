@@ -1,11 +1,24 @@
 #!/usr/bin/env python
 """
-Code used to generate the required user configuration file for
-ESMValTool.
+Generate the required user configuration file for ESMValTool.
 """
 import os
+import warnings
 
-import esmvalcore.experimental as esmvaltool
+with warnings.catch_warnings():
+    warnings.filterwarnings(
+        "ignore",
+        message=(
+            "\n  Thank you for trying out the new ESMValCore API."
+            "\n  Note that this API is experimental and may be subject to "
+            "change."
+            "\n  More info: "
+            "https://github.com/ESMValGroup/ESMValCore/issues/498"
+        ),
+        category=UserWarning,
+        module="esmvalcore.experimental._warnings",
+    )
+    import esmvalcore.experimental as esmvaltool
 import yaml
 
 USER_CONFIG_PATH = os.environ["USER_CONFIG_PATH"]
