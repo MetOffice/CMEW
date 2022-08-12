@@ -9,11 +9,9 @@ with warnings.catch_warnings():
     warnings.filterwarnings(
         "ignore",
         message=(
-            "\n  Thank you for trying out the new ESMValCore API."
-            "\n  Note that this API is experimental and may be subject to "
-            "change."
-            "\n  More info: "
-            "https://github.com/ESMValGroup/ESMValCore/issues/498"
+            "\n  Thank you for trying out the new ESMValCore API.\n  Note "
+            "that this API is experimental and may be subject to change.\n  "
+            "More info: https://github.com/ESMValGroup/ESMValCore/issues/498"
         ),
         category=UserWarning,
         module="esmvalcore.experimental._warnings",
@@ -29,7 +27,9 @@ def main():
     Write the updated configuration values to the file defined by
     ``USER_CONFIG_PATH``.
     """
-    # Get the default configuration values from ESMValTool.
+    # Get the default configuration values from ESMValTool. A dictionary is
+    # needed here to avoid the config object from converting paths to PosixPath
+    # objects, which causes issues when writing the YAML file.
     config_values = dict(esmvaltool.CFG)
 
     # Get the configuration values defined in the environment for the
