@@ -3,3 +3,6 @@
         platform = spice
         [[[directives]]]
             --wckey = CAW
+            --time = 2
+            --mem = 3G
+            --ntasks = 4

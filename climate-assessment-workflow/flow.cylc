@@ -3,11 +3,11 @@
     UTC mode = True
 
 [task parameters]
-    metrics = radiation_budget
+    metric = radiation_budget
 
 [scheduling]
     [[graph]]
-        R1 = install_cold => configure => process<metrics>
+        R1 = install_cold => configure => process<metric>
 
 [runtime]
     [[root]]
@@ -17,6 +17,7 @@
             MODULE_NAME = {{ MODULE_NAME }}
             USER_CONFIG_DIR = ${CYLC_WORKFLOW_RUN_DIR}/etc
             USER_CONFIG_PATH = ${USER_CONFIG_DIR}/config-user.yml
+            MAX_PARALLEL_TASKS = {{ MAX_PARALLEL_TASKS }}
 
     [[install_cold]]
         platform = localhost
@@ -48,9 +49,10 @@
             ROOTPATH_OBS4MIPS = {{ ROOTPATH_OBS4MIPS }}
             ROOTPATH_RAWOBS = {{ ROOTPATH_RAWOBS }}
 
-    [[process<metrics>]]
+    [[process<metric>]]
         inherit = None, COMPUTE
         [[[environment]]]
             ROSE_TASK_APP = process
+            RECIPE_NAME = "recipe_${CYLC_TASK_PARAM_metric}.yml"
 
 {% include 'site/' ~ SITE ~ '.cylc' %}
