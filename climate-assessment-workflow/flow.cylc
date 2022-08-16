@@ -53,6 +53,9 @@
         inherit = None, COMPUTE
         [[[environment]]]
             ROSE_TASK_APP = process
+            ROSE_APP_OPT_CONF_KEYS = ${CYLC_TASK_PARAM_metric}
+            RECIPE_TIME = {{ RECIPE_TIME }}
+            RECIPE_MEM = {{ RECIPE_MEM }}
             RECIPE_NAME = "recipe_${CYLC_TASK_PARAM_metric}.yml"
 
 {% include 'site/' ~ SITE ~ '.cylc' %}
