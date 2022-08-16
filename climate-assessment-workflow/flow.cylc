@@ -54,8 +54,8 @@
         [[[environment]]]
             ROSE_TASK_APP = process
             ROSE_APP_OPT_CONF_KEYS = ${CYLC_TASK_PARAM_metric}
-            RECIPE_TIME = {{ RECIPE_TIME }}
-            RECIPE_MEM = {{ RECIPE_MEM }}
+            RECIPE_MEMORY = {{ RECIPE_MEMORY }}
             RECIPE_NAME = "recipe_${CYLC_TASK_PARAM_metric}.yml"
+            RECIPE_TIME = {{ RECIPE_TIME }}
 
 {% include 'site/' ~ SITE ~ '.cylc' %}
