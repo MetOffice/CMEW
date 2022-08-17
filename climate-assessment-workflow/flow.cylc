@@ -17,7 +17,6 @@
             MODULE_NAME = {{ MODULE_NAME }}
             USER_CONFIG_DIR = ${CYLC_WORKFLOW_RUN_DIR}/etc
             USER_CONFIG_PATH = ${USER_CONFIG_DIR}/config-user.yml
-            MAX_PARALLEL_TASKS = {{ MAX_PARALLEL_TASKS }}
 
     [[install_cold]]
         platform = localhost
@@ -38,6 +37,7 @@
             DRS_ANA4MIPS = {{ DRS_ANA4MIPS }}
             DRS_NATIVE6 = {{ DRS_NATIVE6 }}
             DRS_OBS4MIPS = {{ DRS_OBS4MIPS }}
+            MAX_PARALLEL_TASKS = {{ MAX_PARALLEL_TASKS }}
             ROOTPATH_CMIP3 = {{ ROOTPATH_CMIP3 }}
             ROOTPATH_CMIP5 = {{ ROOTPATH_CMIP5 }}
             ROOTPATH_CMIP6 = {{ ROOTPATH_CMIP6 }}
@@ -53,9 +53,7 @@
         inherit = None, COMPUTE
         [[[environment]]]
             ROSE_TASK_APP = process
-            ROSE_APP_OPT_CONF_KEYS = ${CYLC_TASK_PARAM_metric}
-            RECIPE_MEMORY = {{ RECIPE_MEMORY }}
+            ROSE_SUITE_OPT_CONF_KEYS = ${CYLC_TASK_PARAM_metric}
             RECIPE_NAME = "recipe_${CYLC_TASK_PARAM_metric}.yml"
-            RECIPE_TIME = {{ RECIPE_TIME }}
 
 {% include 'site/' ~ SITE ~ '.cylc' %}

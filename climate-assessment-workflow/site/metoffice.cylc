@@ -1,6 +1,8 @@
+#!jinja2
 [runtime]
     [[COMPUTE]]
         platform = spice
         [[[directives]]]
             --wckey = CAW
-            --ntasks = 4
+            --time = {{ RECIPE_TIME }}
+            --ntasks = {{ MAX_PARALLEL_TASKS }}
