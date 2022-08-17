@@ -4,5 +4,9 @@
         platform = spice
         [[[directives]]]
             --wckey = CAW
-            --time = {{ RECIPE_TIME }}
             --ntasks = {{ MAX_PARALLEL_TASKS }}
+
+    [[process<metric=radiation_budget>]]
+        [[[directives]]]
+            --time = 2
+            --mem = 3G
