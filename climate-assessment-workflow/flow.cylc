@@ -3,11 +3,11 @@
     UTC mode = True
 
 [task parameters]
-    metrics = radiation_budget
+    metric = radiation_budget
 
 [scheduling]
     [[graph]]
-        R1 = install_cold => configure => process<metrics>
+        R1 = install_cold => configure => process<metric>
 
 [runtime]
     [[root]]
@@ -37,6 +37,7 @@
             DRS_ANA4MIPS = {{ DRS_ANA4MIPS }}
             DRS_NATIVE6 = {{ DRS_NATIVE6 }}
             DRS_OBS4MIPS = {{ DRS_OBS4MIPS }}
+            MAX_PARALLEL_TASKS = {{ MAX_PARALLEL_TASKS }}
             ROOTPATH_CMIP3 = {{ ROOTPATH_CMIP3 }}
             ROOTPATH_CMIP5 = {{ ROOTPATH_CMIP5 }}
             ROOTPATH_CMIP6 = {{ ROOTPATH_CMIP6 }}
@@ -48,9 +49,10 @@
             ROOTPATH_OBS4MIPS = {{ ROOTPATH_OBS4MIPS }}
             ROOTPATH_RAWOBS = {{ ROOTPATH_RAWOBS }}
 
-    [[process<metrics>]]
+    [[process<metric>]]
         inherit = None, COMPUTE
         [[[environment]]]
             ROSE_TASK_APP = process
+            RECIPE_NAME = "recipe_${CYLC_TASK_PARAM_metric}.yml"
 
 {% include 'site/' ~ SITE ~ '.cylc' %}

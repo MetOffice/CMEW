@@ -27,6 +27,14 @@ safe_load(){
     fi
 }
 
+# Must be run before importing numpy, see
+# https://www-avd/sci/dask_best_practice/numpy-threads.html.
+export OMP_NUM_THREADS=1
+export OPENBLAS_NUM_THREADS=1
+export MKL_NUM_THREADS=1
+export VECLIB_MAXIMUM_THREADS=1
+export NUMEXPR_NUM_THREADS=1
+
 # Ensure '~/.local' isn't added to 'sys.path'.
 export PYTHONNOUSERSITE=True
 

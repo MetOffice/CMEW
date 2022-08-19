@@ -8,3 +8,4 @@ User Guide
    :maxdepth: 1
 
    quick_start
+   workflow
