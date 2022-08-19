@@ -11,9 +11,6 @@ Glossary
    CAW
      Climate Assessment Workflow
 
-   CIAO
-     Climate Model Inputs and Outputs
-
    CMIP
      Coupled Model Intercomparison Project, see the `CMIP Documentation`_.
 
@@ -28,6 +25,9 @@ Glossary
      ESMValTool is a community diagnostic and performance metrics tool for
      routine evaluation of |ESMs| in |CMIP|, see the
      `ESMValTool Documentation`_.
+
+   MIAO
+     Model Inputs And Outputs
 
    Rose
      Rose is a toolkit for writing, editing and running application

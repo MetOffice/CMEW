@@ -4,12 +4,12 @@
 .. capitalised glossary terms.
 
 .. |CAW| replace:: :term:`CAW`
-.. |CIAO| replace:: :term:`CIAO`
 .. |CMIP| replace:: :term:`CMIP`
 .. |Cylc| replace:: :term:`Cylc`
 .. |ESM| replace:: :term:`ESM`
 .. |ESMs| replace:: :term:`ESMs <ESM>`
 .. |ESMValTool| replace:: :term:`ESMValTool`
+.. |MIAO| replace:: :term:`MIAO`
 .. |Rose| replace:: :term:`Rose`
 
 .. Links
