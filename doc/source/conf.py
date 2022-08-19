@@ -20,6 +20,7 @@
 project = 'Climate Assessment Workflow (CAW)'
 copyright = 'Crown Copyright 2022, the Met Office'
 author = 'Emma Hogan'
+version = "0.1.0"
 
 
 # -- General configuration ---------------------------------------------------
