@@ -78,6 +78,3 @@ jobs:
           conda activate caw
           cd doc
           make linkcheck
-          # The '-s' option returns true if the file is not empty.
-          output_file="build/linkcheck/output.txt"
-          if [[ -s "${output_file}" ]]; then exit 1; else exit 0; fi
