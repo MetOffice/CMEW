@@ -39,11 +39,6 @@ templates_path = ['_templates']
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = []
 
-# Ignore the following URLs when doing a linkcheck build.
-linkcheck_ignore = [
-    r'http://fcm1/cylc-review'  # Internal to Met Office.
-]
-
 # -- Options for HTML output -------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
