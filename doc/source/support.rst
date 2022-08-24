@@ -6,5 +6,5 @@ Support
 
 .. include:: common.txt
 
-Please contact the |CIAO| team at ciao@metoffice.gov.uk to request support
+Please contact the |MIAO| team at ciao@metoffice.gov.uk to request support
 related to the |CAW|.

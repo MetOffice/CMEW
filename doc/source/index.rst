@@ -15,8 +15,3 @@ Welcome to the Climate Assessment Workflow's documentation!
    user_guide/index.rst
    support
    glossary
-
-Indices and tables
-------------------
-
-* :ref:`genindex`

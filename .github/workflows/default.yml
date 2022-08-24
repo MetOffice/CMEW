@@ -1,5 +1,5 @@
-# This workflow creates the required Conda environment, then builds the
-# documentation.
+# This workflow creates the required Conda environment, performs various
+# validation steps for Cylc and Rose, and builds and checks the documentation.
 name: default
 
 # Controls when the action will run
@@ -71,3 +71,10 @@ jobs:
           conda activate caw
           cd doc
           make html
+
+      - name: Check for broken links in the documentation
+        run: |
+          eval "$(conda shell.bash hook)"
+          conda activate caw
+          cd doc
+          make linkcheck

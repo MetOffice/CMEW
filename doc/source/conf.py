@@ -20,6 +20,7 @@
 project = 'Climate Assessment Workflow (CAW)'
 copyright = 'Crown Copyright 2022, the Met Office'
 author = 'Emma Hogan'
+version = "0.1.0"
 
 
 # -- General configuration ---------------------------------------------------
@@ -37,7 +38,6 @@ templates_path = ['_templates']
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = []
-
 
 # -- Options for HTML output -------------------------------------------------
 

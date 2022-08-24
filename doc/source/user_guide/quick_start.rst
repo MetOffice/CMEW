@@ -21,4 +21,4 @@ Quick Start
     cylc play climate-assessment-workflow/<run-name>
 
 * Browse the logs using `Cylc Review`_, a web service for browsing logs via an
-  `HTTP interface`_.
+  HTTP interface.

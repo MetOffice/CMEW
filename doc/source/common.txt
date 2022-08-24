@@ -4,12 +4,12 @@
 .. capitalised glossary terms.
 
 .. |CAW| replace:: :term:`CAW`
-.. |CIAO| replace:: :term:`CIAO`
 .. |CMIP| replace:: :term:`CMIP`
 .. |Cylc| replace:: :term:`Cylc`
 .. |ESM| replace:: :term:`ESM`
 .. |ESMs| replace:: :term:`ESMs <ESM>`
 .. |ESMValTool| replace:: :term:`ESMValTool`
+.. |MIAO| replace:: :term:`MIAO`
 .. |Rose| replace:: :term:`Rose`
 
 .. Links
@@ -18,6 +18,5 @@
 .. _Cylc Documentation: https://cylc.github.io/cylc-doc/stable/html/index.html
 .. _Cylc Review: https://cylc.github.io/cylc-doc/7.9.3/html/tutorial.html#viewing-suite-logs-in-a-web-browser-cylc-review
 .. _ESMValTool Documentation: https://www.esmvaltool.org/
-.. _HTTP interface: http://fcm1/cylc-review
 .. _Radiation budget: https://docs.esmvaltool.org/en/latest/recipes/recipe_radiation_budget.html
 .. _Rose Documentation: https://metomi.github.io/rose/doc/html/index.html
