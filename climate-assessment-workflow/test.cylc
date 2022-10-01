@@ -1,0 +1,17 @@
+#!jinja2
+[runtime]
+    [[compare<metric>]]
+        platform = localhost
+        [[[environment]]]
+            ROSE_TASK_APP = compare
+            METRIC = ${CYLC_TASK_PARAM_metric}
+
+    [[compare<metric=radiation_budget>]]
+        [[[environment]]]
+            METRIC_DIR = "recipe_${METRIC}"
+            METRIC_FILES = """
+                work/seasonal_radiation_budget/radiation_budget/HadGEM3-GC31-LL_metrics.csv
+                work/seasonal_radiation_budget/radiation_budget/UKESM1-0-LL_metrics.csv
+                plots/single_value_radiation_budget/radiation_budget/png/HadGEM3-GC31-LL.png
+                plots/single_value_radiation_budget/radiation_budget/png/UKESM1-0-LL.png
+            """
