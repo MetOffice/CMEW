@@ -1,4 +1,5 @@
 #!jinja2
+# test.cylc
 [runtime]
     [[compare<metric>]]
         platform = localhost

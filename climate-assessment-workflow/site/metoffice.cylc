@@ -1,4 +1,5 @@
 #!jinja2
+# metoffice.cylc
 [runtime]
     [[COMPUTE]]
         platform = spice

@@ -1,4 +1,5 @@
 #!jinja2
+# flow.cylc
 [scheduler]
     UTC mode = True
 
