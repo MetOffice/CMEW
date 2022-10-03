@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Usage compare.sh
+# USAGE compare.sh
 #
 # ENVIRONMENT
 #   OUTPUT_DIR    The full path to the output directory for the 'process' task
