@@ -1,0 +1,8 @@
+#!jinja2
+# test.cylc
+[runtime]
+    [[compare<metric>]]
+        platform = localhost
+        [[[environment]]]
+            ROSE_TASK_APP = compare
+            ROSE_APP_OPT_CONF_KEYS=${CYLC_TASK_PARAM_metric}

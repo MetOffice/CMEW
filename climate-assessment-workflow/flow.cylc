@@ -1,4 +1,5 @@
 #!jinja2
+# flow.cylc
 [scheduler]
     UTC mode = True
 
@@ -7,7 +8,12 @@
 
 [scheduling]
     [[graph]]
-        R1 = install_cold => configure => process<metric>
+        R1 = """
+            install_cold => configure => process<metric>
+{%- if TEST %}
+            process<metric> => compare<metric>
+{%- endif %}
+        """
 
 [runtime]
     [[root]]
@@ -17,6 +23,7 @@
             MODULE_NAME = {{ MODULE_NAME }}
             USER_CONFIG_DIR = ${CYLC_WORKFLOW_RUN_DIR}/etc
             USER_CONFIG_PATH = ${USER_CONFIG_DIR}/config-user.yml
+            OUTPUT_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/cycle/${CYLC_TASK_CYCLE_POINT}
 
     [[install_cold]]
         platform = localhost
@@ -55,4 +62,7 @@
             ROSE_TASK_APP = process
             RECIPE_NAME = "recipe_${CYLC_TASK_PARAM_metric}.yml"
 
-{% include 'site/' ~ SITE ~ '.cylc' %}
+{% include "site/" ~ SITE ~ ".cylc" %}
+{%- if TEST %}
+    {% include "inc/test.cylc" %}
+{%- endif %}
