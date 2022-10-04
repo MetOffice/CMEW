@@ -15,8 +15,7 @@ set -eux
 
 # Ensure the files produced by the 'process' task for the metric match the
 # expected files.
-METRIC_FILES_ARRAY=(${METRIC_FILES})
-for metric_file in "${METRIC_FILES_ARRAY[@]}"
+for metric_file in ${METRIC_FILES}
     do
         OUTPUT_METRIC_PATH="${OUTPUT_DIR}/${METRIC_DIR}*/${metric_file}"
         if [ ! -f ${OUTPUT_METRIC_PATH} ]; then
