@@ -64,5 +64,5 @@
 
 {% include "site/" ~ SITE ~ ".cylc" %}
 {%- if TEST %}
-    {% include "test.cylc" %}
+    {% include "inc/test.cylc" %}
 {%- endif %}
