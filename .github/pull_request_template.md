@@ -12,5 +12,8 @@ Closes #<issue_number>.
 **Review checklist**
 
 - [] Do the changes in this PR address the above issue / have all acceptance criteria been met?
+- [] Do the changes follow the recommendations in the [wiki: Developer Guide](https://github.com/MetOffice/CMEW/wiki/Developer-Guide)?
 - [] Do all the tests pass? (the tests are not run by the GitHub workflow)
 - [] Has the documentation been updated appropriately?
+- [] Do the HTML pages render correctly?
+- [] Do the steps in the "Quick Start" section work?
