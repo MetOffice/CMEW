@@ -1,6 +1,22 @@
-[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
+# Climate Model Evaluation Workflow
 
-# climate-assessment-workflow
+## Introduction
 
-The climate-assessment-workflow repository contains code to assess climate
-models.
+The Climate Model Evaluation Workflow (CMEW) is a Cylc 8 workflow that is used
+to evaluate climate models for all Earth System Model (ESM) components. See the
+[CMEW documentation](https://www-hc/~esmval/cmew-latest/) for more information.
+
+## Contributing
+
+We welcome all contributions to improve the CMEW! Maintainers will do their
+best to help you if you have any questions, concerns, or experience any
+difficulties along the way.
+
+If you would like to contribute, please follow the instructions provided on
+[Wiki: Development Workflow](https://github.com/MetOffice/CMEW/wiki/Development-Workflow).
+
+## Maintainers
+
+Current maintainers of this package are:
+
+* Emma Hogan (@ehogan)
