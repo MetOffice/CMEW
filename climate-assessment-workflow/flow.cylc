@@ -20,7 +20,7 @@
 
 [runtime]
     [[root]]
-        script = rose task-run -v -O '({{SITE}})'
+        script = rose task-run
         env-script = "eval $(rose task-env)"
         [[[environment]]]
             MODULE_NAME = {{ MODULE_NAME }}
