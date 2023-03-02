@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 Welcome to the Climate Model Evaluation Workflow's documentation!
-===========================================================
+=================================================================
 
 .. toctree::
    :maxdepth: 1
