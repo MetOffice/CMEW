@@ -29,7 +29,7 @@ jobs:
       - name: Create environment
         run: |
           conda update conda
-          conda create --name caw --file .github/workflows/caw.lock
+          conda create --name caw --file .github/workflows/cmew.lock
           eval "$(conda shell.bash hook)"
           conda activate caw
 
@@ -37,21 +37,21 @@ jobs:
         run: |
           eval "$(conda shell.bash hook)"
           conda activate caw
-          cd climate-assessment-workflow
+          cd climate-model-evaluation-workflow
           cylc validate .
 
       - name: Run Cylc configuration linter
         run: |
           eval "$(conda shell.bash hook)"
           conda activate caw
-          cd climate-assessment-workflow
+          cd climate-model-evaluation-workflow
           cylc lint
 
       - name: Validate format of Rose configuration files
         run: |
           eval "$(conda shell.bash hook)"
           conda activate caw
-          cd climate-assessment-workflow
+          cd climate-model-evaluation-workflow
           output="$(rose config-dump)"
           msg="Run 'rose config-dump' to re-dump the Rose configuration files"
           msg="${msg} in the common format, then commit the changes."
@@ -62,7 +62,7 @@ jobs:
         run: |
           eval "$(conda shell.bash hook)"
           conda activate caw
-          cd climate-assessment-workflow
+          cd climate-model-evaluation-workflow
           rose metadata-check -C meta/
 
       - name: Build documentation
