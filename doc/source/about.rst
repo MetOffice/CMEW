@@ -6,8 +6,8 @@ About
 
 .. include:: common.txt
 
-The Climate Assessment Workflow (|CAW|) is a workflow that is used to assess
+The Climate Assessment Workflow (|CMEW|) is a workflow that is used to assess
 climate models.
 
 |Cylc| v8 and |Rose| v2 are used as the workflow engine and application
-configuration system for the |CAW|, respectively.
+configuration system for the |CMEW|, respectively.
