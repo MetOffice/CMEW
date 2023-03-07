@@ -7,18 +7,18 @@ Quick Start
 
 * Checkout the |CMEW|::
 
-    git clone git@github.com:MetOffice/climate-assessment-workflow.git
+    git clone git@github.com:MetOffice/climate-model-evaluation-workflow.git
 
 * Configure the |CMEW|::
 
-    cd climate-assessment-workflow/climate-assessment-workflow
+    cd climate-model-evaluation-workflow/climate-model-evaluation-workflow
     rose edit
 
 * Run the |CMEW| at the Met Office, where ``<run-name>`` is a unique run name
   relevant to the current configuration::
 
     cylc install --run-name=<run-name> -O metoffice
-    cylc play climate-assessment-workflow/<run-name>
+    cylc play climate-model-evaluation-workflow/<run-name>
 
 * Browse the logs using `Cylc Review`_, a web service for browsing logs via an
   HTTP interface.
