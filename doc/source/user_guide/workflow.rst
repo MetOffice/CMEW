@@ -10,13 +10,13 @@ An overview of the workflow
 
 The |CAW| performs the following steps:
 
-``install_cold``
+``install_env_file``
   :Description:
      Activates the environment for |ESMValTool|, based on the ``SITE`` provided
   :Runs on:
      Localhost
   :Executes:
-     The ``install_cold.sh`` script from the |Rose| app
+     The ``install_env_file.sh`` script from the |Rose| app
   :Details:
      Runs once at the start of the workflow
 
@@ -29,7 +29,7 @@ The |CAW| performs the following steps:
      The ``configure.py`` script from the |Rose| app
   :Details:
      Runs once at the start of the workflow, immediately after the successful
-     completion of the ``install_cold`` job
+     completion of the ``install_env_file`` job
 
 ``process``
   :Description:
