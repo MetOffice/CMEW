@@ -17,10 +17,10 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'Climate Model Evaluation Workflow (CMEW)'
-copyright = 'Crown Copyright 2022, the Met Office'
-author = 'Emma Hogan'
-version = "0.1.0"
+project = "Climate Model Evaluation Workflow (CMEW)"
+copyright = "Crown Copyright 2022-2023, the Met Office"
+author = "Emma Hogan"
+version = "0.1.0dev"
 
 
 # -- General configuration ---------------------------------------------------
