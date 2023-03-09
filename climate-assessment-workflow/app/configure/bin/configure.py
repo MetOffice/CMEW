@@ -17,20 +17,29 @@ with warnings.catch_warnings():
         module="esmvalcore.experimental._warnings",
     )
     import esmvalcore.experimental as esmvaltool
+    from esmvalcore.experimental.config._config_object import Config
 import yaml
+from pathlib import Path
 
+# where the config file that is used by this workflow is
 USER_CONFIG_PATH = os.environ["USER_CONFIG_PATH"]
 
+# where the config file we want the values from is
+ESMVALTOOL_CONFIG_DIR = Path(esmvaltool.__file__).parent.parent
+ESMVALTOOL_CONFIG = ESMVALTOOL_CONFIG_DIR / 'config-user.yml'
 
 def main():
     """
     Write the updated configuration values to the file defined by
     ``USER_CONFIG_PATH``.
     """
-    # Get the default configuration values from ESMValTool. A dictionary is
-    # needed here to avoid the config object from converting paths to PosixPath
-    # objects, which causes issues when writing the YAML file.
-    config_values = dict(esmvaltool.CFG)
+    # Get the current configuration values from known version of ESMValTool
+    # Write to a dictionary to avoid PosixPath type issues in the YAML file
+    # Update with the path to the latest checked out version
+    # of config-user-example.yml from the ESMValTool directory.
+    config_values = dict(
+        Config._load_user_config(ESMVALTOOL_CONFIG,
+                                 raise_exception=True))
 
     # Get the configuration values defined in the environment for the
     # ``configure`` task.
@@ -75,6 +84,7 @@ def get_config_values_from_task_env():
         "extra_facets_dir": [],
         "max_parallel_tasks": int(os.environ["MAX_PARALLEL_TASKS"]),
         "output_dir": os.environ["OUTPUT_DIR"],
+        "remove_preproc_dir": False,
         "rootpath": {
             "ana4mips": os.environ["ROOTPATH_ANA4MIPS"],
             "CMIP3": os.environ["ROOTPATH_CMIP3"],
