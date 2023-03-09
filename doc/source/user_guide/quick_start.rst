@@ -7,11 +7,11 @@ Quick Start
 
 * Checkout the |CMEW|::
 
-    git clone git@github.com:MetOffice/climate-model-evaluation-workflow.git
+    git clone git@github.com:MetOffice/CMEW.git
 
 * Configure the |CMEW|::
 
-    cd climate-model-evaluation-workflow/climate-model-evaluation-workflow
+    cd CMEW/climate-model-evaluation-workflow
     rose edit
 
 * Run the |CMEW| at the Met Office, where ``<run-name>`` is a unique run name
