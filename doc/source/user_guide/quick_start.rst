@@ -12,7 +12,7 @@ Quick Start
 * Configure the |CMEW|::
 
     cd CMEW/climate-model-evaluation-workflow
-    rose
+    rose edit
 
 * If running any cylc commands and version of cylc is 8, run this command before moving to the next step ::
 
