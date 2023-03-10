@@ -12,13 +12,15 @@ Quick Start
 * Configure the |CMEW|::
 
     cd CMEW/climate-model-evaluation-workflow
-    rose edit
+    rose
 
-* Run the |CMEW| at the Met Office, where ``<run-name>`` is a unique run name
-  relevant to the current configuration::
+* If running any cylc commands and version of cylc is 8, run this command before moving to the next step ::
 
-    cylc install --run-name=<run-name> -O metoffice
-    cylc play climate-model-evaluation-workflow/<run-name>
+    export CYLC_VERSION=8
+
+* Run the |CMEW| at the Met Office ::
+
+    cylc vip -O metoffice
 
 * Browse the logs using `Cylc Review`_, a web service for browsing logs via an
   HTTP interface.
