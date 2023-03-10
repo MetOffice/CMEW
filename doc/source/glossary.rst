@@ -8,8 +8,8 @@ Glossary
 
 .. glossary::
 
-   CAW
-     Climate Assessment Workflow
+   CMEW
+     Climate Model Evaluation Workflow
 
    CMIP
      Coupled Model Intercomparison Project, see the `CMIP Documentation`_.
