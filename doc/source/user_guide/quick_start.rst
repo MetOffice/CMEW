@@ -14,11 +14,9 @@ Quick Start
     cd CMEW/climate-model-evaluation-workflow
     rose edit
 
-* Run the |CMEW| at the Met Office, where ``<run-name>`` is a unique run name
-  relevant to the current configuration::
+* Run the |CMEW| at the Met Office, where <run-name> is a unique run name relevant to the current configuration ::
 
-    cylc install --run-name=<run-name> -O metoffice
-    cylc play climate-model-evaluation-workflow/<run-name>
+    cylc vip --run-name=<run-name> -O metoffice
 
 * Browse the logs using `Cylc Review`_, a web service for browsing logs via an
   HTTP interface.
