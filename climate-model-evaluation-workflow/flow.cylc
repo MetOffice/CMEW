@@ -1,7 +1,9 @@
 #!jinja2
 # flow.cylc
-{{ assert(SITE != "", "SITE must be set to something other than an empty string. Use -O <site> on the command line or set opts to your site through rose edit.") }}
-{{ assert(MODULE_NAME != "", "MODULE_NAME must be set to something other than an empty string. Make sure the opt config file is set through the site.") }}
+{{ assert(SITE != "", "SITE must be set to something other than an empty string.
+    Use -O <site> on the command line or set opts to your site through rose edit.") }}
+{{ assert(MODULE_NAME != "", "MODULE_NAME must be set to something other than an empty string.
+    Make sure the opt config file is set through the site.") }}
 
 [scheduler]
     UTC mode = True
