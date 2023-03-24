@@ -12,7 +12,7 @@
 [scheduling]
     [[graph]]
         R1 = """
-            install_env_file => configure => process<metric>
+            install_env_file => configure_process => process<metric>
 {%- if TEST %}
             process<metric> => compare<metric>
 {%- endif %}
