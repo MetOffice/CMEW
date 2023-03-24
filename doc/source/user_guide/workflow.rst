@@ -20,13 +20,13 @@ The |CMEW| performs the following steps:
   :Details:
      Runs once at the start of the workflow
 
-``configure``
+``configure_process``
   :Description:
      Creates and modifies the |ESMValTool| user configuration file
   :Runs on:
      Localhost
   :Executes:
-     The ``configure.py`` script from the |Rose| app
+     The ``configure_process.py`` script from the |Rose| app
   :Details:
      Runs once at the start of the workflow, immediately after the successful
      completion of the ``install_env_file`` job
