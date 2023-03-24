@@ -33,7 +33,7 @@
         [[[environment]]]
             SITE = {{ SITE }}
 
-    [[configure]]
+    [[configure_process]]
         pre-script = "mkdir -p ${USER_CONFIG_DIR}"
         platform = localhost
         [[[environment]]]
