@@ -56,7 +56,7 @@ def main():
 def get_config_values_from_task_env():
     """
     Return the configuration values defined in the environment for the
-    ``configure`` task.
+    ``configure_process`` task.
     """
     # Note that 'auxiliary_data_dir', 'download_dir' and
     # 'extra_facets_dir' are set to empty values and cannot currently be
