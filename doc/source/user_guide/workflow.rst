@@ -68,6 +68,10 @@ and ``opt`` directories within the workflow. The files required are:
   Contains details on how to set up the environment for ESMValTool at the
   ``SITE``
 
+``site/<site>-standardise-env``
+  Contains details on how to set up the environment for the CDDS package at the
+  ``SITE``
+
 ``opt/rose-suite-<site>.conf``
   Contains configuration items specific to the ``SITE``, including ``SITE``
 
