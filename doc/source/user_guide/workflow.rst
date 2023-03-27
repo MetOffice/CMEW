@@ -64,7 +64,7 @@ and ``opt`` directories within the workflow. The files required are:
 ``site/<site>.cylc``
   Contains task definitions specific to the ``SITE``, for example, ``COMPUTE``
 
-``site/<site>-env``
+``site/<site>-process-env``
   Contains details on how to set up the environment for ESMValTool at the
   ``SITE``
 
