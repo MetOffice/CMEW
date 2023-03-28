@@ -12,7 +12,7 @@
 [scheduling]
     [[graph]]
         R1 = """
-            install_env_file => configure => process<metric>
+            install_env_file => configure & checkout_standardise => process<metric>
 {%- if TEST %}
             process<metric> => compare<metric>
 {%- endif %}
@@ -30,6 +30,11 @@
             CDDS_DIR = ${CYLC_WORKFLOW_RUN_DIR}/lib/CDDS
 
     [[install_env_file]]
+        platform = localhost
+        [[[environment]]]
+            SITE = {{ SITE }}
+    
+    [[checkout_standardise]]
         platform = localhost
         [[[environment]]]
             SITE = {{ SITE }}
