@@ -3,6 +3,7 @@
 .. Glossary substitutions make it easier to refer to pluralised /
 .. capitalised glossary terms.
 
+.. |CDDS| replace:: :term:`CDDS`
 .. |CMEW| replace:: :term:`CMEW`
 .. |CMIP| replace:: :term:`CMIP`
 .. |Cylc| replace:: :term:`Cylc`

@@ -33,7 +33,7 @@
         platform = localhost
         [[[environment]]]
             SITE = {{ SITE }}
-    
+
     [[checkout_standardise]]
         platform = localhost
         [[[environment]]]
