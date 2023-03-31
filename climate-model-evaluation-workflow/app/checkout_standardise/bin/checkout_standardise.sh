@@ -9,4 +9,4 @@ if [[ -d ${CDDS_DIR} ]]; then
 fi
 
 # Checkout the specified branch of the CMEW using -q
-git clone -q -b "${BRANCH}" "${CDDS_URL}" "${CDDS_DIR}"
+git clone -c advice.detachedHead=false -q -b "${BRANCH}" "${CDDS_URL}" "${CDDS_DIR}"
