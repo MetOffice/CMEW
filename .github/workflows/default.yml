@@ -29,29 +29,29 @@ jobs:
       - name: Create environment
         run: |
           conda update conda
-          conda create --name cmew --file .github/workflows/cmew.lock
+          conda create --name caw --file .github/workflows/caw.lock
           eval "$(conda shell.bash hook)"
-          conda activate cmew
+          conda activate caw
 
       - name: Validate Cylc workflow
         run: |
           eval "$(conda shell.bash hook)"
-          conda activate cmew
-          cd climate-model-evaluation-workflow
+          conda activate caw
+          cd climate-assessment-workflow
           cylc validate .
 
       - name: Run Cylc configuration linter
         run: |
           eval "$(conda shell.bash hook)"
-          conda activate cmew
-          cd climate-model-evaluation-workflow
+          conda activate caw
+          cd climate-assessment-workflow
           cylc lint
 
       - name: Validate format of Rose configuration files
         run: |
           eval "$(conda shell.bash hook)"
-          conda activate cmew
-          cd climate-model-evaluation-workflow
+          conda activate caw
+          cd climate-assessment-workflow
           output="$(rose config-dump)"
           msg="Run 'rose config-dump' to re-dump the Rose configuration files"
           msg="${msg} in the common format, then commit the changes."
@@ -61,20 +61,20 @@ jobs:
       - name: Validate Rose configuration metadata
         run: |
           eval "$(conda shell.bash hook)"
-          conda activate cmew
-          cd climate-model-evaluation-workflow
+          conda activate caw
+          cd climate-assessment-workflow
           rose metadata-check -C meta/
 
       - name: Build documentation
         run: |
           eval "$(conda shell.bash hook)"
-          conda activate cmew
+          conda activate caw
           cd doc
           make html
 
       - name: Check for broken links in the documentation
         run: |
           eval "$(conda shell.bash hook)"
-          conda activate cmew
+          conda activate caw
           cd doc
           make linkcheck
