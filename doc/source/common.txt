@@ -4,7 +4,7 @@
 .. capitalised glossary terms.
 
 .. |CDDS| replace:: :term:`CDDS`
-.. |CAW| replace:: :term:`CAW`
+.. |CMEW| replace:: :term:`CMEW`
 .. |CMIP| replace:: :term:`CMIP`
 .. |Cylc| replace:: :term:`Cylc`
 .. |ESM| replace:: :term:`ESM`
