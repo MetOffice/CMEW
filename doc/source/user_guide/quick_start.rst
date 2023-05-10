@@ -5,16 +5,17 @@ Quick Start
 
 .. include:: ../common.txt
 
-* Checkout the |CMEW|::
+* Checkout the |CAW|::
 
-    git clone git@github.com:MetOffice/CMEW.git
+    git clone git@github.com:MetOffice/climate-assessment-workflow.git
 
-* Configure the |CMEW|::
+* Configure the |CAW|::
 
-    cd CMEW/climate-model-evaluation-workflow
+    cd climate-assessment-workflow/climate-assessment-workflow
     rose edit
 
-* Run the |CMEW| at the Met Office, where <run-name> is a unique run name relevant to the current configuration ::
+* Run the |CAW| at the Met Office, where ``<run-name>`` is a unique run name
+  relevant to the current configuration::
 
     cylc vip --run-name=<run-name> -O metoffice
 

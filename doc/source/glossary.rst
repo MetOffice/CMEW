@@ -9,11 +9,11 @@ Glossary
 .. glossary::
 
    CDDS
-     CDDS is a package that |CMEW| uses to standardise data for use in 
+     CDDS is a package that |CAW| uses to standardise data for use in
      |ESMValTool| recipes.
 
-   CMEW
-     Climate Model Evaluation Workflow
+   CAW
+     Climate Assessment Workflow
 
    CMIP
      Coupled Model Intercomparison Project, see the `CMIP Documentation`_.

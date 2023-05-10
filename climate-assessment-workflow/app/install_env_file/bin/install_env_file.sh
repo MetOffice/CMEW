@@ -5,7 +5,7 @@ set -eux
 
 SOURCE_PATH="${CYLC_WORKFLOW_RUN_DIR}/site/${SITE}-process-env"
 TARGET_DIR="${CYLC_WORKFLOW_RUN_DIR}/bin"
-ENV_FILE="cmew-env"
+ENV_FILE="caw-env"
 
 # Create the 'bin' directory in the installed workflow.
 mkdir "${TARGET_DIR}"
