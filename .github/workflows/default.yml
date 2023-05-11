@@ -37,21 +37,21 @@ jobs:
         run: |
           eval "$(conda shell.bash hook)"
           conda activate caw
-          cd climate-assessment-workflow
+          cd CMEW
           cylc validate .
 
       - name: Run Cylc configuration linter
         run: |
           eval "$(conda shell.bash hook)"
           conda activate caw
-          cd climate-assessment-workflow
+          cd CMEW
           cylc lint
 
       - name: Validate format of Rose configuration files
         run: |
           eval "$(conda shell.bash hook)"
           conda activate caw
-          cd climate-assessment-workflow
+          cd CMEW
           output="$(rose config-dump)"
           msg="Run 'rose config-dump' to re-dump the Rose configuration files"
           msg="${msg} in the common format, then commit the changes."
@@ -62,7 +62,7 @@ jobs:
         run: |
           eval "$(conda shell.bash hook)"
           conda activate caw
-          cd climate-assessment-workflow
+          cd CMEW
           rose metadata-check -C meta/
 
       - name: Build documentation
