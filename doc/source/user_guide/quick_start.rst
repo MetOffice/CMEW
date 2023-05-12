@@ -7,11 +7,11 @@ Quick Start
 
 * Checkout the |CAW|::
 
-    git clone git@github.com:MetOffice/climate-assessment-workflow.git
+    git clone git@github.com:MetOffice/CMEW.git
 
 * Configure the |CAW|::
 
-    cd climate-assessment-workflow/climate-assessment-workflow
+    cd CMEW/CMEW
     rose edit
 
 * Run the |CAW| at the Met Office, where ``<run-name>`` is a unique run name
