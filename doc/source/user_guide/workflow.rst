@@ -8,7 +8,7 @@ The workflow
 An overview of the workflow
 ---------------------------
 
-|CMEW| performs the following steps:
+The |CAW| performs the following steps:
 
 ``install_env_file``
   :Description:
