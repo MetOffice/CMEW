@@ -70,7 +70,7 @@ Design considerations
 Portability
 ~~~~~~~~~~~
 
-|CMEW| is portable; site-specific information can be found in the ``site`` and
+|CAW| is portable; site-specific information can be found in the ``site`` and
 ``opt`` directories within the workflow. The files required are:
 
 ``site/<site>.cylc``
@@ -86,7 +86,7 @@ Portability
 Metadata
 ~~~~~~~~
 
-|CMEW| uses Rose metadata. Every item defined in the suite configuration file
+|CAW| uses Rose metadata. Every item defined in the suite configuration file
 (``rose-suite.conf``) will have an entry in the main metadata configuration
 file (``meta/rose-meta.conf``).
 
