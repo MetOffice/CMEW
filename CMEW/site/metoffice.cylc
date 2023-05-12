@@ -4,7 +4,7 @@
     [[COMPUTE]]
         platform = spice
         [[[directives]]]
-            --wckey = CAW
+            --wckey = CMEW
             --ntasks = {{ MAX_PARALLEL_TASKS }}
 
     [[process<metric=radiation_budget>]]
