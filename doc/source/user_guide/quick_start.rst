@@ -5,16 +5,16 @@ Quick Start
 
 .. include:: ../common.txt
 
-* Checkout the |CAW|::
+* Checkout |CMEW|::
 
     git clone git@github.com:MetOffice/CMEW.git
 
-* Configure the |CAW|::
+* Configure |CMEW|::
 
     cd CMEW/CMEW
     rose edit
 
-* Run the |CAW| at the Met Office, where ``<run-name>`` is a unique run name
+* Run |CMEW| at the Met Office, where ``<run-name>`` is a unique run name
   relevant to the current configuration::
 
     cylc vip --run-name=<run-name> -O metoffice

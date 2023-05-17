@@ -8,7 +8,7 @@ The workflow
 An overview of the workflow
 ---------------------------
 
-The |CAW| performs the following steps:
+|CMEW| performs the following steps:
 
 ``install_env_file``
   :Description:
@@ -30,7 +30,7 @@ The |CAW| performs the following steps:
   :Details:
      Runs once at the start of the workflow, immediately after the successful
      completion of the ``install_env_file`` job
-     
+
 
 ``configure``
   :Description:
@@ -70,8 +70,8 @@ Design considerations
 Portability
 ~~~~~~~~~~~
 
-The |CAW| is portable; site-specific information can be found in the ``site``
-and ``opt`` directories within the workflow. The files required are:
+|CMEW| is portable; site-specific information can be found in the ``site`` and
+``opt`` directories within the workflow. The files required are:
 
 ``site/<site>.cylc``
   Contains task definitions specific to the ``SITE``, for example, ``COMPUTE``
@@ -86,9 +86,9 @@ and ``opt`` directories within the workflow. The files required are:
 Metadata
 ~~~~~~~~
 
-The |CAW| uses Rose metadata. Every item defined in the suite configuration
-file (``rose-suite.conf``) will have an entry in the main metadata
-configuration file (``meta/rose-meta.conf``).
+|CMEW| uses Rose metadata. Every item defined in the suite configuration file
+(``rose-suite.conf``) will have an entry in the main metadata configuration
+file (``meta/rose-meta.conf``).
 
 Resources
 ~~~~~~~~~
