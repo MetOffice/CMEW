@@ -42,7 +42,7 @@ def main():
                                  raise_exception=True))
 
     # Get the configuration values defined in the environment for the
-    # ``configure`` task.
+    # ``configure_process`` task.
     config_values_from_task_env = get_config_values_from_task_env()
 
     # Update the default configuration values.
