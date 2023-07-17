@@ -12,7 +12,7 @@
 [scheduling]
     [[graph]]
         R1 = """
-            install_env_file => configure_process => process<metric>
+            install_env_file => configure_process & checkout_standardise => process<metric>
 {%- if TEST %}
             process<metric> => compare<metric>
 {%- endif %}
@@ -27,6 +27,7 @@
             USER_CONFIG_DIR = ${CYLC_WORKFLOW_RUN_DIR}/etc
             USER_CONFIG_PATH = ${USER_CONFIG_DIR}/config-user.yml
             OUTPUT_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/cycle/${CYLC_TASK_CYCLE_POINT}
+            CDDS_DIR = ${CYLC_WORKFLOW_RUN_DIR}/lib/CDDS
 
     [[install_env_file]]
         platform = localhost
@@ -58,6 +59,11 @@
             ROOTPATH_NATIVE6 = {{ ROOTPATH_NATIVE6 }}
             ROOTPATH_OBS4MIPS = {{ ROOTPATH_OBS4MIPS }}
             ROOTPATH_RAWOBS = {{ ROOTPATH_RAWOBS }}
+
+    [[checkout_standardise]]
+        platform = localhost
+        [[[environment]]]
+            SITE = {{ SITE }}
 
     [[process<metric>]]
         inherit = None, COMPUTE
