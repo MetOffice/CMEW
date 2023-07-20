@@ -30,26 +30,22 @@ jobs:
         run: |
           conda update conda
           conda create --name cmew --file .github/workflows/cmew.lock
-          eval "$(conda shell.bash hook)"
           conda activate cmew
 
       - name: Validate Cylc workflow
         run: |
-          eval "$(conda shell.bash hook)"
           conda activate cmew
           cd CMEW
           cylc validate .
 
       - name: Run Cylc configuration linter
         run: |
-          eval "$(conda shell.bash hook)"
           conda activate cmew
           cd CMEW
           cylc lint
 
       - name: Validate format of Rose configuration files
         run: |
-          eval "$(conda shell.bash hook)"
           conda activate cmew
           cd CMEW
           output="$(rose config-dump)"
@@ -60,21 +56,18 @@ jobs:
 
       - name: Validate Rose configuration metadata
         run: |
-          eval "$(conda shell.bash hook)"
           conda activate cmew
           cd CMEW
           rose metadata-check -C meta/
 
       - name: Build documentation
         run: |
-          eval "$(conda shell.bash hook)"
           conda activate cmew
           cd doc
           make html
 
       - name: Check for broken links in the documentation
         run: |
-          eval "$(conda shell.bash hook)"
           conda activate cmew
           cd doc
           make linkcheck
