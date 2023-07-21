@@ -16,6 +16,12 @@ on:
 jobs:
   # This workflow contains a single job called "build"
   build:
+  
+    defaults:
+        run:
+            # Avoid a conda init related shell error.
+            shell: bash -l {0}
+        
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
