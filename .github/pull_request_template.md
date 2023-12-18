@@ -15,11 +15,11 @@ Closes #<issue_number>.
 - [ ] Does the change in this PR follow the recommendations in the [wiki: Developer Guide](https://github.com/MetOffice/CMEW/wiki/Developer-Guide)?
 - [ ] Have new tests related to the change been added?
 - [ ] Do all the GitHub workflow checks pass?
-- [ ] Do all the tests run locally and pass? (Note: the tests are not run by the GitHub workflow)
+- [ ] Do all the tests run locally and pass? (Note: the tests are not run by the GitHub workflow, see [wiki: Run the tests locally](https://github.com/MetOffice/CMEW/wiki/Developer-Guide#run-the-tests-locally))
 - [ ] Has the API documentation related to the change been updated appropriately?
 - [ ] Has the user documentation related to the change been updated appropriately?
-- [ ] Do the HTML pages render correctly?
-- [ ] Do the steps in the "Quick Start" section work?
+- [ ] Do the HTML pages render correctly? (See [wiki: Build the documentation locally](https://github.com/MetOffice/CMEW/wiki/Developer-Guide#build-the-documentation-locally))
+- [ ] Do the steps in the [Quick Start](https://github.com/MetOffice/CMEW/blob/main/doc/source/user_guide/quick_start.rst) section of the documentation work?
 
 ## PR creation checklist for the _reviewer_
 
@@ -36,8 +36,8 @@ Closes #<issue_number>.
 - [ ] Does the change in this PR follow the recommendations in the [wiki: Developer Guide](https://github.com/MetOffice/CMEW/wiki/Developer-Guide)?
 - [ ] Have new tests related to the change been added?
 - [ ] Do all the GitHub workflow checks pass?
-- [ ] Do all the tests run locally and pass? (Note: the tests are not run by the GitHub workflow)
+- [ ] Do all the tests run locally and pass? (Note: the tests are not run by the GitHub workflow, see [wiki: Run the tests locally](https://github.com/MetOffice/CMEW/wiki/Developer-Guide#run-the-tests-locally))
 - [ ] Has the API documentation related to the change been updated appropriately?
 - [ ] Has the user documentation related to the change been updated appropriately?
-- [ ] Do the HTML pages render correctly?
-- [ ] Do the steps in the "Quick Start" section work?
+- [ ] Do the HTML pages render correctly? (See [wiki: Build the documentation locally](https://github.com/MetOffice/CMEW/wiki/Developer-Guide#build-the-documentation-locally))
+- [ ] Do the steps in the [Quick Start](https://github.com/MetOffice/CMEW/blob/main/doc/source/user_guide/quick_start.rst) section of the documentation work?
