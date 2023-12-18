@@ -40,4 +40,6 @@ Closes #<issue_number>.
 - [ ] Has the API documentation related to the change been updated appropriately?
 - [ ] Has the user documentation related to the change been updated appropriately?
 - [ ] Do the HTML pages render correctly?
-- [ ] Do the steps in the "Quick Start" section work?
+- [ ] [][item1]
+
+[item1]: Do the steps in the "Quick Start" section work?
