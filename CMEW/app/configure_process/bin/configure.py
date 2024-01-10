@@ -33,24 +33,18 @@ def main():
     Write the updated configuration values to the file defined by
     ``USER_CONFIG_PATH``.
     """
-    # Get the current configuration values from known version of ESMValTool
+    # Get the current configuration values from the environment
     # Write to a dictionary to avoid PosixPath type issues in the YAML file
     # Update with the path to the latest checked out version
     # of config-user-example.yml from the ESMValTool directory.
-    config_values = dict(
-        Config._load_user_config(ESMVALTOOL_CONFIG,
-                                 raise_exception=True))
 
     # Get the configuration values defined in the environment for the
     # ``configure_process`` task.
     config_values_from_task_env = get_config_values_from_task_env()
 
-    # Update the default configuration values.
-    config_values.update(config_values_from_task_env)
-
     # Write the updated configuration values to the file defined by
     # 'USER_CONFIG_PATH'.
-    write_yaml(USER_CONFIG_PATH, config_values)
+    write_yaml(USER_CONFIG_PATH, config_values_from_task_env)
 
 
 def get_config_values_from_task_env():
