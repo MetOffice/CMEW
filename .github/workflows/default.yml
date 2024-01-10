@@ -35,6 +35,7 @@ jobs:
         run: |
           conda update conda
           conda create --name cmew --file .github/workflows/cmew.lock
+          conda init
           conda activate cmew
 
       - name: Validate Cylc workflow
