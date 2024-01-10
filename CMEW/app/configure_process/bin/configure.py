@@ -17,7 +17,7 @@ with warnings.catch_warnings():
         module="esmvalcore.experimental._warnings",
     )
     import esmvalcore.experimental as esmvaltool
-    from esmvalcore.experimental.config._config_object import Config
+    from esmvalcore.config._config_object import Config
 import yaml
 from pathlib import Path
 
