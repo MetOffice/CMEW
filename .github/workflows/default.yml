@@ -11,6 +11,11 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+# Required shell entrypoint to have properly activated conda environments
+defaults:
+  run:
+    shell: bash -l {0}
+
 # A workflow run is made up of one or more jobs that can run
 # sequentially or in parallel
 jobs:
@@ -30,26 +35,22 @@ jobs:
         run: |
           conda update conda
           conda create --name cmew --file .github/workflows/cmew.lock
-          eval "$(conda shell.bash hook)"
           conda activate cmew
 
       - name: Validate Cylc workflow
         run: |
-          eval "$(conda shell.bash hook)"
           conda activate cmew
           cd CMEW
           cylc validate .
 
       - name: Run Cylc configuration linter
         run: |
-          eval "$(conda shell.bash hook)"
           conda activate cmew
           cd CMEW
           cylc lint
 
       - name: Validate format of Rose configuration files
         run: |
-          eval "$(conda shell.bash hook)"
           conda activate cmew
           cd CMEW
           output="$(rose config-dump)"
@@ -60,21 +61,18 @@ jobs:
 
       - name: Validate Rose configuration metadata
         run: |
-          eval "$(conda shell.bash hook)"
           conda activate cmew
           cd CMEW
           rose metadata-check -C meta/
 
       - name: Build documentation
         run: |
-          eval "$(conda shell.bash hook)"
           conda activate cmew
           cd doc
           make html
 
       - name: Check for broken links in the documentation
         run: |
-          eval "$(conda shell.bash hook)"
           conda activate cmew
           cd doc
           make linkcheck
