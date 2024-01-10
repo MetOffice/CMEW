@@ -30,17 +30,19 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job
       # can access it
       - uses: actions/checkout@v2
+        with:
+          activate-environment: cmew
+          environment-file: .github/workflows/cmew.lock
 
-      - name: Create environment
-        run: |
-          conda update conda
-          conda create --name cmew --file .github/workflows/cmew.lock
-          conda init
-          conda activate cmew
+      # - name: Create environment
+      #   run: |
+      #     conda update conda
+      #     conda create --name cmew --file .github/workflows/cmew.lock
+      #     conda activate cmew
 
       - name: Validate Cylc workflow
         run: |
-          conda activate cmew
+#          conda activate cmew
           cd CMEW
           cylc validate .
 
