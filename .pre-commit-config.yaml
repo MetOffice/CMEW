@@ -9,9 +9,8 @@ repos:
     -   id: trailing-whitespace
     -   id: end-of-file-fixer
     -   id: check-added-large-files
-  # Using this mirror lets us use mypyc-compiled black, which is about 2x faster
--   repo: https://github.com/psf/black-pre-commit-mirror
-    rev: 23.12.1
+-   repo: https://github.com/psf/black
+    rev: 19.10b0
     hooks:
     -   id: black
         # Force black to run on whole repo, using settings from pyproject.toml
