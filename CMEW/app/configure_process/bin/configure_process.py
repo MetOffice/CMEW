@@ -26,7 +26,8 @@ USER_CONFIG_PATH = os.environ["USER_CONFIG_PATH"]
 
 # where the config file we want the values from is
 ESMVALTOOL_CONFIG_DIR = Path(esmvaltool.__file__).parent.parent
-ESMVALTOOL_CONFIG = ESMVALTOOL_CONFIG_DIR / 'config-user.yml'
+ESMVALTOOL_CONFIG = ESMVALTOOL_CONFIG_DIR / "config-user.yml"
+
 
 def main():
     """
@@ -38,8 +39,8 @@ def main():
     # Update with the path to the latest checked out version
     # of config-user-example.yml from the ESMValTool directory.
     config_values = dict(
-        Config._load_user_config(ESMVALTOOL_CONFIG,
-                                 raise_exception=True))
+        Config._load_user_config(ESMVALTOOL_CONFIG, raise_exception=True)
+    )
 
     # Get the configuration values defined in the environment for the
     # ``configure_process`` task.
