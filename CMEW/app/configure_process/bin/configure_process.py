@@ -5,16 +5,11 @@ Generate the required user configuration file for ESMValTool.
 import os
 import warnings
 
-import esmvalcore.experimental as esmvaltool
 import yaml
 from pathlib import Path
 
 # where the config file that is used by this workflow is
 USER_CONFIG_PATH = os.environ["USER_CONFIG_PATH"]
-
-# where the config file we want the values from is
-ESMVALTOOL_CONFIG_DIR = Path(esmvaltool.__file__).parent.parent
-ESMVALTOOL_CONFIG = ESMVALTOOL_CONFIG_DIR / 'config-user.yml'
 
 def main():
     """
