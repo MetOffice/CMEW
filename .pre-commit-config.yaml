@@ -15,6 +15,7 @@ repos:
     -   id: black
         # Force black to run on whole repo, using settings from pyproject.toml
         pass_filenames: false
+        always_run: true
         args: [--config=./pyproject.toml, .]
         # It is recommended to specify the latest version of Python
         # supported by your project here, or alternatively use
