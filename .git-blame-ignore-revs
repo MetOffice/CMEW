@@ -1,0 +1,3 @@
+# .git-blame-ignore-revs
+# Ran black on entire codebase when setting up pre commit hooks
+1f05a1a91a498238dbc0516a8d4fc985111dd7ae
