@@ -21,7 +21,7 @@ with warnings.catch_warnings():
 import yaml
 from pathlib import Path
 
-# where the config file that is used by this workflow is
+# where the config file that is used by this workflow is foo
 USER_CONFIG_PATH = os.environ["USER_CONFIG_PATH"]
 
 # where the config file we want the values from is
