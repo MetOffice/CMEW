@@ -12,7 +12,9 @@
 [scheduling]
     [[graph]]
         R1 = """
-            install_env_file => configure_process & checkout_standardise => process<assessment_area>
+            install_env_file => configure_process & checkout_standardise
+            checkout_standardise => standardise_model_data
+            configure_process & standardise_model_data => process<assessment_area>
 {%- if TEST %}
             process<assessment_area> => compare<assessment_area>
 {%- endif %}
@@ -61,6 +63,11 @@
             ROOTPATH_RAWOBS = {{ ROOTPATH_RAWOBS }}
 
     [[checkout_standardise]]
+        platform = localhost
+        [[[environment]]]
+            SITE = {{ SITE }}
+
+    [[standardise_model_data]]
         platform = localhost
         [[[environment]]]
             SITE = {{ SITE }}
