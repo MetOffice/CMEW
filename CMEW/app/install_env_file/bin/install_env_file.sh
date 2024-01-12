@@ -4,7 +4,7 @@ BASH_XTRACEFD=1
 set -eux
 
 SOURCE_PATH="${CYLC_WORKFLOW_RUN_DIR}/site/${SITE}-process-env"
-TARGET_DIR="${CYLC_WORKFLOW_RUN_DIR}/share/bin"
+TARGET_DIR="${CYLC_WORKFLOW_SHARE_DIR}/bin"
 ENV_FILE="cmew-process-env"
 
 # Create the 'bin' directory in the installed workflow.
