@@ -3,10 +3,8 @@
 Generate the required user configuration file for ESMValTool.
 """
 import os
-import warnings
 
 import yaml
-from pathlib import Path
 
 # where the config file that is used by this workflow is
 USER_CONFIG_PATH = os.environ["USER_CONFIG_PATH"]
