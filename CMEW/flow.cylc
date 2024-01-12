@@ -7,12 +7,15 @@
     UTC mode = True
 
 [task parameters]
-    metric = radiation_budget
+    assessment_area = radiation_budget
 
 [scheduling]
     [[graph]]
         R1 = """
-            install_env_file => configure_process & checkout_standardise => process<metric>
+            checkout_standardise => configure_standardise
+            install_env_file => configure_process & configure_standardise
+            checkout_standardise => configure_standardise => standardise_model_data
+            configure_process & standardise_model_data => process<assessment_area>
 {%- if TEST %}
             process<metric> => compare<metric>
 {%- endif %}
