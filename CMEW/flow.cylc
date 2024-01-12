@@ -12,12 +12,9 @@
 [scheduling]
     [[graph]]
         R1 = """
-            checkout_standardise => configure_standardise
-            install_env_file => configure_process & configure_standardise
-            checkout_standardise => configure_standardise => standardise_model_data
-            configure_process & standardise_model_data => process<assessment_area>
+            install_env_file => configure_process & checkout_standardise => process<metric>
 {%- if TEST %}
-            process<metric> => compare<metric>
+            process<assessment_area> => compare<assessment_area>
 {%- endif %}
         """
 
@@ -68,11 +65,11 @@
         [[[environment]]]
             SITE = {{ SITE }}
 
-    [[process<metric>]]
+    [[process<assessment_area>]]
         inherit = None, COMPUTE
         [[[environment]]]
             ROSE_TASK_APP = process
-            RECIPE_NAME = "recipe_${CYLC_TASK_PARAM_metric}.yml"
+            RECIPE_NAME = "recipe_${CYLC_TASK_PARAM_assessment_area}.yml"
 
 {% include "site/" ~ SITE ~ ".cylc" %}
 {%- if TEST %}

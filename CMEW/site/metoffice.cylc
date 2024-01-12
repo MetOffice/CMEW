@@ -7,7 +7,7 @@
             --wckey = CMEW
             --ntasks = {{ MAX_PARALLEL_TASKS }}
 
-    [[process<metric=radiation_budget>]]
+    [[process<assessment_area=radiation_budget>]]
         [[[directives]]]
             --time = 2
             --mem = 3G
