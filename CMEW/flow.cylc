@@ -13,8 +13,8 @@
     [[graph]]
         R1 = """
             install_env_file => configure_process & checkout_standardise
-            checkout_standardise => configure_standardise => standardise_model_data
-            configure_process & standardise_model_data => process<assessment_area>
+            checkout_standardise => configure_standardise
+            configure_process & configure_standardise => process<assessment_area>
 {%- if TEST %}
             process<assessment_area> => compare<assessment_area>
 {%- endif %}
@@ -71,10 +71,6 @@
         platform = localhost
         [[[environment]]]
             ROSE_TASK_APP = configure_standardise
-
-    [[standardise_model_data]]
-        platform = localhost
-        [[[environment]]]
 
     [[process<assessment_area>]]
         inherit = None, COMPUTE
