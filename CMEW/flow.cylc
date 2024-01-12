@@ -12,8 +12,7 @@
 [scheduling]
     [[graph]]
         R1 = """
-            checkout_standardise => configure_standardise
-            install_env_file => configure_process & configure_standardise
+            install_env_file => configure_process & checkout_standardise
             checkout_standardise => configure_standardise => standardise_model_data
             configure_process & standardise_model_data => process<assessment_area>
 {%- if TEST %}
@@ -71,6 +70,7 @@
     [[configure_standardise]]
         platform = localhost
         [[[environment]]]
+            ROSE_TASK_APP = configure_standardise
 
     [[standardise_model_data]]
         platform = localhost
