@@ -70,6 +70,7 @@
     [[standardise_model_data]]
         platform = localhost
         [[[environment]]]
+            CDDS_VERSION = {{ CDDS_VERSION }}
             SITE = {{ SITE }}
 
     [[process<assessment_area>]]

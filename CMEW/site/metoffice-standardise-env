@@ -22,9 +22,8 @@ if [[ ! -z ${PYTHONPATH_PREPEND:-} ]]; then
 fi
 
 ROOT_SOFTWARE_DIR="/home/h03/cdds/software"
-CDDS_command="/../bin/setup_env_for_cdds"
-version="2.5.4"
-source "${ROOT_SOFTWARE_DIR}${CDDS_command}" ${version}
+CDDS_COMMAND="/../bin/setup_env_for_cdds"
+source "${ROOT_SOFTWARE_DIR}${CDDS_COMMAND}" ${CDDS_VERSION}
 
 if [[ -z ${QUIET_MODE:-} ]]; then
     echo "[OK] CDDS environment loaded."
