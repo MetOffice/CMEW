@@ -1,6 +1,6 @@
 #!/bin/bash -l
 #
-# Usage metoffice-process-env COMMAND
+# Usage metoffice-standardise-env COMMAND
 #
 # ENVIRONMENT
 #   PYTHONPATH_PREPEND  The path to prepend to PYTHONPATH after loading the
