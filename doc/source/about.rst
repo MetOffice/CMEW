@@ -6,7 +6,7 @@ About
 
 .. include:: common.txt
 
-The Climate Model Evaluation Workflow (|CMEW|) is a (|Cylc|) workflow that is
+The Climate Model Evaluation Workflow (|CMEW|) is a |Cylc| workflow that is
 used to evaluate climate models for all Earth System Model (|ESM|) components.
 
 |Cylc| v8 and |Rose| v2 are used as the workflow engine and application
