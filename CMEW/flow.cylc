@@ -69,8 +69,6 @@
 
     [[configure_standardise]]
         platform = localhost
-        [[[environment]]]
-            ROSE_TASK_APP = configure_standardise
 
     [[process<assessment_area>]]
         inherit = None, COMPUTE
