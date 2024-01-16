@@ -12,7 +12,7 @@
 [scheduling]
     [[graph]]
         R1 = """
-            install_env_file => configure_process & checkout_standardise => process<assessment_area>
+            install_env_file => configure_process<assessment_area> & checkout_standardise => process<assessment_area>
 {%- if TEST %}
             process<assessment_area> => compare<assessment_area>
 {%- endif %}
@@ -35,7 +35,7 @@
         [[[environment]]]
             SITE = {{ SITE }}
 
-    [[configure_process]]
+    [[configure_process<assessment_area>]]
         pre-script = "mkdir -p ${USER_CONFIG_DIR} ${USER_SHARE_ETC_DIR}"
         platform = localhost
         [[[environment]]]
@@ -60,6 +60,7 @@
             ROOTPATH_NATIVE6 = {{ ROOTPATH_NATIVE6 }}
             ROOTPATH_OBS4MIPS = {{ ROOTPATH_OBS4MIPS }}
             ROOTPATH_RAWOBS = {{ ROOTPATH_RAWOBS }}
+            RECIPE_NAME = "recipe_${CYLC_TASK_PARAM_assessment_area}.yml"
 
     [[checkout_standardise]]
         platform = localhost
