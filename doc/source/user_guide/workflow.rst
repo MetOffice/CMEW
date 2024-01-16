@@ -42,6 +42,17 @@ An overview of the workflow
      Runs once at the start of the workflow, immediately after the successful
      completion of the ``install_env_file`` job
 
+``standardise_model_data``
+  :Description:
+     Launches the |CDDS| workflow and converts the data into a |CMIP| compliant
+     format for |ESMValTool|
+  :Runs on:
+     Localhost
+  :Executes:
+     The ``cdds_convert`` command
+  :Details:
+     Runs after ``checkout_standardise`` job and before the ``process`` job
+
 ``process``
   :Description:
      Runs the requested recipes using |ESMValTool|
