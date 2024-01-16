@@ -3,19 +3,19 @@
 Generate the required user configuration file for ESMValTool.
 """
 import os
-import warnings
 
 import yaml
-from pathlib import Path
 
 # where the config file that is used by this workflow is
 USER_CONFIG_PATH = os.environ["USER_CONFIG_PATH"]
+
 
 def main():
     """
     Write the updated configuration values to the file defined by
     ``USER_CONFIG_PATH``.
     """
+
     # Get the configuration values defined in the environment for the
     # ``configure_process`` task.
     config_values_from_task_env = get_config_values_from_task_env()
