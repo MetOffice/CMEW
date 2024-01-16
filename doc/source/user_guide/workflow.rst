@@ -51,7 +51,7 @@ An overview of the workflow
   :Executes:
      The |ESMValTool| command line script
   :Details:
-     Runs for every metric defined in the workflow
+     Runs for every assessment area defined in the workflow
 
 ``compare``
   :Description:
@@ -61,7 +61,7 @@ An overview of the workflow
   :Executes:
      The ``compare.sh`` script from the |Rose| app
   :Details:
-     Runs for every metric defined in the workflow
+     Runs for every assessment area defined in the workflow
 
 Design considerations
 ---------------------

@@ -1,4 +1,4 @@
-.. (C) Crown Copyright 2022-2023, the Met Office.
+.. (C) Crown Copyright 2022-2024, the Met Office.
 
 *******
 Support
@@ -6,5 +6,5 @@ Support
 
 .. include:: common.txt
 
-Please contact the |MIAO| team at ciao@metoffice.gov.uk to request support
+Please contact the |MIAO| team at esmval@metoffice.gov.uk to request support
 related to |CMEW|.
