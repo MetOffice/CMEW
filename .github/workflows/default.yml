@@ -24,12 +24,12 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job
       # can access it
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Create environment
         run: |
           conda update conda
-          conda create --name cmew --file .github/workflows/cmew.lock
+          conda create --name cmew --file .github/workflows/cmew-env/cmew-env.lock
           eval "$(conda shell.bash hook)"
           conda activate cmew
 
@@ -78,3 +78,9 @@ jobs:
           conda activate cmew
           cd doc
           make linkcheck
+
+      - name: Run pre-commit hooks
+        run: |
+          eval "$(conda shell.bash hook)"
+          conda activate cmew
+          pre-commit run --all-files
