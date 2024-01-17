@@ -42,6 +42,17 @@ An overview of the workflow
      Runs once at the start of the workflow, immediately after the successful
      completion of the ``install_env_file`` job
 
+``configure_standardise``
+  :Description:
+     Creates the ``request.json`` file and variables list which are needed to run |CDDS|
+  :Runs on:
+     Localhost
+  :Executes:
+     The ``configure_standardise.sh`` script from the |Rose| app
+  :Details:
+     Runs once at the start of the workflow, immediately after the successful
+     completion of the ``checkout_standardise`` job
+
 ``process``
   :Description:
      Runs the requested recipes using |ESMValTool|
