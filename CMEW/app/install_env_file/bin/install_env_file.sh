@@ -7,9 +7,9 @@ set -eux
 SOURCE_PROCESS_PATH="${CYLC_WORKFLOW_RUN_DIR}/site/${SITE}-process-env"
 SOURCE_STANDARDISE_PATH="${CYLC_WORKFLOW_RUN_DIR}/site/${SITE}-standardise-env"
 # Target directory for installation of the environment scripts
-TARGET_DIR="${CYLC_WORKFLOW_RUN_DIR}/share/bin"
+TARGET_DIR="${CYLC_WORKFLOW_SHARE_DIR}/bin"
 # Names of the environment scripts
-ENV_PROCESS_FILE="cmew-env"
+ENV_PROCESS_FILE="cmew-process-env"
 ENV_STANDARDISE_FILE="cmew-standardise-env"
 
 # Create the 'bin' directory in the installed workflow.

@@ -13,8 +13,9 @@
     [[graph]]
         R1 = """
             install_env_file => configure_process & checkout_standardise
-            checkout_standardise => standardise_model_data
+            checkout_standardise => configure_standardise => standardise_model_data
             configure_process & standardise_model_data => process<assessment_area>
+
 {%- if TEST %}
             process<assessment_area> => compare<assessment_area>
 {%- endif %}
@@ -72,6 +73,9 @@
         [[[environment]]]
             CDDS_VERSION = {{ CDDS_VERSION }}
             SITE = {{ SITE }}
+
+    [[configure_standardise]]
+        platform = localhost
 
     [[process<assessment_area>]]
         inherit = None, COMPUTE

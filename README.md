@@ -1,4 +1,5 @@
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 # Climate Model Evaluation Workflow
 
@@ -15,7 +16,7 @@ best to help you if you have any questions, concerns, or experience any
 difficulties along the way.
 
 If you would like to contribute, please follow the instructions provided on
-[Wiki: Development Workflow](https://github.com/MetOffice/CMEW/wiki/Development-Workflow).
+[Wiki: Working Practices](https://github.com/MetOffice/CMEW/wiki/Working-Practices).
 
 ## Maintainers
 
