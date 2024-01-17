@@ -26,7 +26,6 @@
             MODULE_NAME = {{ MODULE_NAME }}
             USER_CONFIG_DIR = ${CYLC_WORKFLOW_RUN_DIR}/etc
             USER_CONFIG_PATH = ${USER_CONFIG_DIR}/config-user.yml
-            USER_SHARE_ETC_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/etc
             OUTPUT_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/cycle/${CYLC_TASK_CYCLE_POINT}
             CDDS_DIR = ${CYLC_WORKFLOW_RUN_DIR}/lib/CDDS
 
@@ -40,7 +39,7 @@
             SITE = {{ SITE }}
 
     [[configure_process<assessment_area>]]
-        pre-script = "mkdir -p ${USER_CONFIG_DIR} ${USER_SHARE_ETC_DIR}"
+        pre-script = "mkdir -p ${USER_CONFIG_DIR} ${CYLC_WORKFLOW_SHARE_DIR}/etc"
         platform = localhost
         inherit = ASSESSMENT_AREAS
         [[[environment]]]
