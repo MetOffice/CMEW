@@ -12,7 +12,9 @@
 [scheduling]
     [[graph]]
         R1 = """
-            install_env_file => configure_process & checkout_standardise => process<assessment_area>
+            install_env_file => configure_process & checkout_standardise
+            checkout_standardise => configure_standardise
+            configure_process & configure_standardise => process<assessment_area>
 {%- if TEST %}
             process<assessment_area> => compare<assessment_area>
 {%- endif %}
@@ -64,6 +66,9 @@
         platform = localhost
         [[[environment]]]
             SITE = {{ SITE }}
+
+    [[configure_standardise]]
+        platform = localhost
 
     [[process<assessment_area>]]
         inherit = None, COMPUTE
