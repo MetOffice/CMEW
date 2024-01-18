@@ -12,8 +12,8 @@
 [scheduling]
     [[graph]]
         R1 = """
-            install_env_file => configure_process & checkout_standardise
-            checkout_standardise => configure_standardise
+            install_env_file => configure_process
+            install_env_file => configure_standardise
             configure_process & configure_standardise => process<assessment_area>
 {%- if TEST %}
             process<assessment_area> => compare<assessment_area>
@@ -61,11 +61,6 @@
             ROOTPATH_NATIVE6 = {{ ROOTPATH_NATIVE6 }}
             ROOTPATH_OBS4MIPS = {{ ROOTPATH_OBS4MIPS }}
             ROOTPATH_RAWOBS = {{ ROOTPATH_RAWOBS }}
-
-    [[checkout_standardise]]
-        platform = localhost
-        [[[environment]]]
-            SITE = {{ SITE }}
 
     [[configure_standardise]]
         platform = localhost
