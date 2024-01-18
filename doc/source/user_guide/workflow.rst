@@ -1,4 +1,4 @@
-.. (C) Crown Copyright 2022-2023, the Met Office.
+.. (C) Crown Copyright 2022-2024, the Met Office.
 
 .. include:: ../common.txt
 
@@ -22,13 +22,19 @@ An overview of the workflow
 
 ``configure_process``
   :Description:
-     Creates and modifies the |ESMValTool| user configuration file
+     * Creates and modifies the |ESMValTool| user configuration file,
+       and writes it to the cylc workflow ``share/etc`` directory
+     * Copies the |ESMValTool| recipe for the assessment area into
+       the cylc workflow ``share/etc`` directory
+
   :Runs on:
      Localhost
   :Executes:
-     The ``configure_process.py`` script from the |Rose| app
+     * The ``configure_process.py`` script from the |Rose| app
+     * The ``esmvaltool recipes get`` command for the required assessment area
+
   :Details:
-     Runs once at the start of the workflow, immediately after the successful
+     Runs once for each assessment area, immediately after the successful
      completion of the ``install_env_file`` job
 
 ``checkout_standardise``
