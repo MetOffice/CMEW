@@ -36,6 +36,8 @@ An overview of the workflow
   :Details:
      Runs once for each assessment area, immediately after the successful
      completion of the ``install_env_file`` job
+  :Families:
+     ``ASSESSMENT_AREAS``
 
 ``configure_standardise``
   :Description:
@@ -58,6 +60,8 @@ An overview of the workflow
      The |ESMValTool| command line script
   :Details:
      Runs for every assessment area defined in the workflow
+  :Families:
+     ``COMPUTE``, ``ASSESSMENT_AREAS``
 
 ``compare``
   :Description:
@@ -87,6 +91,18 @@ Portability
 
 ``opt/rose-suite-<site>.conf``
   Contains configuration items specific to the ``SITE``, including ``SITE``
+
+Cylc task families
+~~~~~~~~~~~~~~~~~~
+Several tasks in |CMEW| are grouped into
+`families <https://cylc.github.io/cylc-doc/stable/html/tutorial/runtime/configuration-consolidation/families.html>`_
+with shared configurations. The following families are used in the workflow:
+
+``COMPUTE``
+  Computationally intensive tasks
+
+``ASSESSMENT_AREAS``
+  Tasks that run for each assessment area independently
 
 Metadata
 ~~~~~~~~
