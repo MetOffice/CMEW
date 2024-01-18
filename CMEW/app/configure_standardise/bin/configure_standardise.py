@@ -13,7 +13,7 @@ def extract_request() -> str:
         request = file.read()
     return request
 
-def write_variables(request: str):
+def write_request(request: str):
     SHARE_DIR = os.environ["CYLC_WORKFLOW_SHARE_DIR"]
     with open(SHARE_DIR + "/etc/request.json", mode="w+") as file:
         file.write(request)
@@ -22,7 +22,7 @@ def write_variables(request: str):
 def main():
     request = extract_request()
     print(request)
-    write_variables(request=request)
+    write_request(request=request)
     return None
 
 if __name__ == "__main__":
