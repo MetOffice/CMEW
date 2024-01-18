@@ -48,7 +48,7 @@ An overview of the workflow
   :Runs on:
      Localhost
   :Executes:
-     The ``configure_standardise.sh`` script from the |Rose| app
+     The ``configure_standardise.sh`` script and the ``configure_standardise.py`` script from the |Rose| app
   :Details:
      Runs once at the start of the workflow, immediately after the successful
      completion of the ``checkout_standardise`` job
