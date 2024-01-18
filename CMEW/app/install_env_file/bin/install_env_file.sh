@@ -3,12 +3,12 @@
 BASH_XTRACEFD=1
 set -eux
 
-# Paths for site-specific environment scripts
+# Paths for site-specific environment scripts.
 SOURCE_PROCESS_PATH="${CYLC_WORKFLOW_RUN_DIR}/site/${SITE}-process-env"
 SOURCE_STANDARDISE_PATH="${CYLC_WORKFLOW_RUN_DIR}/site/${SITE}-standardise-env"
-# Target directory for installation of the environment scripts
+# Target directory for installation of the environment scripts.
 TARGET_DIR="${CYLC_WORKFLOW_SHARE_DIR}/bin"
-# Names of the environment scripts
+# Names of the environment scripts.
 ENV_PROCESS_FILE="cmew-process-env"
 ENV_STANDARDISE_FILE="cmew-standardise-env"
 
