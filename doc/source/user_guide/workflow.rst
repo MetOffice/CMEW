@@ -86,6 +86,9 @@ Portability
 ``site/<site>.cylc``
   Contains task definitions specific to the ``SITE``, for example, ``COMPUTE``
 
+``site/<site>-standardise-env``
+  Contains details on how to set up the environment for CDDS at the ``SITE``
+
 ``site/<site>-process-env``
   Contains details on how to set up the environment for ESMValTool at the
   ``SITE``
