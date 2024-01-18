@@ -3,6 +3,7 @@
 # Usage metoffice-standardise-env COMMAND
 #
 # ENVIRONMENT
+#   CDDS_VERSION        The version of CDDS to load
 #   PYTHONPATH_PREPEND  The path to prepend to PYTHONPATH after loading the
 #                       module
 #   QUIET_MODE          Don't print confirmation messages
