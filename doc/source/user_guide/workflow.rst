@@ -39,6 +39,16 @@ An overview of the workflow
   :Families:
      ``ASSESSMENT_AREAS``
 
+``configure_standardise``
+  :Description:
+     Creates the ``request.json`` file and variables list which are needed to run |CDDS|
+  :Runs on:
+     Localhost
+  :Executes:
+     The ``configure_standardise.sh`` script from the |Rose| app
+  :Details:
+     Runs after the successful completion of the ``configure_process`` job
+
 ``standardise_model_data``
   :Description:
      Launches the |CDDS| workflow and converts the data into a |CMIP| compliant
@@ -50,17 +60,6 @@ An overview of the workflow
   :Details:
      Runs after the successful completion of the ``configure_standardise`` job
 
-``configure_standardise``
-  :Description:
-     Creates the ``request.json`` file and variables list which are needed to run |CDDS|
-  :Runs on:
-     Localhost
-  :Executes:
-     The ``configure_standardise.sh`` script from the |Rose| app
-  :Details:
-     Runs once at the start of the workflow, immediately after the successful
-     completion of the ``install_env_file`` job
-
 ``process``
   :Description:
      Runs the requested recipes using |ESMValTool|
@@ -69,10 +68,9 @@ An overview of the workflow
      ``process`` jobs will run on SPICE
   :Executes:
      The |ESMValTool| command line script
-  :Details:    
-     Runs after the successful completion of both the ``standardise_model_data`` job
-     and the ``configure_process`` job. This job runs for every assessment area
-     defined in the workflow
+  :Details:
+     Runs once for each assessment area, after the successful completion of
+     the ``standardise_model_data`` job.
   :Families:
      ``COMPUTE``, ``ASSESSMENT_AREAS``
 
@@ -84,7 +82,8 @@ An overview of the workflow
   :Executes:
      The ``compare.sh`` script from the |Rose| app
   :Details:
-     Runs for every assessment area defined in the workflow
+     Runs for every assessment area defined in the workflow, after the
+     completion of the process job
 
 Design considerations
 ---------------------
