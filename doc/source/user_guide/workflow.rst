@@ -40,7 +40,7 @@ An overview of the workflow
   :Executes:
      The ``cdds_convert`` command
   :Details:
-     Runs after ``checkout_standardise`` job and before the ``process`` job
+     Runs after the successful completion of the ``configure_standardise`` job
 
 ``configure_standardise``
   :Description:
@@ -51,7 +51,7 @@ An overview of the workflow
      The ``configure_standardise.sh`` script from the |Rose| app
   :Details:
      Runs once at the start of the workflow, immediately after the successful
-     completion of the ``checkout_standardise`` job
+     completion of the ``install_env_file`` job
 
 ``process``
   :Description:
@@ -62,7 +62,9 @@ An overview of the workflow
   :Executes:
      The |ESMValTool| command line script
   :Details:
-     Runs for every assessment area defined in the workflow
+     Runs after the successful completion of both the ``standardise_model_data`` job
+     and the ``configure_process`` job. This job runs for every assessment area
+     defined in the workflow
 
 ``compare``
   :Description:
