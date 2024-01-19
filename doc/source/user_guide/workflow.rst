@@ -31,17 +31,6 @@ An overview of the workflow
      Runs once at the start of the workflow, immediately after the successful
      completion of the ``install_env_file`` job
 
-``checkout_standardise``
-  :Description:
-     Clones the |CDDS| repository and installs it in the run directory
-  :Runs on:
-     Localhost
-  :Executes:
-     The ``checkout_standardise.sh`` script from the |Rose| app
-  :Details:
-     Runs once at the start of the workflow, immediately after the successful
-     completion of the ``install_env_file`` job
-
 ``configure_standardise``
   :Description:
      Creates the ``request.json`` file and variables list which are needed to run |CDDS|
@@ -51,7 +40,18 @@ An overview of the workflow
      The ``configure_standardise.sh`` script from the |Rose| app
   :Details:
      Runs once at the start of the workflow, immediately after the successful
-     completion of the ``checkout_standardise`` job
+     completion of the ``install_env_file`` job
+
+``standardise_model_data``
+  :Description:
+     Launches the |CDDS| workflow and converts the data into a |CMIP| compliant
+     format for |ESMValTool|
+  :Runs on:
+     Localhost
+  :Executes:
+     The ``cdds_convert`` command
+  :Details:
+     Runs after the successful completion of the ``configure_standardise`` job
 
 ``process``
   :Description:
@@ -62,7 +62,9 @@ An overview of the workflow
   :Executes:
      The |ESMValTool| command line script
   :Details:
-     Runs for every assessment area defined in the workflow
+     Runs after the successful completion of both the ``standardise_model_data`` job
+     and the ``configure_process`` job. This job runs for every assessment area
+     defined in the workflow
 
 ``compare``
   :Description:
@@ -85,6 +87,9 @@ Portability
 
 ``site/<site>.cylc``
   Contains task definitions specific to the ``SITE``, for example, ``COMPUTE``
+
+``site/<site>-standardise-env``
+  Contains details on how to set up the environment for CDDS at the ``SITE``
 
 ``site/<site>-process-env``
   Contains details on how to set up the environment for ESMValTool at the
