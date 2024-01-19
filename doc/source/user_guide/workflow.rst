@@ -109,7 +109,7 @@ Portability
 
 Families
 ~~~~~~~~
-Several tasks in |CMEW| are grouped into `Families`_ with shared configurations.
+Several tasks in |CMEW| are grouped into `families`_ with shared configurations.
 The following families are used in the workflow:
 
 ``COMPUTE``
