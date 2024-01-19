@@ -1,4 +1,4 @@
-.. (C) Crown Copyright 2022-2023, the Met Office.
+.. (C) Crown Copyright 2022-2024, the Met Office.
 
 .. include:: ../common.txt
 
@@ -22,14 +22,32 @@ An overview of the workflow
 
 ``configure_process``
   :Description:
-     Creates and modifies the |ESMValTool| user configuration file
+     * Creates and modifies the |ESMValTool| user configuration file,
+       and writes it to the cylc workflow ``share/etc`` directory
+     * Copies the |ESMValTool| recipe for the assessment area into
+       the cylc workflow ``share/etc`` directory
+
   :Runs on:
      Localhost
   :Executes:
-     The ``configure_process.py`` script from the |Rose| app
+     * The ``configure_process.py`` script from the |Rose| app
+     * The ``esmvaltool recipes get`` command for the required assessment area
+
   :Details:
-     Runs once at the start of the workflow, immediately after the successful
+     Runs once for each assessment area, immediately after the successful
      completion of the ``install_env_file`` job
+  :Families:
+     ``ASSESSMENT_AREA``
+
+``configure_standardise``
+  :Description:
+     Creates the ``request.json`` file and variables list which are needed to run |CDDS|
+  :Runs on:
+     Localhost
+  :Executes:
+     The ``configure_standardise.sh`` script from the |Rose| app
+  :Details:
+     Runs after the successful completion of the ``configure_process`` job
 
 ``standardise_model_data``
   :Description:
@@ -42,17 +60,6 @@ An overview of the workflow
   :Details:
      Runs after the successful completion of the ``configure_standardise`` job
 
-``configure_standardise``
-  :Description:
-     Creates the ``request.json`` file and variables list which are needed to run |CDDS|
-  :Runs on:
-     Localhost
-  :Executes:
-     The ``configure_standardise.sh`` script from the |Rose| app
-  :Details:
-     Runs once at the start of the workflow, immediately after the successful
-     completion of the ``install_env_file`` job
-
 ``process``
   :Description:
      Runs the requested recipes using |ESMValTool|
@@ -62,9 +69,10 @@ An overview of the workflow
   :Executes:
      The |ESMValTool| command line script
   :Details:
-     Runs after the successful completion of both the ``standardise_model_data`` job
-     and the ``configure_process`` job. This job runs for every assessment area
-     defined in the workflow
+     Runs once for each assessment area, after the successful completion of
+     the ``standardise_model_data`` job.
+  :Families:
+     ``COMPUTE``, ``ASSESSMENT_AREA``
 
 ``compare``
   :Description:
@@ -74,7 +82,8 @@ An overview of the workflow
   :Executes:
      The ``compare.sh`` script from the |Rose| app
   :Details:
-     Runs for every assessment area defined in the workflow
+     Runs for every assessment area defined in the workflow, after the
+     completion of the process job
 
 Design considerations
 ---------------------
@@ -97,6 +106,18 @@ Portability
 
 ``opt/rose-suite-<site>.conf``
   Contains configuration items specific to the ``SITE``, including ``SITE``
+
+Families
+~~~~~~~~
+Several tasks in |CMEW| are grouped into `families`_ with shared configurations.
+The following families are used in the workflow:
+
+``COMPUTE``
+  A family that is inherited by computationally intensive tasks
+
+``ASSESSMENT_AREA``
+  A family that is inherited by tasks that run
+  for each assessment area independently
 
 Metadata
 ~~~~~~~~
