@@ -7,17 +7,17 @@ from pathlib import Path
 
 
 def parse_variables_from_recipe(recipe_path):
-    """Reads and parses ESMValTool recipe into a formatted string of variables
+    """Retrieve variables from ESMValTool recipe.
 
     Parameters
     ----------
     recipe_path : str
-        Location of the ESMValTool recipe file in the installed workflow
+        Location of the ESMValTool recipe file in the installed workflow.
 
     Returns
     -------
     str
-        Formatted string of the variables to be read by CDDS
+        The variables from the ESMValTool recipe, separated by newlines.
     """
     with open(recipe_path) as source_file:
         variables = source_file.read()
@@ -25,15 +25,15 @@ def parse_variables_from_recipe(recipe_path):
 
 
 def write_variables(variables, target_path):
-    """Writes string of variables to a text file in the installed workflow
+    """Write a string of variables to a text file in the installed workflow.
 
     Parameters
     ----------
     variables : str
-        Formatted string of the variables to be read by CDDS
+        Formatted string of variables to be written to file.
 
     target_path : str
-        Location to write the variables file
+        Location to write the variables file.
     """
     with open(target_path, "w+") as target_file:
         target_file.write(variables)
