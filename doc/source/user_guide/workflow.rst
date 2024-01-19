@@ -56,7 +56,7 @@ An overview of the workflow
   :Runs on:
      Localhost
   :Executes:
-     The ``configure_standardise.sh`` script and the ``create_request_file.py`` script from the |Rose| app
+     The ``cdds_convert`` command
   :Details:
      Runs after the successful completion of the ``configure_standardise`` job
 
