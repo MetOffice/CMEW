@@ -31,17 +31,6 @@ An overview of the workflow
      Runs once at the start of the workflow, immediately after the successful
      completion of the ``install_env_file`` job
 
-``standardise_model_data``
-  :Description:
-     Launches the |CDDS| workflow and converts the data into a |CMIP| compliant
-     format for |ESMValTool|
-  :Runs on:
-     Localhost
-  :Executes:
-     The ``cdds_convert`` command
-  :Details:
-     Runs after the successful completion of the ``configure_standardise`` job
-
 ``configure_standardise``
   :Description:
      Creates the ``request.json`` file and variables list which are needed to run |CDDS|
@@ -52,6 +41,17 @@ An overview of the workflow
   :Details:
      Runs once at the start of the workflow, immediately after the successful
      completion of the ``install_env_file`` job
+
+``standardise_model_data``
+  :Description:
+     Launches the |CDDS| workflow and converts the data into a |CMIP| compliant
+     format for |ESMValTool|
+  :Runs on:
+     Localhost
+  :Executes:
+     The ``cdds_convert`` command
+  :Details:
+     Runs after the successful completion of the ``configure_standardise`` job
 
 ``process``
   :Description:
