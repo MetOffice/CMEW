@@ -44,7 +44,8 @@ An overview of the workflow
 
 ``configure_standardise``
   :Description:
-     Creates the ``request.json`` file and variables list which are needed to run |CDDS|
+     Creates the ``request.json`` file and variables list which are needed to
+     run |CDDS| and initiates the CDDS run directory.
   :Runs on:
      Localhost
   :Executes:
