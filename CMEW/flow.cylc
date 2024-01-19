@@ -42,7 +42,7 @@
     [[configure_process<assessment_area>]]
         pre-script = "mkdir -p ${USER_CONFIG_DIR} ${CYLC_WORKFLOW_SHARE_DIR}/etc"
         platform = localhost
-        inherit = ASSESSMENT_AREAS
+        inherit = None, ASSESSMENT_AREAS
         [[[environment]]]
             ROSE_TASK_APP = configure_process
             DRS_CMIP3 = {{ DRS_CMIP3 }}
