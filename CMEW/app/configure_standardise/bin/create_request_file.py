@@ -22,8 +22,8 @@ def main():
     # TODO: get the recipe_path from the environment
     mock_request_path = Path(__file__).parent.parent / "mock_data/request.json"
     target_path = os.environ["CYLC_WORKFLOW_SHARE_DIR"] + "/etc/request.json"
-    request = parse_request_from_recipe(mock_request_path, target_path)
-    write_request(request=request)
+    request = parse_request_from_recipe(mock_request_path)
+    write_request(request=request, target_path=target_path)
     return None
 
 
