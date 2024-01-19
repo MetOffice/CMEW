@@ -6,13 +6,13 @@ import os
 from pathlib import Path
 
 
-def parse_request_from_recipe(recipe_path: str) -> str:
+def parse_request_from_recipe(recipe_path):
     with open(recipe_path) as file:
         request = file.read()
     return request
 
 
-def write_request(request: str, target_path: str):
+def write_request(request, target_path):
     with open(target_path, mode="w+") as file:
         file.write(request)
     return None
