@@ -9,7 +9,7 @@
     "external_plugin_location":"",
     "global_attributes":{},
     "institution_id":"MOHC",
-    "license":"GCModelDev model data is licensed under the Open Government License v3 (https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/)",
+    "license":"Model development data is not licenced for use outside of the organisation that generated it. Please contact the owner of the model simulation if you wish to use it beyond the source organisation.",
     "mass_data_class":"crum",
     "mip":"CMEW",
     "mip_era":"GCModelDev",
