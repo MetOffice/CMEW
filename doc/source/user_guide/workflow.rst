@@ -110,7 +110,7 @@ Portability
 Cylc task families
 ~~~~~~~~~~~~~~~~~~
 Several tasks in |CMEW| are grouped into
-`families <https://cylc.github.io/cylc-doc/stable/html/tutorial/runtime/configuration-consolidation/families.html>`_
+`Families`_
 with shared configurations. The following families are used in the workflow:
 
 ``COMPUTE``
