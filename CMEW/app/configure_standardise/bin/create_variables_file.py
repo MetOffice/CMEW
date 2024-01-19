@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 """
-Generates the request.json file from the ESMValTool recipe.
-
 Generates the variables.txt file from the ESMValTool recipe.
 """
 import os
