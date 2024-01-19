@@ -62,14 +62,16 @@
             ROOTPATH_OBS4MIPS = {{ ROOTPATH_OBS4MIPS }}
             ROOTPATH_RAWOBS = {{ ROOTPATH_RAWOBS }}
 
+    [[configure_standardise]]
+        platform = localhost
+        [[[environment]]]
+            CDDS_VERSION = {{ CDDS_VERSION }}
+
     [[standardise_model_data]]
         platform = localhost
         [[[environment]]]
             CDDS_VERSION = {{ CDDS_VERSION }}
             SITE = {{ SITE }}
-
-    [[configure_standardise]]
-        platform = localhost
 
     [[process<assessment_area>]]
         inherit = None, COMPUTE
