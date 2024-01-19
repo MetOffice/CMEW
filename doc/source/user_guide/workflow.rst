@@ -113,10 +113,11 @@ Several tasks in |CMEW| are grouped into `Families`_ with shared configurations.
 The following families are used in the workflow:
 
 ``COMPUTE``
-  Computationally intensive tasks
+  A family that is inherited by computationally intensive tasks
 
 ``ASSESSMENT_AREA``
-  Tasks that run for each assessment area independently
+  A family that is inherited by tasks that run
+  for each assessment area independently
 
 Metadata
 ~~~~~~~~
