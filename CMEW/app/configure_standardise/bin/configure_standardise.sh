@@ -6,6 +6,5 @@ set -eux
 mkdir -p ${CYLC_WORKFLOW_SHARE_DIR}/etc
 
 echo "Running configure_standardise"
-echo "Get request.json file"
 cmew-process-env create_request_file.py
-echo "Get variable list"
+cmew-process-env create_variables_file.py
