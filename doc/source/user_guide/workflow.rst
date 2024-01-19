@@ -107,11 +107,10 @@ Portability
 ``opt/rose-suite-<site>.conf``
   Contains configuration items specific to the ``SITE``, including ``SITE``
 
-Cylc task families
-~~~~~~~~~~~~~~~~~~
-Several tasks in |CMEW| are grouped into
-`Families`_
-with shared configurations. The following families are used in the workflow:
+Families
+~~~~~~~~
+Several tasks in |CMEW| are grouped into `Families`_ with shared configurations.
+The following families are used in the workflow:
 
 ``COMPUTE``
   Computationally intensive tasks
