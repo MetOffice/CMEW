@@ -37,7 +37,7 @@ An overview of the workflow
      Runs once for each assessment area, immediately after the successful
      completion of the ``install_env_file`` job
   :Families:
-     ``ASSESSMENT_AREAS``
+     ``ASSESSMENT_AREA``
 
 ``configure_standardise``
   :Description:
@@ -72,7 +72,7 @@ An overview of the workflow
      Runs once for each assessment area, after the successful completion of
      the ``standardise_model_data`` job.
   :Families:
-     ``COMPUTE``, ``ASSESSMENT_AREAS``
+     ``COMPUTE``, ``ASSESSMENT_AREA``
 
 ``compare``
   :Description:
@@ -116,7 +116,7 @@ with shared configurations. The following families are used in the workflow:
 ``COMPUTE``
   Computationally intensive tasks
 
-``ASSESSMENT_AREAS``
+``ASSESSMENT_AREA``
   Tasks that run for each assessment area independently
 
 Metadata

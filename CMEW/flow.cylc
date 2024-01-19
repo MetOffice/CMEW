@@ -30,7 +30,7 @@
             OUTPUT_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/cycle/${CYLC_TASK_CYCLE_POINT}
             CDDS_DIR = ${CYLC_WORKFLOW_RUN_DIR}/lib/CDDS
 
-    [[ASSESSMENT_AREAS]]
+    [[ASSESSMENT_AREA]]
         [[[environment]]]
             RECIPE_NAME = "recipe_${CYLC_TASK_PARAM_assessment_area}.yml"
 
@@ -42,7 +42,7 @@
     [[configure_process<assessment_area>]]
         pre-script = "mkdir -p ${USER_CONFIG_DIR} ${CYLC_WORKFLOW_SHARE_DIR}/etc"
         platform = localhost
-        inherit = None, ASSESSMENT_AREAS
+        inherit = None, ASSESSMENT_AREA
         [[[environment]]]
             ROSE_TASK_APP = configure_process
             DRS_CMIP3 = {{ DRS_CMIP3 }}
@@ -76,7 +76,7 @@
         platform = localhost
 
     [[process<assessment_area>]]
-        inherit = None, COMPUTE, ASSESSMENT_AREAS
+        inherit = None, COMPUTE, ASSESSMENT_AREA
         [[[environment]]]
             ROSE_TASK_APP = process
 
