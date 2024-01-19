@@ -7,17 +7,17 @@ from pathlib import Path
 
 
 def parse_request_from_recipe(recipe_path):
-    """Creates a request from an ESMValTool recipe
+    """Retrieve request information from ESMValTool recipe.
 
     Parameters
     ----------
     recipe_path : Path
-        Location of the ESMValTool recipe file in the installed workflow
+        Location of the ESMValTool recipe file in the installed workflow.
 
     Returns
     -------
     str
-        Contents to be written into a request.json file
+        Json-formatted string containing the request information.
     """
     with open(recipe_path) as file:
         request = file.read()
@@ -25,15 +25,15 @@ def parse_request_from_recipe(recipe_path):
 
 
 def write_request(request, target_path):
-    """Writes json-formatted string to a json file in the installed workflow
+    """Write json-formatted string to a json file in the installed workflow.
 
     Parameters
     ----------
     request : str
-        Json-formatted string of the request to be read by CDDS
+        Json-formatted string containing the request information.
 
     target_path: Path
-        Location of the request.json file in the installed workflow
+        Location to write the request file.
     """
     with open(target_path, mode="w+") as file:
         file.write(request)
