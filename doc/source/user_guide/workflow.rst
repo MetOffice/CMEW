@@ -26,13 +26,11 @@ An overview of the workflow
        and writes it to the cylc workflow ``share/etc`` directory
      * Copies the |ESMValTool| recipe for the assessment area into
        the cylc workflow ``share/etc`` directory
-
   :Runs on:
      Localhost
   :Executes:
      * The ``configure_process.py`` script from the |Rose| app
      * The ``esmvaltool recipes get`` command for the required assessment area
-
   :Details:
      Runs once for each assessment area, immediately after the successful
      completion of the ``install_env_file`` job
@@ -41,7 +39,8 @@ An overview of the workflow
 
 ``configure_standardise``
   :Description:
-     Creates the ``request.json`` file and variables list which are needed to run |CDDS|
+     Creates the ``request.json`` file and variables list which are needed to run
+     |CDDS| and creates the |CDDS| directory structure.
   :Runs on:
      Localhost
   :Executes:
