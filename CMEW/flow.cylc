@@ -12,9 +12,8 @@
 [scheduling]
     [[graph]]
         R1 = """
-            install_env_file => configure_process & configure_standardise
-            configure_standardise => standardise_model_data
-            configure_process & standardise_model_data => process<assessment_area>
+            install_env_file => configure_process<assessment_area> => configure_standardise
+            configure_standardise => standardise_model_data => process<assessment_area>
 {%- if TEST %}
             process<assessment_area> => compare<assessment_area>
 {%- endif %}
@@ -31,14 +30,20 @@
             OUTPUT_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/cycle/${CYLC_TASK_CYCLE_POINT}
             CDDS_DIR = ${CYLC_WORKFLOW_RUN_DIR}/lib/CDDS
 
+    [[ASSESSMENT_AREA]]
+        [[[environment]]]
+            RECIPE_NAME = "recipe_${CYLC_TASK_PARAM_assessment_area}.yml"
+            RECIPE_PATH = "${CYLC_WORKFLOW_SHARE_DIR}/etc/${RECIPE_NAME}"
+
     [[install_env_file]]
         platform = localhost
         [[[environment]]]
             SITE = {{ SITE }}
 
-    [[configure_process]]
-        pre-script = "mkdir -p ${USER_CONFIG_DIR}"
+    [[configure_process<assessment_area>]]
+        pre-script = "mkdir -p ${USER_CONFIG_DIR} ${CYLC_WORKFLOW_SHARE_DIR}/etc"
         platform = localhost
+        inherit = None, ASSESSMENT_AREA
         [[[environment]]]
             ROSE_TASK_APP = configure_process
             DRS_CMIP3 = {{ DRS_CMIP3 }}
@@ -74,10 +79,9 @@
             SITE = {{ SITE }}
 
     [[process<assessment_area>]]
-        inherit = None, COMPUTE
+        inherit = None, COMPUTE, ASSESSMENT_AREA
         [[[environment]]]
             ROSE_TASK_APP = process
-            RECIPE_NAME = "recipe_${CYLC_TASK_PARAM_assessment_area}.yml"
 
 {% include "site/" ~ SITE ~ ".cylc" %}
 {%- if TEST %}

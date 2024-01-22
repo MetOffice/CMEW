@@ -3,9 +3,12 @@
 BASH_XTRACEFD=1
 set -eux
 
+mkdir -p ${CYLC_WORKFLOW_SHARE_DIR}/etc
+
 echo "Running configure_standardise"
 echo "Get request.json file"
-echo "Get variable list"
+
+cmew-process-env create_variables_file.py
 
 # Running setup commands for CDDS
 
@@ -25,3 +28,4 @@ mv ${CYLC_WORKFLOW_RUN_DIR}/app/configure_standardise/mock_data/variables.txt ${
 cmew-standardise-env create_cdds_directory_structure "${WORKING_DIRECTORY}"/request.json -c "${ROOT_PROC_DIR}" -t "${ROOT_DATA_DIR}"
 
 cmew-standardise-env prepare_generate_variable_list "${WORKING_DIRECTORY}/request.json" -c "${ROOT_PROC_DIR}" -t "${ROOT_DATA_DIR}" --use_proc_dir -r "${WORKING_DIRECTORY}/variables.txt"
+
