@@ -40,7 +40,7 @@ An overview of the workflow
 ``configure_standardise``
   :Description:
      Creates the ``request.json`` file and variables list which are needed to run
-     |CDDS| and initiates the |CDDS| run directory.
+     |CDDS| and creates the |CDDS| directory structure.
   :Runs on:
      Localhost
   :Executes:
