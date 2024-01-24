@@ -1,0 +1,5 @@
+#!jinja2
+# unittest.cylc
+[runtime]
+    [[unittest]]
+        platform = localhost

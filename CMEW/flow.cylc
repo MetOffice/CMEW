@@ -12,12 +12,16 @@
 [scheduling]
     [[graph]]
         R1 = """
+{%- if UNITTEST %}
+            install_env_file => unittest
+{%- else %}
             install_env_file => configure_process<assessment_area> => configure_standardise
             configure_standardise => standardise_model_data => process<assessment_area>
-{%- if TEST %}
+    {%- if TEST %}
             process<assessment_area> => compare<assessment_area>
+    {%- endif %}
 {%- endif %}
-        """
+"""
 
 [runtime]
     [[root]]
@@ -86,4 +90,7 @@
 {% include "site/" ~ SITE ~ ".cylc" %}
 {%- if TEST %}
     {% include "inc/test.cylc" %}
+{%- endif %}
+{%- if UNITTEST %}
+    {% include "inc/unittest.cylc" %}
 {%- endif %}
