@@ -21,7 +21,7 @@
             process<assessment_area> => compare<assessment_area>
     {%- endif %}
 {%- endif %}
-"""
+        """
 
 [runtime]
     [[root]]
