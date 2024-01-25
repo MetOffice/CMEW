@@ -22,18 +22,26 @@ An overview of the workflow
 
 ``configure_process``
   :Description:
-     * Creates and modifies the |ESMValTool| user configuration file,
-       and writes it to the cylc workflow ``share/etc`` directory
-     * Copies the |ESMValTool| recipe for the assessment area into
-       the cylc workflow ``share/etc`` directory
+     Creates and modifies the |ESMValTool| user configuration file,
+     and writes it to the cylc workflow ``share/etc`` directory
   :Runs on:
      Localhost
   :Executes:
-     * The ``configure_process.py`` script from the |Rose| app
-     * The ``esmvaltool recipes get`` command for the required assessment area
+     The ``configure_process.py`` script from the |Rose| app
+  :Details:
+     Runs immediately after the successful completion of the ``install_env_file`` job
+
+``configure_for``
+  :Description:
+     Copies the |ESMValTool| recipe for the assessment area into
+     the cylc workflow ``share/etc`` directory
+  :Runs on:
+     Localhost
+  :Executes:
+     The ``esmvaltool recipes get`` command for the required assessment area
   :Details:
      Runs once for each assessment area, immediately after the successful
-     completion of the ``install_env_file`` job
+     completion of the ``configure_process`` job
   :Families:
      ``ASSESSMENT_AREA``
 
