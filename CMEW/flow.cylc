@@ -15,14 +15,13 @@
 {%- if UNITTEST or TEST %}
         install_env_file => unittest
 {%- endif %}
-{%- if not UNITTEST%}
+{%- if not UNITTEST %}
         install_env_file => configure_process<assessment_area> => configure_standardise
         configure_standardise => standardise_model_data => process<assessment_area>
-{%- if TEST%}
+{%- if TEST %}
             process<assessment_area> => compare<assessment_area>
 {%- endif %}
 {%- endif %}
-
         """
 
 [runtime]
@@ -93,6 +92,6 @@
 {%- if TEST %}
     {% include "inc/test.cylc" %}
 {%- endif %}
-{%- if UNITTEST or TEST%}
+{%- if UNITTEST or TEST %}
     {% include "inc/unittest.cylc" %}
 {%- endif %}
