@@ -12,7 +12,7 @@
 [scheduling]
     [[graph]]
         R1 = """
-            install_env_file => configure_process<assessment_area> => configure_standardise
+            install_env_file => configure_for<assessment_area> => configure_standardise
             configure_standardise => standardise_model_data => process<assessment_area>
 {%- if TEST %}
             process<assessment_area> => compare<assessment_area>
@@ -40,12 +40,12 @@
         [[[environment]]]
             SITE = {{ SITE }}
 
-    [[configure_process<assessment_area>]]
+    [[configure_for<assessment_area>]]
         pre-script = "mkdir -p ${USER_CONFIG_DIR} ${CYLC_WORKFLOW_SHARE_DIR}/etc"
         platform = localhost
         inherit = None, ASSESSMENT_AREA
         [[[environment]]]
-            ROSE_TASK_APP = configure_process
+            ROSE_TASK_APP = configure_for
             DRS_CMIP3 = {{ DRS_CMIP3 }}
             DRS_CMIP5 = {{ DRS_CMIP5 }}
             DRS_CMIP6 = {{ DRS_CMIP6 }}
