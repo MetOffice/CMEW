@@ -15,7 +15,7 @@
 {%- if UNITTEST or TEST %}
         install_env_file => unittest
 {%- endif %}
-{%- if not UNITTEST%}
+{%- if not UNITTEST %}
         install_env_file => configure_process<assessment_area> => configure_standardise
         configure_standardise => standardise_model_data => process<assessment_area>
 {%- if TEST%}
