@@ -84,6 +84,17 @@ An overview of the workflow
      Runs for every assessment area defined in the workflow, after the
      completion of the process job
 
+``unittest``
+  :Description:
+     Locates and runs unit tests for the python scripts inside the `app` directory
+  :Runs on:
+     Localhost
+  :Executes:
+     ``pytest`` from the |Rose| app
+  :Details:
+     Can run on its own when `-O unittest` command is invoked, or alongside the
+     full workflow when running with `-O test`
+
 Design considerations
 ---------------------
 
