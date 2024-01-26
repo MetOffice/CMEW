@@ -92,7 +92,7 @@ An overview of the workflow
   :Executes:
      ``pytest`` from the |Rose| app
   :Details:
-     Can run on its own when ``-O unittest`` command is invoked, or alongside the
+     Runs on its own when ``-O unittest`` command is invoked, or runs alongside the
      full workflow when running with ``-O test``
 
 Design considerations
