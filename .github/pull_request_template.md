@@ -6,6 +6,7 @@ Closes #<issue_number>.
 - [ ] Does the text of the PR title exactly match with the text of the issue title (do not include the issue number)?
 - [ ] Have appropriate reviewers been added to the PR (once it is ready for review)?
 - [ ] Has the PR been assigned to the developer?
+- [ ] Have the same labels as the issue been added to the PR (except for the `first good issue` label, which is just for issues)?
 - [ ] Has the `Climate Model Evaluation Workflow (CMEW)` project been added to the PR?
 - [ ] Has the appropriate milestone been added to the PR?
 
@@ -27,6 +28,7 @@ Closes #<issue_number>.
 - [ ] Does the text of the PR title exactly match with the text of the issue title (do not include the issue number)?
 - [ ] Have appropriate reviewers been added to the PR (once it is ready for review)?
 - [ ] Has the PR been assigned to the developer?
+- [ ] Have the same labels as the issue been added to the PR (except for the `first good issue` label, which is just for issues)?
 - [ ] Has the `Climate Model Evaluation Workflow (CMEW)` project been added to the PR?
 - [ ] Has the appropriate milestone been added to the PR?
 
