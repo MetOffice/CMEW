@@ -41,7 +41,7 @@ An overview of the workflow
      The ``esmvaltool recipes get`` command for the required assessment area
   :Details:
      Runs once for each assessment area, immediately after the successful
-     completion of the ``configure_process`` job
+     completion of the ``install_env_file`` job
   :Families:
      ``ASSESSMENT_AREA``
 
@@ -54,7 +54,8 @@ An overview of the workflow
   :Executes:
      The ``configure_standardise.sh`` script from the |Rose| app
   :Details:
-     Runs after the successful completion of the ``configure_process`` job
+     Runs after the successful completion of both the ``configure_process`` job
+     and the ``configure_for`` job
 
 ``standardise_model_data``
   :Description:
