@@ -90,6 +90,7 @@
             ROSE_TASK_APP = process
 
     [[housekeeping]]
+        pre-script = "shopt -s globstar"
         platform = localhost
 
 {% include "site/" ~ SITE ~ ".cylc" %}
