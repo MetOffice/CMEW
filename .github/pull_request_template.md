@@ -20,7 +20,7 @@ Closes #<issue_number>.
 - [ ] Has the API documentation (e.g., docstrings in Python modules) related to the change been updated appropriately?
 - [ ] Has the user documentation (i.e., everything in the `doc` directory) related to the change been updated appropriately?
 - [ ] Do the HTML pages render correctly? (See [wiki: Build the documentation locally](https://github.com/MetOffice/CMEW/wiki/Developer-Guide#build-the-documentation-locally))
-- [ ] Do the steps in the [Quick Start](https://github.com/MetOffice/CMEW/blob/main/doc/source/user_guide/quick_start.rst) section of the documentation work?
+- [ ] Are any changes needed to the steps in the [Quick Start](https://github.com/MetOffice/CMEW/blob/main/doc/source/user_guide/quick_start.rst) section of the documentation?
 
 ## PR creation checklist for the _reviewer_
 
@@ -42,4 +42,4 @@ Closes #<issue_number>.
 - [ ] Has the API documentation (e.g., docstrings in Python modules) related to the change been updated appropriately?
 - [ ] Has the user documentation (i.e., everything in the `doc` directory) related to the change been updated appropriately?
 - [ ] Do the HTML pages render correctly? (See [wiki: Build the documentation locally](https://github.com/MetOffice/CMEW/wiki/Developer-Guide#build-the-documentation-locally))
-- [ ] Do the steps in the [Quick Start](https://github.com/MetOffice/CMEW/blob/main/doc/source/user_guide/quick_start.rst) section of the documentation work?
+- [ ] Are any changes needed to the steps in the [Quick Start](https://github.com/MetOffice/CMEW/blob/main/doc/source/user_guide/quick_start.rst) section of the documentation?
