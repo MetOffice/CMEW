@@ -12,7 +12,7 @@ Closes #<issue_number>.
 ## Definition of Done for the _developer_
 
 - [ ] Does the change in this PR address the above issue / have all acceptance criteria been met?
-- [ ] Does the change in this PR follow the recommendations in the [wiki: Developer Guide](https://github.com/MetOffice/CMEW/wiki/Developer-Guide)?
+- [ ] Does the change in this PR follow the requirements in the [wiki: Developer Guide](https://github.com/MetOffice/CMEW/wiki/Developer-Guide) (including copyrights)?
 - [ ] Have new tests related to the change been added?
 - [ ] Do all the GitHub workflow checks pass?
 - [ ] Do all the tests run locally and pass? (Note: the tests are not run by the GitHub workflow, see [wiki: Run the tests locally](https://github.com/MetOffice/CMEW/wiki/Developer-Guide#run-the-tests-locally))
@@ -33,7 +33,7 @@ Closes #<issue_number>.
 ## Definition of Done for the _reviewer_
 
 - [ ] Does the change in this PR address the above issue / have all acceptance criteria been met?
-- [ ] Does the change in this PR follow the recommendations in the [wiki: Developer Guide](https://github.com/MetOffice/CMEW/wiki/Developer-Guide)?
+- [ ] Does the change in this PR follow the requirements in the [wiki: Developer Guide](https://github.com/MetOffice/CMEW/wiki/Developer-Guide) (including copyrights)?
 - [ ] Have new tests related to the change been added?
 - [ ] Do all the GitHub workflow checks pass?
 - [ ] Do all the tests run locally and pass? (Note: the tests are not run by the GitHub workflow, see [wiki: Run the tests locally](https://github.com/MetOffice/CMEW/wiki/Developer-Guide#run-the-tests-locally))
