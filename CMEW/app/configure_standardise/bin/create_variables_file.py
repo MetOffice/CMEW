@@ -29,7 +29,7 @@ def parse_variables_from_recipe(recipe_path):
             variable_str = mip + "/" + variable
             if variable_str not in variables:
                 variables.append(variable_str)
-    variables_str = "\n".join(variables)
+    variables_str = "\n".join(variables) + "\n"
     return variables_str
 
 

@@ -3,16 +3,14 @@
 Tests for configure_standardise
 """
 from create_variables_file import parse_variables_from_recipe
-from unittest import mock
-from esmvalcore.experimental import get_recipe
+from pathlib import Path
 
 
 def test_parse_radiation_budget_variables():
-    with mock.patch(
-        "create_variables_file.Recipe",
-        return_value=get_recipe("recipe_radiation_budget"),
-    ):
-        actual = parse_variables_from_recipe("foo")
+    recipe_path = (
+        Path(__file__).parent.parent / "mock_data" / "test_recipe.yml"
+    )
+    actual = parse_variables_from_recipe(recipe_path)
     expected = """Emon/rss
 Amon/rsdt
 Amon/rsut
@@ -23,5 +21,6 @@ Amon/rlut
 Amon/rlutcs
 Amon/rlds
 Amon/hfss
-Amon/hfls"""
+Amon/hfls
+"""
     assert actual == expected
