@@ -3,7 +3,7 @@
 Generates the variables.txt file from the ESMValTool recipe.
 """
 import os
-from pathlib import Path
+from esmvalcore.experimental.recipe import Recipe
 
 
 def parse_variables_from_recipe(recipe_path):
@@ -19,9 +19,18 @@ def parse_variables_from_recipe(recipe_path):
     str
         The variables from the ESMValTool recipe, separated by newlines.
     """
-    with open(recipe_path) as source_file:
-        variables = source_file.read()
-    return variables
+    recipe = Recipe(recipe_path)
+    diagnostics = recipe.data["diagnostics"]
+    variables = []
+    for diagnostic in diagnostics:
+        variables_dict = diagnostics[diagnostic]["variables"]
+        for variable in variables_dict:
+            mip = variables_dict[variable]["mip"]
+            variable_str = mip + "/" + variable
+            if variable_str not in variables:
+                variables.append(variable_str)
+    variables_str = "\n".join(variables)
+    return variables_str
 
 
 def write_variables(variables, target_path):
@@ -40,8 +49,10 @@ def write_variables(variables, target_path):
 
 
 def main():
-    mock_path = Path(__file__).parent.parent / "mock_data" / "variables.txt"
-    variables = parse_variables_from_recipe(mock_path)
+    recipe_path = os.path.join(
+        os.environ["RECIPE_PATH"], os.environ["RECIPE_NAME"]
+    )
+    variables = parse_variables_from_recipe(recipe_path)
     write_variables(variables, os.environ["VARIABLES_PATH"])
 
 

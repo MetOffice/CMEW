@@ -74,6 +74,7 @@
 
     [[configure_standardise]]
         platform = localhost
+        inherit = ASSESSMENT_AREA
         [[[environment]]]
             CDDS_VERSION = {{ CDDS_VERSION }}
 
