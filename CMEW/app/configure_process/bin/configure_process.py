@@ -41,6 +41,7 @@ def get_config_values_from_task_env():
     config_values_from_task_env = {
         "auxiliary_data_dir": "",
         "config_file": USER_CONFIG_PATH,
+        "config_developer_file": "config-developer.yml",
         "download_dir": "",
         "drs": {
             "ana4mips": os.environ["DRS_ANA4MIPS"],
@@ -52,6 +53,7 @@ def get_config_values_from_task_env():
             "OBS": os.environ["DRS_OBS"],
             "obs4MIPs": os.environ["DRS_OBS4MIPS"],
             "OBS6": os.environ["DRS_OBS6"],
+            "ESMVal": "BADC",
         },
         "extra_facets_dir": [],
         "max_parallel_tasks": int(os.environ["MAX_PARALLEL_TASKS"]),
@@ -68,6 +70,7 @@ def get_config_values_from_task_env():
             "obs4MIPs": os.environ["ROOTPATH_OBS4MIPS"],
             "OBS6": os.environ["ROOTPATH_OBS6"],
             "RAWOBS": os.environ["ROOTPATH_RAWOBS"],
+            "ESMVal": "~/Code/induction-project/GCModelDev",
         },
     }
     return config_values_from_task_env
