@@ -11,10 +11,6 @@ TARGET_DIR="${CYLC_WORKFLOW_SHARE_DIR}/bin"
 # Names of the environment scripts.
 ENV_PROCESS_FILE="cmew-process-env"
 ENV_STANDARDISE_FILE="cmew-standardise-env"
-
-# Create the 'bin' directory in the installed workflow.
-mkdir "${TARGET_DIR}"
-
 # Copy the environment scripts to the 'bin' directory.
 cp "${SOURCE_PROCESS_PATH}" "${TARGET_DIR}/${ENV_PROCESS_FILE}"
 cp "${SOURCE_STANDARDISE_PATH}" "${TARGET_DIR}/${ENV_STANDARDISE_FILE}"
