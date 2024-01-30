@@ -56,7 +56,7 @@ def parse_variables_from_recipe(recipe_path):
         variables = diagnostics[diagnostic]["variables"]
         for variable in variables:
             mip = variables[variable]["mip"]
-            formatted_variable = mip + "/" + variable
+            formatted_variable = f"{mip}/{variable}"
             if formatted_variable not in formatted_variables:
                 formatted_variables.append(formatted_variable)
     variables_str = "\n".join(formatted_variables) + "\n"
