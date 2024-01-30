@@ -3,7 +3,7 @@ Closes #<issue_number>.
 ## PR creation checklist for the _developer_
 
 - [ ] Does the feature branch name follow the format `<issue_number>_<short_description_of_feature>`?
-- [ ] Does the text of the PR title exactly match with the text of the issue title (do not include the issue number)?
+- [ ] Does the text of the PR title exactly match with the text (not including the issue number) of the issue title?
 - [ ] Have appropriate reviewers been added to the PR (once it is ready for review)?
 - [ ] Has the PR been assigned to the developer(s)?
 - [ ] Have the same labels as the issue been added to the PR (except for the `first good issue` label, which is just for issues)?
@@ -24,7 +24,7 @@ Closes #<issue_number>.
 ## PR creation checklist for the _reviewer_
 
 - [ ] Does the feature branch name follow the format `<issue_number>_<short_description_of_feature>`?
-- [ ] Does the text of the PR title exactly match with the text of the issue title (do not include the issue number)?
+- [ ] Does the text of the PR title exactly match with the text (not including the issue number) of the issue title?
 - [ ] Have appropriate reviewers been added to the PR (once it is ready for review)?
 - [ ] Has the PR been assigned to the developer(s)?
 - [ ] Have the same labels as the issue been added to the PR (except for the `first good issue` label, which is just for issues)?
