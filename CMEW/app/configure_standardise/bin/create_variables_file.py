@@ -16,6 +16,29 @@ def parse_variables_from_recipe(recipe_path):
     * Output a newline-separated list of variables, with each line formatted
       as ``<mip>/<variable>``
 
+    Recipe file snippet::
+
+        diagnostics:
+          <diagnostic_1>:
+            variables:
+              <variable_1a>:
+                mip: <mip_1a>
+              <variable_1b>:
+                mip: <mip_1b>
+          <diagnostic_2>:
+            variables:
+              <variable_2a>:
+                mip: <mip_2a>
+              <variable_2b>:
+                mip: <mip_2b>
+
+    Will be formatted as::
+
+        <mip_1a>/<variable_1a>
+        <mip_1b>/<variable_1b>
+        <mip_2a>/<variable_2a>
+        <mip_2b>/<variable_2b>
+
     Parameters
     ----------
     recipe_path : str
