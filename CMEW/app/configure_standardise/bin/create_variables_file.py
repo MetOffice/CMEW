@@ -9,6 +9,13 @@ from esmvalcore.experimental.recipe import Recipe
 def parse_variables_from_recipe(recipe_path):
     """Retrieve variables from ESMValTool recipe.
 
+    * Read the ESMValTool recipe YAML file from the provided ``recipe_path``
+    * For each diagnostic defined in the recipe, extract the variables required
+      for that diagnostic
+    * For each variable, extract the mip table name
+    * Output a newline-separated list of variables, with each line formatted
+      as ``<mip>/<variable>``
+
     Parameters
     ----------
     recipe_path : str
@@ -21,15 +28,15 @@ def parse_variables_from_recipe(recipe_path):
     """
     recipe = Recipe(recipe_path)
     diagnostics = recipe.data["diagnostics"]
-    variables = []
+    formatted_variables = []
     for diagnostic in diagnostics:
-        variables_dict = diagnostics[diagnostic]["variables"]
-        for variable in variables_dict:
-            mip = variables_dict[variable]["mip"]
-            variable_str = mip + "/" + variable
-            if variable_str not in variables:
-                variables.append(variable_str)
-    variables_str = "\n".join(variables) + "\n"
+        variables = diagnostics[diagnostic]["variables"]
+        for variable in variables:
+            mip = variables[variable]["mip"]
+            formatted_variable = mip + "/" + variable
+            if formatted_variable not in formatted_variables:
+                formatted_variables.append(formatted_variable)
+    variables_str = "\n".join(formatted_variables) + "\n"
     return variables_str
 
 
