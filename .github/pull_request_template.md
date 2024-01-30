@@ -2,6 +2,8 @@ Closes #<issue_number>.
 
 ## PR creation checklist for the _developer_
 
+- [ ] Has `<issue_number>` above :point_up: been replaced with the issue number?
+- [ ] Has `main` been selected as the base branch?
 - [ ] Does the feature branch name follow the format `<issue_number>_<short_description_of_feature>`?
 - [ ] Does the text of the PR title exactly match with the text (not including the issue number) of the issue title?
 - [ ] Have appropriate reviewers been added to the PR (once it is ready for review)?
@@ -23,6 +25,8 @@ Closes #<issue_number>.
 
 ## PR creation checklist for the _reviewer_
 
+- [ ] Has `<issue_number>` above :point_up: been replaced with the issue number?
+- [ ] Has `main` been selected as the base branch?
 - [ ] Does the feature branch name follow the format `<issue_number>_<short_description_of_feature>`?
 - [ ] Does the text of the PR title exactly match with the text (not including the issue number) of the issue title?
 - [ ] Have appropriate reviewers been added to the PR (once it is ready for review)?
