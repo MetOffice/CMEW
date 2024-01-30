@@ -56,9 +56,7 @@ def write_variables(variables, target_path):
 
 
 def main():
-    recipe_path = os.path.join(
-        os.environ["RECIPE_PATH"], os.environ["RECIPE_NAME"]
-    )
+    recipe_path = os.environ["RECIPE_PATH"]
     variables = parse_variables_from_recipe(recipe_path)
     write_variables(variables, os.environ["VARIABLES_PATH"])
 

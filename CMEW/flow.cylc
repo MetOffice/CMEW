@@ -16,8 +16,8 @@
         install_env_file => unittest
 {%- endif %}
 {%- if not UNITTEST %}
-        install_env_file => configure_process<assessment_area> => configure_standardise
-        configure_standardise => standardise_model_data => process<assessment_area>
+        install_env_file => configure_process<assessment_area> => configure_standardise<assessment_area>
+        configure_standardise<assessment_area> => standardise_model_data => process<assessment_area>
 {%- if TEST %}
             process<assessment_area> => compare<assessment_area>
 {%- endif %}
@@ -72,11 +72,12 @@
             ROOTPATH_OBS4MIPS = {{ ROOTPATH_OBS4MIPS }}
             ROOTPATH_RAWOBS = {{ ROOTPATH_RAWOBS }}
 
-    [[configure_standardise]]
+    [[configure_standardise<assessment_area>]]
         platform = localhost
-        inherit = ASSESSMENT_AREA
+        inherit = None, ASSESSMENT_AREA
         [[[environment]]]
             CDDS_VERSION = {{ CDDS_VERSION }}
+            ROSE_TASK_APP = configure_standardise
 
     [[standardise_model_data]]
         platform = localhost
