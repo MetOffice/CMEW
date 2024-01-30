@@ -16,8 +16,8 @@
         install_env_file => unittest
 {%- endif %}
 {%- if not UNITTEST %}
-        install_env_file => configure_process<assessment_area> => configure_standardise
-        configure_standardise => standardise_model_data => housekeeping & process<assessment_area>
+        install_env_file => configure_process & configure_for<assessment_area> => configure_standardise
+        configure_standardise => standardise_model_data => process<assessment_area> & housekeeping
 {%- if TEST %}
             process<assessment_area> => compare<assessment_area>
 {%- endif %}
@@ -45,12 +45,10 @@
         [[[environment]]]
             SITE = {{ SITE }}
 
-    [[configure_process<assessment_area>]]
+    [[configure_process]]
         pre-script = "mkdir -p ${USER_CONFIG_DIR} ${CYLC_WORKFLOW_SHARE_DIR}/etc"
         platform = localhost
-        inherit = None, ASSESSMENT_AREA
         [[[environment]]]
-            ROSE_TASK_APP = configure_process
             DRS_CMIP3 = {{ DRS_CMIP3 }}
             DRS_CMIP5 = {{ DRS_CMIP5 }}
             DRS_CMIP6 = {{ DRS_CMIP6 }}
@@ -71,6 +69,12 @@
             ROOTPATH_NATIVE6 = {{ ROOTPATH_NATIVE6 }}
             ROOTPATH_OBS4MIPS = {{ ROOTPATH_OBS4MIPS }}
             ROOTPATH_RAWOBS = {{ ROOTPATH_RAWOBS }}
+
+    [[configure_for<assessment_area>]]
+        platform = localhost
+        inherit = None, ASSESSMENT_AREA
+        [[[environment]]]
+            ROSE_TASK_APP = configure_for
 
     [[configure_standardise]]
         platform = localhost
