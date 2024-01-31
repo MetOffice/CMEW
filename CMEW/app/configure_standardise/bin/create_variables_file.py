@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+# (C) British Crown Copyright 2024, Met Office.
+# Please see LICENSE for license details.
 """
 Generates the variables.txt file from the ESMValTool recipe.
 """
