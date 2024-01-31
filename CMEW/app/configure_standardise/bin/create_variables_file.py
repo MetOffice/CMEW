@@ -46,8 +46,9 @@ def parse_variables_from_recipe(recipe_path):
 
     Returns
     -------
-    str
-        The variables from the ESMValTool recipe, separated by newlines.
+    list[str]
+        List of variables from the ESMValTool recipe,
+        formatted as ``<mip>/<variable>``.
     """
     recipe = Recipe(recipe_path)
     diagnostics = recipe.data["diagnostics"]
@@ -59,8 +60,7 @@ def parse_variables_from_recipe(recipe_path):
             formatted_variable = f"{mip}/{variable}"
             if formatted_variable not in formatted_variables:
                 formatted_variables.append(formatted_variable)
-    variables_str = "\n".join(formatted_variables) + "\n"
-    return variables_str
+    return formatted_variables
 
 
 def write_variables(variables, target_path):
@@ -68,14 +68,15 @@ def write_variables(variables, target_path):
 
     Parameters
     ----------
-    variables : str
-        Formatted string of variables to be written to file.
+    variables : list[str]
+        List of variables to be written to file.
 
     target_path : str
         Location to write the variables file.
     """
-    with open(target_path, "w+") as target_file:
-        target_file.write(variables)
+    variables_str = "\n".join(variables) + "\n"
+    with open(target_path, "w") as target_file:
+        target_file.write(variables_str)
 
 
 def main():

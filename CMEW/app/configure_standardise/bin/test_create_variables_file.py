@@ -11,16 +11,17 @@ def test_parse_radiation_budget_variables():
         Path(__file__).parent.parent / "mock_data" / "test_recipe.yml"
     )
     actual = parse_variables_from_recipe(recipe_path)
-    expected = """Emon/rss
-Amon/rsdt
-Amon/rsut
-Amon/rsutcs
-Amon/rsds
-Emon/rls
-Amon/rlut
-Amon/rlutcs
-Amon/rlds
-Amon/hfss
-Amon/hfls
-"""
+    expected = [
+        "Emon/rss",
+        "Amon/rsdt",
+        "Amon/rsut",
+        "Amon/rsutcs",
+        "Amon/rsds",
+        "Emon/rls",
+        "Amon/rlut",
+        "Amon/rlutcs",
+        "Amon/rlds",
+        "Amon/hfss",
+        "Amon/hfls",
+    ]
     assert actual == expected
