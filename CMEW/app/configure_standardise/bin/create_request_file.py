@@ -18,7 +18,7 @@ def create_request():
         CDDS request information to be written to JSON file.
     """
     stream = os.environ["STREAM"]
-    run_bounds_for_stream_key = f"run_bounds_for_stream{stream}"
+    run_bounds_for_stream_key = f"run_bounds_for_stream_{stream}"
     run_bounds = f"{os.environ['START_DATETIME']} {os.environ['END_DATETIME']}"
     request = {
         "atmos_timestep": os.environ["ATMOS_TIMESTEP"],
