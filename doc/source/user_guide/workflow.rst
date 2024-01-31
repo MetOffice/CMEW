@@ -67,7 +67,9 @@ An overview of the workflow
      The ``cdds_convert`` command and the ``restructure_dirs.sh`` script
      from the |Rose| app
   :Details:
-     Runs after the successful completion of the ``configure_standardise`` job
+     Runs after the successful completion of the ``configure_standardise`` job.
+     The ``restructure_dirs.sh`` script moves the standardised data into
+     a directory with a BADC DRS structure so that |ESMValTool| can find the data
 
 ``process``
   :Description:
