@@ -42,7 +42,7 @@ def parse_variables_from_recipe(recipe_path):
     Parameters
     ----------
     recipe_path : str
-        Location of the ESMValTool recipe file in the installed workflow.
+        Location of the ESMValTool recipe file.
 
     Returns
     -------
