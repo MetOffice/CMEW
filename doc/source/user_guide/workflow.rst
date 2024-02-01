@@ -23,7 +23,9 @@ An overview of the workflow
 ``configure_process``
   :Description:
      Creates and modifies the |ESMValTool| user configuration file,
-     and writes it to the cylc workflow ``share/etc`` directory
+     and writes it to the cylc workflow ``share/etc`` directory. Copies
+     a modified version of ``app/configure_process/config-develop.yml``
+     to ``share/etc``
   :Runs on:
      Localhost
   :Executes:
@@ -34,7 +36,8 @@ An overview of the workflow
 ``configure_for``
   :Description:
      Copies the |ESMValTool| recipe for the assessment area into
-     the cylc workflow ``share/etc`` directory
+     the cylc workflow ``share/etc`` directory. Temporarily, this is hard coded
+     to copy the recipe from ``app/configure_for/recipe_data/``
   :Runs on:
      Localhost
   :Executes:
