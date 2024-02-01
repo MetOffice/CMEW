@@ -54,6 +54,7 @@ def create_request():
         "suite_revision": "not used except with data request",
         "variant_label": "r1i1p1f1",
     }
+    # Combine request dict and streams_run_bounds dict (in-place union)
     request |= streams_run_bounds
     return request
 
