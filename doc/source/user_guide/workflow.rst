@@ -68,6 +68,17 @@ An overview of the workflow
   :Details:
      Runs after the successful completion of the ``configure_standardise`` job
 
+``housekeeping``
+  :Description:
+     Removes any intermediate files from the cylc run directory that were
+     created by the |CDDS| workflow in ``standardise_model_data``
+  :Runs on:
+     Localhost
+  :Executes:
+     The |rose_prune|_ application
+  :Details:
+     Runs after the successful completion of the ``standardise_model_data`` job
+
 ``process``
   :Description:
      Runs the requested recipes using |ESMValTool|
