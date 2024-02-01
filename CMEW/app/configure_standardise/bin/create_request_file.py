@@ -63,7 +63,7 @@ def write_request(request, target_path):
         Location to write the request file.
     """
     with open(target_path, mode="w") as file:
-        json.dump(request, file)
+        json.dump(request, file, separators=(",\n", ": "))
 
 
 def main():

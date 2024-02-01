@@ -79,6 +79,18 @@
         platform = localhost
         [[[environment]]]
             CDDS_VERSION = {{ CDDS_VERSION }}
+            ATMOS_TIMESTEP = {{ ATMOS_TIMESTEP }}
+            CALENDAR = {{ CALENDAR }}
+            EXPERIMENT_ID = {{ EXPERIMENT_ID }}
+            INSTITUTION_ID = {{ INSTITUTION_ID }}
+            MASS_DATA_CLASS = {{ MASS_DATA_CLASS }}
+            MODEL_ID = {{ MODEL_ID }}
+            MODEL_TYPE = {{ MODEL_TYPE }}
+            START_DATETIME = {{ START_DATETIME }}
+            END_DATETIME = {{ END_DATETIME }}
+            STREAM = {{ STREAM }}
+            SUITE_ID = {{ SUITE_ID }}
+            VARIANT_LABEL = {{ VARIANT_LABEL }}
 
     [[standardise_model_data]]
         platform = localhost
