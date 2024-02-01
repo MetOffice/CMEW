@@ -71,6 +71,17 @@ An overview of the workflow
      The ``restructure_dirs.sh`` script moves the standardised data into
      a directory with a BADC DRS structure so that |ESMValTool| can find the data
 
+``housekeeping``
+  :Description:
+     Removes any intermediate files from the cylc run directory that were
+     created by the |CDDS| workflow in ``standardise_model_data``
+  :Runs on:
+     Localhost
+  :Executes:
+     The |rose_prune|_ application
+  :Details:
+     Runs after the successful completion of the ``standardise_model_data`` job
+
 ``process``
   :Description:
      Runs the requested recipes using |ESMValTool|
