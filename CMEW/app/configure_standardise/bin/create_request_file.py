@@ -17,9 +17,11 @@ def create_request():
     dict
         CDDS request information to be written to JSON file.
     """
-    stream = "apm"
-    run_bounds_for_stream_key = f"run_bounds_for_stream_{stream}"
+    streams = ["apm"]
     run_bounds = f"{os.environ['START_DATETIME']} {os.environ['END_DATETIME']}"
+    streams_run_bounds = {
+        f"run_bounds_for_stream_{stream}": run_bounds for stream in streams
+    }
     request = {
         "atmos_timestep": "1200",
         "branch_method": "no parent",
@@ -41,13 +43,13 @@ def create_request():
         "package": "round-1",
         "request_id": "CMEW",
         "run_bounds": run_bounds,
-        run_bounds_for_stream_key: run_bounds,
         "sub_experiment_id": "none",
         "suite_branch": "trunk",
         "suite_id": os.environ["EXPERIMENT_SUITE_ID"],
         "suite_revision": "not used except with data request",
         "variant_label": "r1i1p1f1",
     }
+    request |= streams_run_bounds
     return request
 
 
