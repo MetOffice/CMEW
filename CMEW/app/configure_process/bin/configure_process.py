@@ -71,7 +71,8 @@ def get_config_values_from_task_env():
             "obs4MIPs": os.environ["ROOTPATH_OBS4MIPS"],
             "OBS6": os.environ["ROOTPATH_OBS6"],
             "RAWOBS": os.environ["ROOTPATH_RAWOBS"],
-            "ESMVal": os.environ["CYLC_WORKFLOW_RUN_DIR"] + "/work/GCModelDev",
+            "ESMVal": os.environ["CYLC_WORKFLOW_SHARE_DIR"]
+            + "/work/GCModelDev",
         },
     }
     return config_values_from_task_env
