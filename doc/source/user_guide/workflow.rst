@@ -64,9 +64,23 @@ An overview of the workflow
   :Runs on:
      Localhost
   :Executes:
-     The ``cdds_convert`` command
+     The ``cdds_convert`` command and the ``restructure_dirs.sh`` script
+     from the |Rose| app
   :Details:
-     Runs after the successful completion of the ``configure_standardise`` job
+     Runs after the successful completion of the ``configure_standardise`` job.
+     The ``restructure_dirs.sh`` script moves the standardised data into
+     a directory with a BADC DRS structure so that |ESMValTool| can find the data
+
+``housekeeping``
+  :Description:
+     Removes any intermediate files from the cylc run directory that were
+     created by the |CDDS| workflow in ``standardise_model_data``
+  :Runs on:
+     Localhost
+  :Executes:
+     The |rose_prune|_ application
+  :Details:
+     Runs after the successful completion of the ``standardise_model_data`` job
 
 ``process``
   :Description:
