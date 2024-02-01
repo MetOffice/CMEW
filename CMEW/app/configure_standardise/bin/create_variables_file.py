@@ -16,7 +16,7 @@ def parse_variables_from_recipe(recipe_path):
       for that diagnostic
     * For each variable, extract the mip table name
     * Output a newline-separated list of variables, with each line formatted
-      as ``<mip>/<variable>``
+      as ``<mip>/<variable>:<stream>``
 
     Recipe file snippet::
 
@@ -36,10 +36,10 @@ def parse_variables_from_recipe(recipe_path):
 
     Will be formatted as::
 
-        <mip_1a>/<variable_1a>
-        <mip_1b>/<variable_1b>
-        <mip_2a>/<variable_2a>
-        <mip_2b>/<variable_2b>
+        <mip_1a>/<variable_1a>:<stream>
+        <mip_1b>/<variable_1b>:<stream>
+        <mip_2a>/<variable_2a>:<stream>
+        <mip_2b>/<variable_2b>:<stream>
 
     Parameters
     ----------
@@ -52,6 +52,8 @@ def parse_variables_from_recipe(recipe_path):
         List of variables from the ESMValTool recipe,
         formatted as ``<mip>/<variable>``.
     """
+    # For now, hard-code stream to apm, this is correct for Amon and Emon mip
+    stream = "apm"
     recipe = Recipe(recipe_path)
     diagnostics = recipe.data["diagnostics"]
     formatted_variables = []
@@ -59,7 +61,7 @@ def parse_variables_from_recipe(recipe_path):
         variables = diagnostics[diagnostic]["variables"]
         for variable in variables:
             mip = variables[variable]["mip"]
-            formatted_variable = f"{mip}/{variable}"
+            formatted_variable = f"{mip}/{variable}:{stream}"
             if formatted_variable not in formatted_variables:
                 formatted_variables.append(formatted_variable)
     return formatted_variables

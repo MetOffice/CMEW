@@ -14,16 +14,16 @@ def test_parse_radiation_budget_variables():
     )
     actual = parse_variables_from_recipe(recipe_path)
     expected = [
-        "Emon/rss",
-        "Amon/rsdt",
-        "Amon/rsut",
-        "Amon/rsutcs",
-        "Amon/rsds",
-        "Emon/rls",
-        "Amon/rlut",
-        "Amon/rlutcs",
-        "Amon/rlds",
-        "Amon/hfss",
-        "Amon/hfls",
+        "Emon/rss:apm",
+        "Amon/rsdt:apm",
+        "Amon/rsut:apm",
+        "Amon/rsutcs:apm",
+        "Amon/rsds:apm",
+        "Emon/rls:apm",
+        "Amon/rlut:apm",
+        "Amon/rlutcs:apm",
+        "Amon/rlds:apm",
+        "Amon/hfss:apm",
+        "Amon/hfls:apm",
     ]
     assert actual == expected
