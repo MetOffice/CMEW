@@ -17,36 +17,36 @@ def create_request():
     dict
         CDDS request information to be written to JSON file.
     """
-    stream = os.environ["STREAM"]
+    stream = "apm"
     run_bounds_for_stream_key = f"run_bounds_for_stream_{stream}"
     run_bounds = f"{os.environ['START_DATETIME']} {os.environ['END_DATETIME']}"
     request = {
-        "atmos_timestep": os.environ["ATMOS_TIMESTEP"],
+        "atmos_timestep": "1200",
         "branch_method": "no parent",
         "calendar": os.environ["CALENDAR"],
         "child_base_date": "1850-01-01T00:00:00",
         "config_version": "1.0.1",
-        "experiment_id": os.environ["EXPERIMENT_ID"],
+        "experiment_id": "amip",
         "external_plugin": "",
         "external_plugin_location": "",
         "global_attributes": {},
         "institution_id": os.environ["INSTITUTION_ID"],
         "license": "GCModelDev model data is licensed under the Open Government License v3 (https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/)",  # noqa: E501
-        "mass_data_class": os.environ["MASS_DATA_CLASS"],
+        "mass_data_class": "crum",
         "mip": "ESMVal",
         "mip_era": "GCModelDev",
         "mip_table_dir": "/home/h03/cdds/etc/mip_tables/GCModelDev/0.0.9",
         "model_id": os.environ["MODEL_ID"],
-        "model_type": os.environ["MODEL_TYPE"],
+        "model_type": "AGCM AER",
         "package": "round-1",
         "request_id": "CMEW",
         "run_bounds": run_bounds,
         run_bounds_for_stream_key: run_bounds,
         "sub_experiment_id": "none",
         "suite_branch": "trunk",
-        "suite_id": os.environ["SUITE_ID"],
+        "suite_id": os.environ["EXPERIMENT_SUITE_ID"],
         "suite_revision": "not used except with data request",
-        "variant_label": os.environ["VARIANT_LABEL"],
+        "variant_label": "r1i1p1f1",
     }
     return request
 

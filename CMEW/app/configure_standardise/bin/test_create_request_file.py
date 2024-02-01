@@ -4,18 +4,12 @@ from create_request_file import create_request
 
 
 def test_create_request(monkeypatch):
-    monkeypatch.setenv("ATMOS_TIMESTEP", "1200")
     monkeypatch.setenv("CALENDAR", "360_day")
-    monkeypatch.setenv("EXPERIMENT_ID", "historical")
     monkeypatch.setenv("INSTITUTION_ID", "MOHC")
-    monkeypatch.setenv("MASS_DATA_CLASS", "crum")
     monkeypatch.setenv("MODEL_ID", "UKESM1-0-LL")
-    monkeypatch.setenv("MODEL_TYPE", "AOGCM AER")
     monkeypatch.setenv("START_DATETIME", "1993-01-01T00:00:00")
     monkeypatch.setenv("END_DATETIME", "1994-01-01T00:00:00")
-    monkeypatch.setenv("STREAM", "apm")
-    monkeypatch.setenv("SUITE_ID", "u-az513")
-    monkeypatch.setenv("VARIANT_LABEL", "r5i1p1f3")
+    monkeypatch.setenv("EXPERIMENT_SUITE_ID", "u-az513")
 
     actual = create_request()
     expected = {
@@ -24,7 +18,7 @@ def test_create_request(monkeypatch):
         "calendar": "360_day",
         "child_base_date": "1850-01-01T00:00:00",
         "config_version": "1.0.1",
-        "experiment_id": "historical",
+        "experiment_id": "amip",
         "external_plugin": "",
         "external_plugin_location": "",
         "global_attributes": {},
@@ -35,7 +29,7 @@ def test_create_request(monkeypatch):
         "mip_era": "GCModelDev",
         "mip_table_dir": "/home/h03/cdds/etc/mip_tables/GCModelDev/0.0.9",
         "model_id": "UKESM1-0-LL",
-        "model_type": "AOGCM AER",
+        "model_type": "AGCM AER",
         "package": "round-1",
         "request_id": "CMEW",
         "run_bounds": "1993-01-01T00:00:00 1994-01-01T00:00:00",
@@ -44,6 +38,6 @@ def test_create_request(monkeypatch):
         "suite_branch": "trunk",
         "suite_id": "u-az513",
         "suite_revision": "not used except with data request",
-        "variant_label": "r5i1p1f3",
+        "variant_label": "r1i1p1f1",
     }
     assert actual == expected

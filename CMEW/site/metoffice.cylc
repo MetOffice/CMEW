@@ -1,6 +1,9 @@
 #!jinja2
 # metoffice.cylc
 [runtime]
+    [[root]]
+        [[[environment]]]
+            INSTITUTION_ID="MOHC"
     [[COMPUTE]]
         platform = spice
         [[[directives]]]
