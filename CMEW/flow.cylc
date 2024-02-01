@@ -82,7 +82,7 @@
             CALENDAR = {{ CALENDAR }}
             MODEL_ID = {{ MODEL_ID }}
             START_YEAR = {{ START_YEAR }}
-            END_YEAR = {{ END_YEAR }}
+            NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
             EXPERIMENT_SUITE_ID = {{ EXPERIMENT_SUITE_ID }}
 
     [[standardise_model_data]]

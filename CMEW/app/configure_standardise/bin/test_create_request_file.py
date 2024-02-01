@@ -8,7 +8,7 @@ def test_create_request(monkeypatch):
     monkeypatch.setenv("INSTITUTION_ID", "MOHC")
     monkeypatch.setenv("MODEL_ID", "UKESM1-0-LL")
     monkeypatch.setenv("START_YEAR", "1993")
-    monkeypatch.setenv("END_YEAR", "1993")
+    monkeypatch.setenv("NUMBER_OF_YEARS", "1")
     monkeypatch.setenv("EXPERIMENT_SUITE_ID", "u-az513")
 
     actual = create_request()

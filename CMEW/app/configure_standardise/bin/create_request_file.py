@@ -19,7 +19,10 @@ def create_request():
     """
     streams = ["apm"]
     start_datetime = f"{os.environ['START_YEAR']}-01-01T00:00:00"
-    end_datetime = f"{int(os.environ['END_YEAR']) + 1}-01-01T00:00:00"
+    end_year = int(os.environ["START_YEAR"]) + int(
+        os.environ["NUMBER_OF_YEARS"]
+    )
+    end_datetime = f"{end_year}-01-01T00:00:00"
     run_bounds = f"{start_datetime} {end_datetime}"
     streams_run_bounds = {
         f"run_bounds_for_stream_{stream}": run_bounds for stream in streams
