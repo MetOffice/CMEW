@@ -9,18 +9,21 @@ from pathlib import Path
 
 
 def test_parse_radiation_budget_variables():
-    mock_path = Path(__file__).parent.parent / "mock_data" / "variables.txt"
-    actual = parse_variables_from_recipe(mock_path)
-    expected = """Emon/rss:apm
-Amon/rsdt:apm
-Amon/rsut:apm
-Amon/rsutcs:apm
-Amon/rsds:apm
-Emon/rls:apm
-Amon/rlut:apm
-Amon/rlutcs:apm
-Amon/rlds:apm
-Amon/hfss:apm
-Amon/hfls:apm
-"""
+    recipe_path = (
+        Path(__file__).parent.parent / "mock_data" / "test_recipe.yml"
+    )
+    actual = parse_variables_from_recipe(recipe_path)
+    expected = [
+        "Emon/rss:apm",
+        "Amon/rsdt:apm",
+        "Amon/rsut:apm",
+        "Amon/rsutcs:apm",
+        "Amon/rsds:apm",
+        "Emon/rls:apm",
+        "Amon/rlut:apm",
+        "Amon/rlutcs:apm",
+        "Amon/rlds:apm",
+        "Amon/hfss:apm",
+        "Amon/hfls:apm",
+    ]
     assert actual == expected
