@@ -17,7 +17,7 @@
 {%- endif %}
 {%- if not UNITTEST %}
         install_env_file => configure_process & configure_for<assessment_area> => configure_standardise
-        configure_standardise => standardise_model_data => process<assessment_area>
+        configure_standardise => standardise_model_data => process<assessment_area> & housekeeping
 {%- if TEST %}
             process<assessment_area> => compare<assessment_area>
 {%- endif %}
@@ -93,6 +93,9 @@
         inherit = None, COMPUTE, ASSESSMENT_AREA
         [[[environment]]]
             ROSE_TASK_APP = process
+
+    [[housekeeping]]
+        platform = localhost
 
 {% include "site/" ~ SITE ~ ".cylc" %}
 {%- if TEST %}
