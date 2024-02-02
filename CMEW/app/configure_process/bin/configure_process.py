@@ -41,8 +41,9 @@ def get_config_values_from_task_env():
     config_values_from_task_env = {
         "auxiliary_data_dir": "",
         "config_file": USER_CONFIG_PATH,
-        "config_developer_file": os.environ["CYLC_WORKFLOW_SHARE_DIR"]
-        + "/etc/config-developer.yml",
+        "config_developer_file": os.path.join(
+            os.environ["CYLC_WORKFLOW_SHARE_DIR"], "etc/config-developer.yml"
+        ),
         "download_dir": "",
         "drs": {
             "ana4mips": os.environ["DRS_ANA4MIPS"],
@@ -71,8 +72,9 @@ def get_config_values_from_task_env():
             "obs4MIPs": os.environ["ROOTPATH_OBS4MIPS"],
             "OBS6": os.environ["ROOTPATH_OBS6"],
             "RAWOBS": os.environ["ROOTPATH_RAWOBS"],
-            "ESMVal": os.environ["CYLC_WORKFLOW_SHARE_DIR"]
-            + "/work/GCModelDev",
+            "ESMVal": os.path.join(
+                os.environ["CYLC_WORKFLOW_SHARE_DIR"], "work/GCModelDev"
+            ),
         },
     }
     return config_values_from_task_env
