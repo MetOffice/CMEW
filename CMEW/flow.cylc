@@ -16,8 +16,8 @@
         install_env_file => unittest
 {%- endif %}
 {%- if not UNITTEST %}
-        install_env_file => configure_process & configure_for<assessment_area> => configure_standardise
-        configure_standardise => standardise_model_data => process<assessment_area> & housekeeping
+        install_env_file => configure_process & configure_for<assessment_area> => configure_standardise<assessment_area>
+        configure_standardise<assessment_area> => standardise_model_data => process<assessment_area> & housekeeping
 {%- if TEST %}
             process<assessment_area> => compare<assessment_area>
 {%- endif %}
@@ -75,10 +75,12 @@
         [[[environment]]]
             ROSE_TASK_APP = configure_for
 
-    [[configure_standardise]]
+    [[configure_standardise<assessment_area>]]
         platform = localhost
+        inherit = None, ASSESSMENT_AREA
         [[[environment]]]
             CDDS_VERSION = {{ CDDS_VERSION }}
+            ROSE_TASK_APP = configure_standardise
 
     [[standardise_model_data]]
         platform = localhost
