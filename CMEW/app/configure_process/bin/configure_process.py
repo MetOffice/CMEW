@@ -42,7 +42,9 @@ def get_config_values_from_task_env():
         "auxiliary_data_dir": "",
         "config_file": USER_CONFIG_PATH,
         "config_developer_file": os.path.join(
-            os.environ["CYLC_WORKFLOW_SHARE_DIR"], "etc/config-developer.yml"
+            os.environ["CYLC_WORKFLOW_SHARE_DIR"],
+            "etc",
+            "config-developer.yml",
         ),
         "download_dir": "",
         "drs": {
@@ -73,7 +75,7 @@ def get_config_values_from_task_env():
             "OBS6": os.environ["ROOTPATH_OBS6"],
             "RAWOBS": os.environ["ROOTPATH_RAWOBS"],
             "ESMVal": os.path.join(
-                os.environ["CYLC_WORKFLOW_SHARE_DIR"], "work/GCModelDev"
+                os.environ["CYLC_WORKFLOW_SHARE_DIR"], "work", "GCModelDev"
             ),
         },
     }
