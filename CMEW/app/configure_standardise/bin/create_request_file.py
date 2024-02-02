@@ -50,7 +50,7 @@ def create_request():
         "run_bounds": run_bounds,
         "sub_experiment_id": "none",
         "suite_branch": "trunk",
-        "suite_id": os.environ["EXPERIMENT_SUITE_ID"],
+        "suite_id": os.environ["SUITE_ID"],
         "suite_revision": "not used except with data request",
         "variant_label": "r1i1p1f1",
     }
