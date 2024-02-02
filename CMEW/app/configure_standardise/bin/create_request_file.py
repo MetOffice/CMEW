@@ -60,7 +60,7 @@ def create_request():
 
 
 def write_request(request, target_path):
-    """Write request dict to a JSON file in the installed workflow.
+    """Write request dictionary to a JSON file at ``target_path``.
 
     Parameters
     ----------
