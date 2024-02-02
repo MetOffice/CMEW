@@ -35,8 +35,8 @@
             OUTPUT_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/cycle/${CYLC_TASK_CYCLE_POINT}
             CDDS_DIR = ${CYLC_WORKFLOW_RUN_DIR}/lib/CDDS
             SHARE_DATA_CDDS = ${CYLC_WORKFLOW_SHARE_DIR}/data/cdds
-            ROOT_PROC_DIR="${SHARE_DATA_CDDS}/proc"
-            ROOT_DATA_DIR="${SHARE_DATA_CDDS}/cdds_data"
+            ROOT_PROC_DIR = ${SHARE_DATA_CDDS}/proc
+            ROOT_DATA_DIR = ${SHARE_DATA_CDDS}/cdds_data
 
     [[ASSESSMENT_AREA]]
         [[[environment]]]
