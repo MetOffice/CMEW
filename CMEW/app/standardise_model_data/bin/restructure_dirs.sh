@@ -9,6 +9,3 @@ RESTRUCTURE_COMMAND="/bin/restructure_for_cmip6"
 ROOT_RESTRUCTURED_DIR="${CYLC_WORKFLOW_SHARE_DIR}/work/"
 
 ${CEDA_ROOT_DIR}${RESTRUCTURE_COMMAND} -d ${ROOT_RESTRUCTURED_DIR} ${ROOT_DATA_DIR}
-
-# ESMValTool reads from ./GCModelDev/CMIP/ so need to rename the directory.
-mv "${ROOT_RESTRUCTURED_DIR}/GCModelDev/ESMVal/" "${ROOT_RESTRUCTURED_DIR}/GCModelDev/CMIP/"
