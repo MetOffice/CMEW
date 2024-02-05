@@ -96,7 +96,7 @@ An overview of the workflow
      The |ESMValTool| command line script
   :Details:
      Runs once for each assessment area, after the successful completion of
-     the ``standardise_model_data`` and the ``configure_process`` job
+     the ``standardise_model_data`` and the ``configure_process`` jobs
   :Families:
      ``COMPUTE``, ``ASSESSMENT_AREA``
 
