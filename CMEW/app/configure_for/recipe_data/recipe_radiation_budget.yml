@@ -20,8 +20,8 @@ documentation:
 datasets:
   - {dataset: HadGEM3-GC31-LL, project: CMIP6, exp: historical,
      ensemble: r1i1p1f3, grid: gn, start_year: 1993, end_year: 1993}
-  - {dataset: UKESM1-0-LL, project: ESMVal, exp: historical, activity: ESMVal,
-     ensemble: r5i1p1f3, grid: gn, start_year: 1993, end_year: 1993}
+  - {dataset: UKESM1-0-LL, project: ESMVal, exp: amip, activity: ESMVal,
+     ensemble: r1i1p1f1, grid: gn, start_year: 1993, end_year: 1993}
 
 preprocessors:
   single_value:
