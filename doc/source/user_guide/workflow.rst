@@ -58,8 +58,8 @@ An overview of the workflow
   :Executes:
      The ``configure_standardise.sh`` script from the |Rose| app
   :Details:
-     Runs after the successful completion of both the ``configure_process`` job
-     and the ``configure_for`` job
+     Runs once for each assessment_area, immediately after the successful
+     completion of the ``configure_for`` job
 
 ``standardise_model_data``
   :Description:
@@ -96,7 +96,7 @@ An overview of the workflow
      The |ESMValTool| command line script
   :Details:
      Runs once for each assessment area, after the successful completion of
-     the ``standardise_model_data`` job.
+     the ``standardise_model_data`` job and the ``configure_process`` job
   :Families:
      ``COMPUTE``, ``ASSESSMENT_AREA``
 
