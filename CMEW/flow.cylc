@@ -16,7 +16,9 @@
         install_env_file => unittest
 {%- endif %}
 {%- if not UNITTEST %}
-        install_env_file => configure_process & configure_for<assessment_area> => configure_standardise<assessment_area>
+        install_env_file => configure_process & configure_for<assessment_area>
+        configure_for<assessment_area> => configure_standardise<assessment_area>
+        configure_process => process<assessment_area>
         configure_standardise<assessment_area> => standardise_model_data => process<assessment_area> & housekeeping
 {%- if TEST %}
             process<assessment_area> => compare<assessment_area>
