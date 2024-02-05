@@ -14,5 +14,5 @@ existing python scripts in the workflow.
 To run the full |CMEW| workflow at the Met Office, with all tests enabled, use the command
     ``cylc vip -O metoffice -O test``
 
-To only run the unit tests run
-    ``cylc vip -O unittest``
+To only run the unit tests at the Met Office, use the command
+    ``cylc vip -O metoffice -O unittest``
