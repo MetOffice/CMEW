@@ -1,7 +1,7 @@
 #!jinja2
 # flow.cylc
 {{ assert(SITE != "", "SITE must be set to something other than an empty string") }}
-{{ assert(MODULE_NAME != "", "MODULE_NAME must be set to something other than an empty string") }}
+{{ assert(ESMVALTOOL_MODULE_NAME != "", "ESMVALTOOL_MODULE_NAME must be set to something other than an empty string") }}
 
 [scheduler]
     UTC mode = True
@@ -32,7 +32,7 @@
         env-script = "eval $(rose task-env)"
         platform = localhost
         [[[environment]]]
-            MODULE_NAME = {{ MODULE_NAME }}
+            ESMVALTOOL_MODULE_NAME = {{ ESMVALTOOL_MODULE_NAME }}
             USER_CONFIG_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/etc
             USER_CONFIG_PATH = ${USER_CONFIG_DIR}/config-user.yml
             OUTPUT_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/cycle/${CYLC_TASK_CYCLE_POINT}

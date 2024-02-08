@@ -3,7 +3,8 @@
 # Usage metoffice-process-env COMMAND
 #
 # ENVIRONMENT
-#   MODULE_NAME         The name of the module to load
+#   ESMVALTOOL_MODULE_NAME  The name and version of the ESMValTool
+#                           module to load
 #   PYTHONPATH_PREPEND  The path to prepend to PYTHONPATH after loading the
 #                       module
 #   QUIET_MODE          Don't print confirmation messages
@@ -38,7 +39,7 @@ export NUMEXPR_NUM_THREADS=1
 # Ensure '~/.local' isn't added to 'sys.path'.
 export PYTHONNOUSERSITE=True
 
-safe_load "${MODULE_NAME}"
+safe_load "${ESMVALTOOL_MODULE_NAME}"
 
 # If PYTHONPATH_PREPEND has been set, prepend it to PYTHONPATH to extend the
 # Python environment.
