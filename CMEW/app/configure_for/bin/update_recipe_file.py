@@ -7,9 +7,24 @@ import yaml
 
 def update_recipe(recipe_path):
     with open(recipe_path, "r") as f:
-        original_recipe = yaml.safe_load(f)
-    updated_recipe = original_recipe
-    return updated_recipe
+        recipe = yaml.safe_load(f)
+
+    first_dataset = recipe["datasets"][0]
+    second_dataset = recipe["datasets"][1]
+
+    first_dataset.update({"end_year": 1993})
+
+    second_dataset.update(
+        {
+            "project": "ESMVal",
+            "exp": "amip",
+            "activity": "ESMVal",
+            "ensemble": "r1i1p1f1",
+            "end_year": 1993,
+        }
+    )
+
+    return recipe
 
 
 def write_recipe(recipe, target_path):

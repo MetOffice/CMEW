@@ -158,9 +158,7 @@ def test_create_recipe_file():
         / "mock_data"
         / "test_recipe.yml"
     )
-    actual = update_recipe(recipe_path)["documentation"]["title"]
-    alt_expected = expected["documentation"]["title"]
-    title = "Radiation Budget"
+    actual = update_recipe(recipe_path)
 
     # Assert
-    assert actual == alt_expected == title
+    assert actual == expected
