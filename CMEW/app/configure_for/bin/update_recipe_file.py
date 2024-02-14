@@ -27,18 +27,19 @@ def update_recipe(recipe_path):
     return recipe
 
 
-def write_recipe(recipe, target_path):
+def write_recipe(updated_recipe, target_path):
     with open(target_path, "w") as f:
-        yaml.dump(recipe, f)
+        yaml.dump(updated_recipe, f)
 
 
 def main():
-    recipe_path = os.environ["RECIPE_NAME"]
+    recipe_path = os.environ["RECIPE_PATH"]
     updated_recipe = update_recipe(recipe_path)
     write_recipe(updated_recipe, recipe_path)
 
 
 if __name__ == "__main__":
+    print("I did a run!")
     main()
 
     # FOR QUICK PYYAML TESTS
