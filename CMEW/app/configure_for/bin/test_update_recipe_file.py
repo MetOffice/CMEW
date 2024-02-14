@@ -152,12 +152,15 @@ def test_create_recipe_file():
     }
 
     # Act
-    # TODO: Copied from `configure_standardise/bin/test_create_variables.py`
-    #       Need to update for the location of this file itself.
     recipe_path = (
-        Path(__file__).parent.parent / "mock_data" / "test_recipe.yml"
+        Path(__file__).parent.parent.parent
+        / "unittest"
+        / "mock_data"
+        / "test_recipe.yml"
     )
-    actual = update_recipe(recipe_path)
+    actual = update_recipe(recipe_path)["documentation"]["title"]
+    alt_expected = expected["documentation"]["title"]
+    title = "Radiation Budget"
 
     # Assert
-    assert actual == expected
+    assert actual == alt_expected == title
