@@ -10,7 +10,7 @@ def test_create_recipe_file():
     expected = {
         "documentation": {
             "title": "Radiation Budget",
-            "description": "This diagnostic analyses the radiation budget by separating top-of-atmosphere fluxes into clear-sky and cloud forcing components, and surface fluxes into downwelling and upwelling components. Model predictions are compared against three observational estimates, one of which (Stephens et al. 2012) includes uncertainty estimates. When the black error bars overlap the zero line, the model is consistent with observations according to Stephens et al. (2012).",
+            "description": "This diagnostic analyses the radiation budget by separating top-of-atmosphere fluxes into clear-sky and cloud forcing components, and surface fluxes into downwelling and upwelling components. Model predictions are compared against three observational estimates, one of which (Stephens et al. 2012) includes uncertainty estimates. When the black error bars overlap the zero line, the model is consistent with observations according to Stephens et al. (2012).",  # noqa: E501
             "authors": ["lillis_jon", "hogan_emma"],
             "maintainer": ["lillis_jon", "hogan_emma"],
         },
@@ -128,7 +128,7 @@ def test_create_recipe_file():
                 },
             },
             "seasonal_radiation_budget": {
-                "description": "Seasonal radiation budget for HadGEM3 vs UKESM1.",
+                "description": "Seasonal radiation budget for HadGEM3 vs UKESM1.",  # noqa: E501
                 "variables": {
                     "rss": {"mip": "Emon", "preprocessor": "seasonal"},
                     "rsdt": {"mip": "Amon", "preprocessor": "seasonal"},
@@ -144,7 +144,7 @@ def test_create_recipe_file():
                 },
                 "scripts": {
                     "radiation_budget": {
-                        "script": "radiation_budget/seasonal_radiation_budget.py"
+                        "script": "radiation_budget/seasonal_radiation_budget.py"  # noqa: E501
                     }
                 },
             },
@@ -156,7 +156,7 @@ def test_create_recipe_file():
     #       Need to update for the location of this file itself.
     recipe_path = (
         Path(__file__).parent.parent / "mock_data" / "test_recipe.yml"
-        )
+    )
     actual = update_recipe(recipe_path)
 
     # Assert
