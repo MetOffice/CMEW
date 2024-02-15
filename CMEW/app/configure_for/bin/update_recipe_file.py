@@ -6,24 +6,25 @@ import yaml
 
 
 def update_recipe(recipe_path):
+    start_year = int(os.environ["START_YEAR"])
+    end_year = (
+        int(os.environ["START_YEAR"]) + int(os.environ["NUMBER_OF_YEARS"]) - 1
+    )
     with open(recipe_path, "r") as f:
         recipe = yaml.safe_load(f)
-
     first_dataset = recipe["datasets"][0]
     second_dataset = recipe["datasets"][1]
-
-    first_dataset.update({"end_year": 1993})
-
+    first_dataset.update({"start_year": start_year, "end_year": end_year})
     second_dataset.update(
         {
             "project": "ESMVal",
             "exp": "amip",
             "activity": "ESMVal",
             "ensemble": "r1i1p1f1",
-            "end_year": 1993,
+            "start_year": start_year,
+            "end_year": end_year,
         }
     )
-
     return recipe
 
 
@@ -39,10 +40,4 @@ def main():
 
 
 if __name__ == "__main__":
-    print("I did a run!")
     main()
-
-    # FOR QUICK PYYAML TESTS
-    # with open('/net/home/h02/cbillows/Code/CMEW/CMEW/app/configure_for/recipe_data/recipe_radiation_budget.yml', 'r') as file: # noqa: E501
-    #     data = yaml.safe_load(file)
-    # print(data)
