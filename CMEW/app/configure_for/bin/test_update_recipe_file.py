@@ -4,8 +4,9 @@ from update_recipe_file import update_recipe
 from pathlib import Path
 
 
-def test_create_recipe_file():
-    # Arrange
+def test_create_recipe_file(monkeypatch):
+    monkeypatch.setenv("START_YEAR", "1993")
+    monkeypatch.setenv("NUMBER_OF_YEARS", "1")
     expected = {
         "documentation": {
             "title": "Radiation Budget",
@@ -150,7 +151,6 @@ def test_create_recipe_file():
         },
     }
 
-    # Act
     recipe_path = (
         Path(__file__).parent.parent.parent
         / "unittest"
@@ -159,5 +159,4 @@ def test_create_recipe_file():
     )
     actual = update_recipe(recipe_path)
 
-    # Assert
     assert actual == expected
