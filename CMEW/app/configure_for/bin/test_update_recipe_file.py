@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # (C) British Crown Copyright 2024, Met Office.
 # Please see LICENSE for license details.
 from update_recipe_file import update_recipe
