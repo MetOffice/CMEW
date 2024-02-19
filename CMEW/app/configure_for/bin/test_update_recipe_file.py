@@ -4,7 +4,7 @@ from update_recipe_file import update_recipe
 from pathlib import Path
 
 
-def test_create_recipe_file(monkeypatch):
+def test_update_recipe(monkeypatch):
     monkeypatch.setenv("START_YEAR", "1993")
     monkeypatch.setenv("NUMBER_OF_YEARS", "1")
     expected = {
