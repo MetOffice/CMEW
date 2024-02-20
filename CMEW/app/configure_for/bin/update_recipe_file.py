@@ -86,7 +86,7 @@ def write_recipe(updated_recipe, target_path):
         Location to write the updated ESMValTool recipe.
     """
     with open(target_path, "w") as f:
-        yaml.dump(updated_recipe, f)
+        yaml.dump(updated_recipe, f, default_flow_style=False)
 
 
 def main():
