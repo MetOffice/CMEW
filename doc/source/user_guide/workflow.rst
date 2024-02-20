@@ -29,19 +29,23 @@ An overview of the workflow
   :Executes:
      The ``configure_process.py`` script from the |Rose| app
   :Details:
-     Runs immediately after the successful completion of the ``install_env_file`` job
+     Runs immediately after the successful completion of the ``install_env_file`` job.
+     Temporarily, the modified ESMValTool developer configuration file is copied from
+     the ``configure_process`` app to the ``share/etc`` directory in the installed workflow
 
 ``configure_for``
   :Description:
      Copies the |ESMValTool| recipe for the assessment area into
-     the cylc workflow ``share/etc`` directory
+     the cylc workflow ``share/etc`` directory in the installed workflow
   :Runs on:
      Localhost
   :Executes:
      The ``esmvaltool recipes get`` command for the required assessment area
   :Details:
      Runs once for each assessment area, immediately after the successful
-     completion of the ``install_env_file`` job
+     completion of the ``install_env_file`` job. Temporarily, this task is hard coded
+     to copy the ``radiation_budget_recipe.yml`` from ``app/configure_for/recipe_data/``
+     to the `share/etc` directory in the installed workflow
   :Families:
      ``ASSESSMENT_AREA``
 
@@ -54,8 +58,8 @@ An overview of the workflow
   :Executes:
      The ``configure_standardise.sh`` script from the |Rose| app
   :Details:
-     Runs after the successful completion of both the ``configure_process`` job
-     and the ``configure_for`` job
+     Runs once for each assessment_area, immediately after the successful
+     completion of the ``configure_for`` job
 
 ``standardise_model_data``
   :Description:
@@ -92,7 +96,7 @@ An overview of the workflow
      The |ESMValTool| command line script
   :Details:
      Runs once for each assessment area, after the successful completion of
-     the ``standardise_model_data`` job.
+     the ``standardise_model_data`` and the ``configure_process`` jobs
   :Families:
      ``COMPUTE``, ``ASSESSMENT_AREA``
 

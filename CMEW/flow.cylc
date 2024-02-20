@@ -16,7 +16,9 @@
         install_env_file => unittest
 {%- endif %}
 {%- if not UNITTEST %}
-        install_env_file => configure_process & configure_for<assessment_area> => configure_standardise<assessment_area>
+        install_env_file => configure_process & configure_for<assessment_area>
+        configure_for<assessment_area> => configure_standardise<assessment_area>
+        configure_process => process<assessment_area>
         configure_standardise<assessment_area> => standardise_model_data => process<assessment_area> & housekeeping
 {%- if TEST %}
             process<assessment_area> => compare<assessment_area>
@@ -28,6 +30,7 @@
     [[root]]
         script = rose task-run
         env-script = "eval $(rose task-env)"
+        platform = localhost
         [[[environment]]]
             MODULE_NAME = {{ MODULE_NAME }}
             USER_CONFIG_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/etc
@@ -44,12 +47,10 @@
             RECIPE_PATH = "${CYLC_WORKFLOW_SHARE_DIR}/etc/${RECIPE_NAME}"
 
     [[install_env_file]]
-        platform = localhost
         [[[environment]]]
             SITE = {{ SITE }}
 
     [[configure_process]]
-        platform = localhost
         [[[environment]]]
             DRS_CMIP3 = {{ DRS_CMIP3 }}
             DRS_CMIP5 = {{ DRS_CMIP5 }}
@@ -73,20 +74,22 @@
             ROOTPATH_RAWOBS = {{ ROOTPATH_RAWOBS }}
 
     [[configure_for<assessment_area>]]
-        platform = localhost
         inherit = None, ASSESSMENT_AREA
         [[[environment]]]
             ROSE_TASK_APP = configure_for
 
     [[configure_standardise<assessment_area>]]
-        platform = localhost
         inherit = None, ASSESSMENT_AREA
         [[[environment]]]
             CDDS_VERSION = {{ CDDS_VERSION }}
             ROSE_TASK_APP = configure_standardise
+            CALENDAR = {{ CALENDAR }}
+            MODEL_ID = {{ MODEL_ID }}
+            START_YEAR = {{ START_YEAR }}
+            NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
+            SUITE_ID = {{ SUITE_ID }}
 
     [[standardise_model_data]]
-        platform = localhost
         [[[environment]]]
             CDDS_VERSION = {{ CDDS_VERSION }}
             SITE = {{ SITE }}
@@ -97,7 +100,6 @@
             ROSE_TASK_APP = process
 
     [[housekeeping]]
-        platform = localhost
 
 {% include "site/" ~ SITE ~ ".cylc" %}
 {%- if TEST %}
