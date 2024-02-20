@@ -13,6 +13,7 @@
 .. |MIAO| replace:: :term:`MIAO`
 .. |Rose| replace:: :term:`Rose`
 .. |rose_prune| replace:: ``rose_prune``
+.. |Rose Edit GUI| replace:: ``Rose Edit GUI``
 
 .. Links
 
@@ -24,3 +25,4 @@
 .. _Radiation budget: https://docs.esmvaltool.org/en/latest/recipes/recipe_radiation_budget.html
 .. _Rose Documentation: https://metomi.github.io/rose/doc/html/index.html
 .. _rose_prune: https://metomi.github.io/rose/doc/html/api/built-in/rose_prune.html
+.. _Rose Edit GUI: https://metomi.github.io/rose/doc/html/api/command-reference.html#rose-config-edit
