@@ -1,8 +1,9 @@
 # (C) British Crown Copyright 2024, Met Office.
 # Please see LICENSE for license details.
-from update_recipe_file import update_recipe, write_recipe
+from update_recipe_file import update_recipe, main
 from pathlib import Path
 import pytest
+import shutil
 import yaml
 
 
@@ -44,16 +45,22 @@ def test_update_recipe(
 
 
 def test_main(
+    monkeypatch,
     mock_env_vars,
     path_to_updated_recipe_kgo,
     path_to_mock_original_recipe,
     tmp_path,
 ):
-    path_to_temp_updated_recipe = tmp_path / "recipe.yml"
-    modified_content = update_recipe(path_to_mock_original_recipe)
-    write_recipe(modified_content, path_to_temp_updated_recipe)
+    # copy original recipe to temp location so it can be overwritten
+    path_to_temp_recipe = tmp_path / "tmp_recipe.yml"
+    shutil.copy(path_to_mock_original_recipe, path_to_temp_recipe)
 
-    with open(path_to_temp_updated_recipe, "r") as f1, open(
+    # set env var to temp location of original recipe
+    monkeypatch.setenv("RECIPE_PATH", path_to_temp_recipe)
+
+    main()
+
+    with open(path_to_temp_recipe, "r") as f1, open(
         path_to_updated_recipe_kgo, "r"
     ) as f2:
         actual = f1.readlines()
