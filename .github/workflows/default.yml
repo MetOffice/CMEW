@@ -23,7 +23,7 @@ jobs:
     # of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job
-      # can access it
+      # can access it.
       - uses: actions/checkout@v4
 
       - name: Create environment
