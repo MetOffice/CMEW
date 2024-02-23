@@ -99,9 +99,9 @@
     [[housekeeping]]
 
 {% include "site/" ~ SITE ~ ".cylc" %}
-{%- if TEST %}
-    {% include "inc/test.cylc" %}
-{%- endif %}
-{%- if UNITTEST or TEST %}
+{%- if TEST or UNITTEST %}
     {% include "inc/unittest.cylc" %}
+        {%- if TEST %}
+            {% include "inc/test.cylc" %}
+        {%- endif %}
 {%- endif %}
