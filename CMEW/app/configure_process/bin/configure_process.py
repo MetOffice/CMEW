@@ -7,7 +7,7 @@ import os
 import yaml
 
 # where the config file that is used by this workflow is
-USER_CONFIG_PATH = os.environ["USER_CONFIG_PATH"]
+USER_CONFIG_PATH = os.environ.get("USER_CONFIG_PATH", None)
 
 
 def main():
