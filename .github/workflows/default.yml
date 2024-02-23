@@ -85,8 +85,8 @@ jobs:
           conda activate cmew
           pre-commit run --all-files
 
-      - name: Run unit tests
+      - name: Run unit tests with pytest
         run: |
           eval "$(conda shell.bash hook)"
           conda activate cmew
-          pytest
+          pytest --pluggy
