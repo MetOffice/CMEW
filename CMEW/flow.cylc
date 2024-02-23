@@ -20,9 +20,9 @@
         configure_for<assessment_area> => configure_standardise<assessment_area>
         configure_process => process<assessment_area>
         configure_standardise<assessment_area> => standardise_model_data => process<assessment_area> & housekeeping
-{%- if TEST %}
+    {%- if TEST %}
             process<assessment_area> => compare<assessment_area>
-{%- endif %}
+    {%- endif %}
 {%- endif %}
         """
 
