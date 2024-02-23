@@ -6,29 +6,80 @@ import os
 
 import yaml
 
-# where the config file that is used by this workflow is
-USER_CONFIG_PATH = os.environ["USER_CONFIG_PATH"]
-
 
 def main():
     """
-    Write the updated configuration values to the file defined by
-    ``USER_CONFIG_PATH``.
-    """
+    Write the required user configuration file for ESMValTool.
 
-    # Get the configuration values defined in the environment for the
-    # ``configure_process`` task.
-    config_values_from_task_env = get_config_values_from_task_env()
+    The user configuration file is written to the path defined by
+    the environment variable ``USER_CONFIG_PATH``.
+    """
+    # Retrieve the values defined in the environment for the
+    # 'configure_process' task.
+    values = retrieve_values_from_task_env()
+
+    # Create the contents for the user configuration file using these
+    # values.
+    user_config_file_contents = create_user_config_file(values)
 
     # Write the updated configuration values to the file defined by
     # 'USER_CONFIG_PATH'.
-    write_yaml(USER_CONFIG_PATH, config_values_from_task_env)
+    user_config_path = values["USER_CONFIG_PATH"]
+    write_yaml(user_config_path, user_config_file_contents)
 
 
-def get_config_values_from_task_env():
+def retrieve_values_from_task_env():
     """
-    Return the configuration values defined in the environment for the
+    Return the values defined in the environment for the
     ``configure_process`` task.
+
+    Returns
+    -------
+    : dictionary
+        The values defined in the environment for the
+        ``configure_process`` task.
+    """
+    values_from_task_env = {
+        "CYLC_WORKFLOW_SHARE_DIR": os.environ["CYLC_WORKFLOW_SHARE_DIR"],
+        "DRS_ANA4MIPS": os.environ["DRS_ANA4MIPS"],
+        "DRS_CMIP3": os.environ["DRS_CMIP3"],
+        "DRS_CMIP5": os.environ["DRS_CMIP5"],
+        "DRS_CMIP6": os.environ["DRS_CMIP6"],
+        "DRS_CORDEX": os.environ["DRS_CORDEX"],
+        "DRS_NATIVE6": os.environ["DRS_NATIVE6"],
+        "DRS_OBS": os.environ["DRS_OBS"],
+        "DRS_OBS4MIPS": os.environ["DRS_OBS4MIPS"],
+        "DRS_OBS6": os.environ["DRS_OBS6"],
+        "MAX_PARALLEL_TASKS": os.environ["MAX_PARALLEL_TASKS"],
+        "OUTPUT_DIR": os.environ["OUTPUT_DIR"],
+        "ROOTPATH_ANA4MIPS": os.environ["ROOTPATH_ANA4MIPS"],
+        "ROOTPATH_CMIP3": os.environ["ROOTPATH_CMIP3"],
+        "ROOTPATH_CMIP5": os.environ["ROOTPATH_CMIP5"],
+        "ROOTPATH_CMIP6": os.environ["ROOTPATH_CMIP6"],
+        "ROOTPATH_CORDEX": os.environ["ROOTPATH_CORDEX"],
+        "ROOTPATH_NATIVE6": os.environ["ROOTPATH_NATIVE6"],
+        "ROOTPATH_OBS": os.environ["ROOTPATH_OBS"],
+        "ROOTPATH_OBS4MIPS": os.environ["ROOTPATH_OBS4MIPS"],
+        "ROOTPATH_OBS6": os.environ["ROOTPATH_OBS6"],
+        "ROOTPATH_RAWOBS": os.environ["ROOTPATH_RAWOBS"],
+        "USER_CONFIG_PATH": os.environ["USER_CONFIG_PATH"],
+    }
+    return values_from_task_env
+
+
+def create_user_config_file(values):
+    """
+    Return the contents of the user configuration file.
+
+    Parameters
+    ----------
+    values : dictionary
+        The values to use for the user configuration file.
+
+    Returns
+    -------
+    : dictionary
+        The contents of the user configuration file.
     """
     # Note that 'auxiliary_data_dir', 'download_dir' and
     # 'extra_facets_dir' are set to empty values and cannot currently be
@@ -38,48 +89,50 @@ def get_config_values_from_task_env():
     # default configuration file provided by ESMValTool v2.6.0.
     # 'auxiliary_data_dir' is used by some recipes to look for
     # additional datasets, so may need to be configured in the future.
-    config_values_from_task_env = {
+    user_config_file_contents = {
         "auxiliary_data_dir": "",
-        "config_file": USER_CONFIG_PATH,
+        "config_file": values.get("USER_CONFIG_PATH", None),
         "config_developer_file": os.path.join(
-            os.environ["CYLC_WORKFLOW_SHARE_DIR"],
+            values.get("CYLC_WORKFLOW_SHARE_DIR", None),
             "etc",
             "config-developer.yml",
         ),
         "download_dir": "",
         "drs": {
-            "ana4mips": os.environ["DRS_ANA4MIPS"],
-            "CMIP3": os.environ["DRS_CMIP3"],
-            "CMIP5": os.environ["DRS_CMIP5"],
-            "CMIP6": os.environ["DRS_CMIP6"],
-            "CORDEX": os.environ["DRS_CORDEX"],
-            "native6": os.environ["DRS_NATIVE6"],
-            "OBS": os.environ["DRS_OBS"],
-            "obs4MIPs": os.environ["DRS_OBS4MIPS"],
-            "OBS6": os.environ["DRS_OBS6"],
+            "ana4mips": values.get("DRS_ANA4MIPS", None),
+            "CMIP3": values.get("DRS_CMIP3", None),
+            "CMIP5": values.get("DRS_CMIP5", None),
+            "CMIP6": values.get("DRS_CMIP6", None),
+            "CORDEX": values.get("DRS_CORDEX", None),
+            "native6": values.get("DRS_NATIVE6", None),
+            "OBS": values.get("DRS_OBS", None),
+            "obs4MIPs": values.get("DRS_OBS4MIPS", None),
+            "OBS6": values.get("DRS_OBS6", None),
             "ESMVal": "BADC",
         },
         "extra_facets_dir": [],
-        "max_parallel_tasks": int(os.environ["MAX_PARALLEL_TASKS"]),
-        "output_dir": os.environ["OUTPUT_DIR"],
+        "max_parallel_tasks": int(values.get("MAX_PARALLEL_TASKS", None)),
+        "output_dir": values.get("OUTPUT_DIR", None),
         "remove_preproc_dir": False,
         "rootpath": {
-            "ana4mips": os.environ["ROOTPATH_ANA4MIPS"],
-            "CMIP3": os.environ["ROOTPATH_CMIP3"],
-            "CMIP5": os.environ["ROOTPATH_CMIP5"],
-            "CMIP6": os.environ["ROOTPATH_CMIP6"],
-            "CORDEX": os.environ["ROOTPATH_CORDEX"],
-            "native6": os.environ["ROOTPATH_NATIVE6"],
-            "OBS": os.environ["ROOTPATH_OBS"],
-            "obs4MIPs": os.environ["ROOTPATH_OBS4MIPS"],
-            "OBS6": os.environ["ROOTPATH_OBS6"],
-            "RAWOBS": os.environ["ROOTPATH_RAWOBS"],
+            "ana4mips": values.get("ROOTPATH_ANA4MIPS", None),
+            "CMIP3": values.get("ROOTPATH_CMIP3", None),
+            "CMIP5": values.get("ROOTPATH_CMIP5", None),
+            "CMIP6": values.get("ROOTPATH_CMIP6", None),
+            "CORDEX": values.get("ROOTPATH_CORDEX", None),
+            "native6": values.get("ROOTPATH_NATIVE6", None),
+            "OBS": values.get("ROOTPATH_OBS", None),
+            "obs4MIPs": values.get("ROOTPATH_OBS4MIPS", None),
+            "OBS6": values.get("ROOTPATH_OBS6", None),
+            "RAWOBS": values.get("ROOTPATH_RAWOBS", None),
             "ESMVal": os.path.join(
-                os.environ["CYLC_WORKFLOW_SHARE_DIR"], "work", "GCModelDev"
+                values.get("CYLC_WORKFLOW_SHARE_DIR", None),
+                "work",
+                "GCModelDev",
             ),
         },
     }
-    return config_values_from_task_env
+    return user_config_file_contents
 
 
 def write_yaml(file_path, contents):
