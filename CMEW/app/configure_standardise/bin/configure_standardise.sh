@@ -11,10 +11,6 @@ cmew-process-env create_variables_file.py
 
 # Running setup commands for CDDS
 
-export WORKING_DIRECTORY="${CYLC_WORKFLOW_SHARE_DIR}/data/cdds"
-export ROOT_PROC_DIR="${WORKING_DIRECTORY}/proc"
-export ROOT_DATA_DIR="${WORKING_DIRECTORY}/cdds_data"
+cmew-standardise-env create_cdds_directory_structure "${REQUEST_PATH}" -c "${ROOT_PROC_DIR}" -t "${ROOT_DATA_DIR}"
 
-cmew-standardise-env create_cdds_directory_structure "${CYLC_WORKFLOW_SHARE_DIR}/etc/request.json" -c "${ROOT_PROC_DIR}" -t "${ROOT_DATA_DIR}"
-
-cmew-standardise-env prepare_generate_variable_list "${CYLC_WORKFLOW_SHARE_DIR}/etc/request.json" -c "${ROOT_PROC_DIR}" -t "${ROOT_DATA_DIR}" --use_proc_dir -r "${CYLC_WORKFLOW_SHARE_DIR}/etc/variables.txt"
+cmew-standardise-env prepare_generate_variable_list "${REQUEST_PATH}" -c "${ROOT_PROC_DIR}" -t "${ROOT_DATA_DIR}" --use_proc_dir -r "${VARIABLES_PATH}"
