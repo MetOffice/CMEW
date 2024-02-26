@@ -51,11 +51,13 @@ def test_main(
     path_to_mock_original_recipe,
     tmp_path,
 ):
-    # copy original recipe to temp location so it can be overwritten
+    # Copy the original recipe to a tmp_path location to allow it to be
+    # overwritten.
     path_to_temp_recipe = tmp_path / "tmp_recipe.yml"
     shutil.copy(path_to_mock_original_recipe, path_to_temp_recipe)
 
-    # set env var to temp location of original recipe
+    # Mock the environmental variable 'RECIPE PATH' to the tmp_path location
+    # where the original recipe is stored.
     monkeypatch.setenv("RECIPE_PATH", path_to_temp_recipe)
 
     main()
@@ -66,7 +68,8 @@ def test_main(
         actual = f1.readlines()
         kgo_with_comment = f2.readlines()
 
-    # remove three line comment from kgo file contents
+    # Remove the three line comment at the top of
+    # 'test_updated_radiation_budget_recipe.yml'.
     kgo_without_comment = kgo_with_comment[3:]
 
     assert actual == kgo_without_comment
