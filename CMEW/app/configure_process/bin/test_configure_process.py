@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-# (C) British Crown Copyright 2024, Met Office.
-# Please see LICENSE for license details.
+# (C) Crown Copyright 2024, Met Office.
+# Please see LICENSE.md for license details.
 from configure_process import create_user_config_file
 
 
