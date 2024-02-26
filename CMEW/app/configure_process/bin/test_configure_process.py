@@ -10,3 +10,11 @@ def test_create_user_config_file_verify_remove_preproc_dir_value_is_false():
     output = config_values["remove_preproc_dir"]
     expected = False
     assert output == expected
+
+
+def test_create_user_config_file_verify_esmval_value_equals_BADC():
+    config_values = create_user_config_file()
+
+    output = config_values["drs"]["ESMVal"]
+    expected = "BADC"
+    assert output == expected
