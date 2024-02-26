@@ -19,7 +19,7 @@ def path_to_updated_recipe_kgo():
         Path(__file__).parent.parent.parent
         / "unittest"
         / "kgo"
-        / "test_updated_recipe.yml"
+        / "test_updated_radiation_budget_recipe.yml"
     )
     return path
 
