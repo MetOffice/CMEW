@@ -86,6 +86,30 @@ def create_user_config_file(values=None):
     if values is None:
         values = {}
 
+    if "CYLC_WORKFLOW_SHARE_DIR" in values:
+        config_developer_file = (
+            os.path.join(
+                values["CYLC_WORKFLOW_SHARE_DIR"],
+                "etc",
+                "config-developer.yml",
+            ),
+        )
+        esmval = (
+            os.path.join(
+                values["CYLC_WORKFLOW_SHARE_DIR"],
+                "work",
+                "GCModelDev",
+            ),
+        )
+    else:
+        config_developer_file = None
+        esmval = None
+
+    if "MAX_PARALLEL_TASKS" in values:
+        max_parallel_tasks = int(values["MAX_PARALLEL_TASKS"])
+    else:
+        max_parallel_tasks = None
+
     # Note that 'auxiliary_data_dir', 'download_dir' and
     # 'extra_facets_dir' are set to empty values and cannot currently be
     # configured. However, 'download_dir' is used only when using the
@@ -97,11 +121,7 @@ def create_user_config_file(values=None):
     user_config_file_contents = {
         "auxiliary_data_dir": "",
         "config_file": values.get("USER_CONFIG_PATH", None),
-        "config_developer_file": os.path.join(
-            values.get("CYLC_WORKFLOW_SHARE_DIR", None),
-            "etc",
-            "config-developer.yml",
-        ),
+        "config_developer_file": config_developer_file,
         "download_dir": "",
         "drs": {
             "ana4mips": values.get("DRS_ANA4MIPS", None),
@@ -116,7 +136,7 @@ def create_user_config_file(values=None):
             "ESMVal": "BADC",
         },
         "extra_facets_dir": [],
-        "max_parallel_tasks": int(values.get("MAX_PARALLEL_TASKS", None)),
+        "max_parallel_tasks": max_parallel_tasks,
         "output_dir": values.get("OUTPUT_DIR", None),
         "remove_preproc_dir": False,
         "rootpath": {
@@ -130,11 +150,7 @@ def create_user_config_file(values=None):
             "obs4MIPs": values.get("ROOTPATH_OBS4MIPS", None),
             "OBS6": values.get("ROOTPATH_OBS6", None),
             "RAWOBS": values.get("ROOTPATH_RAWOBS", None),
-            "ESMVal": os.path.join(
-                values.get("CYLC_WORKFLOW_SHARE_DIR", None),
-                "work",
-                "GCModelDev",
-            ),
+            "ESMVal": esmval,
         },
     }
     return user_config_file_contents
