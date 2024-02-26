@@ -3,6 +3,8 @@
 .. Glossary substitutions make it easier to refer to pluralised /
 .. capitalised glossary terms.
 
+.. Add in alphabetical order.
+
 .. |CDDS| replace:: :term:`CDDS`
 .. |CMEW| replace:: :term:`CMEW`
 .. |CMIP| replace:: :term:`CMIP`
@@ -12,8 +14,8 @@
 .. |ESMValTool| replace:: :term:`ESMValTool`
 .. |MIAO| replace:: :term:`MIAO`
 .. |Rose| replace:: :term:`Rose`
-.. |rose_prune| replace:: ``rose_prune``
 .. |Rose Edit GUI| replace:: ``Rose Edit GUI``
+.. |rose_prune| replace:: ``rose_prune``
 
 .. Links
 
