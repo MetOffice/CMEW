@@ -67,7 +67,7 @@ def retrieve_values_from_task_env():
     return values_from_task_env
 
 
-def create_user_config_file(values):
+def create_user_config_file(values=None):
     """
     Return the contents of the user configuration file.
 
@@ -81,6 +81,9 @@ def create_user_config_file(values):
     : dictionary
         The contents of the user configuration file.
     """
+    if values is None:
+        values = {}
+
     # Note that 'auxiliary_data_dir', 'download_dir' and
     # 'extra_facets_dir' are set to empty values and cannot currently be
     # configured. However, 'download_dir' is used only when using the
@@ -142,9 +145,9 @@ def write_yaml(file_path, contents):
 
     Parameters
     ----------
-    file_path: string
+    file_path : string
         The full path to the YAML file to write the contents to.
-    contents: dictionary
+    contents : dictionary
         The contents to write to the YAML file.
     """
     with open(file_path, "w") as file_handle:
