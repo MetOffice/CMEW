@@ -38,8 +38,8 @@ def path_to_mock_original_recipe():
 def test_update_recipe(
     mock_env_vars, path_to_updated_recipe_kgo, path_to_mock_original_recipe
 ):
-    with open(path_to_updated_recipe_kgo, "r") as f:
-        expected = yaml.safe_load(f)
+    with open(path_to_updated_recipe_kgo, "r") as file_handle:
+        expected = yaml.safe_load(file_handle)
     actual = update_recipe(path_to_mock_original_recipe)
     assert actual == expected
 
@@ -62,11 +62,11 @@ def test_main(
 
     main()
 
-    with open(path_to_temp_recipe, "r") as f1, open(
-        path_to_updated_recipe_kgo, "r"
-    ) as f2:
-        actual = f1.readlines()
-        kgo_with_comment = f2.readlines()
+    with open(path_to_temp_recipe, "r") as file_handle_1:
+        actual = file_handle_1.readlines()
+
+    with open(path_to_updated_recipe_kgo, "r") as file_handle_2:
+        kgo_with_comment = file_handle_2.readlines()
 
     # Remove the three line comment at the top of
     # 'test_updated_radiation_budget_recipe.yml'.
