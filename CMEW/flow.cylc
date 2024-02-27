@@ -37,6 +37,11 @@
             USER_CONFIG_PATH = ${USER_CONFIG_DIR}/config-user.yml
             OUTPUT_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/cycle/${CYLC_TASK_CYCLE_POINT}
             CDDS_DIR = ${CYLC_WORKFLOW_RUN_DIR}/lib/CDDS
+            SHARE_DATA_CDDS = ${CYLC_WORKFLOW_SHARE_DIR}/data/cdds
+            ROOT_PROC_DIR = ${SHARE_DATA_CDDS}/proc
+            ROOT_DATA_DIR = ${SHARE_DATA_CDDS}/cdds_data
+            REQUEST_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request.json
+            VARIABLES_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/variables.txt
 
     [[ASSESSMENT_AREA]]
         [[[environment]]]
@@ -74,6 +79,8 @@
         inherit = None, ASSESSMENT_AREA
         [[[environment]]]
             ROSE_TASK_APP = configure_for
+            START_YEAR = {{ START_YEAR }}
+            NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
 
     [[configure_standardise<assessment_area>]]
         inherit = None, ASSESSMENT_AREA
