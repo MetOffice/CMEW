@@ -10,7 +10,10 @@ from pathlib import Path
 
 def test_parse_radiation_budget_variables():
     recipe_path = (
-        Path(__file__).parent.parent / "mock_data" / "test_recipe.yml"
+        Path(__file__).parent.parent.parent
+        / "unittest"
+        / "mock_data"
+        / "test_radiation_budget_recipe_v2.9.0.yml"
     )
     actual = parse_variables_from_recipe(recipe_path)
     expected = [
