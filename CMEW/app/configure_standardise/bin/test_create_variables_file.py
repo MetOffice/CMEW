@@ -13,7 +13,7 @@ def test_parse_radiation_budget_variables():
         Path(__file__).parent.parent.parent
         / "unittest"
         / "mock_data"
-        / "test_recipe.yml"
+        / "test_radiation_budget_recipe_v2.9.0.yml"
     )
     actual = parse_variables_from_recipe(recipe_path)
     expected = [

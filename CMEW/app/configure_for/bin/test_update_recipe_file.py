@@ -30,7 +30,7 @@ def path_to_mock_original_recipe():
         Path(__file__).parent.parent.parent
         / "unittest"
         / "mock_data"
-        / "test_recipe.yml"
+        / "test_radiation_budget_recipe_v2.9.0.yml"
     )
     return path
 
