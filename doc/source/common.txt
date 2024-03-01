@@ -1,7 +1,9 @@
-.. (C) Crown Copyright 2022-2023, the Met Office.
+.. (C) Crown Copyright 2022-2024, the Met Office.
 
 .. Glossary substitutions make it easier to refer to pluralised /
 .. capitalised glossary terms.
+
+.. Add in alphabetical order.
 
 .. |CDDS| replace:: :term:`CDDS`
 .. |CMEW| replace:: :term:`CMEW`
@@ -12,6 +14,7 @@
 .. |ESMValTool| replace:: :term:`ESMValTool`
 .. |MIAO| replace:: :term:`MIAO`
 .. |Rose| replace:: :term:`Rose`
+.. |Rose Edit GUI| replace:: ``Rose Edit GUI``
 .. |rose_prune| replace:: ``rose_prune``
 
 .. Links
@@ -23,4 +26,5 @@
 .. _ESMValTool Documentation: https://www.esmvaltool.org/
 .. _Radiation budget: https://docs.esmvaltool.org/en/latest/recipes/recipe_radiation_budget.html
 .. _Rose Documentation: https://metomi.github.io/rose/doc/html/index.html
+.. _Rose Edit GUI: https://metomi.github.io/rose/doc/html/api/command-reference.html#rose-config-edit
 .. _rose_prune: https://metomi.github.io/rose/doc/html/api/built-in/rose_prune.html

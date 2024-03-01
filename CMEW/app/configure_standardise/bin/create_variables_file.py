@@ -52,7 +52,7 @@ def parse_variables_from_recipe(recipe_path):
         List of variables from the ESMValTool recipe,
         formatted as ``<mip>/<variable>:<stream>``.
     """
-    # For now, hard-code stream to apm, this is correct for Amon and Emon mip
+    # For now, hard-code stream to apm, this is correct for Amon and Emon mip.
     stream = "apm"
     recipe = Recipe(recipe_path)
     diagnostics = recipe.data["diagnostics"]

@@ -13,16 +13,16 @@
     [[graph]]
         R1 = """
 {%- if UNITTEST or TEST %}
-        install_env_file => unittest
+            install_env_file => unittest
 {%- endif %}
 {%- if not UNITTEST %}
-        install_env_file => configure_process & configure_for<assessment_area>
-        configure_for<assessment_area> => configure_standardise<assessment_area>
-        configure_process => process<assessment_area>
-        configure_standardise<assessment_area> => standardise_model_data => process<assessment_area> & housekeeping
-{%- if TEST %}
+            install_env_file => configure_process & configure_for<assessment_area>
+            configure_for<assessment_area> => configure_standardise<assessment_area>
+            configure_process => process<assessment_area>
+            configure_standardise<assessment_area> => standardise_model_data => process<assessment_area> & housekeeping
+    {%- if TEST %}
             process<assessment_area> => compare<assessment_area>
-{%- endif %}
+    {%- endif %}
 {%- endif %}
         """
 
@@ -79,6 +79,8 @@
         inherit = None, ASSESSMENT_AREA
         [[[environment]]]
             ROSE_TASK_APP = configure_for
+            START_YEAR = {{ START_YEAR }}
+            NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
 
     [[configure_standardise<assessment_area>]]
         inherit = None, ASSESSMENT_AREA
@@ -104,9 +106,9 @@
     [[housekeeping]]
 
 {% include "site/" ~ SITE ~ ".cylc" %}
-{%- if TEST %}
-    {% include "inc/test.cylc" %}
-{%- endif %}
-{%- if UNITTEST or TEST %}
+{%- if TEST or UNITTEST %}
     {% include "inc/unittest.cylc" %}
+    {%- if TEST %}
+        {% include "inc/test.cylc" %}
+    {%- endif %}
 {%- endif %}
