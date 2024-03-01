@@ -18,3 +18,12 @@ def test_create_user_config_file_verify_esmval_value_equals_BADC():
     output = config_values["drs"]["ESMVal"]
     expected = "BADC"
     assert output == expected
+
+
+def test_create_user_config_file_verify_user_config_path():
+    expected = "userpath"
+    test_values = {"USER_CONFIG_PATH": expected}
+    config_values = create_user_config_file(test_values)
+
+    output = config_values["config_file"]
+    assert output == expected
