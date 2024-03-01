@@ -35,17 +35,20 @@ An overview of the workflow
 
 ``configure_for``
   :Description:
-     Copies the |ESMValTool| recipe for the assessment area into
-     the cylc workflow ``share/etc`` directory in the installed workflow
+     Copies an updated version of the |ESMValTool| recipe for the assessment
+     area into the cylc workflow ``share/etc`` directory in the installed
+     workflow
   :Runs on:
      Localhost
   :Executes:
-     The ``esmvaltool recipes get`` command for the required assessment area
+     For the required assessment area, executes the ``esmvaltool recipes get``
+     command followed by the ``update_recipe_file.py`` script from the |Rose|
+     app
   :Details:
      Runs once for each assessment area, immediately after the successful
-     completion of the ``install_env_file`` job. Temporarily, this task is hard coded
-     to copy the ``radiation_budget_recipe.yml`` from ``app/configure_for/recipe_data/``
-     to the `share/etc` directory in the installed workflow
+     completion of the ``install_env_file`` job. The recipe is updated with
+     CMEW required variables (e.g. "Activity": "ESMVal") and also with user
+     configurable variables from the |Rose Edit GUI|_/``rose-suite.conf``
   :Families:
      ``ASSESSMENT_AREA``
 
