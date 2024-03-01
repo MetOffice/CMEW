@@ -27,3 +27,12 @@ def test_create_user_config_file_verify_user_config_path():
 
     output = config_values["config_file"]
     assert output == expected
+
+
+def test_create_user_config_file_verify_cmip6_rootpath():
+    expected = "cmip_rootpath"
+    test_values = {"ROOTPATH_CMIP6": expected}
+    config_values = create_user_config_file(test_values)
+
+    output = config_values["rootpath"]["CMIP6"]
+    assert output == expected
