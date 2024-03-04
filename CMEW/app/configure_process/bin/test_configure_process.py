@@ -53,7 +53,10 @@ def test_create_user_config_file_verify_cmip6_rootpath():
 
 @pytest.mark.parametrize(
     "outer_key, input_key, key_assigned, expected",
-    [("drs", "DRS_OBS", "OBS", "obspath")],
+    [
+        ("drs", "DRS_CORDEX", "CORDEX", "cordexpath"),
+        ("drs", "DRS_OBS", "OBS", "obspath"),
+    ],
 )
 def test_create_user_config_file_two_values(
     outer_key, input_key, key_assigned, expected
