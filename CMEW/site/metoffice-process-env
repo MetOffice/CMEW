@@ -5,12 +5,12 @@
 # ENVIRONMENT
 #   ESMVALTOOL_MODULE_NAME  The name and version of the ESMValTool
 #                           module to load
-#   PYTHONPATH_PREPEND  The path to prepend to PYTHONPATH after loading the
-#                       module
-#   QUIET_MODE          Don't print confirmation messages
+#   PYTHONPATH_PREPEND      The path to prepend to PYTHONPATH after loading the
+#                           module
+#   QUIET_MODE              Don't print confirmation messages
 #
 # OPTIONS
-#   COMMAND             The command to execute with options
+#   COMMAND                 The command to execute with options
 set -eu
 
 module_count(){
