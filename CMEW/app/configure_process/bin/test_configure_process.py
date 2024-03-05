@@ -39,18 +39,6 @@ def test_create_user_config_file_verify_cmip6_rootpath():
     assert output == expected
 
 
-# test 5
-# def test_create_user_config_file_two_values():
-#     expected = "obspath"
-#     test_values = {"DRS_OBS": expected}
-#     config_values = create_user_config_file(test_values)
-
-#     output = config_values["drs"]["OBS"]
-#     assert output == expected
-
-# test 5 parametrized
-
-
 @pytest.mark.parametrize(
     "outer_key, input_key, key_assigned, expected",
     [
