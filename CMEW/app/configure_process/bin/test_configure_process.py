@@ -15,7 +15,11 @@ from configure_process import create_user_config_file
 def test_create_user_config_file_single_values(
     input_key, output_key, expected
 ):
-    test_values = {input_key: expected}
+    if input_key is None:
+        test_values = None
+    else:
+        test_values = {input_key: expected}
+
     config_values = create_user_config_file(test_values)
     output = config_values[output_key]
     assert output == expected
@@ -33,7 +37,11 @@ def test_create_user_config_file_single_values(
 def test_create_user_config_file_nested_values(
     input_key, output_outer_key, output_inner_key, expected
 ):
-    test_values = {input_key: expected}
+    if input_key is None:
+        test_values = None
+    else:
+        test_values = {input_key: expected}
+
     config_values = create_user_config_file(test_values)
     output = config_values[output_outer_key][output_inner_key]
     assert output == expected
