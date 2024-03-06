@@ -12,7 +12,9 @@ from configure_process import create_user_config_file
         ("USER_CONFIG_PATH", "config_file", "userpath"),
     ],
 )
-def test_create_user_config_file_two_values(input_key, output_key, expected):
+def test_create_user_config_file_single_values(
+    input_key, output_key, expected
+):
     test_values = {input_key: expected}
     config_values = create_user_config_file(test_values)
     output = config_values[output_key]
@@ -28,7 +30,7 @@ def test_create_user_config_file_two_values(input_key, output_key, expected):
         ("ESMVal", "drs", "ESMVal", "BADC"),
     ],
 )
-def test_create_user_config_file_four_values(
+def test_create_user_config_file_nested_values(
     input_key, output_outer_key, output_inner_key, expected
 ):
     test_values = {input_key: expected}
