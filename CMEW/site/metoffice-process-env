@@ -3,13 +3,15 @@
 # Usage metoffice-process-env COMMAND
 #
 # ENVIRONMENT
-#   MODULE_NAME         The name of the module to load
-#   PYTHONPATH_PREPEND  The path to prepend to PYTHONPATH after loading the
-#                       module
-#   QUIET_MODE          Don't print confirmation messages
+#   ESMVALTOOL_MODULE_NAME  The name of the modulefile used to setup the
+#                           ESMValTool environment for CMEW via the
+#                           'module load' command.
+#   PYTHONPATH_PREPEND      The path to prepend to PYTHONPATH after loading the
+#                           module
+#   QUIET_MODE              Don't print confirmation messages
 #
 # OPTIONS
-#   COMMAND             The command to execute with options
+#   COMMAND                 The command to execute with options
 set -eu
 
 module_count(){
@@ -38,7 +40,7 @@ export NUMEXPR_NUM_THREADS=1
 # Ensure '~/.local' isn't added to 'sys.path'.
 export PYTHONNOUSERSITE=True
 
-safe_load "${MODULE_NAME}"
+safe_load "${ESMVALTOOL_MODULE_NAME}"
 
 # If PYTHONPATH_PREPEND has been set, prepend it to PYTHONPATH to extend the
 # Python environment.
