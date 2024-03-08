@@ -21,8 +21,8 @@ def test_create_user_config_file_single_values(
         test_values = {input_key: expected}
 
     config_values = create_user_config_file(test_values)
-    output = config_values[output_key]
-    assert output == expected
+    actual = config_values[output_key]
+    assert actual == expected
 
 
 @pytest.mark.parametrize(
@@ -43,5 +43,5 @@ def test_create_user_config_file_nested_values(
         test_values = {input_key: expected}
 
     config_values = create_user_config_file(test_values)
-    output = config_values[output_outer_key][output_inner_key]
-    assert output == expected
+    actual = config_values[output_outer_key][output_inner_key]
+    assert actual == expected
