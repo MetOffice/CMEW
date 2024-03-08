@@ -87,19 +87,15 @@ def create_user_config_file(values=None):
         values = {}
 
     if "CYLC_WORKFLOW_SHARE_DIR" in values:
-        config_developer_file = (
-            os.path.join(
-                values["CYLC_WORKFLOW_SHARE_DIR"],
-                "etc",
-                "config-developer.yml",
-            ),
+        config_developer_file = os.path.join(
+            values["CYLC_WORKFLOW_SHARE_DIR"],
+            "etc",
+            "config-developer.yml",
         )
-        esmval = (
-            os.path.join(
-                values["CYLC_WORKFLOW_SHARE_DIR"],
-                "work",
-                "GCModelDev",
-            ),
+        esmval = os.path.join(
+            values["CYLC_WORKFLOW_SHARE_DIR"],
+            "work",
+            "GCModelDev",
         )
     else:
         config_developer_file = None
