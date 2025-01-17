@@ -25,7 +25,7 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job
       # can access it
       - uses: actions/checkout@v4
-      # Override default Python version
+      # Override the default Python version
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11.10'
