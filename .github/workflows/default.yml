@@ -25,6 +25,10 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job
       # can access it
       - uses: actions/checkout@v4
+      # Override default Python version
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11.10'
 
       - name: Create environment
         run: |
@@ -84,3 +88,9 @@ jobs:
           eval "$(conda shell.bash hook)"
           conda activate cmew
           pre-commit run --all-files
+
+      - name: Run unit tests with pytest
+        run: |
+          eval "$(conda shell.bash hook)"
+          conda activate cmew
+          pytest --pluggy
