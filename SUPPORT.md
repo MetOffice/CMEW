@@ -8,4 +8,3 @@ https://github.com/MetOffice/CMEW/discussions
 
 Please contact the |[MIAO](https://github.com/MetOffice/CMEW/blob/main/doc/source/support.rst#id1)| team at esmval@metoffice.gov.uk to request support
 related to |[CMEW](https://github.com/MetOffice/CMEW)|.
-
