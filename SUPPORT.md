@@ -3,8 +3,9 @@
 
 
 # Support
-For informal questions and discussions with other community members, you are very welcome to read and write to the [Discussions](https://github.com/MetOffice/CMEW/discussions) pages:
-https://github.com/MetOffice/CMEW/discussions
+For formal and informal support questions or discussions with other
+|[CMEW](https://github.com/MetOffice/CMEW)|
+community members, you are very welcome to read and write to the
+CMEW [Discussions](https://github.com/MetOffice/CMEW/discussions)
+pages.
 
-Please contact the |[MIAO](https://github.com/MetOffice/CMEW/blob/main/doc/source/support.rst#id1)| team at esmval@metoffice.gov.uk to request support
-related to |[CMEW](https://github.com/MetOffice/CMEW)|.
