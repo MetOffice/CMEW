@@ -3,8 +3,8 @@
 *******
 Support
 *******
-
 .. include:: common.txt
 
-Please contact the |MIAO| team at esmval@metoffice.gov.uk to request support
-related to |CMEW|.
+For support issues, please see the Support section near the end of the home page (the 'README' text) at
+`CMEW on GitHub`_.
+
