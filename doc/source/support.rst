@@ -10,4 +10,4 @@ Support
 .. accessible as it is private now.
 
 For support issues, please see the Support section near the end of the home page
-(the 'README' text) at !https://github.com/MetOffice/CMEW .
+(the 'README' text) at: ``https://github.com/MetOffice/CMEW`` .
