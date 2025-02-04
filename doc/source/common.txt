@@ -19,7 +19,6 @@
 
 .. Links
 
-.. _CMEW on GitHub: https://github.com/MetOffice/CMEW
 .. _CMIP Documentation: https://www.wcrp-climate.org/wgcm-cmip
 .. _Cylc Documentation: https://cylc.github.io/cylc-doc/stable/html/index.html
 .. _families: https://cylc.github.io/cylc-doc/stable/html/tutorial/runtime/configuration-consolidation/families.html

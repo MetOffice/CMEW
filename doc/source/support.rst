@@ -5,5 +5,9 @@ Support
 *******
 .. include:: common.txt
 
-For support issues, please see the Support section near the end of the home page (the 'README' text) at
-`CMEW on GitHub`_.
+.. The CMEW URL can be a hypertext link when the repository is public, but
+.. workflow currently fails if that is done as the actual URL is not
+.. accessible as it is private now.
+
+For support issues, please see the Support section near the end of the home page
+(the 'README' text) at !https://github.com/MetOffice/CMEW .
