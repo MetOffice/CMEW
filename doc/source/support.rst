@@ -9,5 +9,5 @@ Support
 .. workflow currently fails if that is done as the actual URL is not
 .. accessible as it is private now.
 
-For support issues, please see the Support section near the end of the home page
-(the 'README' text) at: ``https://github.com/MetOffice/CMEW`` .
+For support issues, please see the Support section near the end of the home
+page (the 'README' text) at: ``https://github.com/MetOffice/CMEW`` .
