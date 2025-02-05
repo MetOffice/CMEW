@@ -3,6 +3,6 @@
 
 
 # Support
-For support questions or discussions with other [CMEW](https://github.com/MetOffice/CMEW) 
+For support questions or discussions with other [CMEW](https://github.com/MetOffice/CMEW)
 community members, please use the
 CMEW [Discussions](https://github.com/MetOffice/CMEW/discussions) pages.
