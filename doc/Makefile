@@ -1,3 +1,5 @@
+# (C) British Crown Copyright 2024-2025, Met Office.
+# The LICENSE.md file contains full licensing details.
 # Minimal makefile for Sphinx documentation
 #
 
