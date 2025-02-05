@@ -70,6 +70,6 @@ def test_main(
 
     # Remove the three line comment at the top of
     # 'test_updated_radiation_budget_recipe.yml'.
-    kgo_without_comment = kgo_with_comment[3:]
+    kgo_without_comment = kgo_with_comment[5:]
 
     assert actual == kgo_without_comment
