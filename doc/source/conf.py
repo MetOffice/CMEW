@@ -1,3 +1,5 @@
+# (C) British Crown Copyright 2024-2025, Met Office.
+# The LICENSE.md file contains full licensing details.
 # Configuration file for the Sphinx documentation builder.
 #
 # This file only contains a selection of the most common options. For a full
