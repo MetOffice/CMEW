@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# (C) Crown Copyright 2024, Met Office.
+# (C) Crown Copyright 2024-2025, Met Office.
 # Please see LICENSE.md for license details.
 """
 Overwrite the ESMValTool recipe with an updated version. Include:
