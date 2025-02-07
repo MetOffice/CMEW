@@ -22,4 +22,3 @@ Quick Start
 
 * Browse the logs using `Cylc Review`_, a web service for browsing logs via an
   HTTP interface.
-

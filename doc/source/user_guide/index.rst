@@ -10,4 +10,3 @@ User Guide
 
    quick_start
    workflow
-

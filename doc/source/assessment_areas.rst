@@ -10,4 +10,3 @@ Available assessment areas
 The following assessment areas are currently available in |CMEW|:
 
 * `Radiation budget`_ (implemented in |ESMValTool|)
-

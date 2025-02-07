@@ -28,4 +28,3 @@
 .. _Rose Documentation: https://metomi.github.io/rose/doc/html/index.html
 .. _Rose Edit GUI: https://metomi.github.io/rose/doc/html/api/command-reference.html#rose-config-edit
 .. _rose_prune: https://metomi.github.io/rose/doc/html/api/built-in/rose_prune.html
-

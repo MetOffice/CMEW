@@ -12,4 +12,3 @@ used to evaluate climate models for all Earth System Model (|ESM|) components.
 
 |Cylc| v8 and |Rose| v2 are used as the workflow engine and application
 configuration system for the |CMEW|, respectively.
-

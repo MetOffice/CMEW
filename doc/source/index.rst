@@ -18,4 +18,3 @@ Welcome to the Climate Model Evaluation Workflow's documentation!
    testing
    support
    glossary
-

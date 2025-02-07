@@ -37,4 +37,3 @@ Glossary
    Rose
      Rose is a toolkit for writing, editing and running application
      configurations, see the `Rose Documentation`_.
-
