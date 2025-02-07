@@ -17,4 +17,3 @@ To run the full |CMEW| workflow at the Met Office, with all tests enabled, use t
 
 To only run the unit tests at the Met Office, use the command
     ``cylc vip -O metoffice -O unittest``
-
