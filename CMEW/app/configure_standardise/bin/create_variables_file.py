@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # (C) British Crown Copyright 2024-2025, Met Office.
-# Please see LICENSE for license details.
+# The LICENSE.md file contains full licensing details.
 """
 Generates the variables.txt file from the ESMValTool recipe.
 """

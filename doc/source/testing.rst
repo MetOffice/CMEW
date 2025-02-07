@@ -1,5 +1,5 @@
 .. (C) Crown Copyright 2024-2025, the Met Office.
-
+.. The LICENSE.md file contains full licensing details.
 *******
 Testing
 *******

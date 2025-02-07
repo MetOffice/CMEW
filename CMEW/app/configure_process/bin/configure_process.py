@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # (C) Crown Copyright 2022-2025, Met Office.
-# Please see LICENSE.md for license details.
+# The LICENSE.md file contains full licensing details.
 """
 Generate the required user configuration file for ESMValTool.
 """
