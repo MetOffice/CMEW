@@ -1,5 +1,6 @@
 .. (C) Crown Copyright 2022-2025, the Met Office.
 .. The LICENSE.md file contains full licensing details.
+
 ********
 Glossary
 ********
@@ -36,3 +37,4 @@ Glossary
    Rose
      Rose is a toolkit for writing, editing and running application
      configurations, see the `Rose Documentation`_.
+

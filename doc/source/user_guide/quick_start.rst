@@ -1,5 +1,6 @@
 .. (C) Crown Copyright 2022-2025, the Met Office.
 .. The LICENSE.md file contains full licensing details.
+
 Quick Start
 ===========
 
@@ -21,3 +22,4 @@ Quick Start
 
 * Browse the logs using `Cylc Review`_, a web service for browsing logs via an
   HTTP interface.
+

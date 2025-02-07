@@ -1,5 +1,5 @@
 .. (C) Crown Copyright 2022-2025, the Met Office.
-# The LICENSE.md file contains full licensing details.
+.. The LICENSE.md file contains full licensing details.
 .. Glossary substitutions make it easier to refer to pluralised /
 .. capitalised glossary terms.
 
@@ -28,3 +28,4 @@
 .. _Rose Documentation: https://metomi.github.io/rose/doc/html/index.html
 .. _Rose Edit GUI: https://metomi.github.io/rose/doc/html/api/command-reference.html#rose-config-edit
 .. _rose_prune: https://metomi.github.io/rose/doc/html/api/built-in/rose_prune.html
+
