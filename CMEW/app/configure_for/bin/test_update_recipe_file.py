@@ -1,5 +1,5 @@
-# (C) Crown Copyright 2024, Met Office.
-# Please see LICENSE.md for license details.
+# (C) Crown Copyright 2024-2025, Met Office.
+# The LICENSE.md file contains full licensing details.
 from update_recipe_file import update_recipe, main
 from pathlib import Path
 import pytest

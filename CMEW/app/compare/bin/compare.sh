@@ -1,6 +1,6 @@
 #!/bin/bash
 # (C) British Crown Copyright 2024-2025, Met Office.
-# Please see LICENSE.md for license details.
+# The LICENSE.md file contains full licensing details.
 #
 # USAGE compare.sh
 #
