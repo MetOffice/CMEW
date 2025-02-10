@@ -20,7 +20,7 @@
 # -- Project information -----------------------------------------------------
 
 project = "Climate Model Evaluation Workflow (CMEW)"
-copyright = "Crown Copyright 2022-2024, Met Office"
+copyright = "Crown Copyright 2022-2025, Met Office"
 author = "Emma Hogan"
 version = "0.1.0dev"
 
