@@ -19,7 +19,7 @@ If you would like to contribute, please follow the instructions provided on
 [Wiki: Working Practices](https://github.com/MetOffice/CMEW/wiki/Working-Practices).
 
 ## Support
-To get help with CMEW please see [Support](SUPPORT.md).
+The [Support](SUPPORT.md) file provides details on how to get help with CMEW.
 
 ## Maintainers
 

@@ -3,6 +3,9 @@
 
 
 # Support
-For support questions or discussions with other [CMEW](https://github.com/MetOffice/CMEW)
-community members, please use the
-CMEW [Discussions](https://github.com/MetOffice/CMEW/discussions) pages.
+
+For support questions or discussions with other [CMEW][cmew] community members,
+ please use [CMEW Discussions][cmew-discussions].
+
+[cmew]: https://github.com/MetOffice/CMEW
+[cmew-discussions]: https://github.com/MetOffice/CMEW/discussions
