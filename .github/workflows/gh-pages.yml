@@ -10,7 +10,7 @@ on:
   push:
     #branches: ["main"]
     # temporary branch for testing build !!
-    branches: ["243_move_docs_to_github"]
+    branches: ["main"]
 
   # Allows this workflow to be started manually from the Actions tab
   workflow_dispatch:
