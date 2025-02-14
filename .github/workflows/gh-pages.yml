@@ -47,10 +47,26 @@ jobs:
       - name: Setup GHPages
         uses: actions/configure-pages@v5
 
-      - name: Sphinx build
+      - name: Create environment
         run: |
-          sphinx-build doc ./_site
+          conda update conda
+          conda create --name cmew --file .github/workflows/cmew-env/cmew-env.lock
+          eval "$(conda shell.bash hook)"
+          conda activate cmew
 
+      - name: Build documentation
+        run: |
+          eval "$(conda shell.bash hook)"
+          conda activate cmew
+          cd doc
+          make html source ../_site
+          # builds to doc/build
+
+#      - name: Sphinx build
+#        run: |
+#          sphinx-build doc ./_site
+
+      # looks in ./_site
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
 
