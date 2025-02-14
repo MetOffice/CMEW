@@ -64,6 +64,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3.0.1
         with:
+          # default path: ./_site/
           path: doc/build
 
   # Deployment job
