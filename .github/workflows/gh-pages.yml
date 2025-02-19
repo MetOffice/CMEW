@@ -36,10 +36,6 @@ jobs:
       - name: Checkout CMEW repository
         uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: |
-          pip install sphinx sphinx_rtd_theme myst_parser
-
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v5
 
