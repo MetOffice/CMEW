@@ -1,9 +1,7 @@
-# (C) Crown Copyright 2024-2025, Met Office.
+# (C) Crown Copyright 2025, Met Office.
 # The LICENSE.md file contains full licensing details.
 
-# Build and deploy to GitHub pages using Sphinx from Workflow Actions
-
-name: sphinx-to-githubpages
+name: Build the documentation, then deploy to GitHub Pages
 
 on:
   # Triggers the workflow on push (commit to main)
@@ -35,14 +33,14 @@ jobs:
 
     steps:
       # Check out the repository under $GITHUB_WORKSPACE, then run build there
-      - name: Checkout
+      - name: Checkout CMEW repository
         uses: actions/checkout@v4
 
       - name: Install dependencies
         run: |
           pip install sphinx sphinx_rtd_theme myst_parser
 
-      - name: Setup GHPages
+      - name: Setup GitHub Pages
         uses: actions/configure-pages@v5
 
       - name: Create environment
@@ -52,7 +50,7 @@ jobs:
           eval "$(conda shell.bash hook)"
           conda activate cmew
 
-      - name: Build documentation
+      - name: Build documentation using Sphinx
         run: |
           eval "$(conda shell.bash hook)"
           conda activate cmew
@@ -60,11 +58,11 @@ jobs:
           make html
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3.0.1
+        uses: actions/upload-pages-artifact@v3
         with:
           path: doc/build
 
-  # Deploy built documentation to GitHub pages
+  # Deploy built documentation to GitHub Pages
   deploy:
     environment:
       name: github-pages
