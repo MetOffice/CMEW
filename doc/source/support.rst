@@ -6,5 +6,6 @@ Support
 
 .. include:: common.txt
 
-The SUPPORT.md file provides details on how to get help with CMEW.
- https://github.com/MetOffice/CMEW/blob/main/SUPPORT.md
+The SUPPORT.md_ file provides details on how to get help with CMEW.
+
+.. _SUPPORT.md: https://github.com/MetOffice/CMEW/blob/main/SUPPORT.md
