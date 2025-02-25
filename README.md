@@ -20,6 +20,9 @@ difficulties along the way.
 If you would like to contribute, please follow the instructions provided on
 [Wiki: Working Practices](https://github.com/MetOffice/CMEW/wiki/Working-Practices).
 
+## Support
+The [Support](SUPPORT.md) file provides details on how to get help with CMEW.
+
 ## Maintainers
 
 Current maintainers of this package are:
