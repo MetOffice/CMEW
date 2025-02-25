@@ -1,4 +1,5 @@
-.. (C) Crown Copyright 2022-2023, the Met Office.
+.. (C) Crown Copyright 2022-2025, Met Office.
+.. The LICENSE.md file contains full licensing details.
 
 ********
 Glossary
