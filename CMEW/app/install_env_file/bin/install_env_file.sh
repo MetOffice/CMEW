@@ -1,4 +1,6 @@
 #!/bin/bash
+# (C) Crown Copyright 2022-2025, Met Office.
+# The LICENSE.md file contains full licensing details.
 # Send the output from 'set -x' to 'stdout' rather than 'stderr'.
 BASH_XTRACEFD=1
 set -eux

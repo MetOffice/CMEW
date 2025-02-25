@@ -1,3 +1,5 @@
+# (C) Crown Copyright 2022-2025, Met Office.
+# The LICENSE.md file contains full licensing details.
 # Configuration file for the Sphinx documentation builder.
 #
 # This file only contains a selection of the most common options. For a full
@@ -18,7 +20,7 @@
 # -- Project information -----------------------------------------------------
 
 project = "Climate Model Evaluation Workflow (CMEW)"
-copyright = "Crown Copyright 2022-2024, Met Office"
+copyright = "Crown Copyright 2022-2025, Met Office"
 author = "Emma Hogan"
 version = "0.1.0dev"
 
