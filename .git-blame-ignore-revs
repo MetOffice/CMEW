@@ -1,3 +1,5 @@
+# (C) Crown Copyright 2024-2025, Met Office.
+# The LICENSE.md file contains full licensing details.
 # .git-blame-ignore-revs
 # Ran black on entire codebase when setting up pre commit hooks
 1f05a1a91a498238dbc0516a8d4fc985111dd7ae

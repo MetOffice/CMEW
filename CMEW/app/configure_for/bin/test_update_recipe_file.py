@@ -1,5 +1,5 @@
-# (C) Crown Copyright 2024, Met Office.
-# Please see LICENSE.md for license details.
+# (C) Crown Copyright 2024-2025, Met Office.
+# The LICENSE.md file contains full licensing details.
 from update_recipe_file import update_recipe, main
 from pathlib import Path
 import pytest
@@ -68,8 +68,8 @@ def test_main(
     with open(path_to_updated_recipe_kgo, "r") as file_handle_2:
         kgo_with_comment = file_handle_2.readlines()
 
-    # Remove the three line comment at the top of
+    # Remove the five comment lines at the top of
     # 'test_updated_radiation_budget_recipe.yml'.
-    kgo_without_comment = kgo_with_comment[3:]
+    kgo_without_comment = kgo_with_comment[5:]
 
     assert actual == kgo_without_comment

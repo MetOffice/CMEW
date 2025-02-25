@@ -1,3 +1,5 @@
+REM (C) Crown Copyright 2022-2025, Met Office.
+REM The LICENSE.md file contains full licensing details.
 @ECHO OFF
 
 pushd %~dp0
