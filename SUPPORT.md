@@ -5,7 +5,7 @@
 # Support
 
 For support questions or discussions with other [CMEW][cmew] community members,
- please use [CMEW Discussions][cmew-discussions].
+please use [CMEW Discussions][cmew-discussions].
 
 [cmew]: https://github.com/MetOffice/CMEW
 [cmew-discussions]: https://github.com/MetOffice/CMEW/discussions
