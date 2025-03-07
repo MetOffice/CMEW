@@ -27,7 +27,7 @@
 ###############################################################################
 ---
 custom:
-  cmor_path: /home/h03/cdds/etc/mip_tables/GCModelDev/0.0.9
+  cmor_path: /home/h03/cdds/etc/mip_tables/GCModelDev/0.0.23
 
 ESMVal:
   cmor_strict: true
