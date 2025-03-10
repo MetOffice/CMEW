@@ -5,14 +5,13 @@
 Generates the request.cfg file from the ESMValTool recipe for CDDS v3.
 Guidance can be found in `CDDS config_request`_.
 
-.. _CDDS config_request: https://fuzzy-adventure-c51c3985.pages.github.io/latest/tutorials/request/config_request/  # noqa: E501
+.. _CDDS config_request: https://metoffice.github.io/CDDS/3.0/tutorials/request/config_request/  # noqa: E501
 """
 import os
 from pathlib import Path
-from typing import List
 
 
-def create_request() -> List[str]:
+def create_request():
     """Retrieve CDDS request information from Rose suite configuration.
 
     Returns
@@ -148,7 +147,7 @@ def create_request() -> List[str]:
     return request
 
 
-def write_request(request: List[str], target_path: Path):
+def write_request(request, target_path):
     """Write request to a .cfg file at ``target_path``.
 
     Parameters

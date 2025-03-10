@@ -32,8 +32,10 @@ def request_file_path(tmp_path):
     return filepath
 
 
-# Create a CDDS request file and compare it to the expected result file.
-def test_make_request_file(monkey_env, request_file_path):
+def test_make_request_file(monkey_env, request_file_path):  # noqa : 36
+    # Create a CDDS request file and compare it to the expected result file.
+    # noqa : 36 : Ignore warning about monkey_env not being used; it is needed
+    # but not referenced.
     print(f"Request file: {request_file_path}")  # run with -s option for this
     actual = make_request_file(request_file_path)
     assert actual is not None, "Request was not produced"
