@@ -3,7 +3,7 @@
 # The LICENSE.md file contains full licensing details.
 """
 Generates the request.cfg file from the ESMValTool recipe for CDDS v3.
-See `CDDS config_request`_.
+Guidance can be found in `CDDS config_request`_.
 
 .. _CDDS config_request: https://fuzzy-adventure-c51c3985.pages.github.io/latest/tutorials/request/config_request/  # noqa: E501
 """
