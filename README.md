@@ -12,13 +12,8 @@ to evaluate climate models for all Earth System Model (ESM) components. See the
 [CMEW documentation](https://www-hc/~esmval/cmew/cmew-latest/) for more information.
 
 ## Contributing
-
-We welcome all contributions to improve the CMEW! Maintainers will do their
-best to help you if you have any questions, concerns, or experience any
-difficulties along the way.
-
-If you would like to contribute, please follow the instructions provided on
-[Wiki: Working Practices](https://github.com/MetOffice/CMEW/wiki/Working-Practices).
+The [Contributing](CONTRIBUTING.md) file provides details on how to contribute
+to CMEW.
 
 ## Support
 The [Support](SUPPORT.md) file provides details on how to get help with CMEW.
