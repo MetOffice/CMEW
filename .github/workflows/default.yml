@@ -86,3 +86,12 @@ jobs:
           eval "$(conda shell.bash hook)"
           conda activate cmew
           pre-commit run --all-files
+
+      # find all shell scripts:  either *.sh or with no extension.
+      # Exclude .git and cache directories and README and Makefile file names
+      # from results. (Makefile is a make and not a bash, script.)
+      - name: Run ShellCheck
+        run: |
+          find . -type f \( -name '*.sh' -or ! -name '*.*' \) ! \
+          -name "Makefile" ! -name "README" ! -path "*.git*" ! \
+          -path "*cache*" -exec shellcheck {} +
