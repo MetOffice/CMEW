@@ -10,4 +10,4 @@ concerns, or experience any difficulties along the way.
 If you would like to contribute, please follow the instructions provided on
 [Wiki: Working Practices][workprac].
 
-[workprac](https://github.com/MetOffice/CMEW/wiki/Working-Practices).
+[workprac]: https://github.com/MetOffice/CMEW/wiki/Working-Practices
