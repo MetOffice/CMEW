@@ -46,7 +46,7 @@ safe_load "${ESMVALTOOL_MODULE_NAME}"
 
 # If PYTHONPATH_PREPEND has been set, prepend it to PYTHONPATH to extend the
 # Python environment.
-if [[ ! -z ${PYTHONPATH_PREPEND:-} ]]; then
+if [[ -n ${PYTHONPATH_PREPEND:-} ]]; then
     echo "[INFO] Prepending the following to PYTHONPATH: ${PYTHONPATH_PREPEND}"
     export PYTHONPATH=${PYTHONPATH_PREPEND}:${PYTHONPATH:-}
 fi
