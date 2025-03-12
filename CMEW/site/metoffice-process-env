@@ -55,5 +55,6 @@ if [[ -z ${QUIET_MODE:-} ]]; then
     echo "[OK] Modules loaded."
 fi
 
-command="/usr/bin/time -v -o ${CYLC_TASK_LOG_ROOT}.time $@"
-exec ${command}
+command=("/usr/bin/time -v -o ${CYLC_TASK_LOG_ROOT}.time $@")
+# shellcheck disable=SC2068
+exec ${command[@]}
