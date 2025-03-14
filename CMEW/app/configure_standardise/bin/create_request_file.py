@@ -137,7 +137,7 @@ def create_request():
     return request
 
 
-def write_request(request: configparser.ConfigParser, target_path: Path):
+def write_request(request, target_path):
     """Write request to a .cfg file at ``target_path``.
 
     Parameters
