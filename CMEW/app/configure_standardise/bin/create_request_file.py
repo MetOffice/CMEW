@@ -123,7 +123,7 @@ def create_request():
         "skip_qc": "False",
         "skip_archive": "True",
         "cdds_workflow_branch": "tags/3.0.6",
-        "cylc_args": "--no-detach",  # -v
+        "cylc_args": "-v --no-detach",
         "no_email_notifications": "True",
         "scale_memory_limits": "",
         "override_cycling_frequency": "",
