@@ -56,5 +56,7 @@ if [[ -z ${QUIET_MODE:-} ]]; then
 fi
 
 command=("/usr/bin/time -v -o ${CYLC_TASK_LOG_ROOT}.time $@")
+# Ignore "SC2068: Double quote array expansions to avoid re-splitting elements"
+# because it *should* be split
 # shellcheck disable=SC2068
 exec ${command[@]}
