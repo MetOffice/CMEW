@@ -26,7 +26,9 @@ fi
 
 ROOT_SOFTWARE_DIR="/home/h03/cdds/software"
 CDDS_COMMAND="/../bin/setup_env_for_cdds"
-# shellcheck source=/home/h03/cdds/software/../bin/setup_env_for_cdds
+# SC1090 (warning): ShellCheck can't follow non-constant source.
+# If the path is given, it would not be found (SC1091).
+# shellcheck disable=SC1090
 source "${ROOT_SOFTWARE_DIR}${CDDS_COMMAND}" "${CDDS_VERSION}"
 
 if [[ -z ${QUIET_MODE:-} ]]; then
