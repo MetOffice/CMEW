@@ -20,8 +20,12 @@ set -eux
 for metric_file in ${METRIC_FILES}
     do
         OUTPUT_METRIC_PATH="${OUTPUT_DIR}/${METRIC_DIR}*/${metric_file}"
-        if [ ! -f "${OUTPUT_METRIC_PATH}" ]; then
+#       Need globbing but not word splitting. IFS is internal field separator
+#        IFS=""
+#       shellcheck disable=SC2086
+        if [ ! -f ${OUTPUT_METRIC_PATH} ]; then
             echo "${OUTPUT_METRIC_PATH} does not exist"
             exit 1
         fi
+        unset IFS
     done
