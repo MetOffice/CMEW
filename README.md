@@ -24,4 +24,4 @@ Current maintainers of this package are:
 
 * Emma Hogan (@ehogan)
 
-[cmewdoc]: https://www-hc/~esmval/cmew/cmew-latest/
+[cmewdoc]: https://metoffice.github.io/CMEW
