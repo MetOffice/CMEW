@@ -42,9 +42,7 @@ def test_make_request_file(monkey_env, request_file_path):  # noqa : 36
     # but not referenced.
     actual = make_request_file(request_file_path)
     assert actual is not None, "Request was not produced"
-    print(
-        f"\nRequest file:\n{request_file_path}"
-    )  # run with -s option for this
+    print(f"\nRequest file:\n{request_file_path}")  # run with -s to see file
 
     assert [] == compare(
         read_file(request_file_path), expected_config()
@@ -91,8 +89,6 @@ def expected_config():
     mip_table_dir = "$CDDS_ETC" + "/mip_tables/GCModelDev/" + mip_table_v
 
     request["metadata"] = {
-        "branch_date_in_child": "",
-        "branch_date_in_parent": "",
         "branch_method": "no parent",
         "base_date": base_date,
         "calendar": calendar,
@@ -110,9 +106,6 @@ def expected_config():
         "parent_experiment_id": "no parent",
     }
     request["common"] = {
-        "force_plugin": "",
-        "external_plugin": "",
-        "external_plugin_location": "",
         "mip_table_dir": mip_table_dir,
         "mode": "relaxed",
         "package": "round-1",

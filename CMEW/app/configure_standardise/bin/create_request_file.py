@@ -20,8 +20,6 @@ def create_request():
     ConfigParser
         CDDS request information to be written to a CDDS .cfg file.
     """
-    # cdds_etc_dir = os.environ["CDDS_ETC"]
-
     # Date/time given in ISO 8601 format YYYY-MM-DDThh:mm:ssZ,
     # where the Z terminating character indicating UTC time zone
     start_year = os.environ["START_YEAR"]
@@ -37,8 +35,8 @@ def create_request():
     start_datetime = f"{start_year}-01-01T00:00:00Z"
     end_year = int(start_year) + int(number_of_years)
     end_datetime = f"{end_year}-01-01T00:00:00Z"
+    base_date = "1850-01-01T00:00:00Z"
     # time_units = "days since " + base_date
-        base_date = "1850-01-01T00:00:00Z"
     mip_table_v = "0.0.23"
     mip_table_dir = "$CDDS_ETC" + "/mip_tables/GCModelDev/" + mip_table_v
 
@@ -58,6 +56,8 @@ def create_request():
         "model_type": "AGCM AER",
     }  # end metadata
     request["netcdf_global_attributes"] = {
+        # This is needed for CDDS 3.0.6 but may not be needed with 3.1+, to be
+        # ascertained by follow-up discussion and testing.
         "parent_experiment_id": "no parent",
     }
     request["common"] = {
