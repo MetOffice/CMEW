@@ -3,7 +3,7 @@
 # The LICENSE.md file contains full licensing details.
 """
 Generates the request.cfg file from the ESMValTool recipe for CDDS v3.
-See `CDDS config_request`_.
+Guidance can be found in `CDDS config_request`_.
 
 .. _CDDS config_request: https://metoffice.github.io/CDDS/3.0/tutorials/request/config_request/  # noqa: E501
 """
@@ -22,8 +22,8 @@ def create_request():
     """
     # cdds_etc_dir = os.environ["CDDS_ETC"]
 
-    # date/time given in ISO 8601 format, where the Z terminating character
-    # represents timezone UTC (equivalent of GMT).
+    # Date/time given in ISO 8601 format YYYY-MM-DDThh:mm:ssZ,
+    # where the Z terminating character indicating UTC time zone
     start_year = os.environ["START_YEAR"]
     number_of_years = os.environ["NUMBER_OF_YEARS"]
     model_id = os.environ["MODEL_ID"]
@@ -37,15 +37,13 @@ def create_request():
     start_datetime = f"{start_year}-01-01T00:00:00Z"
     end_year = int(start_year) + int(number_of_years)
     end_datetime = f"{end_year}-01-01T00:00:00Z"
-    base_date = "1850-01-01T00:00:00Z"
-    # time_units = "days since " + base_date[0:10]  # date part yyyy-mm-dd
+    # time_units = "days since " + base_date
+        base_date = "1850-01-01T00:00:00Z"
     mip_table_v = "0.0.23"
     mip_table_dir = "$CDDS_ETC" + "/mip_tables/GCModelDev/" + mip_table_v
 
     request = configparser.ConfigParser()
     request["metadata"] = {
-        "branch_date_in_child": "",
-        "branch_date_in_parent": "",
         "branch_method": "no parent",
         "base_date": base_date,
         "calendar": calendar,
@@ -54,13 +52,6 @@ def create_request():
         "license": "GCModelDev model data is licensed under the Open Government License v3 (https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/)",  # noqa: E501
         "mip": "ESMVal",
         "mip_era": "GCModelDev",
-        # "parent_base_date": base_date,
-        # "parent_experiment_id": "",
-        # "parent_mip": "",
-        # "parent_mip_era": "",
-        # "parent_model_id": model_id,
-        # "parent_time_units": time_units,
-        # "parent_variant_label": "",
         "sub_experiment_id": "none",
         "variant_label": "r1i1p1f1",
         "model_id": model_id,
@@ -70,9 +61,6 @@ def create_request():
         "parent_experiment_id": "no parent",
     }
     request["common"] = {
-        "force_plugin": "",
-        "external_plugin": "",
-        "external_plugin_location": "",
         "mip_table_dir": mip_table_dir,
         "mode": "relaxed",
         "package": "round-1",

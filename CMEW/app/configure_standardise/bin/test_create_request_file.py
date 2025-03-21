@@ -101,13 +101,6 @@ def expected_config():
         "license": "GCModelDev model data is licensed under the Open Government License v3 (https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/)",  # noqa: E501
         "mip": "ESMVal",
         "mip_era": "GCModelDev",
-        # "parent_base_date": base_date,
-        # "parent_experiment_id": "",
-        # "parent_mip": "",
-        # "parent_mip_era": "",
-        # "parent_model_id": model_id,
-        # "parent_time_units": time_units,
-        # "parent_variant_label": "",
         "sub_experiment_id": "none",
         "variant_label": "r1i1p1f1",
         "model_id": model_id,
