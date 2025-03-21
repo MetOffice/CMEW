@@ -20,6 +20,8 @@ def monkey_env(monkeypatch):
     monkeypatch.setenv("CALENDAR", "360_day")
     monkeypatch.setenv("INSTITUTION_ID", "MOHC")
     monkeypatch.setenv("SUITE_ID", "u-az513")
+    monkeypatch.setenv("EXPERIMENT_ID", "amip")
+    monkeypatch.setenv("VARIANT_LABEL", "r1i1p1f1")
     monkeypatch.setenv("ROOT_PROC_DIR", "~/cylc-run/CMEW/runX/share/proc")
     monkeypatch.setenv("ROOT_DATA_DIR", "~/cylc-run/CMEW/runX/share/data")
     monkeypatch.setenv(
@@ -79,6 +81,8 @@ def expected_config():
     root_proc_dir = os.environ["ROOT_PROC_DIR"]
     root_data_dir = os.environ["ROOT_DATA_DIR"]
     variables_path = os.environ["VARIABLES_PATH"]
+    experiment_id = os.environ["EXPERIMENT_ID"]
+    variant_label = os.environ["VARIANT_LABEL"]
 
     start_datetime = f"{start_year}-01-01T00:00:00Z"
     end_year = int(start_year) + int(number_of_years)
@@ -92,13 +96,13 @@ def expected_config():
         "branch_method": "no parent",
         "base_date": base_date,
         "calendar": calendar,
-        "experiment_id": "amip",
+        "experiment_id": experiment_id,
         "institution_id": institution_id,
         "license": "GCModelDev model data is licensed under the Open Government License v3 (https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/)",  # noqa: E501
         "mip": "ESMVal",
         "mip_era": "GCModelDev",
         "sub_experiment_id": "none",
-        "variant_label": "r1i1p1f1",
+        "variant_label": variant_label,
         "model_id": model_id,
         "model_type": "AGCM AER",
     }  # end metadata
@@ -109,7 +113,11 @@ def expected_config():
         "mip_table_dir": mip_table_dir,
         "mode": "relaxed",
         "package": "round-1",
-        "workflow_basename": "CMEW",
+        "workflow_basename": model_id
+        + "_"
+        + experiment_id
+        + "_"
+        + variant_label,
         "root_proc_dir": root_proc_dir,
         "root_data_dir": root_data_dir,
         "root_ancil_dir": "$CDDS_ETC/" + "ancil",

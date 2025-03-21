@@ -31,12 +31,13 @@ def create_request():
     root_proc_dir = os.environ["ROOT_PROC_DIR"]
     root_data_dir = os.environ["ROOT_DATA_DIR"]
     variables_path = os.environ["VARIABLES_PATH"]
+    experiment_id = "amip"
+    variant_label = "r1i1p1f1"
 
     start_datetime = f"{start_year}-01-01T00:00:00Z"
     end_year = int(start_year) + int(number_of_years)
     end_datetime = f"{end_year}-01-01T00:00:00Z"
     base_date = "1850-01-01T00:00:00Z"
-    # time_units = "days since " + base_date
     mip_table_v = "0.0.23"
     mip_table_dir = "$CDDS_ETC" + "/mip_tables/GCModelDev/" + mip_table_v
 
@@ -45,18 +46,18 @@ def create_request():
         "branch_method": "no parent",
         "base_date": base_date,
         "calendar": calendar,
-        "experiment_id": "amip",
+        "experiment_id": experiment_id,
         "institution_id": institution_id,
         "license": "GCModelDev model data is licensed under the Open Government License v3 (https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/)",  # noqa: E501
         "mip": "ESMVal",
         "mip_era": "GCModelDev",
         "sub_experiment_id": "none",
-        "variant_label": "r1i1p1f1",
+        "variant_label": variant_label,
         "model_id": model_id,
         "model_type": "AGCM AER",
     }  # end metadata
     request["netcdf_global_attributes"] = {
-        # This is needed for CDDS 3.0.6 but may not be needed with 3.1+, to be
+        # This is needed for CDDS 3.0.6 but may not be needed with 3.1+. To be
         # ascertained by follow-up discussion and testing.
         "parent_experiment_id": "no parent",
     }
@@ -64,7 +65,11 @@ def create_request():
         "mip_table_dir": mip_table_dir,
         "mode": "relaxed",
         "package": "round-1",
-        "workflow_basename": "CMEW",
+        "workflow_basename": model_id
+        + "_"
+        + experiment_id
+        + "_"
+        + variant_label,
         "root_proc_dir": root_proc_dir,
         "root_data_dir": root_data_dir,
         "root_ancil_dir": "$CDDS_ETC/" + "ancil",
