@@ -8,8 +8,9 @@
 ## Introduction
 
 The Climate Model Evaluation Workflow (CMEW) is a Cylc 8 workflow that is used
-to evaluate climate models for all Earth System Model (ESM) components. See the
-[CMEW documentation](https://www-hc/~esmval/cmew/cmew-latest/) for more information.
+to evaluate climate models for all Earth System Model (ESM) components.
+Please refer to the [CMEW documentation](https://metoffice.github.io/CMEW)
+for more information.
 
 ## Contributing
 
