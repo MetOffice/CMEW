@@ -38,16 +38,26 @@
             USER_CONFIG_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/etc
             USER_CONFIG_PATH = ${USER_CONFIG_DIR}/config-user.yml
             OUTPUT_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/cycle/${CYLC_TASK_CYCLE_POINT}
+
             SHARE_DATA_CDDS = ${CYLC_WORKFLOW_SHARE_DIR}/data/cdds
+            SHARE_DATA_CDDS_REFERENCE = ${CYLC_WORKFLOW_SHARE_DIR}/data/cdds_reference
+
             ROOT_PROC_DIR = ${SHARE_DATA_CDDS}/proc
+            ROOT_PROC_DIR_REFERENCE = ${SHARE_DATA_CDDS}/proc_reference
+
             ROOT_DATA_DIR = ${SHARE_DATA_CDDS}/cdds_data
+            ROOT_DATA_DIR_REFERENCE = ${SHARE_DATA_CDDS}/cdds_data_reference
+
             REQUEST_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request.json
+            REQUEST_PATH_REFERENCE = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request_reference.json
+
             VARIABLES_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/variables.txt
 
     [[ASSESSMENT_AREA]]
         [[[environment]]]
             RECIPE_NAME = "recipe_${CYLC_TASK_PARAM_assessment_area}.yml"
             RECIPE_PATH = "${CYLC_WORKFLOW_SHARE_DIR}/etc/${RECIPE_NAME}"
+            RECIPE_PATH_REFERENCE = "${CYLC_WORKFLOW_SHARE_DIR}/etc/REFERENCE_${RECIPE_NAME}"
 
     [[install_env_file]]
         [[[environment]]]
@@ -82,17 +92,29 @@
             ROSE_TASK_APP = configure_for
             START_YEAR = {{ START_YEAR }}
             NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
+            VARIANT_LABEL = {{ VARIANT_LABEL }}
+            VARIANT_LABEL_REFERENCE = {{ VARIANT_LABEL_REFERENCE }}
 
     [[configure_standardise<assessment_area>]]
         inherit = None, ASSESSMENT_AREA
         [[[environment]]]
             CDDS_VERSION = {{ CDDS_VERSION }}
             ROSE_TASK_APP = configure_standardise
+            MODELS_OPTION = {{ MODELS_OPTION }}
+
             CALENDAR = {{ CALENDAR }}
+            CALENDAR_REFERENCE = {{ CALENDAR_REFERENCE }}
             MODEL_ID = {{ MODEL_ID }}
+            MODEL_ID_REFERENCE = {{ MODEL_ID_REFERENCE }}
+
             START_YEAR = {{ START_YEAR }}
             NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
+
             SUITE_ID = {{ SUITE_ID }}
+            SUITE_ID_REFERENCE = {{ SUITE_ID_REFERENCE }}
+
+            VARIANT_LABEL = {{ VARIANT_LABEL }}
+            VARIANT_LABEL_REFERENCE = {{ VARIANT_LABEL_REFERENCE }}
 
     [[standardise_model_data]]
         [[[environment]]]

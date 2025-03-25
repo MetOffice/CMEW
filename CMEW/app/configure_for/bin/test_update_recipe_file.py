@@ -6,6 +6,8 @@ import pytest
 import shutil
 import yaml
 
+variant_label = "r1i1p1f1"  # = ensemble
+
 
 @pytest.fixture
 def mock_env_vars(monkeypatch):
@@ -36,17 +38,18 @@ def path_to_mock_original_recipe():
 
 
 def test_update_recipe(
-    mock_env_vars, path_to_updated_recipe_kgo, path_to_mock_original_recipe
+    mock_env_vars,
+    path_to_updated_recipe_kgo,
+    path_to_mock_original_recipe,  # noqa : 36
 ):
     with open(path_to_updated_recipe_kgo, "r") as file_handle:
         expected = yaml.safe_load(file_handle)
-    actual = update_recipe(path_to_mock_original_recipe)
+    actual = update_recipe(path_to_mock_original_recipe, variant_label)
     assert actual == expected
 
 
 def test_main(
-    monkeypatch,
-    mock_env_vars,
+    mock_env_vars,  # noqa : 36
     path_to_updated_recipe_kgo,
     path_to_mock_original_recipe,
     tmp_path,
@@ -56,11 +59,7 @@ def test_main(
     path_to_temp_recipe = tmp_path / "tmp_recipe.yml"
     shutil.copy(path_to_mock_original_recipe, path_to_temp_recipe)
 
-    # Mock the environmental variable 'RECIPE PATH' to the tmp_path location
-    # where the original recipe is stored.
-    monkeypatch.setenv("RECIPE_PATH", path_to_temp_recipe)
-
-    main()
+    main(path_to_temp_recipe, variant_label)  # literal string is variant_label
 
     with open(path_to_temp_recipe, "r") as file_handle_1:
         actual = file_handle_1.readlines()

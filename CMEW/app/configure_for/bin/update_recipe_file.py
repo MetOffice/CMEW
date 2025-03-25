@@ -8,15 +8,16 @@ Overwrite the ESMValTool recipe with an updated version. Include:
 * User configurable variables from the Rose suite configuration
 """
 import os
+import argparse
 import yaml
 
 
-def update_recipe(recipe_path):
+def update_recipe(recipe_path, variant_label):
     """Update the ESMValTool recipe.
 
     * Read the ESMValTool recipe YAML file from the provided ``recipe_path``
     * Update the dataset section of the recipe with a) CMEW required key/values
-      and b) user configurables values from the Rose suite configuration.
+      and b) user-configurable values from the Rose suite configuration.
 
     Recipe file/datasets section snippet (human written YAML)::
 
@@ -46,6 +47,8 @@ def update_recipe(recipe_path):
     ----------
     recipe_path: str
         Location of the ESMValTool recipe file.
+    variant_label: str
+        The ensemble/variant of a test or reference model.
 
     Returns
     -------
@@ -66,7 +69,7 @@ def update_recipe(recipe_path):
             "project": "ESMVal",
             "exp": "amip",
             "activity": "ESMVal",
-            "ensemble": "r1i1p1f1",
+            "ensemble": variant_label,
             "start_year": start_year,
             "end_year": end_year,
         }
@@ -89,15 +92,31 @@ def write_recipe(updated_recipe, target_path):
         yaml.dump(updated_recipe, file_handle, default_flow_style=False)
 
 
-def main():
+def main(recipe_path, variant_label):
     """
     Load and update the ESMValTool recipe. Overwrite the original recipe with
     the updated recipe.
+
+    Parameters
+    ----------
+    recipe_path: str
+        Path to the recipe file.
+    variant_label: str
+        Ensemble/Variant label.
     """
-    recipe_path = os.environ["RECIPE_PATH"]
-    updated_recipe = update_recipe(recipe_path)
+    updated_recipe = update_recipe(recipe_path, variant_label)
     write_recipe(updated_recipe, recipe_path)
 
 
 if __name__ == "__main__":
-    main()
+    # Get args from cmd line.  This needs to be told which of test or reference
+    # settings to use, it cannot decide itself.
+    parser = argparse.ArgumentParser(
+        prog="Update-recipe-file",
+        description="Update a recipe file for a test or reference model.",
+    )
+    parser.add_argument("-p", help="Recipe path", required=True)
+    parser.add_argument("-v", help="Variant Label", required=True)
+    args = parser.parse_args()
+
+    main(args.p, args.v)
