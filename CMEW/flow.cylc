@@ -100,7 +100,6 @@
         [[[environment]]]
             CDDS_VERSION = {{ CDDS_VERSION }}
             ROSE_TASK_APP = configure_standardise
-            MODELS_OPTION = {{ MODELS_OPTION }}
 
             CALENDAR = {{ CALENDAR }}
             CALENDAR_REFERENCE = {{ CALENDAR_REFERENCE }}

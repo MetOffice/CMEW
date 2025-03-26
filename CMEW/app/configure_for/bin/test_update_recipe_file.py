@@ -59,7 +59,7 @@ def test_main(
     path_to_temp_recipe = tmp_path / "tmp_recipe.yml"
     shutil.copy(path_to_mock_original_recipe, path_to_temp_recipe)
 
-    main(path_to_temp_recipe, variant_label)  # literal string is variant_label
+    main(path_to_temp_recipe, variant_label)
 
     with open(path_to_temp_recipe, "r") as file_handle_1:
         actual = file_handle_1.readlines()
