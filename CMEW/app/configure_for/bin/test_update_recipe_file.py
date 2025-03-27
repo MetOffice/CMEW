@@ -6,14 +6,16 @@ import pytest
 import shutil
 import yaml
 
-variant_label = "r1i1p1f1"  # = ensemble test
-variant_label_reference = "r1i1p1f3"  # = ensemble reference
+g_variant_label = "r1i1p1f1"  # = ensemble test
+g_variant_label_reference = "r1i1p1f3"  # = ensemble reference
 
 
 @pytest.fixture
 def mock_env_vars(monkeypatch):
     monkeypatch.setenv("START_YEAR", "1993")
     monkeypatch.setenv("NUMBER_OF_YEARS", "1")
+    monkeypatch.setenv("VARIANT_LABEL", g_variant_label)
+    monkeypatch.setenv("VARIANT_LABEL_REFERENCE", g_variant_label_reference)
 
 
 @pytest.fixture
@@ -39,19 +41,22 @@ def path_to_mock_original_recipe():
 
 
 def test_update_recipe(
-    mock_env_vars,
+    mock_env_vars,  # noqa : 36
     path_to_updated_recipe_kgo,
     path_to_mock_original_recipe,  # noqa : 36
 ):
     with open(path_to_updated_recipe_kgo, "r") as file_handle:
         expected = yaml.safe_load(file_handle)
     actual = update_recipe(
-        path_to_mock_original_recipe, variant_label, variant_label_reference
+        path_to_mock_original_recipe,
+        g_variant_label,
+        g_variant_label_reference,
     )
     assert actual == expected
 
 
 def test_main(
+    monkeypatch,
     mock_env_vars,  # noqa : 36
     path_to_updated_recipe_kgo,
     path_to_mock_original_recipe,
@@ -62,7 +67,11 @@ def test_main(
     path_to_temp_recipe = tmp_path / "tmp_recipe.yml"
     shutil.copy(path_to_mock_original_recipe, path_to_temp_recipe)
 
-    main(path_to_temp_recipe, variant_label, variant_label_reference)
+    # Mock the environmental variable 'RECIPE PATH' to the tmp_path location
+    # where the original recipe is stored.
+    monkeypatch.setenv("RECIPE_PATH", str(path_to_temp_recipe))
+
+    main()
 
     with open(path_to_temp_recipe, "r") as file_handle_1:
         actual = file_handle_1.readlines()

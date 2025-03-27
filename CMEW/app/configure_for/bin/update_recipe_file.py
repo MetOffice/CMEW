@@ -8,7 +8,6 @@ Overwrite the ESMValTool recipe with an updated version. Include:
 * User configurable variables from the Rose suite configuration
 """
 import os
-import argparse
 import yaml
 
 
@@ -101,7 +100,7 @@ def write_recipe(updated_recipe, target_path):
         yaml.dump(updated_recipe, file_handle, default_flow_style=False)
 
 
-def main(recipe_path, variant_label, variant_label_reference):
+def update(recipe_path, variant_label, variant_label_reference):
     """
     Load and update the ESMValTool recipe. Overwrite the original recipe with
     the updated recipe.
@@ -121,16 +120,17 @@ def main(recipe_path, variant_label, variant_label_reference):
     write_recipe(updated_recipe, recipe_path)
 
 
-if __name__ == "__main__":
-    # Get args from cmd line.  This needs to be told which of test or reference
-    # settings to use, it cannot decide itself.
-    parser = argparse.ArgumentParser(
-        prog="Update-recipe-file",
-        description="Update a recipe file for a test or reference model.",
-    )
-    parser.add_argument("-p", help="Recipe path", required=True)
-    parser.add_argument("-v", help="Variant label of test", required=True)
-    parser.add_argument("-r", help="Variant label of reference", required=True)
-    args = parser.parse_args()
+def main():
+    """
+    Invoke the load and update of the ESMValTool recipe, getting the relevant
+    variables from the environment.
+    """
+    recipe_path = os.environ["RECIPE_PATH"]
+    variant_label = os.environ["VARIANT_LABEL"]
+    variant_label_reference = os.environ["VARIANT_LABEL_REFERENCE"]
 
-    main(args.p, args.v, args.r)
+    update(recipe_path, variant_label, variant_label_reference)
+
+
+if __name__ == "__main__":
+    main()
