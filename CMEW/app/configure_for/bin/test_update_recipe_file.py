@@ -6,7 +6,8 @@ import pytest
 import shutil
 import yaml
 
-variant_label = "r1i1p1f1"  # = ensemble
+variant_label = "r1i1p1f1"  # = ensemble test
+variant_label_reference = "r1i1p1f3"  # = ensemble reference
 
 
 @pytest.fixture
@@ -44,7 +45,9 @@ def test_update_recipe(
 ):
     with open(path_to_updated_recipe_kgo, "r") as file_handle:
         expected = yaml.safe_load(file_handle)
-    actual = update_recipe(path_to_mock_original_recipe, variant_label)
+    actual = update_recipe(
+        path_to_mock_original_recipe, variant_label, variant_label_reference
+    )
     assert actual == expected
 
 
@@ -59,7 +62,7 @@ def test_main(
     path_to_temp_recipe = tmp_path / "tmp_recipe.yml"
     shutil.copy(path_to_mock_original_recipe, path_to_temp_recipe)
 
-    main(path_to_temp_recipe, variant_label)
+    main(path_to_temp_recipe, variant_label, variant_label_reference)
 
     with open(path_to_temp_recipe, "r") as file_handle_1:
         actual = file_handle_1.readlines()

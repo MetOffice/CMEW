@@ -57,7 +57,6 @@
         [[[environment]]]
             RECIPE_NAME = "recipe_${CYLC_TASK_PARAM_assessment_area}.yml"
             RECIPE_PATH = "${CYLC_WORKFLOW_SHARE_DIR}/etc/${RECIPE_NAME}"
-            RECIPE_PATH_REFERENCE = "${CYLC_WORKFLOW_SHARE_DIR}/etc/REFERENCE_${RECIPE_NAME}"
 
     [[install_env_file]]
         [[[environment]]]

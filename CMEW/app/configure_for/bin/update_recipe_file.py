@@ -12,7 +12,7 @@ import argparse
 import yaml
 
 
-def update_recipe(recipe_path, variant_label):
+def update_recipe(recipe_path, variant_label, variant_label_reference):
     """Update the ESMValTool recipe.
 
     * Read the ESMValTool recipe YAML file from the provided ``recipe_path``
@@ -48,7 +48,9 @@ def update_recipe(recipe_path, variant_label):
     recipe_path: str
         Location of the ESMValTool recipe file.
     variant_label: str
-        The ensemble/variant of a test or reference model.
+        The ensemble/variant label of the test model.
+    variant_label_reference: str
+        The ensemble/variant label of the reference model.
 
     Returns
     -------
@@ -61,9 +63,16 @@ def update_recipe(recipe_path, variant_label):
     )
     with open(recipe_path, "r") as file_handle:
         recipe = yaml.safe_load(file_handle)
-    first_dataset = recipe["datasets"][0]
-    second_dataset = recipe["datasets"][1]
-    first_dataset.update({"start_year": start_year, "end_year": end_year})
+    first_dataset = recipe["datasets"][0]  # Reference model
+    second_dataset = recipe["datasets"][1]  # Test model
+
+    first_dataset.update(
+        {
+            "start_year": start_year,
+            "ensemble": variant_label_reference,
+            "end_year": end_year,
+        }
+    )
     second_dataset.update(
         {
             "project": "ESMVal",
@@ -92,7 +101,7 @@ def write_recipe(updated_recipe, target_path):
         yaml.dump(updated_recipe, file_handle, default_flow_style=False)
 
 
-def main(recipe_path, variant_label):
+def main(recipe_path, variant_label, variant_label_reference):
     """
     Load and update the ESMValTool recipe. Overwrite the original recipe with
     the updated recipe.
@@ -102,9 +111,13 @@ def main(recipe_path, variant_label):
     recipe_path: str
         Path to the recipe file.
     variant_label: str
-        Ensemble/Variant label.
+        Ensemble/Variant label of the test model.
+    variant_label_reference: str
+        Ensemble/Variant label of the reference model.
     """
-    updated_recipe = update_recipe(recipe_path, variant_label)
+    updated_recipe = update_recipe(
+        recipe_path, variant_label, variant_label_reference
+    )
     write_recipe(updated_recipe, recipe_path)
 
 
@@ -116,7 +129,8 @@ if __name__ == "__main__":
         description="Update a recipe file for a test or reference model.",
     )
     parser.add_argument("-p", help="Recipe path", required=True)
-    parser.add_argument("-v", help="Variant Label", required=True)
+    parser.add_argument("-v", help="Variant label of test", required=True)
+    parser.add_argument("-r", help="Variant label of reference", required=True)
     args = parser.parse_args()
 
-    main(args.p, args.v)
+    main(args.p, args.v, args.r)
