@@ -11,7 +11,13 @@ import os
 import yaml
 
 
-def update_recipe(recipe_path, variant_label, variant_label_reference):
+def update_recipe(
+    recipe_path,
+    variant_label,
+    variant_label_reference,
+    model_id,
+    model_id_reference,
+):
     """Update the ESMValTool recipe.
 
     * Read the ESMValTool recipe YAML file from the provided ``recipe_path``
@@ -50,7 +56,10 @@ def update_recipe(recipe_path, variant_label, variant_label_reference):
         The ensemble/variant label of the test model.
     variant_label_reference: str
         The ensemble/variant label of the reference model.
-
+    model_id: str
+        Id of the test model.
+    model_id_reference: str
+        Id of the reference model.
     Returns
     -------
     recipe: dict[str, union[str, int]]
@@ -73,6 +82,7 @@ def update_recipe(recipe_path, variant_label, variant_label_reference):
             "ensemble": variant_label_reference,
             "start_year": start_year,
             "end_year": end_year,
+            "dataset": model_id_reference,
         }
     )
     second_dataset.update(
@@ -83,6 +93,7 @@ def update_recipe(recipe_path, variant_label, variant_label_reference):
             "ensemble": variant_label,
             "start_year": start_year,
             "end_year": end_year,
+            "dataset": model_id,
         }
     )
     return recipe
@@ -103,7 +114,13 @@ def write_recipe(updated_recipe, target_path):
         yaml.dump(updated_recipe, file_handle, default_flow_style=False)
 
 
-def update(recipe_path, variant_label, variant_label_reference):
+def update(
+    recipe_path,
+    variant_label,
+    variant_label_reference,
+    model_id,
+    model_id_reference,
+):
     """
     Load and update the ESMValTool recipe. Overwrite the original recipe with
     the updated recipe.
@@ -116,9 +133,17 @@ def update(recipe_path, variant_label, variant_label_reference):
         Ensemble/Variant label of the test model.
     variant_label_reference: str
         Ensemble/Variant label of the reference model.
+    model_id: str
+        ID of the test model.
+    model_id_reference: str
+        ID of the reference model.
     """
     updated_recipe = update_recipe(
-        recipe_path, variant_label, variant_label_reference
+        recipe_path,
+        variant_label,
+        variant_label_reference,
+        model_id,
+        model_id_reference,
     )
     write_recipe(updated_recipe, recipe_path)
 
@@ -131,8 +156,16 @@ def main():
     recipe_path = os.environ["RECIPE_PATH"]
     variant_label = os.environ["VARIANT_LABEL"]
     variant_label_reference = os.environ["VARIANT_LABEL_REFERENCE"]
+    model_id = os.environ["MODEL_ID"]
+    model_id_reference = os.environ["MODEL_ID_REFERENCE"]
 
-    update(recipe_path, variant_label, variant_label_reference)
+    update(
+        recipe_path,
+        variant_label,
+        variant_label_reference,
+        model_id,
+        model_id_reference,
+    )
 
 
 if __name__ == "__main__":
