@@ -11,7 +11,7 @@ import os
 import yaml
 
 
-def update_recipe(recipe_path, variant_label, variant_label_reference):
+def update_recipe(recipe_path):
     """Update the ESMValTool recipe.
 
     * Read the ESMValTool recipe YAML file from the provided ``recipe_path``
@@ -46,16 +46,15 @@ def update_recipe(recipe_path, variant_label, variant_label_reference):
     ----------
     recipe_path: str
         Location of the ESMValTool recipe file.
-    variant_label: str
-        The ensemble/variant label of the test model.
-    variant_label_reference: str
-        The ensemble/variant label of the reference model.
 
     Returns
     -------
     recipe: dict[str, union[str, int]]
         The content of the ESMValTool recipe with updated datasets section.
     """
+    variant_label = os.environ["VARIANT_LABEL"]
+    variant_label_reference = os.environ["VARIANT_LABEL_REFERENCE"]
+
     start_year = int(os.environ["START_YEAR"])
     end_year = (
         int(os.environ["START_YEAR"]) + int(os.environ["NUMBER_OF_YEARS"]) - 1
@@ -103,36 +102,14 @@ def write_recipe(updated_recipe, target_path):
         yaml.dump(updated_recipe, file_handle, default_flow_style=False)
 
 
-def update(recipe_path, variant_label, variant_label_reference):
-    """
-    Load and update the ESMValTool recipe. Overwrite the original recipe with
-    the updated recipe.
-
-    Parameters
-    ----------
-    recipe_path: str
-        Path to the recipe file.
-    variant_label: str
-        Ensemble/Variant label of the test model.
-    variant_label_reference: str
-        Ensemble/Variant label of the reference model.
-    """
-    updated_recipe = update_recipe(
-        recipe_path, variant_label, variant_label_reference
-    )
-    write_recipe(updated_recipe, recipe_path)
-
-
 def main():
     """
     Invoke the load and update of the ESMValTool recipe, getting the relevant
     variables from the environment.
     """
     recipe_path = os.environ["RECIPE_PATH"]
-    variant_label = os.environ["VARIANT_LABEL"]
-    variant_label_reference = os.environ["VARIANT_LABEL_REFERENCE"]
-
-    update(recipe_path, variant_label, variant_label_reference)
+    updated_recipe = update_recipe(recipe_path)
+    write_recipe(updated_recipe, recipe_path)
 
 
 if __name__ == "__main__":

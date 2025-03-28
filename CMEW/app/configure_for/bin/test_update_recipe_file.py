@@ -6,16 +6,13 @@ import pytest
 import shutil
 import yaml
 
-g_variant_label = "r1i1p1f1"  # = ensemble test
-g_variant_label_reference = "r1i1p1f3"  # = ensemble reference
-
 
 @pytest.fixture
 def mock_env_vars(monkeypatch):
     monkeypatch.setenv("START_YEAR", "1993")
     monkeypatch.setenv("NUMBER_OF_YEARS", "1")
-    monkeypatch.setenv("VARIANT_LABEL", g_variant_label)
-    monkeypatch.setenv("VARIANT_LABEL_REFERENCE", g_variant_label_reference)
+    monkeypatch.setenv("VARIANT_LABEL", "r1i1p1f1")
+    monkeypatch.setenv("VARIANT_LABEL_REFERENCE", "r1i1p1f3")
 
 
 @pytest.fixture
@@ -49,8 +46,6 @@ def test_update_recipe(
         expected = yaml.safe_load(file_handle)
     actual = update_recipe(
         path_to_mock_original_recipe,
-        g_variant_label,
-        g_variant_label_reference,
     )
     assert actual == expected
 
