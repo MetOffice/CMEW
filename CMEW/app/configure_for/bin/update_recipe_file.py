@@ -67,8 +67,11 @@ def update_recipe(recipe_path, variant_label, variant_label_reference):
 
     first_dataset.update(
         {
-            "start_year": start_year,
+            "project": "ESMVal",
+            "exp": "amip",
+            "activity": "ESMVal",
             "ensemble": variant_label_reference,
+            "start_year": start_year,
             "end_year": end_year,
         }
     )
