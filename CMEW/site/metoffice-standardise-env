@@ -26,17 +26,12 @@ fi
 
 ROOT_SOFTWARE_DIR="/home/h03/cdds/software"
 CDDS_COMMAND="/../bin/setup_env_for_cdds"
-# SC1090 (warning): ShellCheck can't follow non-constant source.
-# If the path is given, it would not be found (SC1091).
-# shellcheck disable=SC1090
+# shellcheck source=/dev/null
 source "${ROOT_SOFTWARE_DIR}${CDDS_COMMAND}" "${CDDS_VERSION}"
 
 if [[ -z ${QUIET_MODE:-} ]]; then
     echo "[OK] CDDS environment loaded."
 fi
 
-command=("/usr/bin/time -v -o ${CYLC_TASK_LOG_ROOT}.time $@")
-# Ignore "SC2068: Double quote array expansions to avoid re-splitting elements"
-# because it *should* be split
-# shellcheck disable=SC2068
-exec ${command[@]}
+command=(/usr/bin/time -v -o "${CYLC_TASK_LOG_ROOT}.time" "$@")
+exec "${command[@]}"
