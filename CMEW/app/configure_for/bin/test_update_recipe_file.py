@@ -6,20 +6,15 @@ import pytest
 import shutil
 import yaml
 
-g_variant_label = "r1i1p1f1"  # = ensemble test
-g_variant_label_reference = "r1i1p1f3"  # = ensemble reference
-g_model_id = "UKESM1-0-LL"  # test model_id
-g_model_id_reference = "HadGEM3-GC31-LL"  # reference model_id
-
 
 @pytest.fixture
 def mock_env_vars(monkeypatch):
     monkeypatch.setenv("START_YEAR", "1993")
     monkeypatch.setenv("NUMBER_OF_YEARS", "1")
-    monkeypatch.setenv("VARIANT_LABEL", g_variant_label)
-    monkeypatch.setenv("VARIANT_LABEL_REFERENCE", g_variant_label_reference)
-    monkeypatch.setenv("MODEL_ID", g_model_id)
-    monkeypatch.setenv("MODEL_ID_REFERENCE", g_model_id_reference)
+    monkeypatch.setenv("VARIANT_LABEL", "r1i1p1f1")
+    monkeypatch.setenv("VARIANT_LABEL_REFERENCE", "r1i1p1f3")
+    monkeypatch.setenv("MODEL_ID", "UKESM1-0-LL")
+    monkeypatch.setenv("MODEL_ID_REFERENCE", "HadGEM3-GC31-LL")
 
 
 @pytest.fixture
@@ -51,13 +46,8 @@ def test_update_recipe(
 ):
     with open(path_to_updated_recipe_kgo, "r") as file_handle:
         expected = yaml.safe_load(file_handle)
-
     actual = update_recipe(
         path_to_mock_original_recipe,
-        g_variant_label,
-        g_variant_label_reference,
-        g_model_id,
-        g_model_id_reference,
     )
     assert actual == expected
 
@@ -77,7 +67,6 @@ def test_main(
     # Mock the environmental variable 'RECIPE PATH' to the tmp_path location
     # where the original recipe is stored.
     monkeypatch.setenv("RECIPE_PATH", str(path_to_temp_recipe))
-    print(f"Recipe produced: {path_to_temp_recipe}")
 
     main()  # The test updates the recipe
 
