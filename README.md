@@ -13,8 +13,8 @@ See the [CMEW documentation](https://www-hc/~esmval/cmew/cmew-latest/)
 for more information.
 
 ## Contributing
-The [Contributing](CONTRIBUTING.md)
-file provides details on how to contribute to CMEW.
+The [Contributing](CONTRIBUTING.md) file provides details
+on how to contribute to CMEW.
 
 ## Support
 The [Support](SUPPORT.md) file provides details on how to get help with CMEW.

@@ -3,11 +3,11 @@
 
 # Contributing
 
-We welcome all contributions to improve the CMEW!
+We welcome all contributions to improve CMEW!
 Maintainers will do their best to help you if you have any questions,
 concerns, or experience any difficulties along the way.
 
 If you would like to contribute, please follow the instructions provided on
-[Wiki: Working Practices][workprac].
+[Wiki: Working Practices][working-practices].
 
-[workprac]: https://github.com/MetOffice/CMEW/wiki/Working-Practices
+[working-practices]: https://github.com/MetOffice/CMEW/wiki/Working-Practices
