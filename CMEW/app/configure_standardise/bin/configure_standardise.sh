@@ -8,10 +8,14 @@ set -eux
 echo "Running configure_standardise"
 
 # For Test model
-cmew-process-env create_request_file.py -p "${REQUEST_PATH}" -m "${MODEL_ID}" -s "${SUITE_ID}" -c "${CALENDAR}" -v "${VARIANT_LABEL}"
+cmew-process-env create_request_file.py --path "${REQUEST_PATH}" /
+    --model_id "${MODEL_ID}" --suite_id "${SUITE_ID}" /
+    --calendar "${CALENDAR}" --variant "${VARIANT_LABEL}"
 
 # For Reference model
-cmew-process-env create_request_file.py -p "${REQUEST_PATH_REFERENCE}" -m "${MODEL_ID_REFERENCE}" -s "${SUITE_ID_REFERENCE}" -c "${CALENDAR_REFERENCE}" -v "${VARIANT_LABEL_REFERENCE}"
+cmew-process-env create_request_file.py --path "${REQUEST_PATH_REFERENCE}" /
+    --model_id "${MODEL_ID_REFERENCE}" --suite_id "${SUITE_ID_REFERENCE}" /
+    --calendar "${CALENDAR_REFERENCE}" --variant "${VARIANT_LABEL_REFERENCE}"
 
 # For both test & reference models
 cmew-process-env create_variables_file.py

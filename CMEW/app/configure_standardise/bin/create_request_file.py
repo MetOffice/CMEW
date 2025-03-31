@@ -81,43 +81,34 @@ def write_request(request, target_path):
         json.dump(request, file, separators=(",\n", ": "))
 
 
-def make_request_file(
-    request_file_path, model_id, suite_id, calendar, variant
-):
-    """Drive creation of a request file at``request_file_path``.
-       This also facilitates unit testing by providing a target for an
-       injected file path.
-    Parameters
-    ----------
-    request_file_path: A file path string.
-        The location to which to write the request file.
-    model_id: string of the model_id
-    suite_id: string of the suite_id
-    calendar: string of the calendar
-    variant: string of the variant label
+def get_arguments():
+    """Get arguments from the command line.
+    Returns
+    -------
+    args : argparse.Namespace object
+        Refer to the add_argument() calls below, which are self-documenting.
     """
-    request = create_request(model_id, suite_id, calendar, variant)
-    write_request(request, request_file_path)
-    return request
+    # Missing arguments will cause the program to exit with error 2.
+    parser = argparse.ArgumentParser(
+        prog="create_request_file",
+        description="Create a request file to pass to CDDS_convert",
+    )
+    parser.add_argument("--path", help="Path of request-file ", required=True)
+    parser.add_argument("--model_id", help="Model_id", required=True)
+    parser.add_argument("--suite_id", help="Suite_id", required=True)
+    parser.add_argument("--calendar", help="Calendar", required=True)
+    parser.add_argument("--variant", help="Variant Label", required=True)
+    args = parser.parse_args()
+    return args
 
 
 def main():
-    # Get args from cmd line.  This needs to be told which of test or reference
-    # settings to use, it cannot decide itself.
-    # Mandatory flags or missing arguments for a flag are handled by the parser
-    # Optional flags must be handled explicitly unless given a default value.
-    parser = argparse.ArgumentParser(
-        prog="create-request-file",
-        description="Create a request file to pass to CDDS-convert",
+    args = get_arguments()
+    request = create_request(
+        args.model_id, args.suit_id, args.calendar, args.variant
     )
-    parser.add_argument("-p", help="Request-file path", required=True)
-    parser.add_argument("-m", help="Model_id", required=True)
-    parser.add_argument("-s", help="Suite_id", required=True)
-    parser.add_argument("-c", help="Calendar", required=True)
-    parser.add_argument("-v", help="Variant Label", required=True)
-    args = parser.parse_args()
-
-    make_request_file(args.p, args.m, args.s, args.c, args.v)
+    write_request(request, args.path)
+    return request
 
 
 if __name__ == "__main__":

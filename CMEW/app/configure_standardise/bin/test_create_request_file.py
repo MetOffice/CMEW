@@ -2,17 +2,18 @@
 # The LICENSE.md file contains full licensing details.
 import json
 import pytest
-from create_request_file import make_request_file
+from create_request_file import create_request, write_request
 
 # Testing app/configure_standardise/bin/create_request_file.py
 # To see the request file produced, run pytest from CMEW with the arguments:
 # CMEW/app/configure_standardise/bin/test_create_request_file.py -s
 
-model_id = "UKESM1-0-LL"
-suite_id = "u-az513"
-calendar = "360_day"
-variant_label = "r1i1p1f1"
-test_file = "request.json"  # Result file
+# Constants
+MODEL_ID = "UKESM1-0-LL"
+SUITE_ID = "u-az513"
+CALENDAR = "360_day"
+VARIANT_LABEL = "r1i1p1f1"
+TEST_FILE = "request.json"
 
 
 @pytest.fixture
@@ -25,7 +26,7 @@ def monkey_env(monkeypatch):
 @pytest.fixture
 def request_file_path(tmp_path):
     # path to new result file
-    filepath = tmp_path / test_file
+    filepath = tmp_path / TEST_FILE
     return filepath
 
 
@@ -36,12 +37,12 @@ def test_create_request(monkey_env, request_file_path):  # noqa : 36
     # noqa : 36 : Ignore warning about monkey_env not being used; it is used
     # silently but not referenced.
 
-    request = make_request_file(
-        request_file_path, model_id, suite_id, calendar, variant_label
-    )
+    request = create_request(MODEL_ID, SUITE_ID, CALENDAR, VARIANT_LABEL)
     assert request is not None, "Request was not produced"
-    print(f"\nRequest file:\n{request_file_path}")
+    assert request == expected_request()
 
+    write_request(request, request_file_path)
+    print(f"\nRequest file:\n{request_file_path}")
     actual = read_file(request_file_path)
     assert actual == expected_request()
 
@@ -57,7 +58,7 @@ def expected_request():
     expected = {
         "atmos_timestep": "1200",
         "branch_method": "no parent",
-        "calendar": calendar,
+        "calendar": CALENDAR,
         "child_base_date": "1850-01-01T00:00:00",
         "config_version": "1.0.1",
         "experiment_id": "amip",
@@ -70,7 +71,7 @@ def expected_request():
         "mip": "ESMVal",
         "mip_era": "GCModelDev",
         "mip_table_dir": "/home/h03/cdds/etc/mip_tables/GCModelDev/0.0.9",
-        "model_id": model_id,
+        "model_id": MODEL_ID,
         "model_type": "AGCM AER",
         "package": "round-1",
         "request_id": "CMEW",
@@ -78,8 +79,8 @@ def expected_request():
         "run_bounds_for_stream_apm": "1993-01-01T00:00:00 1994-01-01T00:00:00",
         "sub_experiment_id": "none",
         "suite_branch": "trunk",
-        "suite_id": suite_id,
+        "suite_id": SUITE_ID,
         "suite_revision": "not used except with data request",
-        "variant_label": variant_label,
+        "variant_label": VARIANT_LABEL,
     }
     return expected
