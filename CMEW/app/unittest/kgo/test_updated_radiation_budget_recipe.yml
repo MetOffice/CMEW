@@ -4,12 +4,13 @@
 # To be used for testing purposes. Represents KGO for `update_recipe`.
 ---
 datasets:
-- dataset: HadGEM3-GC31-LL
+- activity: ESMVal
+  dataset: HadGEM3-GC31-LL
   end_year: 1993
   ensemble: r1i1p1f3
-  exp: historical
+  exp: amip
   grid: gn
-  project: CMIP6
+  project: ESMVal
   start_year: 1993
 - activity: ESMVal
   dataset: UKESM1-0-LL

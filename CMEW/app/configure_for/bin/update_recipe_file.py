@@ -16,7 +16,7 @@ def update_recipe(recipe_path):
 
     * Read the ESMValTool recipe YAML file from the provided ``recipe_path``
     * Update the dataset section of the recipe with a) CMEW required key/values
-      and b) user configurables values from the Rose suite configuration.
+      and b) user-configurable values from the Rose suite configuration.
 
     Recipe file/datasets section snippet (human written YAML)::
 
@@ -52,23 +52,39 @@ def update_recipe(recipe_path):
     recipe: dict[str, union[str, int]]
         The content of the ESMValTool recipe with updated datasets section.
     """
+    variant_label = os.environ["VARIANT_LABEL"]
+    variant_label_reference = os.environ["VARIANT_LABEL_REFERENCE"]
+    model_id = os.environ["MODEL_ID"]
+    model_id_reference = os.environ["MODEL_ID_REFERENCE"]
     start_year = int(os.environ["START_YEAR"])
     end_year = (
         int(os.environ["START_YEAR"]) + int(os.environ["NUMBER_OF_YEARS"]) - 1
     )
     with open(recipe_path, "r") as file_handle:
         recipe = yaml.safe_load(file_handle)
-    first_dataset = recipe["datasets"][0]
-    second_dataset = recipe["datasets"][1]
-    first_dataset.update({"start_year": start_year, "end_year": end_year})
+    first_dataset = recipe["datasets"][0]  # Reference model
+    second_dataset = recipe["datasets"][1]  # Test model
+
+    first_dataset.update(
+        {
+            "project": "ESMVal",
+            "exp": "amip",
+            "activity": "ESMVal",
+            "ensemble": variant_label_reference,
+            "start_year": start_year,
+            "end_year": end_year,
+            "dataset": model_id_reference,
+        }
+    )
     second_dataset.update(
         {
             "project": "ESMVal",
             "exp": "amip",
             "activity": "ESMVal",
-            "ensemble": "r1i1p1f1",
+            "ensemble": variant_label,
             "start_year": start_year,
             "end_year": end_year,
+            "dataset": model_id,
         }
     )
     return recipe
@@ -91,8 +107,8 @@ def write_recipe(updated_recipe, target_path):
 
 def main():
     """
-    Load and update the ESMValTool recipe. Overwrite the original recipe with
-    the updated recipe.
+    Invoke the load and update of the ESMValTool recipe, getting the relevant
+    variables from the environment.
     """
     recipe_path = os.environ["RECIPE_PATH"]
     updated_recipe = update_recipe(recipe_path)

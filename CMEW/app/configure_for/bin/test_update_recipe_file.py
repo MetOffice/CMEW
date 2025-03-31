@@ -11,6 +11,10 @@ import yaml
 def mock_env_vars(monkeypatch):
     monkeypatch.setenv("START_YEAR", "1993")
     monkeypatch.setenv("NUMBER_OF_YEARS", "1")
+    monkeypatch.setenv("VARIANT_LABEL", "r1i1p1f1")
+    monkeypatch.setenv("VARIANT_LABEL_REFERENCE", "r1i1p1f3")
+    monkeypatch.setenv("MODEL_ID", "UKESM1-0-LL")
+    monkeypatch.setenv("MODEL_ID_REFERENCE", "HadGEM3-GC31-LL")
 
 
 @pytest.fixture
@@ -36,17 +40,21 @@ def path_to_mock_original_recipe():
 
 
 def test_update_recipe(
-    mock_env_vars, path_to_updated_recipe_kgo, path_to_mock_original_recipe
+    mock_env_vars,  # noqa : 36
+    path_to_updated_recipe_kgo,
+    path_to_mock_original_recipe,  # noqa : 36
 ):
     with open(path_to_updated_recipe_kgo, "r") as file_handle:
         expected = yaml.safe_load(file_handle)
-    actual = update_recipe(path_to_mock_original_recipe)
+    actual = update_recipe(
+        path_to_mock_original_recipe,
+    )
     assert actual == expected
 
 
 def test_main(
     monkeypatch,
-    mock_env_vars,
+    mock_env_vars,  # noqa : 36
     path_to_updated_recipe_kgo,
     path_to_mock_original_recipe,
     tmp_path,
@@ -58,13 +66,15 @@ def test_main(
 
     # Mock the environmental variable 'RECIPE PATH' to the tmp_path location
     # where the original recipe is stored.
-    monkeypatch.setenv("RECIPE_PATH", path_to_temp_recipe)
+    monkeypatch.setenv("RECIPE_PATH", str(path_to_temp_recipe))
 
-    main()
+    main()  # The test updates the recipe
 
+    # Read the recipe produced
     with open(path_to_temp_recipe, "r") as file_handle_1:
         actual = file_handle_1.readlines()
 
+    # Read the baseline recipe
     with open(path_to_updated_recipe_kgo, "r") as file_handle_2:
         kgo_with_comment = file_handle_2.readlines()
 
