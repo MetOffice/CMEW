@@ -105,7 +105,7 @@ def get_arguments():
 def main():
     args = get_arguments()
     request = create_request(
-        args.model_id, args.suit_id, args.calendar, args.variant
+        args.model_id, args.suite_id, args.calendar, args.variant
     )
     write_request(request, args.path)
     return request
