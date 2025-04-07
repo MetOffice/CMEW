@@ -86,3 +86,10 @@ jobs:
           eval "$(conda shell.bash hook)"
           conda activate cmew
           pre-commit run --all-files
+
+      # Find all bash scripts (files with an 'sh' extension)
+      # and explicitly include the `env` files (which have no extension).
+      - name: Run ShellCheck
+        run: |
+          find . -type f \( -name "*.sh" -or -name "*-env$" \) \
+          -exec shellcheck {} \;
