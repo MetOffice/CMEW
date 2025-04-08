@@ -1,5 +1,7 @@
 # (C) Crown Copyright 2024-2025, Met Office.
 # The LICENSE.md file contains full licensing details.
+import os
+
 from create_request_file import create_request
 
 
@@ -27,7 +29,8 @@ def test_create_request(monkeypatch):
         "mass_data_class": "crum",
         "mip": "ESMVal",
         "mip_era": "GCModelDev",
-        "mip_table_dir": "~cdds/etc/mip_tables/GCModelDev/0.0.9",
+        "mip_table_dir": os.path.expanduser(
+            "~cdds/etc/mip_tables/GCModelDev/0.0.9"),
         "model_id": "UKESM1-0-LL",
         "model_type": "AGCM AER",
         "package": "round-1",

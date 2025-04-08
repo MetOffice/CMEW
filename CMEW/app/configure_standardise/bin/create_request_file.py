@@ -42,7 +42,8 @@ def create_request():
         "mass_data_class": "crum",
         "mip": "ESMVal",
         "mip_era": "GCModelDev",
-        "mip_table_dir": "~cdds/etc/mip_tables/GCModelDev/0.0.9",
+        "mip_table_dir": os.path.expanduser(
+            "~cdds/etc/mip_tables/GCModelDev/0.0.9"),
         "model_id": os.environ["MODEL_ID"],
         "model_type": "AGCM AER",
         "package": "round-1",
