@@ -43,7 +43,8 @@ def create_request():
         "mip": "ESMVal",
         "mip_era": "GCModelDev",
         "mip_table_dir": os.path.expanduser(
-            "~cdds/etc/mip_tables/GCModelDev/0.0.9"),
+            "~cdds/etc/mip_tables/GCModelDev/0.0.9"
+        ),
         "model_id": os.environ["MODEL_ID"],
         "model_type": "AGCM AER",
         "package": "round-1",

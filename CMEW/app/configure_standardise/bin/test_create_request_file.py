@@ -30,7 +30,8 @@ def test_create_request(monkeypatch):
         "mip": "ESMVal",
         "mip_era": "GCModelDev",
         "mip_table_dir": os.path.expanduser(
-            "~cdds/etc/mip_tables/GCModelDev/0.0.9"),
+            "~cdds/etc/mip_tables/GCModelDev/0.0.9"
+        ),
         "model_id": "UKESM1-0-LL",
         "model_type": "AGCM AER",
         "package": "round-1",
