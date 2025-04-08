@@ -24,7 +24,8 @@ if [[ -n ${PYTHONPATH_PREPEND:-} ]]; then
     export PYTHONPATH=${PYTHONPATH_PREPEND}:${PYTHONPATH:-}
 fi
 
-ROOT_SOFTWARE_DIR="~cdds/software"
+# Expanding tilde: https://www.shellcheck.net/wiki/SC2088
+ROOT_SOFTWARE_DIR=~cdds/"software"
 CDDS_COMMAND="/../bin/setup_env_for_cdds"
 # shellcheck source=/dev/null
 source "${ROOT_SOFTWARE_DIR}${CDDS_COMMAND}" "${CDDS_VERSION}"
