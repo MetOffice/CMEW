@@ -27,6 +27,7 @@ def create_request():
     streams_run_bounds = {
         f"run_bounds_for_stream_{stream}": run_bounds for stream in streams
     }
+    mip_table_dir = os.path.expanduser("~cdds/etc/mip_tables/GCModelDev/0.0.9")
     request = {
         "atmos_timestep": "1200",
         "branch_method": "no parent",
@@ -42,7 +43,7 @@ def create_request():
         "mass_data_class": "crum",
         "mip": "ESMVal",
         "mip_era": "GCModelDev",
-        "mip_table_dir": "~cdds/etc/mip_tables/GCModelDev/0.0.9",
+        "mip_table_dir": mip_table_dir,
         "model_id": os.environ["MODEL_ID"],
         "model_type": "AGCM AER",
         "package": "round-1",
