@@ -5,7 +5,7 @@
 BASH_XTRACEFD=1
 set -eux
 
-CEDA_ROOT_DIR="/home/h03/hadmm/CDDS/github/ceda-mip-tools"
+CEDA_ROOT_DIR="~cdds/software/ceda-mip-tools"
 RESTRUCTURE_COMMAND="/bin/restructure_for_cmip6"
 
 ROOT_RESTRUCTURED_DIR="${CYLC_WORKFLOW_SHARE_DIR}/work/"
