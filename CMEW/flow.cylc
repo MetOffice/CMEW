@@ -49,6 +49,14 @@
             RECIPE_NAME = "recipe_${CYLC_TASK_PARAM_assessment_area}.yml"
             RECIPE_PATH = "${CYLC_WORKFLOW_SHARE_DIR}/etc/${RECIPE_NAME}"
 
+    [[STANDARDISE]]
+        [[[environment]]]
+            CDDS_BIN_DIR = "~cdds/bin"
+            CDDS_SOFTWARE_DIR = "~cdds/software"
+            # Workaround for bug in CDDS: ROOT_SOFTWARE_DIR: unbound variable.
+            ROOT_SOFTWARE_DIR = ${CDDS_SOFTWARE_DIR}
+            CDDS_VERSION = {{ CDDS_VERSION }}
+
     [[install_env_file]]
         [[[environment]]]
             SITE = {{ SITE }}
@@ -84,9 +92,8 @@
             NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
 
     [[configure_standardise<assessment_area>]]
-        inherit = None, ASSESSMENT_AREA
+        inherit = STANDARDISE, ASSESSMENT_AREA
         [[[environment]]]
-            CDDS_VERSION = {{ CDDS_VERSION }}
             ROSE_TASK_APP = configure_standardise
             CALENDAR = {{ CALENDAR }}
             MODEL_ID = {{ MODEL_ID }}
@@ -95,8 +102,8 @@
             SUITE_ID = {{ SUITE_ID }}
 
     [[standardise_model_data]]
+        inherit = STANDARDISE
         [[[environment]]]
-            CDDS_VERSION = {{ CDDS_VERSION }}
             SITE = {{ SITE }}
 
     [[process<assessment_area>]]
