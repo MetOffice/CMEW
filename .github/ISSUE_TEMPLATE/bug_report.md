@@ -1,8 +1,6 @@
-[(C) Crown Copyright 2024-2025, Met Office.]: #
-[The LICENSE.md file contains full licensing details.]: #
 ---
 name: Bug report
-about: Create a bug report to help us improve
+about: Create a report to help us improve
 title: ''
 labels: bug
 assignees: ''
@@ -13,7 +11,7 @@ assignees: ''
 A clear and concise description of what the bug is.
 
 **To Reproduce**
-Steps to reproduce the behavior:
+Steps to reproduce the behaviour:
 1. Go to '...'
 2. Click on '....'
 3. Scroll down to '....'

@@ -1,5 +1,3 @@
-[(C) Crown Copyright 2024-2025, Met Office.]: #
-[The LICENSE.md file contains full licensing details.]: #
 ---
 name: Feature request
 about: Suggest an idea for this project
