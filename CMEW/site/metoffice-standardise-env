@@ -19,18 +19,18 @@ export PYTHONNOUSERSITE=True
 
 # If PYTHONPATH_PREPEND has been set, prepend it to PYTHONPATH to extend the
 # Python environment.
-if [[ ! -z ${PYTHONPATH_PREPEND:-} ]]; then
+if [[ -n ${PYTHONPATH_PREPEND:-} ]]; then
     echo "[INFO] Prepending the following to PYTHONPATH: ${PYTHONPATH_PREPEND}"
     export PYTHONPATH=${PYTHONPATH_PREPEND}:${PYTHONPATH:-}
 fi
 
-ROOT_SOFTWARE_DIR="/home/h03/cdds/software"
-CDDS_COMMAND="/../bin/setup_env_for_cdds"
-source "${ROOT_SOFTWARE_DIR}${CDDS_COMMAND}" ${CDDS_VERSION}
+CDDS_COMMAND="${CDDS_BIN_DIR}/setup_env_for_cdds"
+# shellcheck source=/dev/null
+source "${CDDS_COMMAND}" "${CDDS_VERSION}"
 
 if [[ -z ${QUIET_MODE:-} ]]; then
     echo "[OK] CDDS environment loaded."
 fi
 
-command="/usr/bin/time -v -o ${CYLC_TASK_LOG_ROOT}.time $@"
-exec ${command}
+command=(/usr/bin/time -v -o "${CYLC_TASK_LOG_ROOT}.time" "$@")
+exec "${command[@]}"
