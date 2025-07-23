@@ -22,9 +22,9 @@ def create_request():
     )
     request = configparser.ConfigParser()
     request["metadata"] = {
+        "base_date": "1850-01-01T00:00:00",
         "branch_method": "no parent",
         "calendar": os.environ["CALENDAR"],
-        "base_date": "1850-01-01T00:00:00",
         "experiment_id": "amip",
         "institution_id": os.environ["INSTITUTION_ID"],
         "license": "GCModelDev model data is licensed under the Open Government License v3 (https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/)",  # noqa: E501
@@ -42,6 +42,8 @@ def create_request():
             "~cdds/etc/mip_tables/GCModelDev/0.0.9"
         ),
         "package": "round-1",
+        "root_proc_dir": os.environ["ROOT_PROC_DIR"],
+        "root_data_dir": os.environ["ROOT_DATA_DIR"],
         "workflow_basename": "CMEW",
     }
     request["data"] = {

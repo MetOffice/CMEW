@@ -6,11 +6,14 @@ from create_request_file import create_request
 
 
 def test_create_request(monkeypatch):
+    # In the order defined in 'create_request_file.py'.
+    monkeypatch.setenv("START_YEAR", "1993")
+    monkeypatch.setenv("NUMBER_OF_YEARS", "1")
     monkeypatch.setenv("CALENDAR", "360_day")
     monkeypatch.setenv("INSTITUTION_ID", "MOHC")
     monkeypatch.setenv("MODEL_ID", "UKESM1-0-LL")
-    monkeypatch.setenv("START_YEAR", "1993")
-    monkeypatch.setenv("NUMBER_OF_YEARS", "1")
+    monkeypatch.setenv("ROOT_PROC_DIR", "/path/to/proc/dir/")
+    monkeypatch.setenv("ROOT_DATA_DIR", "/path/to/data/dir/")
     monkeypatch.setenv("SUITE_ID", "u-az513")
 
     config = create_request()
@@ -39,6 +42,8 @@ def test_create_request(monkeypatch):
                 "~cdds/etc/mip_tables/GCModelDev/0.0.9"
             ),
             "package": "round-1",
+            "root_proc_dir": "/path/to/proc/dir/",
+            "root_data_dir": "/path/to/data/dir/",
             "workflow_basename": "CMEW",
         },
         "data": {
