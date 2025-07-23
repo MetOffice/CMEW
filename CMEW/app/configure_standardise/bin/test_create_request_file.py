@@ -15,6 +15,7 @@ def test_create_request(monkeypatch):
     monkeypatch.setenv("ROOT_PROC_DIR", "/path/to/proc/dir/")
     monkeypatch.setenv("ROOT_DATA_DIR", "/path/to/data/dir/")
     monkeypatch.setenv("SUITE_ID", "u-az513")
+    monkeypatch.setenv("VARIABLES_PATH", "/path/to/variables.txt")
 
     config = create_request()
     actual = {
@@ -54,6 +55,7 @@ def test_create_request(monkeypatch):
             "model_workflow_revision": "not used except with data request",
             "start_date": "1993-01-01T00:00:00",
             "streams": "apm",
+            "variable_list_file": "/path/to/variables.txt",
         },
         "misc": {
             "atmos_timestep": "1200",
