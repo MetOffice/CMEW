@@ -15,3 +15,14 @@ exclude = '''
   )/
 )
 '''
+
+# Configure pytest.
+[tool.pytest.ini_options]
+filterwarnings = [
+    # Ignore deprecation warnings from webob, esmpy and pkg_resources:
+    "ignore:'cgi' is deprecated and slated for removal in Python 3.13:DeprecationWarning",
+    "ignore:Implicit None on return values is deprecated:DeprecationWarning",
+    "ignore:Deprecated call to `pkg_resources.declare_namespace:DeprecationWarning",
+    # Ignore user warnings from pybtex:
+    "ignore:pkg_resources is deprecated as an API:UserWarning",
+]

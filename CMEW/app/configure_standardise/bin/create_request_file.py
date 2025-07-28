@@ -2,11 +2,11 @@
 # (C) Crown Copyright 2024-2025, Met Office.
 # The LICENSE.md file contains full licensing details.
 """
-Generates the request.json file from the ESMValTool recipe.
+Generates the request configuration file from the ESMValTool recipe.
 """
+import configparser
 import os
 from pathlib import Path
-import json
 
 
 def create_request():
@@ -14,72 +14,78 @@ def create_request():
 
     Returns
     -------
-    dict
-        CDDS request information to be written to JSON file.
+    configparser.ConfigParser()
+        CDDS request configuration.
     """
-    streams = ["apm"]
-    start_datetime = f"{os.environ['START_YEAR']}-01-01T00:00:00"
     end_year = int(os.environ["START_YEAR"]) + int(
         os.environ["NUMBER_OF_YEARS"]
     )
-    end_datetime = f"{end_year}-01-01T00:00:00"
-    run_bounds = f"{start_datetime} {end_datetime}"
-    streams_run_bounds = {
-        f"run_bounds_for_stream_{stream}": run_bounds for stream in streams
-    }
-    request = {
-        "atmos_timestep": "1200",
+    request = configparser.ConfigParser()
+    request["metadata"] = {
+        "base_date": "1850-01-01T00:00:00",
         "branch_method": "no parent",
         "calendar": os.environ["CALENDAR"],
-        "child_base_date": "1850-01-01T00:00:00",
-        "config_version": "1.0.1",
         "experiment_id": "amip",
-        "external_plugin": "",
-        "external_plugin_location": "",
-        "global_attributes": {},
         "institution_id": os.environ["INSTITUTION_ID"],
         "license": "GCModelDev model data is licensed under the Open Government License v3 (https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/)",  # noqa: E501
-        "mass_data_class": "crum",
         "mip": "ESMVal",
         "mip_era": "GCModelDev",
+        "model_id": os.environ["MODEL_ID"],
+        "model_type": "AGCM AER",
+        "sub_experiment_id": "none",
+        "variant_label": "r1i1p1f1",
+    }
+    request["common"] = {
+        "external_plugin": "",
+        "external_plugin_location": "",
         "mip_table_dir": os.path.expanduser(
             "~cdds/etc/mip_tables/GCModelDev/0.0.9"
         ),
-        "model_id": os.environ["MODEL_ID"],
-        "model_type": "AGCM AER",
+        "mode": "relaxed",
         "package": "round-1",
-        "request_id": "CMEW",
-        "run_bounds": run_bounds,
-        "sub_experiment_id": "none",
-        "suite_branch": "trunk",
-        "suite_id": os.environ["SUITE_ID"],
-        "suite_revision": "not used except with data request",
-        "variant_label": "r1i1p1f1",
+        "root_proc_dir": os.environ["ROOT_PROC_DIR"],
+        "root_data_dir": os.environ["ROOT_DATA_DIR"],
+        "workflow_basename": "CMEW",
     }
-    # Combine request dict and streams_run_bounds dict (in-place union).
-    request |= streams_run_bounds
+    request["data"] = {
+        "end_date": f"{end_year}-01-01T00:00:00",
+        "mass_data_class": "crum",
+        "model_workflow_branch": "trunk",
+        "model_workflow_id": os.environ["SUITE_ID"],
+        "model_workflow_revision": "not used except with data request",
+        "start_date": f"{os.environ['START_YEAR']}-01-01T00:00:00",
+        "streams": "apm",
+        "variable_list_file": os.environ["VARIABLES_PATH"],
+    }
+    request["misc"] = {
+        "atmos_timestep": "1200",
+    }
+    request["conversion"] = {
+        "mip_convert_plugin": "UKESM1",
+        "skip_archive": "True",
+        "cylc_args": "--no-detach -v",
+    }
     return request
 
 
 def write_request(request, target_path):
-    """Write request dictionary to a JSON file at ``target_path``.
+    """Write the request configuration to a file at ``target_path``.
 
     Parameters
     ----------
-    request : dict
-        Dictionary containing the request information.
+    request : configparser.ConfigParser()
+        The request configuration.
 
     target_path: Path
-        Location to write the request file.
+        The full path to the file
+        where the request configuration will be written.
     """
-    with open(target_path, mode="w") as file:
-        json.dump(request, file, separators=(",\n", ": "))
+    with open(target_path, mode="w") as file_handle:
+        request.write(file_handle)
 
 
 def main():
-    target_path = (
-        Path(os.environ["CYLC_WORKFLOW_SHARE_DIR"]) / "etc" / "request.json"
-    )
+    target_path = Path(os.environ["REQUEST_PATH"])
     request = create_request()
     write_request(request, target_path)
 
