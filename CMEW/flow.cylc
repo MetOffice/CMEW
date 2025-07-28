@@ -41,7 +41,7 @@
             SHARE_DATA_CDDS = ${CYLC_WORKFLOW_SHARE_DIR}/data/cdds
             ROOT_PROC_DIR = ${SHARE_DATA_CDDS}/proc
             ROOT_DATA_DIR = ${SHARE_DATA_CDDS}/cdds_data
-            REQUEST_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request.json
+            REQUEST_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request.cfg
             VARIABLES_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/variables.txt
 
     [[ASSESSMENT_AREA]]

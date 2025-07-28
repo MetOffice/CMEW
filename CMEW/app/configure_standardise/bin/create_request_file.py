@@ -2,7 +2,7 @@
 # (C) Crown Copyright 2024-2025, Met Office.
 # The LICENSE.md file contains full licensing details.
 """
-Generates the request.json file from the ESMValTool recipe.
+Generates the request configuration file from the ESMValTool recipe.
 """
 import configparser
 import os
@@ -15,7 +15,7 @@ def create_request():
     Returns
     -------
     dict
-        CDDS request information to be written to JSON file.
+        CDDS request configuration.
     """
     end_year = int(os.environ["START_YEAR"]) + int(
         os.environ["NUMBER_OF_YEARS"]
@@ -79,9 +79,7 @@ def write_request(request, target_path):
 
 
 def main():
-    target_path = (
-        Path(os.environ["CYLC_WORKFLOW_SHARE_DIR"]) / "etc" / "request.json"
-    )
+    target_path = Path(os.environ["REQUEST_PATH"])
     request = create_request()
     write_request(request, target_path)
 
