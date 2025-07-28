@@ -14,7 +14,7 @@ def create_request():
 
     Returns
     -------
-    dict
+    configparser.ConfigParser()
         CDDS request configuration.
     """
     end_year = int(os.environ["START_YEAR"]) + int(
