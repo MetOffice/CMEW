@@ -41,6 +41,7 @@ def create_request():
         "mip_table_dir": os.path.expanduser(
             "~cdds/etc/mip_tables/GCModelDev/0.0.9"
         ),
+        "mode": "relaxed",
         "package": "round-1",
         "root_proc_dir": os.environ["ROOT_PROC_DIR"],
         "root_data_dir": os.environ["ROOT_DATA_DIR"],
@@ -58,6 +59,11 @@ def create_request():
     }
     request["misc"] = {
         "atmos_timestep": "1200",
+    }
+    request["conversion"] = {
+        "mip_convert_plugin": "UKESM1",
+        "skip_archive": "True",
+        "cylc_args": "--no-detach -v",
     }
     return request
 

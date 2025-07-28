@@ -42,6 +42,7 @@ def test_create_request(monkeypatch):
             "mip_table_dir": os.path.expanduser(
                 "~cdds/etc/mip_tables/GCModelDev/0.0.9"
             ),
+            "mode": "relaxed",
             "package": "round-1",
             "root_proc_dir": "/path/to/proc/dir/",
             "root_data_dir": "/path/to/data/dir/",
@@ -59,6 +60,11 @@ def test_create_request(monkeypatch):
         },
         "misc": {
             "atmos_timestep": "1200",
+        },
+        "conversion": {
+            "mip_convert_plugin": "UKESM1",
+            "skip_archive": "True",
+            "cylc_args": "--no-detach -v",
         },
     }
     assert actual == expected
