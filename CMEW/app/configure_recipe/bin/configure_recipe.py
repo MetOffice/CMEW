@@ -17,7 +17,7 @@ def main():
     the environment variable ``USER_CONFIG_PATH``.
     """
     # Retrieve the values defined in the environment for the
-    # 'configure_process' task.
+    # 'configure_recipe' task.
     values = retrieve_values_from_task_env()
 
     # Create the contents for the user configuration file using these
@@ -33,13 +33,13 @@ def main():
 def retrieve_values_from_task_env():
     """
     Return the values defined in the environment for the
-    ``configure_process`` task.
+    ``configure_recipe`` task.
 
     Returns
     -------
     : dictionary
         The values defined in the environment for the
-        ``configure_process`` task.
+        ``configure_recipe`` task.
     """
     values_from_task_env = {
         "CYLC_WORKFLOW_SHARE_DIR": os.environ["CYLC_WORKFLOW_SHARE_DIR"],

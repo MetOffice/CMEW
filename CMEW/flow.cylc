@@ -18,12 +18,12 @@
             install_env_file => unittest
 {%- endif %}
 {%- if not UNITTEST %}
-            install_env_file => configure_process & configure_for<assessment_area>
+            install_env_file => configure_recipe & configure_for<assessment_area>
             configure_for<assessment_area> => configure_standardise<assessment_area>
-            configure_process => process<assessment_area>
-            configure_standardise<assessment_area> => standardise_model_data => process<assessment_area> & housekeeping
+            configure_recipe => run_recipe<assessment_area>
+            configure_standardise<assessment_area> => standardise_model_data => run_recipe<assessment_area> & housekeeping
     {%- if TEST %}
-            process<assessment_area> => compare<assessment_area>
+            run_recipe<assessment_area> => compare<assessment_area>
     {%- endif %}
 {%- endif %}
         """
@@ -61,7 +61,7 @@
         [[[environment]]]
             SITE = {{ SITE }}
 
-    [[configure_process]]
+    [[configure_recipe]]
         [[[environment]]]
             DRS_CMIP3 = {{ DRS_CMIP3 }}
             DRS_CMIP5 = {{ DRS_CMIP5 }}
@@ -106,10 +106,10 @@
         [[[environment]]]
             SITE = {{ SITE }}
 
-    [[process<assessment_area>]]
+    [[run_recipe<assessment_area>]]
         inherit = None, COMPUTE, ASSESSMENT_AREA
         [[[environment]]]
-            ROSE_TASK_APP = process
+            ROSE_TASK_APP = run_recipe
 
     [[housekeeping]]
 
