@@ -35,22 +35,25 @@ An overview of the workflow
 
 ``configure_for``
   :Description:
-     Copies an updated version of the |ESMValTool| recipe for the assessment
-     area into the cylc workflow ``share/etc`` directory in the installed
-     workflow
+     Copies an updated version of the |ESMValTool| recipe
+     into the cylc workflow ``share/etc`` directory
+     in the installed workflow
   :Runs on:
      Localhost
   :Executes:
-     For the required assessment area, executes the ``esmvaltool recipes get``
-     command followed by the ``update_recipe_file.py`` script from the |Rose|
-     app
+     For the required recipe,
+     executes the ``esmvaltool recipes get`` command
+     followed by the ``update_recipe_file.py`` script from the |Rose| app
   :Details:
-     Runs once for each assessment area, immediately after the successful
-     completion of the ``install_env_file`` job. The recipe is updated with
-     CMEW required variables (e.g. "Activity": "ESMVal") and also with user
-     configurable variables from the |Rose Edit GUI|_/``rose-suite.conf``
+     Runs once for each recipe,
+     immediately after the successful completion
+     of the ``install_env_file`` job.
+     The recipe is updated with CMEW required variables
+     (e.g. "Activity": "ESMVal")
+     and also with user configurable variables
+     from the |Rose Edit GUI|_/``rose-suite.conf``
   :Families:
-     ``ASSESSMENT_AREA``
+     ``RECIPE``
 
 ``configure_standardise``
   :Description:
@@ -61,7 +64,7 @@ An overview of the workflow
   :Executes:
      The ``configure_standardise.sh`` script from the |Rose| app
   :Details:
-     Runs once for each assessment_area, immediately after the successful
+     Runs once for each recipe, immediately after the successful
      completion of the ``configure_for`` job
 
 ``standardise_model_data``
@@ -98,10 +101,11 @@ An overview of the workflow
   :Executes:
      The |ESMValTool| command line script
   :Details:
-     Runs once for each assessment area, after the successful completion of
-     the ``standardise_model_data`` and the ``configure_recipe`` jobs
+     Runs once for each recipe,
+     after the successful completion of the ``standardise_model_data``
+     and the ``configure_recipe`` jobs
   :Families:
-     ``COMPUTE``, ``ASSESSMENT_AREA``
+     ``COMPUTE``, ``RECIPE``
 
 ``compare``
   :Description:
@@ -111,8 +115,8 @@ An overview of the workflow
   :Executes:
      The ``compare.sh`` script from the |Rose| app
   :Details:
-     Runs for every assessment area defined in the workflow, after the
-     completion of the ``run_recipe`` job
+     Runs for every recipe defined in the workflow,
+     after the completion of the ``run_recipe`` job
 
 ``unittest``
   :Description:
@@ -155,9 +159,9 @@ The following families are used in the workflow:
 ``COMPUTE``
   A family that is inherited by computationally intensive tasks
 
-``ASSESSMENT_AREA``
+``RECIPE``
   A family that is inherited by tasks that run
-  for each assessment area independently
+  for each recipe independently
 
 Metadata
 ~~~~~~~~
