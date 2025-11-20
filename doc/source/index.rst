@@ -13,7 +13,7 @@ Welcome to the Climate Model Evaluation Workflow's documentation!
    :caption: Contents
 
    about
-   assessment_area
+   assessment_areas
    user_guide/index.rst
    testing
    support
