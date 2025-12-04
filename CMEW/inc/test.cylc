@@ -3,7 +3,7 @@
 # The LICENSE.md file contains full licensing details.
 # test.cylc
 [runtime]
-    [[compare<assessment_area>]]
+    [[compare<recipe>]]
         [[[environment]]]
             ROSE_TASK_APP = compare
-            ROSE_APP_OPT_CONF_KEYS=${CYLC_TASK_PARAM_assessment_area}
+            ROSE_APP_OPT_CONF_KEYS=${CYLC_TASK_PARAM_recipe}

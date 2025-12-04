@@ -9,7 +9,7 @@
     UTC mode = True
 
 [task parameters]
-    assessment_area = radiation_budget
+    recipe = radiation_budget
 
 [scheduling]
     [[graph]]
@@ -18,12 +18,12 @@
             install_env_file => unittest
 {%- endif %}
 {%- if not UNITTEST %}
-            install_env_file => configure_process & configure_for<assessment_area>
-            configure_for<assessment_area> => configure_standardise<assessment_area>
-            configure_process => process<assessment_area>
-            configure_standardise<assessment_area> => standardise_model_data => process<assessment_area> & housekeeping
+            install_env_file => configure_recipe & configure_for<recipe>
+            configure_for<recipe> => configure_standardise<recipe>
+            configure_recipe => run_recipe<recipe>
+            configure_standardise<recipe> => standardise_model_data => run_recipe<recipe> & housekeeping
     {%- if TEST %}
-            process<assessment_area> => compare<assessment_area>
+            run_recipe<recipe> => compare<recipe>
     {%- endif %}
 {%- endif %}
         """
@@ -44,9 +44,9 @@
             REQUEST_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request.cfg
             VARIABLES_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/variables.txt
 
-    [[ASSESSMENT_AREA]]
+    [[RECIPE]]
         [[[environment]]]
-            RECIPE_NAME = "recipe_${CYLC_TASK_PARAM_assessment_area}.yml"
+            RECIPE_NAME = "recipe_${CYLC_TASK_PARAM_recipe}.yml"
             RECIPE_PATH = "${CYLC_WORKFLOW_SHARE_DIR}/etc/${RECIPE_NAME}"
 
     [[STANDARDISE]]
@@ -61,7 +61,7 @@
         [[[environment]]]
             SITE = {{ SITE }}
 
-    [[configure_process]]
+    [[configure_recipe]]
         [[[environment]]]
             DRS_CMIP3 = {{ DRS_CMIP3 }}
             DRS_CMIP5 = {{ DRS_CMIP5 }}
@@ -84,15 +84,15 @@
             ROOTPATH_OBS4MIPS = {{ ROOTPATH_OBS4MIPS }}
             ROOTPATH_RAWOBS = {{ ROOTPATH_RAWOBS }}
 
-    [[configure_for<assessment_area>]]
-        inherit = None, ASSESSMENT_AREA
+    [[configure_for<recipe>]]
+        inherit = None, RECIPE
         [[[environment]]]
             ROSE_TASK_APP = configure_for
             START_YEAR = {{ START_YEAR }}
             NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
 
-    [[configure_standardise<assessment_area>]]
-        inherit = STANDARDISE, ASSESSMENT_AREA
+    [[configure_standardise<recipe>]]
+        inherit = STANDARDISE, RECIPE
         [[[environment]]]
             ROSE_TASK_APP = configure_standardise
             CALENDAR = {{ CALENDAR }}
@@ -106,10 +106,10 @@
         [[[environment]]]
             SITE = {{ SITE }}
 
-    [[process<assessment_area>]]
-        inherit = None, COMPUTE, ASSESSMENT_AREA
+    [[run_recipe<recipe>]]
+        inherit = None, COMPUTE, RECIPE
         [[[environment]]]
-            ROSE_TASK_APP = process
+            ROSE_TASK_APP = run_recipe
 
     [[housekeeping]]
 
