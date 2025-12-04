@@ -15,8 +15,13 @@ Quick Start
     cd CMEW/CMEW
     rose edit
 
-* Run |CMEW| at the Met Office, where ``<run-name>`` is a unique run name
-  relevant to the current configuration::
+* Run |CMEW| at the Met Office with the current configuration,
+  either without specifiying a run name::
+
+    cylc vip -O metoffice
+
+  or by supplying a unique run name relevant to the current configuration
+  (e.g. for identifying your run later on)::
 
     cylc vip --run-name=<run-name> -O metoffice
 
