@@ -1,4 +1,4 @@
-Prerequisites for Cloning and Running CMEW on SPICE (Slurm) 
+Prerequisites for Cloning and Running CMEW on SPICE (Slurm)
 ===========================================================
 
 .. include:: ../common.txt
@@ -6,7 +6,7 @@ Prerequisites for Cloning and Running CMEW on SPICE (Slurm)
 This page lists the prerequisites for:
   * Cloning the Climate Model Evaluation Workflow (|CMEW|) repository
   * Running |CMEW| on Met Office SPICE systems using the Slurm batch scheduler.
- 
+
 1 Cloning the CMEW repository
 -----------------------------
 
@@ -123,7 +123,6 @@ You need:
 * non-interactive activation via site/metoffice-standardise-env
 
 Sanity check after sourcing your standardise env script::
- 
-  source site/metoffice-standardise-env
-  mip_convert --version 
 
+  source site/metoffice-standardise-env
+  mip_convert --version
