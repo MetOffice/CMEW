@@ -14,6 +14,11 @@ Quick Start
     git clone git@github.com:MetOffice/CMEW.git
 
 
+* Ensure you are in the directory containing `flow.cylc`, e.g.::
+
+    cd CMEW/CMEW
+
+
 * Run |CMEW| at the Met Office with the current configuration::
 
     cylc vip -O metoffice
