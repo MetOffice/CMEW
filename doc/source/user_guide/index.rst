@@ -8,6 +8,6 @@ User Guide
 .. toctree::
    :maxdepth: 1
 
-   prerequisites_spice
+   Prerequisites <prerequisites_spice>
    quick_start
    workflow
