@@ -3,7 +3,7 @@ Prerequisites for Cloning and Running CMEW on SPICE (Slurm)
 
 .. include:: ../common.txt
 
-This page lists the prerequisites for:
+This page lists the prerequisites for the metoffice site:
   * Cloning the Climate Model Evaluation Workflow (|CMEW|) repository
   * Running |CMEW| on Met Office SPICE systems using the Slurm batch scheduler.
 
@@ -15,9 +15,6 @@ This page lists the prerequisites for:
 
 * A valid SPICE user account.
 * Network access to the |CMEW| GitHub repository (via SSH or HTTPS).
-
-If GitHub access is restricted on your host, you may need to use a proxy or
-clone from a machine with access and copy the repository to SPICE.
 
 1.2. Git Installed
 ^^^^^^^^^^^^^^^^^^
@@ -43,18 +40,10 @@ A GitHub SSH key registered to your account.
     ls ~/.ssh
     ssh -T git@github.com
 
-* Clone::
-
-    git clone git@github.com:MetOffice/CMEW.git
-
 Option B: HTTPS
 """""""""""""""
 
 GitHub username + Personal Access Token (PAT) if required.
-
-* Clone::
-
-    git clone https://github.com:MetOffice/CMEW.git
 
 1.4 Access and Platform for Running CMEW
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -88,8 +77,6 @@ Expected examples::
 
     /usr/local/bin/cylc with Cylc 8.6.1
     /usr/local/bin/rose with Rose 2.6.2
-
-You do not need to install your own Cylc/Rose conda environment unless you want an isolated personal stack.
 
 2.1 Diagnostics Environment (ESMValTool)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
