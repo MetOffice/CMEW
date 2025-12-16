@@ -88,7 +88,8 @@ def test_create_request_default_extract(monkeypatch):
     assert actual == expected
 
 def test_create_request_extract_false_with_path(monkeypatch):
-    """EXTRACT=False + EXTRACT_DATA_PATH set → skip_extract + override root_data_dir."""
+    """EXTRACT=False + EXTRACT_DATA_PATH set → 
+       skip_extract + override root_data_dir."""
     _clear_extract_env(monkeypatch)
     _set_base_env(monkeypatch)
     monkeypatch.setenv("EXTRACT", "false")
@@ -114,7 +115,7 @@ def test_create_request_extract_false_without_path_raises(monkeypatch):
     _clear_extract_env(monkeypatch)
     _set_base_env(monkeypatch)
     monkeypatch.setenv("EXTRACT", "false")
-    # EXTRACT_DATA_PATH intentionally not set (or could set to empty/whitespace)
+    # EXTRACT_DATA_PATH intentionally not set (or could set to empty)
 
     with pytest.raises(ValueError, match="EXTRACT=False"):
         create_request()
