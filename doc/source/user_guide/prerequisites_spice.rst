@@ -1,5 +1,8 @@
-Prerequisites for Cloning and Running CMEW on SPICE (Slurm)
-===========================================================
+# (C) Crown Copyright 2022-2025, Met Office.
+# The LICENSE.md file contains full licensing details.
+
+Prerequisites for Running CMEW at the Met Office
+================================================
 
 .. include:: ../common.txt
 
@@ -107,9 +110,3 @@ Contact ServiceNow for a MOOSE account on SPICE if there is no access to MASS.
 You need:
 
 * CDDS installed on SPICE
-* non-interactive activation via site/metoffice-standardise-env
-
-Sanity check after sourcing your standardise env script::
-
-  source site/metoffice-standardise-env
-  mip_convert --version
