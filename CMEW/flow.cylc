@@ -90,6 +90,7 @@
             ROSE_TASK_APP = configure_for
             START_YEAR = {{ START_YEAR }}
             NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
+            LABEL_FOR_PLOTS = {{ LABEL_FOR_PLOTS }}
 
     [[configure_standardise<recipe>]]
         inherit = STANDARDISE, RECIPE

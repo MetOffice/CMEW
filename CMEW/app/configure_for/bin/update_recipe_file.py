@@ -34,13 +34,14 @@ def update_recipe(recipe_path):
     - {dataset: <dataset>, end_year: <end_year>, ensemble: <ensemble>,
       end_year: <end_year>, exp: <exp>, grid: <grid>, project: <project>,
       start_year: <start_year>}
-    - {activity: <activity>, dataset: <dataset>, end_year: <end_year>,
-      ensemble: <ensemble>, exp: <exp>, grid: <grid>, project: <project>,
-      start_year: <start_year>}
+    - {activity: <activity>, alias: <alias>, dataset: <dataset>,
+      end_year: <end_year>, ensemble: <ensemble>, exp: <exp>, grid: <grid>,
+      project: <project>, start_year: <start_year>}
 
     Notes
     -----
-    The updated recipe includes one additional CMEW required key: "Activity".
+    The updated recipe includes two additional CMEW required keys:
+    "Activity" and "Alias".
 
     Parameters
     ----------
@@ -60,7 +61,8 @@ def update_recipe(recipe_path):
         recipe = yaml.safe_load(file_handle)
     first_dataset = recipe["datasets"][0]
     second_dataset = recipe["datasets"][1]
-    first_dataset.update({"start_year": start_year, "end_year": end_year})
+    first_dataset.update(
+        {"start_year": start_year, "end_year": end_year})
     second_dataset.update(
         {
             "project": "ESMVal",
@@ -69,6 +71,7 @@ def update_recipe(recipe_path):
             "ensemble": "r1i1p1f1",
             "start_year": start_year,
             "end_year": end_year,
+            "alias": os.environ["LABEL_FOR_PLOTS"]
         }
     )
     return recipe

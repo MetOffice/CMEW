@@ -11,6 +11,7 @@ import yaml
 def mock_env_vars(monkeypatch):
     monkeypatch.setenv("START_YEAR", "1993")
     monkeypatch.setenv("NUMBER_OF_YEARS", "1")
+    monkeypatch.setenv("LABEL_FOR_PLOTS", "Test Label")
 
 
 @pytest.fixture
