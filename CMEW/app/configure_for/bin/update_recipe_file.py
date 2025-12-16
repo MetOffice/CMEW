@@ -61,8 +61,7 @@ def update_recipe(recipe_path):
         recipe = yaml.safe_load(file_handle)
     first_dataset = recipe["datasets"][0]
     second_dataset = recipe["datasets"][1]
-    first_dataset.update(
-        {"start_year": start_year, "end_year": end_year})
+    first_dataset.update({"start_year": start_year, "end_year": end_year})
     second_dataset.update(
         {
             "project": "ESMVal",
