@@ -1,12 +1,16 @@
 # (C) Crown Copyright 2024-2025, Met Office.
 # The LICENSE.md file contains full licensing details.
+
 import os
+import pytest
 
 from create_request_file import create_request
 
-
-def test_create_request(monkeypatch):
-    # In the order defined in 'create_request_file.py'.
+def _set_base_env(monkeypatch):
+    """
+    Set the base environment variables needed by create_request().
+    In the order defined in 'create_request_file.py'.
+    """
     monkeypatch.setenv("START_YEAR", "1993")
     monkeypatch.setenv("NUMBER_OF_YEARS", "1")
     monkeypatch.setenv("CALENDAR", "360_day")
@@ -17,10 +21,22 @@ def test_create_request(monkeypatch):
     monkeypatch.setenv("SUITE_ID", "u-az513")
     monkeypatch.setenv("VARIABLES_PATH", "/path/to/variables.txt")
 
+def _clear_extract_env(monkeypatch):
+    """Ensure EXTRACT/EXTRACT_DATA_PATH do not leak from the suite env."""
+    monkeypatch.delenv("EXTRACT", raising=False)
+    monkeypatch.delenv("EXTRACT_DATA_PATH", raising=False)
+
+def test_create_request_default_extract(monkeypatch):
+    """EXTRACT default (True) - no skip_extract, root_data_dir unchanged."""
+    _clear_extract_env(monkeypatch)
+    _set_base_env(monkeypatch)
+    # Do not set EXTRACT or EXTRACT_DATA_PATH → EXTRACT defaults to True.
+
     config = create_request()
     actual = {
         section: dict(config.items(section)) for section in config.sections()
     }
+
     expected = {
         "metadata": {
             "branch_method": "no parent",
@@ -65,6 +81,41 @@ def test_create_request(monkeypatch):
             "mip_convert_plugin": "UKESM1",
             "skip_archive": "True",
             "cylc_args": "--no-detach -v",
+            # NOTE: no 'skip_extract' key when EXTRACT defaults to True
         },
     }
+
     assert actual == expected
+
+def test_create_request_extract_false_with_path(monkeypatch):
+    """EXTRACT=False + EXTRACT_DATA_PATH set → skip_extract + override root_data_dir."""
+    _clear_extract_env(monkeypatch)
+    _set_base_env(monkeypatch)
+    monkeypatch.setenv("EXTRACT", "false")
+    monkeypatch.setenv("EXTRACT_DATA_PATH", "/pre/extracted/data")
+
+    config = create_request()
+    actual = {
+        section: dict(config.items(section)) for section in config.sections()
+    }
+
+    # Ensure skip_extract is set in [conversion]
+    assert actual["conversion"]["skip_extract"] == "True"
+
+    # Ensure root_data_dir is taken from EXTRACT_DATA_PATH, not ROOT_DATA_DIR
+    assert actual["common"]["root_data_dir"] == "/pre/extracted/data"
+
+    # Optional extra checks to ensure other keys unaffected:
+    assert actual["common"]["root_proc_dir"] == "/path/to/proc/dir/"
+    assert actual["conversion"]["mip_convert_plugin"] == "UKESM1"
+
+def test_create_request_extract_false_without_path_raises(monkeypatch):
+    """EXTRACT=False with no EXTRACT_DATA_PATH → fail with ValueError."""
+    _clear_extract_env(monkeypatch)
+    _set_base_env(monkeypatch)
+    monkeypatch.setenv("EXTRACT", "false")
+    # EXTRACT_DATA_PATH intentionally not set (or could set to empty/whitespace)
+
+    with pytest.raises(ValueError, match="EXTRACT=False"):
+        create_request()
+
