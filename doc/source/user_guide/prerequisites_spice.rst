@@ -1,14 +1,14 @@
-# (C) Crown Copyright 2022-2025, Met Office.
+# (C) Crown Copyright 2025, Met Office.
 # The LICENSE.md file contains full licensing details.
 
-Prerequisites for Running CMEW at the Met Office
-================================================
+Prerequisites for Cloning and Running CMEW at the Met Office
+============================================================
 
 .. include:: ../common.txt
 
 This page lists the prerequisites for the metoffice site:
   * Cloning the Climate Model Evaluation Workflow (|CMEW|) repository
-  * Running |CMEW| on Met Office SPICE systems using the Slurm batch scheduler.
+  * Running |CMEW| on Met Office systems
 
 1 Cloning the CMEW repository
 -----------------------------
@@ -16,8 +16,8 @@ This page lists the prerequisites for the metoffice site:
 1.1. Access and Network
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-* A valid SPICE user account.
-* Network access to the |CMEW| GitHub repository (via SSH or HTTPS).
+* A valid user account.
+* Internet access to the |CMEW| GitHub repository (via SSH or HTTPS).
 
 1.2. Git Installed
 ^^^^^^^^^^^^^^^^^^
@@ -32,21 +32,6 @@ This page lists the prerequisites for the metoffice site:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 You need either **SSH** or **HTTPS** authentication.
-
-Option A: SSH (recommended)
-"""""""""""""""""""""""""""
-
-A GitHub SSH key registered to your account.
-
-* Check your keys::
-
-    ls ~/.ssh
-    ssh -T git@github.com
-
-Option B: HTTPS
-"""""""""""""""
-
-GitHub username + Personal Access Token (PAT) if required.
 
 1.4 Access and Platform for Running CMEW
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -64,7 +49,7 @@ If **hostname -f** ends with **.spice.sc.metoffice.gov.uk** you are on SPICE.
 2 Cylc and Rose
 ---------------
 
-On SPICE, Cylc and Rose are normally provided centrally. These versions are known to work with the CMEW prototype:
+On the Met Office system, Cylc and Rose are normally provided centrally. These versions are known to work with the CMEW prototype:
 
   * Cylc Flow 8.x (e.g. 8.6.1)
   * Rose 2.x (e.g. 2.6.2)
@@ -86,7 +71,7 @@ Expected examples::
 
 |CMEW| runs ESMValTool recipes for diagnostics. You need:
 
-  * a working ESMValTool installation available on SPICE
+  * a working ESMValTool installation available on your Linux system
 
 Sanity check after loading the esmvaltool module::
 
@@ -101,7 +86,7 @@ Verify that the credentials file is installed correctly and that MASS access is 
 
   moo si -v
 
-Contact ServiceNow for a MOOSE account on SPICE if there is no access to MASS.
+Contact ServiceNow for a MOOSE account on your Linux system if there is no access to MASS.
 
 2.3 Standardisation Environment (CDDS / CMORisation)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -109,4 +94,4 @@ Contact ServiceNow for a MOOSE account on SPICE if there is no access to MASS.
 |CMEW| standardises model data prior to diagnostics using CDDS.
 You need:
 
-* CDDS installed on SPICE
+* CDDS installed on the Met Office system (confirmed)
