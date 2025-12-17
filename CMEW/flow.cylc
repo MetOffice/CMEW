@@ -57,6 +57,21 @@
             ROOT_SOFTWARE_DIR = ${CDDS_SOFTWARE_DIR}
             CDDS_VERSION = {{ CDDS_VERSION }}
 
+    # multi-run metadata family for issue #285
+    [[TWO_RUNS]]
+        [[[environment]]]
+            # Reference run metadata
+            REF_MODEL_ID      = {{ REF_MODEL_ID }}
+            REF_SUITE_ID      = {{ REF_SUITE_ID }}
+            REF_CALENDAR      = {{ REF_CALENDAR }}
+            REF_VARIANT_LABEL = {{ REF_VARIANT_LABEL }}
+
+            # Test run metadata
+            TEST_MODEL_ID      = {{ TEST_MODEL_ID }}
+            TEST_SUITE_ID      = {{ TEST_SUITE_ID }}
+            TEST_CALENDAR      = {{ TEST_CALENDAR }}
+            TEST_VARIANT_LABEL = {{ TEST_VARIANT_LABEL }}
+
     [[install_env_file]]
         [[[environment]]]
             SITE = {{ SITE }}
@@ -85,14 +100,14 @@
             ROOTPATH_RAWOBS = {{ ROOTPATH_RAWOBS }}
 
     [[configure_for<recipe>]]
-        inherit = None, RECIPE
+        inherit = None, RECIPE, TWO_RUNS
         [[[environment]]]
             ROSE_TASK_APP = configure_for
             START_YEAR = {{ START_YEAR }}
             NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
 
     [[configure_standardise<recipe>]]
-        inherit = STANDARDISE, RECIPE
+        inherit = STANDARDISE, RECIPE, TWO_RUNS
         [[[environment]]]
             ROSE_TASK_APP = configure_standardise
             CALENDAR = {{ CALENDAR }}
@@ -102,7 +117,7 @@
             SUITE_ID = {{ SUITE_ID }}
 
     [[standardise_model_data]]
-        inherit = STANDARDISE
+        inherit = STANDARDISE, TWO_RUNS
         [[[environment]]]
             SITE = {{ SITE }}
 
