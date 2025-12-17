@@ -24,8 +24,8 @@ def create_request():
     )
     if not extract_flag and not extract_data_path:
         raise ValueError(
-                "EXTRACT=False but EXTRACT_DATA_PATH is empty. "
-                "Provide a full path to previously extracted model output."
+            "EXTRACT=False but EXTRACT_DATA_PATH is empty. "
+            "Provide a full path to previously extracted model output."
         )
     request = configparser.ConfigParser()
     request["metadata"] = {

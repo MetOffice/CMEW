@@ -6,6 +6,7 @@ import pytest
 
 from create_request_file import create_request
 
+
 def _set_base_env(monkeypatch):
     """
     Set the base environment variables needed by create_request().
@@ -21,10 +22,12 @@ def _set_base_env(monkeypatch):
     monkeypatch.setenv("SUITE_ID", "u-az513")
     monkeypatch.setenv("VARIABLES_PATH", "/path/to/variables.txt")
 
+
 def _clear_extract_env(monkeypatch):
     """Ensure EXTRACT/EXTRACT_DATA_PATH do not leak from the suite env."""
     monkeypatch.delenv("EXTRACT", raising=False)
     monkeypatch.delenv("EXTRACT_DATA_PATH", raising=False)
+
 
 def test_create_request_default_extract(monkeypatch):
     """EXTRACT default (True) - no skip_extract, root_data_dir unchanged."""
@@ -87,9 +90,10 @@ def test_create_request_default_extract(monkeypatch):
 
     assert actual == expected
 
+
 def test_create_request_extract_false_with_path(monkeypatch):
-    """EXTRACT=False + EXTRACT_DATA_PATH set → 
-       skip_extract + override root_data_dir."""
+    """EXTRACT=False + EXTRACT_DATA_PATH set →
+    skip_extract + override root_data_dir."""
     _clear_extract_env(monkeypatch)
     _set_base_env(monkeypatch)
     monkeypatch.setenv("EXTRACT", "false")
@@ -110,6 +114,7 @@ def test_create_request_extract_false_with_path(monkeypatch):
     assert actual["common"]["root_proc_dir"] == "/path/to/proc/dir/"
     assert actual["conversion"]["mip_convert_plugin"] == "UKESM1"
 
+
 def test_create_request_extract_false_without_path_raises(monkeypatch):
     """EXTRACT=False with no EXTRACT_DATA_PATH → fail with ValueError."""
     _clear_extract_env(monkeypatch)
@@ -119,4 +124,3 @@ def test_create_request_extract_false_without_path_raises(monkeypatch):
 
     with pytest.raises(ValueError, match="EXTRACT=False"):
         create_request()
-
