@@ -70,7 +70,7 @@ def update_recipe(recipe_path):
             "ensemble": "r1i1p1f1",
             "start_year": start_year,
             "end_year": end_year,
-            "alias": os.environ["LABEL_FOR_PLOTS"]
+            "alias": os.environ["LABEL_FOR_PLOTS"],
         }
     )
     return recipe
