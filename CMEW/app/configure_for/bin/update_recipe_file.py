@@ -34,13 +34,14 @@ def update_recipe(recipe_path):
     - {dataset: <dataset>, end_year: <end_year>, ensemble: <ensemble>,
       end_year: <end_year>, exp: <exp>, grid: <grid>, project: <project>,
       start_year: <start_year>}
-    - {activity: <activity>, dataset: <dataset>, end_year: <end_year>,
-      ensemble: <ensemble>, exp: <exp>, grid: <grid>, project: <project>,
-      start_year: <start_year>}
+    - {activity: <activity>, alias: <alias>, dataset: <dataset>,
+      end_year: <end_year>, ensemble: <ensemble>, exp: <exp>, grid: <grid>,
+      project: <project>, start_year: <start_year>}
 
     Notes
     -----
-    The updated recipe includes one additional CMEW required key: "Activity".
+    The updated recipe includes two additional CMEW required keys:
+    "Activity" and "Alias".
 
     Parameters
     ----------
@@ -56,6 +57,14 @@ def update_recipe(recipe_path):
     end_year = (
         int(os.environ["START_YEAR"]) + int(os.environ["NUMBER_OF_YEARS"]) - 1
     )
+
+    # Read given alias or use the suite ID
+    if os.environ.get("LABEL_FOR_PLOTS"):
+        alias = os.environ["LABEL_FOR_PLOTS"]
+    else:
+        alias = os.environ["SUITE_ID"]
+
+    # Amend the recipe datasets section
     with open(recipe_path, "r") as file_handle:
         recipe = yaml.safe_load(file_handle)
     first_dataset = recipe["datasets"][0]
@@ -69,6 +78,7 @@ def update_recipe(recipe_path):
             "ensemble": "r1i1p1f1",
             "start_year": start_year,
             "end_year": end_year,
+            "alias": alias,
         }
     )
     return recipe
