@@ -115,11 +115,19 @@
             START_YEAR = {{ START_YEAR }}
             NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
             SUITE_ID = {{ SUITE_ID }}
+            # Paths for two-run CDDS requests & variable lists
+            REQUEST_PATH_REF = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request_ref.cfg
+            REQUEST_PATH_TEST = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request_test.cfg
+            VARIABLES_PATH_REF = ${CYLC_WORKFLOW_SHARE_DIR}/etc/variables_ref.txt
+            VARIABLES_PATH_TEST = ${CYLC_WORKFLOW_SHARE_DIR}/etc/variables_test.txt
 
     [[standardise_model_data]]
         inherit = STANDARDISE, TWO_RUNS
         [[[environment]]]
             SITE = {{ SITE }}
+            # Same request files created by configure_standardise
+            REQUEST_PATH_REF = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request_ref.cfg
+            REQUEST_PATH_TEST = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request_test.cfg
 
     [[run_recipe<recipe>]]
         inherit = None, COMPUTE, RECIPE
