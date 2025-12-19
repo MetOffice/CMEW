@@ -66,11 +66,11 @@
             REF_CALENDAR      = {{ REF_CALENDAR }}
             REF_VARIANT_LABEL = {{ REF_VARIANT_LABEL }}
 
-            # Test run metadata
-            TEST_MODEL_ID      = {{ TEST_MODEL_ID }}
-            TEST_SUITE_ID      = {{ TEST_SUITE_ID }}
-            TEST_CALENDAR      = {{ TEST_CALENDAR }}
-            TEST_VARIANT_LABEL = {{ TEST_VARIANT_LABEL }}
+            # Validation run metadata
+            VALIDTN_MODEL_ID      = {{ MODEL_ID }}
+            VALIDTN_SUITE_ID      = {{ SUITE_ID }}
+            VALIDTN_CALENDAR      = {{ CALENDAR }}
+            VALIDTN_VARIANT_LABEL = {{ VARIANT_LABEL }}
 
     [[install_env_file]]
         [[[environment]]]
