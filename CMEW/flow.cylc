@@ -110,11 +110,8 @@
         inherit = STANDARDISE, RECIPE, MODEL_RUNS
         [[[environment]]]
             ROSE_TASK_APP = configure_standardise
-            CALENDAR = {{ CALENDAR }}
-            MODEL_ID = {{ MODEL_ID }}
             START_YEAR = {{ START_YEAR }}
             NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
-            SUITE_ID = {{ SUITE_ID }}
 
     [[standardise_model_data]]
         inherit = STANDARDISE, MODEL_RUNS
