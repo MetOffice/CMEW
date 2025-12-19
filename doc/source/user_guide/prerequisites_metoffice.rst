@@ -10,6 +10,13 @@ This page lists the prerequisites for the metoffice site:
   * Cloning the Climate Model Evaluation Workflow (|CMEW|) repository
   * Running |CMEW| on Met Office systems
 
+|CMEW| users at the Met Office will need access to:
+  * Git
+  * Cylc
+  * MASS
+  * The ESMValTool community environment
+  * CDDS
+
 1 Cloning the CMEW repository
 -----------------------------
 
