@@ -61,15 +61,15 @@
     [[MODEL_RUNS]]
         [[[environment]]]
             # Reference run metadata
-            REF_MODEL_ID      = {{ REF_MODEL_ID }}
-            REF_SUITE_ID      = {{ REF_SUITE_ID }}
-            REF_CALENDAR      = {{ REF_CALENDAR }}
+            REF_MODEL_ID = {{ REF_MODEL_ID }}
+            REF_SUITE_ID = {{ REF_SUITE_ID }}
+            REF_CALENDAR = {{ REF_CALENDAR }}
             REF_VARIANT_LABEL = {{ REF_VARIANT_LABEL }}
 
             # Validation run metadata
-            MODEL_ID      = {{ MODEL_ID }}
-            SUITE_ID      = {{ SUITE_ID }}
-            CALENDAR      = {{ CALENDAR }}
+            MODEL_ID = {{ MODEL_ID }}
+            SUITE_ID = {{ SUITE_ID }}
+            CALENDAR = {{ CALENDAR }}
             VARIANT_LABEL = {{ VARIANT_LABEL }}
 
     [[install_env_file]]
