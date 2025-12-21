@@ -57,7 +57,7 @@
             ROOT_SOFTWARE_DIR = ${CDDS_SOFTWARE_DIR}
             CDDS_VERSION = {{ CDDS_VERSION }}
 
-    # multi-run metadata family
+    # Multi-run metadata family
     [[MODEL_RUNS]]
         [[[environment]]]
             # Reference run metadata
