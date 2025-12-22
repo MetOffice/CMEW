@@ -90,7 +90,7 @@ Verify that the credentials file is installed correctly and that MASS access is 
 
   moo si -v
 
-Contact ServiceNow for a MOOSE account on your Linux system if there is no access to MASS.
+Contact ServiceNow for a MOOSE account if there is no access to MASS.
 
 2.3 Standardisation Environment (CDDS / CMORisation)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
