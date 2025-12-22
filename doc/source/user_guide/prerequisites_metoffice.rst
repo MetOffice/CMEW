@@ -15,7 +15,7 @@ This page lists the prerequisites for the metoffice site:
   * Cylc
   * MASS
   * The ESMValTool community environment
-  * CDDS
+  * |CDDS|
 
 1 Cloning the CMEW repository
 -----------------------------
