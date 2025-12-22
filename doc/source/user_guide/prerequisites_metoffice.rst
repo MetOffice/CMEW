@@ -96,6 +96,5 @@ Contact ServiceNow for a MOOSE account if there is no access to MASS.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 |CMEW| standardises model data prior to diagnostics using CDDS.
-You need:
 
-* CDDS installed on the Met Office system (confirmed)
+*|CDDS| is centrally installed on the Met Office system
