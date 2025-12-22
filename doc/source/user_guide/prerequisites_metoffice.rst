@@ -47,11 +47,8 @@ You must be able to submit Slurm jobs under a valid account/project.
 
 Quick checks::
 
-    hostname -f
     sinfo
     squeue -u $USER
-
-If **hostname -f** ends with **.spice.sc.metoffice.gov.uk** you are on SPICE.
 
 2 Cylc and Rose
 ---------------
