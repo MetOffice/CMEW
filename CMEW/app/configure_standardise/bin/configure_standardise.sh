@@ -6,61 +6,91 @@ BASH_XTRACEFD=1
 set -euo pipefail
 set -x
 
+echo "[INFO] Running configure_standardise for REF and EVAL runs"
 
-echo "Running configure_standardise (two runs: REF and TEST)"
+# ---------------------------------------------------------------------------
+# 0. Derive per-run request paths if not provided by Cylc
+# ---------------------------------------------------------------------------
+# We still honour REQUEST_PATH_REF / REQUEST_PATH_EVAL if flow.cylc sets them,
+# but we can safely derive them here from CYLC_WORKFLOW_SHARE_DIR as a fallback.
 
-# Helper function to configure one run (REF or TEST)
-configure_run() {
-    local RUN_PREFIX="$1"           # "REF" or "TEST"
-    local REQUEST_PATH_VAR="$2"     # e.g. "REQUEST_PATH_REF"
-    local VARIABLES_PATH_VAR="$3"   # e.g. "VARIABLES_PATH_REF"
+: "${CYLC_WORKFLOW_SHARE_DIR:?CYLC_WORKFLOW_SHARE_DIR must be set}"
 
-    # Indirect expansion to read env vars like REF_MODEL_ID, TEST_MODEL_ID, etc.
-    local MODEL_ID_VAR="${RUN_PREFIX}_MODEL_ID"
-    local SUITE_ID_VAR="${RUN_PREFIX}_SUITE_ID"
-    local CALENDAR_VAR="${RUN_PREFIX}_CALENDAR"
-    local VARIANT_VAR="${RUN_PREFIX}_VARIANT_LABEL"
+REQUEST_PATH_REF="${REQUEST_PATH_REF:-${CYLC_WORKFLOW_SHARE_DIR}/etc/request_ref.cfg}"
+REQUEST_PATH_EVAL="${REQUEST_PATH_EVAL:-${CYLC_WORKFLOW_SHARE_DIR}/etc/request_eval.cfg}"
 
-    local MODEL_ID_VALUE="${!MODEL_ID_VAR}"
-    local SUITE_ID_VALUE="${!SUITE_ID_VAR}"
-    local CALENDAR_VALUE="${!CALENDAR_VAR}"
-    local VARIANT_VALUE="${!VARIANT_VAR}"
+echo "[INFO] Using REQUEST_PATH_REF=${REQUEST_PATH_REF}"
+echo "[INFO] Using REQUEST_PATH_EVAL=${REQUEST_PATH_EVAL}"
 
-    # Per-run request & variables paths
-    local REQUEST_PATH_VALUE="${!REQUEST_PATH_VAR}"
-    local VARIABLES_PATH_VALUE="${!VARIABLES_PATH_VAR}"
+# Sanity check: we expect REF_* and base MODEL_* metadata in the environment
+: "${REF_MODEL_ID:?REF_MODEL_ID must be set}"
+: "${REF_SUITE_ID:?REF_SUITE_ID must be set}"
+: "${REF_CALENDAR:?REF_CALENDAR must be set}"
+: "${MODEL_ID:?MODEL_ID (evaluation) must be set}"
+: "${SUITE_ID:?SUITE_ID (evaluation) must be set}"
+: "${CALENDAR:?CALENDAR (evaluation) must be set}"
 
-    echo "[INFO] Configuring run ${RUN_PREFIX}:"
-    echo "       MODEL_ID=${MODEL_ID_VALUE}"
-    echo "       SUITE_ID=${SUITE_ID_VALUE}"
-    echo "       CALENDAR=${CALENDAR_VALUE}"
-    echo "       VARIANT_LABEL=${VARIANT_VALUE}"
-    echo "       REQUEST_PATH=${REQUEST_PATH_VALUE}"
-    echo "       VARIABLES_PATH=${VARIABLES_PATH_VALUE}"
+# ---------------------------------------------------------------------------
+# 1. Create variables.txt once (shared by both runs)
+# ---------------------------------------------------------------------------
+echo "[INFO] Creating variables file from ESMValTool recipe"
+cmew-esmvaltool-env create_variables_file.py
 
-    # Export values expected by the Python scripts
-    export MODEL_ID="${MODEL_ID_VALUE}"
-    export SUITE_ID="${SUITE_ID_VALUE}"
-    export CALENDAR="${CALENDAR_VALUE}"
-    export VARIANT_LABEL="${VARIANT_VALUE}"
+# ---------------------------------------------------------------------------
+# 2. Helper: configure CDDS request + directory structure for a given run
+# ---------------------------------------------------------------------------
+create_for_run() {
+    local RUN_LABEL="$1"
 
-    # Also export the generic names used inside the scripts
-    export REQUEST_PATH="${REQUEST_PATH_VALUE}"
-    export VARIABLES_PATH="${VARIABLES_PATH_VALUE}"
+    local run_model_id=""
+    local run_suite_id=""
+    local run_calendar=""
+    local run_variant=""
+    local run_request=""
 
-    # Create request configuration file and variables file for this run.
-    cmew-esmvaltool-env create_request_file.py
-    cmew-esmvaltool-env create_variables_file.py
+    case "${RUN_LABEL}" in
+        REF)
+            run_model_id="${REF_MODEL_ID}"
+            run_suite_id="${REF_SUITE_ID}"
+            run_calendar="${REF_CALENDAR}"
+            run_variant="${REF_VARIANT_LABEL:-}"
+            run_request="${REQUEST_PATH_REF}"
+            ;;
+        EVAL)
+            # Evaluation run uses the base MODEL_ID/SUITE_ID/CALENDAR/VARIANT_LABEL
+            run_model_id="${MODEL_ID}"
+            run_suite_id="${SUITE_ID}"
+            run_calendar="${CALENDAR}"
+            run_variant="${VARIANT_LABEL:-}"
+            run_request="${REQUEST_PATH_EVAL}"
+            ;;
+        *)
+            echo "[ERROR] Unknown run label: ${RUN_LABEL}" >&2
+            exit 1
+            ;;
+    esac
 
-    # Create CDDS directory structure and variables list for this run.
-    cmew-standardise-env create_cdds_directory_structure "${REQUEST_PATH}"
-    cmew-standardise-env prepare_generate_variable_list "${REQUEST_PATH}"
+    (
+        # Subshell: don't leak these exports back out into the caller.
+        export MODEL_ID="${run_model_id}"
+        export SUITE_ID="${run_suite_id}"
+        export CALENDAR="${run_calendar}"
+        export VARIANT_LABEL="${run_variant}"
+        export REQUEST_PATH="${run_request}"
+
+        echo "[INFO] Creating request for ${RUN_LABEL} run at: ${REQUEST_PATH}"
+        cmew-esmvaltool-env create_request_file.py
+
+        echo "[INFO] Creating CDDS directory structure for ${RUN_LABEL} run"
+        cmew-standardise-env create_cdds_directory_structure "${REQUEST_PATH}"
+        cmew-standardise-env prepare_generate_variable_list "${REQUEST_PATH}"
+    )
 }
 
-# Configure reference run (REF_*)
-configure_run "REF"  "REQUEST_PATH_REF"  "VARIABLES_PATH_REF"
+# ---------------------------------------------------------------------------
+# 3. Configure both runs
+# ---------------------------------------------------------------------------
+create_for_run REF
+create_for_run EVAL
 
-# Configure test run (TEST_*)
-configure_run "TEST" "REQUEST_PATH_TEST" "VARIABLES_PATH_TEST"
-
-echo "[INFO] configure_standardise completed for REF and TEST runs"
+echo "[INFO] configure_standardise completed for REF and EVAL runs"

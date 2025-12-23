@@ -57,7 +57,7 @@
             ROOT_SOFTWARE_DIR = ${CDDS_SOFTWARE_DIR}
             CDDS_VERSION = {{ CDDS_VERSION }}
 
-    # Multi-run metadata family
+    # Multi-run metadata family: reference and evaluation runs
     [[MODEL_RUNS]]
         [[[environment]]]
             # Reference run metadata
@@ -66,7 +66,7 @@
             REF_CALENDAR = {{ REF_CALENDAR }}
             REF_VARIANT_LABEL = {{ REF_VARIANT_LABEL }}
 
-            # Validation run metadata
+            # Evaluation run metadata (base model)
             MODEL_ID = {{ MODEL_ID }}
             SUITE_ID = {{ SUITE_ID }}
             CALENDAR = {{ CALENDAR }}
@@ -117,9 +117,9 @@
         inherit = STANDARDISE, MODEL_RUNS
         [[[environment]]]
             SITE = {{ SITE }}
-            # Same request files created by configure_standardise
+            # Same request files now consumed by standardise_model_data.sh
             REQUEST_PATH_REF = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request_ref.cfg
-            REQUEST_PATH_TEST = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request_test.cfg
+            REQUEST_PATH_EVAL = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request_eval.cfg
 
     [[run_recipe<recipe>]]
         inherit = None, COMPUTE, RECIPE
