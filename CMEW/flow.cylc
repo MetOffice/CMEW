@@ -41,7 +41,8 @@
             SHARE_DATA_CDDS = ${CYLC_WORKFLOW_SHARE_DIR}/data/cdds
             ROOT_PROC_DIR = ${SHARE_DATA_CDDS}/proc
             ROOT_DATA_DIR = ${SHARE_DATA_CDDS}/cdds_data
-            REQUEST_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request.cfg
+            REQUEST_PATH_REF  = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request_ref.cfg
+            REQUEST_PATH_EVAL = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request_eval.cfg
             VARIABLES_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/variables.txt
 
     [[RECIPE]]
@@ -57,7 +58,7 @@
             ROOT_SOFTWARE_DIR = ${CDDS_SOFTWARE_DIR}
             CDDS_VERSION = {{ CDDS_VERSION }}
 
-    # Multi-run metadata family
+    # Multi-run metadata family: reference and evaluation runs
     [[MODEL_RUNS]]
         [[[environment]]]
             # Reference run metadata
@@ -66,7 +67,7 @@
             REF_CALENDAR = {{ REF_CALENDAR }}
             REF_VARIANT_LABEL = {{ REF_VARIANT_LABEL }}
 
-            # Validation run metadata
+            # Evaluation run metadata
             MODEL_ID = {{ MODEL_ID }}
             SUITE_ID = {{ SUITE_ID }}
             CALENDAR = {{ CALENDAR }}
