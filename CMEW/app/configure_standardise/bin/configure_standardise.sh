@@ -22,7 +22,7 @@ REQUEST_PATH_EVAL="${REQUEST_PATH_EVAL:-${CYLC_WORKFLOW_SHARE_DIR}/etc/request_e
 echo "[INFO] Using REQUEST_PATH_REF=${REQUEST_PATH_REF}"
 echo "[INFO] Using REQUEST_PATH_EVAL=${REQUEST_PATH_EVAL}"
 
-# Sanity check: we expect REF_* and base MODEL_* metadata in the environment
+# Defensive programming: we require REF_* and base MODEL_* metadata in the environment
 : "${REF_MODEL_ID:?REF_MODEL_ID must be set}"
 : "${REF_SUITE_ID:?REF_SUITE_ID must be set}"
 : "${REF_CALENDAR:?REF_CALENDAR must be set}"
