@@ -41,7 +41,8 @@
             SHARE_DATA_CDDS = ${CYLC_WORKFLOW_SHARE_DIR}/data/cdds
             ROOT_PROC_DIR = ${SHARE_DATA_CDDS}/proc
             ROOT_DATA_DIR = ${SHARE_DATA_CDDS}/cdds_data
-            REQUEST_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request.cfg
+            REQUEST_PATH_REF  = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request_ref.cfg
+            REQUEST_PATH_EVAL = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request_eval.cfg
             VARIABLES_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/variables.txt
 
     [[RECIPE]]
@@ -117,9 +118,6 @@
         inherit = STANDARDISE, MODEL_RUNS
         [[[environment]]]
             SITE = {{ SITE }}
-            # Same request files now consumed by standardise_model_data.sh
-            REQUEST_PATH_REF = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request_ref.cfg
-            REQUEST_PATH_EVAL = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request_eval.cfg
 
     [[run_recipe<recipe>]]
         inherit = None, COMPUTE, RECIPE

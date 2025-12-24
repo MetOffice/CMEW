@@ -3,18 +3,15 @@
 # The LICENSE.md file contains full licensing details.
 # Send the output from 'set -x' to 'stdout' rather than 'stderr'.
 BASH_XTRACEFD=1
-set -euo pipefail
-set -x
+set -xeuo pipefail
 
 echo "[INFO] Running configure_standardise for REF and EVAL runs"
 
 # ---------------------------------------------------------------------------
-# 0. Derive per-run request paths if not provided by Cylc
+# 0. Sanity check
 # ---------------------------------------------------------------------------
-# We still honour REQUEST_PATH_REF / REQUEST_PATH_EVAL if flow.cylc sets them,
-# but we can safely derive them here from CYLC_WORKFLOW_SHARE_DIR as a fallback.
-
-: "${CYLC_WORKFLOW_SHARE_DIR:?CYLC_WORKFLOW_SHARE_DIR must be set}"
+: "${REQUEST_PATH_REF:?REQUEST_PATH_REF must be set}"
+: "${REQUEST_PATH_EVAL:?REQUEST_PATH_EVAL must be set}"
 
 REQUEST_PATH_REF="${REQUEST_PATH_REF:-${CYLC_WORKFLOW_SHARE_DIR}/etc/request_ref.cfg}"
 REQUEST_PATH_EVAL="${REQUEST_PATH_EVAL:-${CYLC_WORKFLOW_SHARE_DIR}/etc/request_eval.cfg}"
