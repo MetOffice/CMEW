@@ -8,7 +8,7 @@ set -xeuo pipefail
 echo "[INFO] Running configure_standardise for REF and EVAL runs"
 
 # ---------------------------------------------------------------------------
-# 0. Sanity check
+# 0. Defensive programming
 # ---------------------------------------------------------------------------
 : "${REQUEST_PATH_REF:?REQUEST_PATH_REF must be set}"
 : "${REQUEST_PATH_EVAL:?REQUEST_PATH_EVAL must be set}"
