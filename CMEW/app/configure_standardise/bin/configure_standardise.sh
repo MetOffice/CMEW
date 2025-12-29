@@ -13,9 +13,6 @@ echo "[INFO] Running configure_standardise for REF and EVAL runs"
 : "${REQUEST_PATH_REF:?REQUEST_PATH_REF must be set}"
 : "${REQUEST_PATH_EVAL:?REQUEST_PATH_EVAL must be set}"
 
-REQUEST_PATH_REF="${REQUEST_PATH_REF:-${CYLC_WORKFLOW_SHARE_DIR}/etc/request_ref.cfg}"
-REQUEST_PATH_EVAL="${REQUEST_PATH_EVAL:-${CYLC_WORKFLOW_SHARE_DIR}/etc/request_eval.cfg}"
-
 echo "[INFO] Using REQUEST_PATH_REF=${REQUEST_PATH_REF}"
 echo "[INFO] Using REQUEST_PATH_EVAL=${REQUEST_PATH_EVAL}"
 
