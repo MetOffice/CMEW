@@ -8,18 +8,15 @@ set -xeuo pipefail
 echo "[INFO] Running configure_standardise for REF and EVAL runs"
 
 # ---------------------------------------------------------------------------
-# 0. Sanity check
+# 0. Defensive programming
 # ---------------------------------------------------------------------------
 : "${REQUEST_PATH_REF:?REQUEST_PATH_REF must be set}"
 : "${REQUEST_PATH_EVAL:?REQUEST_PATH_EVAL must be set}"
 
-REQUEST_PATH_REF="${REQUEST_PATH_REF:-${CYLC_WORKFLOW_SHARE_DIR}/etc/request_ref.cfg}"
-REQUEST_PATH_EVAL="${REQUEST_PATH_EVAL:-${CYLC_WORKFLOW_SHARE_DIR}/etc/request_eval.cfg}"
-
 echo "[INFO] Using REQUEST_PATH_REF=${REQUEST_PATH_REF}"
 echo "[INFO] Using REQUEST_PATH_EVAL=${REQUEST_PATH_EVAL}"
 
-# Defensive programming: we require REF_* and base MODEL_* metadata in the environment
+# Require REF_* and base MODEL_* metadata in the environment
 : "${REF_MODEL_ID:?REF_MODEL_ID must be set}"
 : "${REF_SUITE_ID:?REF_SUITE_ID must be set}"
 : "${REF_CALENDAR:?REF_CALENDAR must be set}"
