@@ -13,11 +13,11 @@ def mock_env_vars(monkeypatch):
     monkeypatch.setenv("START_YEAR", "1993")
     monkeypatch.setenv("NUMBER_OF_YEARS", "1")
 
-    # Reference run metadata (must match the KGO)
+    # Reference run metadata
     monkeypatch.setenv("REF_MODEL_ID", "HadGEM3-GC31-LL")
     monkeypatch.setenv("REF_VARIANT_LABEL", "r1i1p1f3")
 
-    # Evaluation run metadata (must match the KGO)
+    # Evaluation run metadata
     monkeypatch.setenv("MODEL_ID", "UKESM1-0-LL")
     monkeypatch.setenv("VARIANT_LABEL", "r1i1p1f1")
 
@@ -50,7 +50,7 @@ def test_update_recipe(
     """update_recipe should produce the KGO with both datasets updated.
 
     - Dataset[0] uses REF_MODEL_ID / REF_VARIANT_LABEL
-    - Dataset[1] uses MODEL_ID / VARIANT_LABEL and ESMVal / amip settings
+    - Dataset[1] uses MODEL_ID / VARIANT_LABEL
     - start_year and end_year are set from START_YEAR / NUMBER_OF_YEARS
     """
     with open(path_to_updated_recipe_kgo, "r") as file_handle:
