@@ -84,6 +84,9 @@ def update_recipe(recipe_path):
     ref_dataset.update(
         {
             "dataset": ref_model_id,
+            "project": "ESMVal",
+            "exp": "amip",
+            "activity": "ESMVal",
             "ensemble": ref_variant,
             "start_year": start_year,
             "end_year": end_year,
