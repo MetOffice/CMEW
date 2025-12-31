@@ -35,8 +35,8 @@ def update_recipe(recipe_path):
     datasets:
     - {dataset: <ref_model_id>, end_year: <end_year>, ensemble: <ref_variant>,
       exp: <exp>, grid: <grid>, project: <project>, start_year: <start_year>}
-    - {activity: ESMVal, dataset: <eval_model_id>, end_year: <end_year>,
-      ensemble: <eval_variant>, exp: amip, grid: <grid>, project: ESMVal,
+    - {activity: <activity>, dataset: <eval_model_id>, end_year: <end_year>,
+      ensemble: <eval_variant>, exp: <exp>, grid: <grid>, project: <project>,
       start_year: <start_year>}
 
     Notes
@@ -93,8 +93,8 @@ def update_recipe(recipe_path):
         }
     )
 
-    # Evaluation dataset: set to ESMVal / amip with evaluation model_id
-    # and variant_label, plus time window.
+    # Evaluation dataset: keep existing project/exp/grid but override
+    # with evaluation model_id and ensemble, plus time window.
     eval_dataset = datasets[1]
     eval_dataset.update(
         {
