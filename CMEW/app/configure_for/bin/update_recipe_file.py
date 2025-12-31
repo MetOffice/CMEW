@@ -44,7 +44,6 @@ def update_recipe(recipe_path):
     The updated recipe includes:
     * Reference dataset (index 0) using REF_MODEL_ID and REF_VARIANT_LABEL
     * Evaluation dataset (index 1) using MODEL_ID and VARIANT_LABEL
-    * One additional CMEW required key for the evaluation dataset: "activity".
 
     Parameters
     ----------
