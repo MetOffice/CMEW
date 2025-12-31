@@ -17,7 +17,7 @@ def mock_env_vars(monkeypatch):
     monkeypatch.setenv("REF_MODEL_ID", "HadGEM3-GC31-LL")
     monkeypatch.setenv("REF_VARIANT_LABEL", "r1i1p1f3")
 
-    # Evaluation run metadata (must match the KGO)
+    # Evaluation run metadata
     monkeypatch.setenv("MODEL_ID", "UKESM1-0-LL")
     monkeypatch.setenv("VARIANT_LABEL", "r1i1p1f1")
 
