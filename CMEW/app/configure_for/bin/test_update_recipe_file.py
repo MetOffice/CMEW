@@ -50,7 +50,7 @@ def test_update_recipe(
     """update_recipe should produce the KGO with both datasets updated.
 
     - Dataset[0] uses REF_MODEL_ID / REF_VARIANT_LABEL
-    - Dataset[1] uses MODEL_ID / VARIANT_LABEL and ESMVal / amip settings
+    - Dataset[1] uses MODEL_ID / VARIANT_LABEL
     - start_year and end_year are set from START_YEAR / NUMBER_OF_YEARS
     """
     with open(path_to_updated_recipe_kgo, "r") as file_handle:
