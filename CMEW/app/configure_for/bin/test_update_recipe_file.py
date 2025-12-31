@@ -13,7 +13,7 @@ def mock_env_vars(monkeypatch):
     monkeypatch.setenv("START_YEAR", "1993")
     monkeypatch.setenv("NUMBER_OF_YEARS", "1")
 
-    # Reference run metadata (must match the KGO)
+    # Reference run metadata
     monkeypatch.setenv("REF_MODEL_ID", "HadGEM3-GC31-LL")
     monkeypatch.setenv("REF_VARIANT_LABEL", "r1i1p1f3")
 
