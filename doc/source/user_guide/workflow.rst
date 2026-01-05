@@ -36,8 +36,9 @@ An overview of the workflow
 ``configure_for``
   :Description:
      Copies an updated version of the |ESMValTool| recipe
-     into the cylc workflow ``share/etc`` directory
-     in the installed workflow
+     into the Cylc workflow ``share/etc`` directory
+     in the installed workflow and configures it for
+     dual model evaluation.
   :Runs on:
      Localhost
   :Executes:
@@ -48,38 +49,75 @@ An overview of the workflow
      Runs once for each recipe,
      immediately after the successful completion
      of the ``install_env_file`` job.
-     The recipe is updated with CMEW required variables
-     (e.g. "Activity": "ESMVal")
-     and also with user configurable variables
-     from the |Rose Edit GUI|_/``rose-suite.conf``
+
+     The recipe is updated to contain two model datasets:
+
+     * A reference model run (REF)
+     * An evaluation model run (EVAL)
+
+     For each dataset, ``configure_for`` applies:
+
+     * CMEW-required values (e.g. "activity: ESMVal", "project: ESMVal")
+     * User-configurable metadata provided via the |Rose Edit GUI|/``rose-suite.conf``,
+       including:
+
+        - ``REF_MODEL_ID``, ``REF_VARIANT_LABEL``
+        - ``MODEL_ID``, ``VARIANT_LABEL``
+        - A common evaluation time window derived from ``START_YEAR`` and ``NUMBER_OF_YEARS``
+
+     this ensures that both model runs are fully defined
+     and consistent within a single |ESMValTool| recipe.
   :Families:
      ``RECIPE``
 
 ``configure_standardise``
   :Description:
-     Creates the ``request.json`` file and variables list which are needed to run
-     |CDDS| and creates the |CDDS| directory structure.
+     Creates the |CDDS| request metadata (``request_ref.json``, ``request_eval.json``), and
+     variables list required to standardise two model development runs, and
+     prepares the |CDDS| directory structure.
   :Runs on:
      Localhost
   :Executes:
      The ``configure_standardise.sh`` script from the |Rose| app
   :Details:
      Runs once for each recipe, immediately after the successful
-     completion of the ``configure_for`` job
+     completion of the ``configure_for`` job.
+
+     ``configure_standardise``:
+
+     * Generates |CDDS| request metadata for each model run (reference and evaluation)
+     * Reads model-specific values from the workflow environment, including:
+
+       - ``model_id``
+       - ``variant_label``
+       - ``calendar``
+       - ``suite_id``
+       - Creates the required directory structure to support multiple |CDDS| standardisation workflows
+         within the same |CMEW| cycle
+
+     This enables both model runs to be processed independently while remaining part of a single
+     workflow execution.
 
 ``standardise_model_data``
   :Description:
-     Launches the |CDDS| workflow and converts the data into a |CMIP| compliant
-     format for |ESMValTool|
+     Launches the CDDS workflow and converts both model runs into |CMIP|-compliant
+     datasets suitable for |ESMValTool| evaluation.
   :Runs on:
      Localhost
   :Executes:
      The ``cdds_convert`` command and the ``restructure_dirs.sh`` script
-     from the |Rose| app
+     from the |Rose| app.
   :Details:
      Runs after the successful completion of the ``configure_standardise`` job.
-     The ``restructure_dirs.sh`` script moves the standardised data into
-     a directory with a BADC DRS structure so that |ESMValTool| can find the data
+
+     ``standardise_model_data``:
+
+     * Executes |CDDS| standardisation for both the reference and evaluation model runs
+     * Produces |CMIP|-compliant output for each run
+     * Uses ``restructure_dirs.sh`` to move standardised data into a BADC DRS-compliant directory structure
+
+     The resulting layout allows |ESMValTool| to locate and analyse both model datasets
+     as part of a single dual-model evaluation.
 
 ``housekeeping``
   :Description:
