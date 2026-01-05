@@ -49,24 +49,11 @@ An overview of the workflow
      Runs once for each recipe,
      immediately after the successful completion
      of the ``install_env_file`` job.
-
-     The recipe is updated to contain two model datasets:
-
-     * A reference model run (REF)
-     * An evaluation model run (EVAL)
-
-     For each dataset, ``configure_for`` applies:
-
-     * CMEW-required values (e.g. "activity: ESMVal", "project: ESMVal")
-     * User-configurable metadata provided via the |Rose Edit GUI|/``rose-suite.conf``,
-       including:
-
-        - ``REF_MODEL_ID``, ``REF_VARIANT_LABEL``
-        - ``MODEL_ID``, ``VARIANT_LABEL``
-        - A common evaluation time window derived from ``START_YEAR`` and ``NUMBER_OF_YEARS``
-
-     this ensures that both model runs are fully defined
-     and consistent within a single |ESMValTool| recipe.
+     The recipe is updated with CMEW required variables
+     (e.g. "Activity": "ESMVal")
+     and also with user configurable variables
+     from the |Rose Edit GUI|_/``rose-suite.conf``,
+     for both model runs.
   :Families:
      ``RECIPE``
 
