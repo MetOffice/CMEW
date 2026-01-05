@@ -24,8 +24,8 @@ Quick Start
     cylc vip -O metoffice
 
 
-* Browse the logs using `Cylc Review`_, a web service for browsing logs via an
-  HTTP interface.
+* Monitor the workflow progress with ``cylc gui``,
+  or browse the logs using `Cylc Review`_.
 
 .. note::
    Model developers and others may wish to configure |CMEW|.
