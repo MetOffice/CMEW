@@ -37,8 +37,8 @@ An overview of the workflow
   :Description:
      Copies an updated version of the |ESMValTool| recipe
      into the Cylc workflow ``share/etc`` directory
-     in the installed workflow and configures it for
-     dual model evaluation.
+     in the installed workflow and configures it
+     to use standardised model data.
   :Runs on:
      Localhost
   :Executes:
