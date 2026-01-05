@@ -25,7 +25,8 @@ Quick Start
 
 
 * Monitor the workflow progress with ``cylc gui``,
-  or browse the logs using `Cylc Review`_.
+  or browse the logs using Cylc Review.
+  `Cylc Review`_ is a web service for browsing logs via an HTTP interface.
 
 .. note::
    Model developers and others may wish to configure |CMEW|.
