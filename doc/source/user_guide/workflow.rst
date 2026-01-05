@@ -87,15 +87,9 @@ An overview of the workflow
      from the |Rose| app.
   :Details:
      Runs after the successful completion of the ``configure_standardise`` job.
-
-     ``standardise_model_data``:
-
-     * Executes |CDDS| standardisation for both the reference and evaluation model runs
-     * Produces |CMIP|-compliant output for each run
-     * Uses ``restructure_dirs.sh`` to move standardised data into a BADC DRS-compliant directory structure
-
-     The resulting layout allows |ESMValTool| to locate and analyse both model datasets
-     as part of a single dual-model evaluation.
+     Executes |CDDS| standardisation for both the reference and evaluation model run
+     to produces |CMIP|-compliant output for each.
+     Uses ``restructure_dirs.sh`` to move standardised data into a BADC DRS structure.
 
 ``housekeeping``
   :Description:
