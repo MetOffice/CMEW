@@ -59,9 +59,9 @@ An overview of the workflow
 
 ``configure_standardise``
   :Description:
-     Creates the |CDDS| request metadata (``request_ref.json``, ``request_eval.json``), and
-     variables list required to standardise two model development runs, and
-     prepares the |CDDS| directory structure.
+     Creates the |CDDS| request metadata
+     and variables list required to standardise two model development runs, 
+     then prepares the |CDDS| directory structure.
   :Runs on:
      Localhost
   :Executes:
