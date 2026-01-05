@@ -69,21 +69,12 @@ An overview of the workflow
   :Details:
      Runs once for each recipe, immediately after the successful
      completion of the ``configure_for`` job.
-
-     ``configure_standardise``:
-
-     * Generates |CDDS| request metadata for each model run (reference and evaluation)
-     * Reads model-specific values from the workflow environment, including:
-
-       - ``model_id``
-       - ``variant_label``
-       - ``calendar``
-       - ``suite_id``
-       - Creates the required directory structure to support multiple |CDDS| standardisation workflows
-         within the same |CMEW| cycle
-
-     This enables both model runs to be processed independently while remaining part of a single
-     workflow execution.
+     Generates |CDDS| request metadata for each model run (reference and evaluation): 
+     ``request_ref.json``, ``request_eval.json``. 
+     Reads model-specific values from the workflow environment. 
+     Creates the required directory structure to support
+     multiple |CDDS| standardisation workflows 
+     within the same |CMEW| cycle.
 
 ``standardise_model_data``
   :Description:
