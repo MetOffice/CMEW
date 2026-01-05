@@ -11,5 +11,3 @@ User Guide
    Prerequisites <prerequisites_metoffice>
    quick_start
    workflow
-   dual_run
-   cmew_dual_vs_single_run
