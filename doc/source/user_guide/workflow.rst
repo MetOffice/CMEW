@@ -60,7 +60,7 @@ An overview of the workflow
 ``configure_standardise``
   :Description:
      Creates the |CDDS| request metadata
-     and variables list required to standardise two model development runs, 
+     and variables list required to standardise two model development runs,
      then prepares the |CDDS| directory structure.
   :Runs on:
      Localhost
