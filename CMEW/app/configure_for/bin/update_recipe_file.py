@@ -77,8 +77,7 @@ def update_recipe(recipe_path):
             "one for the reference and one for the evaluation run."
         )
 
-    # Reference dataset: keep existing project/exp/grid but override
-    # model_id (dataset), ensemble, and time window.
+    # Reference dataset: keep existing project/exp
     ref_dataset = datasets[0]
     ref_dataset.update(
         {
@@ -92,8 +91,7 @@ def update_recipe(recipe_path):
         }
     )
 
-    # Evaluation dataset: keep existing project/exp/grid but override
-    # with evaluation model_id and ensemble, plus time window.
+    # Evaluation dataset: keep existing project/exp
     eval_dataset = datasets[1]
     eval_dataset.update(
         {
