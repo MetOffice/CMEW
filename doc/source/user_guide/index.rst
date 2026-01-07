@@ -8,5 +8,6 @@ User Guide
 .. toctree::
    :maxdepth: 1
 
+   Prerequisites <prerequisites_metoffice>
    quick_start
    workflow
