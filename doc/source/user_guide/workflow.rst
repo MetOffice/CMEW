@@ -12,26 +12,26 @@ An overview of the workflow
 
 ``install_env_file``
   :Description:
-     Activates the environment for |ESMValTool|, based on the ``SITE`` provided
+     Activates the environment for |ESMValTool|, based on the ``SITE`` provided.
   :Runs on:
      Localhost
   :Executes:
-     The ``install_env_file.sh`` script from the |Rose| app
+     The ``install_env_file.sh`` script from the |Rose| app.
   :Details:
-     Runs once at the start of the workflow
+     Runs once at the start of the workflow.
 
 ``configure_recipe``
   :Description:
      Creates and modifies the |ESMValTool| user configuration file,
-     and writes it to the cylc workflow ``share/etc`` directory
+     and writes it to the cylc workflow ``share/etc`` directory.
   :Runs on:
      Localhost
   :Executes:
-     The ``configure_recipe.py`` script from the |Rose| app
+     The ``configure_recipe.py`` script from the |Rose| app.
   :Details:
      Runs immediately after the successful completion of the ``install_env_file`` job.
      Temporarily, the modified ESMValTool developer configuration file is copied from
-     the ``configure_recipe`` app to the ``share/etc`` directory in the installed workflow
+     the ``configure_recipe`` app to the ``share/etc`` directory in the installed workflow.
 
 ``configure_for``
   :Description:
@@ -44,7 +44,7 @@ An overview of the workflow
   :Executes:
      For the required recipe,
      executes the ``esmvaltool recipes get`` command
-     followed by the ``update_recipe_file.py`` script from the |Rose| app
+     followed by the ``update_recipe_file.py`` script from the |Rose| app.
   :Details:
      Runs once for each recipe,
      immediately after the successful completion
@@ -65,7 +65,7 @@ An overview of the workflow
   :Runs on:
      Localhost
   :Executes:
-     The ``configure_standardise.sh`` script from the |Rose| app
+     The ``configure_standardise.sh`` script from the |Rose| app.
   :Details:
      Runs once for each recipe, immediately after the successful
      completion of the ``configure_for`` job.
@@ -107,13 +107,13 @@ An overview of the workflow
      Runs the requested recipes using |ESMValTool|
   :Runs on:
      ``COMPUTE``, which depends on the ``SITE``; at the Met Office, the
-     ``run_recipe`` jobs will run on SPICE
+     ``run_recipe`` jobs will run on SPICE.
   :Executes:
      The |ESMValTool| command line script
   :Details:
      Runs once for each recipe,
      after the successful completion of the ``standardise_model_data``
-     and the ``configure_recipe`` jobs
+     and the ``configure_recipe`` jobs.
   :Families:
      ``COMPUTE``, ``RECIPE``
 
@@ -137,7 +137,7 @@ An overview of the workflow
      ``pytest`` from the |Rose| app
   :Details:
      Runs on its own when ``-O unittest`` command is invoked, or runs alongside the
-     full workflow when running with ``-O test``
+     full workflow when running with ``-O test``.
 
 Design considerations
 ---------------------
