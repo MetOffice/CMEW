@@ -33,22 +33,19 @@ def update_recipe(recipe_path):
     Updated recipe file/datasets section snippet (machine written YAML)::
 
     datasets:
-    - {dataset: <ref_model_id>, end_year: <end_year>, ensemble: <ref_variant>,
-      exp: <exp>, grid: <grid>, project: <project>, start_year: <start_year>}
-    - {activity: <activity>, dataset: <eval_model_id>, end_year: <end_year>,
-      ensemble: <eval_variant>, exp: <exp>, grid: <grid>, project: <project>,
-      start_year: <start_year>}
-    - {activity: <activity>, alias: <alias>, dataset: <dataset>,
-      end_year: <end_year>, ensemble: <ensemble>, exp: <exp>, grid: <grid>,
+    - {activity: <activity>, alias: <ref_alias>, dataset: <ref_model_id>,
+      end_year: <end_year>, ensemble: <ref_variant>, exp: <exp>, grid: <grid>,
+      project: <project>, start_year: <start_year>}
+    - {activity: <activity>, alias: <eval_alias>, dataset: <eval_model_id>,
+      end_year: <end_year>, ensemble: <eval_variant>, exp: <exp>, grid: <grid>,
       project: <project>, start_year: <start_year>}
 
     Notes
     -----
-    The updated recipe includes two additional CMEW required keys:
-    "Activity" and "Alias".
     The updated recipe includes:
     * Reference dataset (index 0) using REF_MODEL_ID and REF_VARIANT_LABEL
     * Evaluation dataset (index 1) using MODEL_ID and VARIANT_LABEL
+    * two additional CMEW required keys: "Activity" and "Alias".
 
     Parameters
     ----------
@@ -72,6 +69,18 @@ def update_recipe(recipe_path):
     eval_model_id = os.environ["MODEL_ID"]
     eval_variant = os.environ["VARIANT_LABEL"]
 
+    # Read given reference alias or use the suite ID
+    if os.environ.get("REF_LABEL_FOR_PLOTS"):
+        ref_alias = os.environ["REF_LABEL_FOR_PLOTS"]
+    else:
+        ref_alias = os.environ["REF_SUITE_ID"]
+
+    # Read given evaluation alias or use the suite ID
+    if os.environ.get("LABEL_FOR_PLOTS"):
+        alias = os.environ["LABEL_FOR_PLOTS"]
+    else:
+        alias = os.environ["SUITE_ID"]
+
     with open(recipe_path, "r") as file_handle:
         recipe = yaml.safe_load(file_handle)
 
@@ -94,6 +103,7 @@ def update_recipe(recipe_path):
             "ensemble": ref_variant,
             "start_year": start_year,
             "end_year": end_year,
+            "alias": ref_alias,
         }
     )
 
