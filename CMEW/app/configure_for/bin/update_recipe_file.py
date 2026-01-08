@@ -31,8 +31,8 @@ def update_recipe(recipe_path):
     Updated recipe file/datasets section snippet (machine written YAML)::
 
     datasets:
-    - {dataset: <dataset>, end_year: <end_year>, ensemble: <ensemble>,
-      end_year: <end_year>, exp: <exp>, grid: <grid>, project: <project>,
+    - {alias: <ref_alias>, dataset: <dataset>, end_year: <end_year>,
+      ensemble: <ensemble>, exp: <exp>, grid: <grid>, project: <project>,
       start_year: <start_year>}
     - {activity: <activity>, alias: <alias>, dataset: <dataset>,
       end_year: <end_year>, ensemble: <ensemble>, exp: <exp>, grid: <grid>,
@@ -58,7 +58,13 @@ def update_recipe(recipe_path):
         int(os.environ["START_YEAR"]) + int(os.environ["NUMBER_OF_YEARS"]) - 1
     )
 
-    # Read given alias or use the suite ID
+    # Read given reference alias or use the suite ID
+    if os.environ.get("REF_LABEL_FOR_PLOTS"):
+        ref_alias = os.environ["REF_LABEL_FOR_PLOTS"]
+    else:
+        ref_alias = os.environ["REF_SUITE_ID"]
+
+    # Read given evaluation alias or use the suite ID
     if os.environ.get("LABEL_FOR_PLOTS"):
         alias = os.environ["LABEL_FOR_PLOTS"]
     else:
@@ -69,7 +75,13 @@ def update_recipe(recipe_path):
         recipe = yaml.safe_load(file_handle)
     first_dataset = recipe["datasets"][0]
     second_dataset = recipe["datasets"][1]
-    first_dataset.update({"start_year": start_year, "end_year": end_year})
+    first_dataset.update(
+        {
+            "start_year": start_year,
+            "end_year": end_year,
+            "alias": ref_alias,
+        }
+    )
     second_dataset.update(
         {
             "project": "ESMVal",

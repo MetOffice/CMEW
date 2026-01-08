@@ -108,6 +108,8 @@
             NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
             LABEL_FOR_PLOTS = {{ LABEL_FOR_PLOTS }}
             SUITE_ID = {{ SUITE_ID }}
+            REF_LABEL_FOR_PLOTS = {{ REF_LABEL_FOR_PLOTS }}
+            REF_SUITE_ID = {{ REF_SUITE_ID }}
 
     [[configure_standardise<recipe>]]
         inherit = STANDARDISE, RECIPE, MODEL_RUNS
