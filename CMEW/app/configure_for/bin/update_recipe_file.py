@@ -77,7 +77,8 @@ def update_recipe(recipe_path):
             "one for the reference and one for the evaluation run."
         )
 
-    # Reference dataset: keep existing project/exp
+    # Reference dataset: treat as a GCModelDev / ESMVal / amip run,
+    # using REF_MODEL_ID & REF_VARIANT_LABEL, with the configured time window.
     ref_dataset = datasets[0]
     ref_dataset.update(
         {
@@ -91,7 +92,7 @@ def update_recipe(recipe_path):
         }
     )
 
-    # Evaluation dataset: keep existing project/exp
+    # Evaluation dataset: ESMVal / amip run using MODEL_ID and VARIANT_LABEL
     eval_dataset = datasets[1]
     eval_dataset.update(
         {
