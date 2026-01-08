@@ -4,13 +4,14 @@
 # To be used for testing purposes. Represents KGO for `update_recipe`.
 ---
 datasets:
-- alias: Ref Test Label
+- activity: ESMVal
+  alias: Ref Test Label
   dataset: HadGEM3-GC31-LL
   end_year: 1993
   ensemble: r1i1p1f3
-  exp: historical
+  exp: amip
   grid: gn
-  project: CMIP6
+  project: ESMVal
   start_year: 1993
 - activity: ESMVal
   alias: Test Label

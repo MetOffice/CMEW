@@ -15,8 +15,10 @@ def update_recipe(recipe_path):
     """Update the ESMValTool recipe.
 
     * Read the ESMValTool recipe YAML file from the provided ``recipe_path``
-    * Update the dataset section of the recipe with a) CMEW required key/values
-      and b) user configurables values from the Rose suite configuration.
+    * Update the datasets section of the recipe with:
+      - CMEW required key/values
+      - User configurable values from the Rose suite configuration
+        for both the reference and evaluation model runs.
 
     Recipe file/datasets section snippet (human written YAML)::
 
@@ -31,8 +33,10 @@ def update_recipe(recipe_path):
     Updated recipe file/datasets section snippet (machine written YAML)::
 
     datasets:
-    - {alias: <ref_alias>, dataset: <dataset>, end_year: <end_year>,
-      ensemble: <ensemble>, exp: <exp>, grid: <grid>, project: <project>,
+    - {dataset: <ref_model_id>, end_year: <end_year>, ensemble: <ref_variant>,
+      exp: <exp>, grid: <grid>, project: <project>, start_year: <start_year>}
+    - {activity: <activity>, dataset: <eval_model_id>, end_year: <end_year>,
+      ensemble: <eval_variant>, exp: <exp>, grid: <grid>, project: <project>,
       start_year: <start_year>}
     - {activity: <activity>, alias: <alias>, dataset: <dataset>,
       end_year: <end_year>, ensemble: <ensemble>, exp: <exp>, grid: <grid>,
@@ -42,6 +46,9 @@ def update_recipe(recipe_path):
     -----
     The updated recipe includes two additional CMEW required keys:
     "Activity" and "Alias".
+    The updated recipe includes:
+    * Reference dataset (index 0) using REF_MODEL_ID and REF_VARIANT_LABEL
+    * Evaluation dataset (index 1) using MODEL_ID and VARIANT_LABEL
 
     Parameters
     ----------
@@ -50,49 +57,61 @@ def update_recipe(recipe_path):
 
     Returns
     -------
-    recipe: dict[str, union[str, int]]
+    recipe: dict
         The content of the ESMValTool recipe with updated datasets section.
     """
+    # Time window from environment
     start_year = int(os.environ["START_YEAR"])
     end_year = (
         int(os.environ["START_YEAR"]) + int(os.environ["NUMBER_OF_YEARS"]) - 1
     )
 
-    # Read given reference alias or use the suite ID
-    if os.environ.get("REF_LABEL_FOR_PLOTS"):
-        ref_alias = os.environ["REF_LABEL_FOR_PLOTS"]
-    else:
-        ref_alias = os.environ["REF_SUITE_ID"]
+    # Model metadata from environment
+    ref_model_id = os.environ["REF_MODEL_ID"]
+    ref_variant = os.environ["REF_VARIANT_LABEL"]
+    eval_model_id = os.environ["MODEL_ID"]
+    eval_variant = os.environ["VARIANT_LABEL"]
 
-    # Read given evaluation alias or use the suite ID
-    if os.environ.get("LABEL_FOR_PLOTS"):
-        alias = os.environ["LABEL_FOR_PLOTS"]
-    else:
-        alias = os.environ["SUITE_ID"]
-
-    # Amend the recipe datasets section
     with open(recipe_path, "r") as file_handle:
         recipe = yaml.safe_load(file_handle)
-    first_dataset = recipe["datasets"][0]
-    second_dataset = recipe["datasets"][1]
-    first_dataset.update(
+
+    datasets = recipe.get("datasets", [])
+    if len(datasets) < 2:
+        raise ValueError(
+            "Expected at least two datasets in the recipe, "
+            "one for the reference and one for the evaluation run."
+        )
+
+    # Reference dataset: treat as a GCModelDev / ESMVal / amip run,
+    # using REF_MODEL_ID & REF_VARIANT_LABEL, with the configured time window.
+    ref_dataset = datasets[0]
+    ref_dataset.update(
         {
-            "start_year": start_year,
-            "end_year": end_year,
-            "alias": ref_alias,
-        }
-    )
-    second_dataset.update(
-        {
+            "dataset": ref_model_id,
             "project": "ESMVal",
             "exp": "amip",
             "activity": "ESMVal",
-            "ensemble": "r1i1p1f1",
+            "ensemble": ref_variant,
+            "start_year": start_year,
+            "end_year": end_year,
+        }
+    )
+
+    # Evaluation dataset: ESMVal / amip run using MODEL_ID and VARIANT_LABEL
+    eval_dataset = datasets[1]
+    eval_dataset.update(
+        {
+            "dataset": eval_model_id,
+            "project": "ESMVal",
+            "exp": "amip",
+            "activity": "ESMVal",
+            "ensemble": eval_variant,
             "start_year": start_year,
             "end_year": end_year,
             "alias": alias,
         }
     )
+
     return recipe
 
 
