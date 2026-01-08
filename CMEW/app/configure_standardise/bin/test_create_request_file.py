@@ -21,6 +21,7 @@ def _set_base_env(monkeypatch):
     monkeypatch.setenv("ROOT_DATA_DIR", "/path/to/data/dir/")
     monkeypatch.setenv("SUITE_ID", "u-az513")
     monkeypatch.setenv("VARIABLES_PATH", "/path/to/variables.txt")
+    monkeypatch.setenv("VARIANT_LABEL", "r1i1p1f1")
 
 
 def _clear_extract_env(monkeypatch):

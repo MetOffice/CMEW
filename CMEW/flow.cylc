@@ -44,7 +44,8 @@
             SHARE_DATA_CDDS = ${CYLC_WORKFLOW_SHARE_DIR}/data/cdds
             ROOT_PROC_DIR = ${SHARE_DATA_CDDS}/proc
             ROOT_DATA_DIR = ${SHARE_DATA_CDDS}/cdds_data
-            REQUEST_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request.cfg
+            REQUEST_PATH_REF  = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request_ref.cfg
+            REQUEST_PATH_EVAL = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request_eval.cfg
             VARIABLES_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/variables.txt
 
     [[RECIPE]]
@@ -66,6 +67,21 @@
             ROOT_DATA_DIR = "{{ EXTRACT_DATA_PATH }}"
             {%- endif %}
 
+
+    # Multi-run metadata family: reference and evaluation runs
+    [[MODEL_RUNS]]
+        [[[environment]]]
+            # Reference run metadata
+            REF_MODEL_ID = {{ REF_MODEL_ID }}
+            REF_SUITE_ID = {{ REF_SUITE_ID }}
+            REF_CALENDAR = {{ REF_CALENDAR }}
+            REF_VARIANT_LABEL = {{ REF_VARIANT_LABEL }}
+
+            # Evaluation run metadata
+            MODEL_ID = {{ MODEL_ID }}
+            SUITE_ID = {{ SUITE_ID }}
+            CALENDAR = {{ CALENDAR }}
+            VARIANT_LABEL = {{ VARIANT_LABEL }}
 
     [[install_env_file]]
         [[[environment]]]
@@ -95,24 +111,21 @@
             ROOTPATH_RAWOBS = {{ ROOTPATH_RAWOBS }}
 
     [[configure_for<recipe>]]
-        inherit = None, RECIPE
+        inherit = None, RECIPE, MODEL_RUNS
         [[[environment]]]
             ROSE_TASK_APP = configure_for
             START_YEAR = {{ START_YEAR }}
             NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
 
     [[configure_standardise<recipe>]]
-        inherit = STANDARDISE, RECIPE
+        inherit = STANDARDISE, RECIPE, MODEL_RUNS
         [[[environment]]]
             ROSE_TASK_APP = configure_standardise
-            CALENDAR = {{ CALENDAR }}
-            MODEL_ID = {{ MODEL_ID }}
             START_YEAR = {{ START_YEAR }}
             NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
-            SUITE_ID = {{ SUITE_ID }}
 
     [[standardise_model_data]]
-        inherit = STANDARDISE
+        inherit = STANDARDISE, MODEL_RUNS
         [[[environment]]]
             SITE = {{ SITE }}
 
