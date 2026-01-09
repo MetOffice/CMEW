@@ -42,6 +42,11 @@ jobs:
           cd CMEW
           cylc validate -O metoffice .
 
+      - name: Run Cylc unit tests
+        run: |
+          cd CMEW
+          conda run -n cmew cylc vip -O metoffice -O unittest .
+
       - name: Run Cylc configuration linter
         run: |
           eval "$(conda shell.bash hook)"
