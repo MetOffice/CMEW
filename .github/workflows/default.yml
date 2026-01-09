@@ -69,10 +69,8 @@ jobs:
 
       - name: Run Cylc unit tests
         run: |
-          eval "$(conda shell.bash hook)"
-          conda activate cmew
           cd CMEW
-          cylc vip -O metoffice -O unittest
+          conda run -n cmew cylc vip -O metoffice -O unittest .
 
       - name: Build documentation
         run: |
