@@ -1,5 +1,5 @@
 #!jinja2
-# (C) Crown Copyright 2022-2025, Met Office.
+# (C) Crown Copyright 2022-2026, Met Office.
 # The LICENSE.md file contains full licensing details.
 # flow.cylc
 {{ assert(SITE != "", "SITE must be set to something other than an empty string") }}
@@ -116,6 +116,10 @@
             ROSE_TASK_APP = configure_for
             START_YEAR = {{ START_YEAR }}
             NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
+            LABEL_FOR_PLOTS = {{ LABEL_FOR_PLOTS }}
+            SUITE_ID = {{ SUITE_ID }}
+            REF_LABEL_FOR_PLOTS = {{ REF_LABEL_FOR_PLOTS }}
+            REF_SUITE_ID = {{ REF_SUITE_ID }}
 
     [[configure_standardise<recipe>]]
         inherit = STANDARDISE, RECIPE, MODEL_RUNS
