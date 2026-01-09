@@ -36,7 +36,7 @@ def update_recipe(recipe_path):
     - {activity: <activity>, alias: <ref_alias>, dataset: <ref_model_id>,
       end_year: <end_year>, ensemble: <ref_variant>, exp: <exp>, grid: <grid>,
       project: <project>, start_year: <start_year>}
-    - {activity: <activity>, alias: <eval_alias>, dataset: <eval_model_id>,
+    - {activity: <activity>, alias: <alias>, dataset: <eval_model_id>,
       end_year: <end_year>, ensemble: <eval_variant>, exp: <exp>, grid: <grid>,
       project: <project>, start_year: <start_year>}
 
