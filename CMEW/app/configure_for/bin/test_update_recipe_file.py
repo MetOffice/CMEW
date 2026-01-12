@@ -1,4 +1,4 @@
-# (C) Crown Copyright 2024-2025, Met Office.
+# (C) Crown Copyright 2024-2026, Met Office.
 # The LICENSE.md file contains full licensing details.
 from update_recipe_file import update_recipe, main
 from pathlib import Path
@@ -12,6 +12,8 @@ def mock_env_vars(monkeypatch):
     # Time window
     monkeypatch.setenv("START_YEAR", "1993")
     monkeypatch.setenv("NUMBER_OF_YEARS", "1")
+    monkeypatch.setenv("LABEL_FOR_PLOTS", "Test Label")
+    monkeypatch.setenv("REF_LABEL_FOR_PLOTS", "Ref Test Label")
 
     # Reference run metadata
     monkeypatch.setenv("REF_MODEL_ID", "HadGEM3-GC31-LL")

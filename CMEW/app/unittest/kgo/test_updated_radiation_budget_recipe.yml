@@ -1,10 +1,11 @@
-# (C) Crown Copyright 2024-2025, Met Office.
+# (C) Crown Copyright 2024-2026, Met Office.
 # The LICENSE.md file contains full licensing details.
 # ESMValTool - Updated Radiation Budget
 # To be used for testing purposes. Represents KGO for `update_recipe`.
 ---
 datasets:
 - activity: ESMVal
+  alias: Ref Test Label
   dataset: HadGEM3-GC31-LL
   end_year: 1993
   ensemble: r1i1p1f3
@@ -13,6 +14,7 @@ datasets:
   project: ESMVal
   start_year: 1993
 - activity: ESMVal
+  alias: Test Label
   dataset: UKESM1-0-LL
   end_year: 1993
   ensemble: r1i1p1f1
