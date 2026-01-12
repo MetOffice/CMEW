@@ -14,7 +14,7 @@ datasets:
   project: ESMVal
   start_year: 1993
 - activity: ESMVal
-  alias: Test Label
+  alias: Eval Test Label
   dataset: UKESM1-0-LL
   end_year: 1993
   ensemble: r1i1p1f1
