@@ -70,7 +70,7 @@ jobs:
       - name: Run Cylc unit tests
         run: |
           cd CMEW
-          conda run -n cmew cylc vip -O metoffice -O unittest .
+          conda run -n cmew pytest -v
 
       - name: Build documentation
         run: |
