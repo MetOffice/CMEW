@@ -20,9 +20,9 @@ echo "[INFO] Using REQUEST_PATH_EVAL=${REQUEST_PATH_EVAL}"
 : "${REF_MODEL_ID:?REF_MODEL_ID must be set}"
 : "${REF_SUITE_ID:?REF_SUITE_ID must be set}"
 : "${REF_CALENDAR:?REF_CALENDAR must be set}"
-: "${MODEL_ID:?MODEL_ID (evaluation) must be set}"
-: "${SUITE_ID:?SUITE_ID (evaluation) must be set}"
-: "${CALENDAR:?CALENDAR (evaluation) must be set}"
+: "${EVAL_MODEL_ID:?EVAL_MODEL_ID (evaluation) must be set}"
+: "${EVAL_SUITE_ID:?EVAL_SUITE_ID (evaluation) must be set}"
+: "${EVAL_CALENDAR:?EVAL_CALENDAR (evaluation) must be set}"
 
 # ---------------------------------------------------------------------------
 # 1. Create variables.txt once (shared by both runs)
@@ -44,6 +44,7 @@ create_for_run() {
 
     case "${RUN_LABEL}" in
         REF)
+            # Reference run uses the base REF_MODEL_ID/REF_SUITE_ID/REF_CALENDAR/REF_VARIANT_LABEL
             run_model_id="${REF_MODEL_ID}"
             run_suite_id="${REF_SUITE_ID}"
             run_calendar="${REF_CALENDAR}"
@@ -51,11 +52,11 @@ create_for_run() {
             run_request="${REQUEST_PATH_REF}"
             ;;
         EVAL)
-            # Evaluation run uses the base MODEL_ID/SUITE_ID/CALENDAR/VARIANT_LABEL
-            run_model_id="${MODEL_ID}"
-            run_suite_id="${SUITE_ID}"
-            run_calendar="${CALENDAR}"
-            run_variant="${VARIANT_LABEL:-}"
+            # Evaluation run uses the base EVAL_MODEL_ID/EVAL_SUITE_ID/EVAL_CALENDAR/EVAL_VARIANT_LABEL
+            run_model_id="${EVAL_MODEL_ID}"
+            run_suite_id="${EVAL_SUITE_ID}"
+            run_calendar="${EVAL_CALENDAR}"
+            run_variant="${EVAL_VARIANT_LABEL:-}"
             run_request="${REQUEST_PATH_EVAL}"
             ;;
         *)

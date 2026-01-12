@@ -36,7 +36,7 @@ def update_recipe(recipe_path):
     - {activity: <activity>, alias: <ref_alias>, dataset: <ref_model_id>,
       end_year: <end_year>, ensemble: <ref_variant>, exp: <exp>, grid: <grid>,
       project: <project>, start_year: <start_year>}
-    - {activity: <activity>, alias: <alias>, dataset: <eval_model_id>,
+    - {activity: <activity>, alias: <eval_alias>, dataset: <eval_model_id>,
       end_year: <end_year>, ensemble: <eval_variant>, exp: <exp>, grid: <grid>,
       project: <project>, start_year: <start_year>}
 
@@ -44,7 +44,7 @@ def update_recipe(recipe_path):
     -----
     The updated recipe includes:
     * Reference dataset (index 0) using REF_MODEL_ID and REF_VARIANT_LABEL
-    * Evaluation dataset (index 1) using MODEL_ID and VARIANT_LABEL
+    * Evaluation dataset (index 1) using EVAL_MODEL_ID and EVAL_VARIANT_LABEL
     * two additional CMEW required keys: "Activity" and "Alias".
 
     Parameters
@@ -66,8 +66,8 @@ def update_recipe(recipe_path):
     # Model metadata from environment
     ref_model_id = os.environ["REF_MODEL_ID"]
     ref_variant = os.environ["REF_VARIANT_LABEL"]
-    eval_model_id = os.environ["MODEL_ID"]
-    eval_variant = os.environ["VARIANT_LABEL"]
+    eval_model_id = os.environ["EVAL_MODEL_ID"]
+    eval_variant = os.environ["EVAL_VARIANT_LABEL"]
 
     # Read given reference alias or use the suite ID
     if os.environ.get("REF_LABEL_FOR_PLOTS"):
@@ -76,10 +76,10 @@ def update_recipe(recipe_path):
         ref_alias = os.environ["REF_SUITE_ID"]
 
     # Read given evaluation alias or use the suite ID
-    if os.environ.get("LABEL_FOR_PLOTS"):
-        alias = os.environ["LABEL_FOR_PLOTS"]
+    if os.environ.get("EVAL_LABEL_FOR_PLOTS"):
+        eval_alias = os.environ["EVAL_LABEL_FOR_PLOTS"]
     else:
-        alias = os.environ["SUITE_ID"]
+        eval_alias = os.environ["EVAL_SUITE_ID"]
 
     with open(recipe_path, "r") as file_handle:
         recipe = yaml.safe_load(file_handle)
@@ -107,7 +107,7 @@ def update_recipe(recipe_path):
         }
     )
 
-    # Evaluation dataset: ESMVal / amip run using MODEL_ID and VARIANT_LABEL
+    # Evaluation dataset: ESMVal / amip run using EVAL_MODEL_ID and EVAL_VARIANT_LABEL
     eval_dataset = datasets[1]
     eval_dataset.update(
         {
@@ -118,7 +118,7 @@ def update_recipe(recipe_path):
             "ensemble": eval_variant,
             "start_year": start_year,
             "end_year": end_year,
-            "alias": alias,
+            "alias": eval_alias,
         }
     )
 
