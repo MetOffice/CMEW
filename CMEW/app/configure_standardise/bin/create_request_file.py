@@ -48,7 +48,7 @@ def create_request():
         "workflow_basename": (
             f"{os.environ['MODEL_ID']}_historical_"
             f"{os.environ['VARIANT_LABEL']}_apm"
-            ),
+        ),
     }
     request["data"] = {
         "end_date": f"{end_year}-01-01T00:00:00",
