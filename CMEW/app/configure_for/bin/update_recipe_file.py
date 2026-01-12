@@ -107,7 +107,8 @@ def update_recipe(recipe_path):
         }
     )
 
-    # Evaluation dataset: ESMVal / amip run using EVAL_MODEL_ID and EVAL_VARIANT_LABEL
+    # Evaluation dataset: ESMVal / amip run
+    # using EVAL_MODEL_ID and EVAL_VARIANT_LABEL
     eval_dataset = datasets[1]
     eval_dataset.update(
         {
