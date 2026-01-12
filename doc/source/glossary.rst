@@ -9,6 +9,11 @@ Glossary
 
 .. glossary::
 
+   Assessment Area
+     A thematic aspect of model performance; a collection of metrics and plots
+     relating to that thematic aspect, owned by a single domain expert.
+     An assessment area contains at least one recipe and multiple metrics.
+
    CDDS
      CDDS is a package that |CMEW| uses to standardise data for use in
      |ESMValTool| recipes.
@@ -31,8 +36,16 @@ Glossary
      routine evaluation of |ESMs| in |CMIP|, see the
      `ESMValTool Documentation`_.
 
+   Metric
+     A number that quantifies model performance.
+
    MIAO
      Model Inputs And Outputs
+
+   Recipe
+     A grouping of metrics. If multiple metrics are needed for a single
+     plot, they must be grouped together in a single recipe. A recipe may
+     contain one or more plots.
 
    Rose
      Rose is a toolkit for writing, editing and running application
