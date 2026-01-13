@@ -13,6 +13,8 @@
 .. |ESMs| replace:: :term:`ESMs <ESM>`
 .. |ESMValTool| replace:: :term:`ESMValTool`
 .. |MIAO| replace:: :term:`MIAO`
+.. |Recipe| replace:: :term:`Recipe`
+.. |Recipes| replace:: :term:`Recipes <Recipe>`
 .. |Rose| replace:: :term:`Rose`
 .. |Rose Edit GUI| replace:: ``Rose Edit GUI``
 .. |rose_prune| replace:: ``rose_prune``
