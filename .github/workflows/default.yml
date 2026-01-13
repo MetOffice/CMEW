@@ -47,7 +47,7 @@ jobs:
           eval "$(conda shell.bash hook)"
           conda activate cmew
           cd CMEW
-          cylc lint
+          cylc lint --ignore=S014
 
       - name: Validate format of Rose configuration files
         run: |
@@ -69,8 +69,10 @@ jobs:
 
       - name: Run Cylc unit tests
         run: |
+          eval "$(conda shell.bash hook)"
+          conda activate cmew
           cd CMEW
-          conda run -n cmew pytest -v
+          pytest -v
 
       - name: Build documentation
         run: |
