@@ -34,11 +34,11 @@ def update_recipe(recipe_path):
 
     datasets:
     - {activity: <activity>, alias: <ref_alias>, dataset: <ref_model_id>,
-      end_year: <end_year>, ensemble: <ref_variant>, exp: <exp>, grid: <grid>,
-      project: <project>, start_year: <start_year>}
+      end_year: <end_year>, ensemble: <ref_variant>, exp: <exp_type>,
+      grid: <grid>, project: <project>, start_year: <start_year>}
     - {activity: <activity>, alias: <alias>, dataset: <eval_model_id>,
-      end_year: <end_year>, ensemble: <eval_variant>, exp: <exp>, grid: <grid>,
-      project: <project>, start_year: <start_year>}
+      end_year: <end_year>, ensemble: <eval_variant>, exp: <eval_exp_type>,
+      grid: <grid>, project: <project>, start_year: <start_year>}
 
     Notes
     -----
@@ -66,8 +66,10 @@ def update_recipe(recipe_path):
     # Model metadata from environment
     ref_model_id = os.environ["REF_MODEL_ID"]
     ref_variant = os.environ["REF_VARIANT_LABEL"]
+    ref_exp_type = os.environ["REF_EXP_TYPE"]
     eval_model_id = os.environ["MODEL_ID"]
     eval_variant = os.environ["VARIANT_LABEL"]
+    eval_exp_type = os.environ["EXP_TYPE"]
 
     # Read given reference alias or use the suite ID
     if os.environ.get("REF_LABEL_FOR_PLOTS"):
@@ -91,14 +93,13 @@ def update_recipe(recipe_path):
             "one for the reference and one for the evaluation run."
         )
 
-    # Reference dataset: treat as a GCModelDev / ESMVal / amip run,
-    # using REF_MODEL_ID & REF_VARIANT_LABEL, with the configured time window.
+    # Reference dataset
     ref_dataset = datasets[0]
     ref_dataset.update(
         {
             "dataset": ref_model_id,
             "project": "ESMVal",
-            "exp": "amip",
+            "exp": ref_exp_type,
             "activity": "ESMVal",
             "ensemble": ref_variant,
             "start_year": start_year,
@@ -107,13 +108,13 @@ def update_recipe(recipe_path):
         }
     )
 
-    # Evaluation dataset: ESMVal / amip run using MODEL_ID and VARIANT_LABEL
+    # Evaluation dataset
     eval_dataset = datasets[1]
     eval_dataset.update(
         {
             "dataset": eval_model_id,
             "project": "ESMVal",
-            "exp": "amip",
+            "exp": eval_exp_type,
             "activity": "ESMVal",
             "ensemble": eval_variant,
             "start_year": start_year,
