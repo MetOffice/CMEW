@@ -12,16 +12,18 @@ def mock_env_vars(monkeypatch):
     # Time window
     monkeypatch.setenv("START_YEAR", "1993")
     monkeypatch.setenv("NUMBER_OF_YEARS", "1")
-    monkeypatch.setenv("LABEL_FOR_PLOTS", "Test Label")
-    monkeypatch.setenv("REF_LABEL_FOR_PLOTS", "Ref Test Label")
 
     # Reference run metadata
     monkeypatch.setenv("REF_MODEL_ID", "HadGEM3-GC31-LL")
     monkeypatch.setenv("REF_VARIANT_LABEL", "r1i1p1f3")
+    monkeypatch.setenv("REF_LABEL_FOR_PLOTS", "Ref Test Label")
+    monkeypatch.setenv("REF_EXP_TYPE", "historical")
 
     # Evaluation run metadata
     monkeypatch.setenv("MODEL_ID", "UKESM1-0-LL")
     monkeypatch.setenv("VARIANT_LABEL", "r1i1p1f1")
+    monkeypatch.setenv("LABEL_FOR_PLOTS", "Test Label")
+    monkeypatch.setenv("EXP_TYPE", "amip")
 
 
 @pytest.fixture
