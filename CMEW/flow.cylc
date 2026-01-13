@@ -36,8 +36,8 @@
         [[[environment]]]
             ESMVALTOOL_MODULE_NAME = {{ ESMVALTOOL_MODULE_NAME }}
             USER_CONFIG_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/etc
-            USER_CONFIG_SUBDIR = ${USER_CONFIG_DIR}/user_config
-            USER_CONFIG_PATH = ${USER_CONFIG_SUBDIR}/config-user.yml
+            ESMVALTOOL_CONFIG_DIR = ${USER_CONFIG_DIR}/user_config
+            USER_CONFIG_PATH = ${ESMVALTOOL_CONFIG_DIR}/config-user.yml
             OUTPUT_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/cycle/${CYLC_TASK_CYCLE_POINT}
             SHARE_DATA_CDDS = ${CYLC_WORKFLOW_SHARE_DIR}/data/cdds
             ROOT_PROC_DIR = ${SHARE_DATA_CDDS}/proc
