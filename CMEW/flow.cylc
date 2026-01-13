@@ -22,7 +22,11 @@
             configure_for<recipe> => configure_standardise<recipe>
             configure_recipe => run_recipe<recipe>
             configure_standardise<recipe> => standardise_model_data
-            standardise_model_data => run_recipe<recipe> & housekeeping
+            {%- if HOUSEKEEPING in (True, "true", "True") %}
+                standardise_model_data => run_recipe<recipe> & housekeeping
+            {%- else %}
+                standardise_model_data => run_recipe<recipe>
+            {%- endif %}
     {%- if TEST %}
             run_recipe<recipe> => compare<recipe>
     {%- endif %}
