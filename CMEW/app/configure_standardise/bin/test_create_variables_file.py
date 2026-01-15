@@ -6,6 +6,9 @@ Tests for configure_standardise
 """
 from create_variables_file import parse_variables_from_recipe
 from pathlib import Path
+import pytest
+
+pytestmark = pytest.mark.unittest
 
 
 def test_parse_radiation_budget_variables():
