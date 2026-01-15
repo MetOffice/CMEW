@@ -3,7 +3,7 @@
 # The LICENSE.md file contains full licensing details.
 import pytest
 from configure_recipe import create_user_config_file
-
+pytestmark = pytest.mark.unittest
 
 @pytest.mark.parametrize(
     "input_key, output_key, expected",
