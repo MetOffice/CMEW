@@ -49,7 +49,7 @@ jobs:
           cd CMEW
           cylc lint
 
-      - name: Validate Rose configuration (QA)
+      - name: Run all Rose validator macros against Rose configuration files
         run: |
           eval "$(conda shell.bash hook)"
           conda activate cmew
