@@ -117,7 +117,6 @@ def create_user_config_file(values=None):
     # additional datasets, so may need to be configured in the future.
     user_config_file_contents = {
         "auxiliary_data_dir": "",
-        "config_file": values.get("USER_CONFIG_PATH", None),
         "config_developer_file": config_developer_file,
         "download_dir": "",
         "drs": {
