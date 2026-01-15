@@ -8,9 +8,9 @@ channels:
 dependencies:
   - cylc-flow
   - cylc-rose
+  - esmvalcore
   - metomi-rose
-  - sphinx
-  - sphinx_rtd_theme
   - pre-commit
   - pytest
-  - esmvalcore
+  - sphinx
+  - sphinx_rtd_theme
