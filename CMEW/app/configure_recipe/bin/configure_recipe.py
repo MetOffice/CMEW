@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# (C) Crown Copyright 2022-2025, Met Office.
+# (C) Crown Copyright 2022-2026, Met Office.
 # The LICENSE.md file contains full licensing details.
 """
 Generate the required user configuration file for ESMValTool.
@@ -27,6 +27,7 @@ def main():
     # Write the updated configuration values to the file defined by
     # 'USER_CONFIG_PATH'.
     user_config_path = values["USER_CONFIG_PATH"]
+    os.makedirs(os.path.dirname(user_config_path), exist_ok=True)
     write_yaml(user_config_path, user_config_file_contents)
 
 
@@ -116,7 +117,6 @@ def create_user_config_file(values=None):
     # additional datasets, so may need to be configured in the future.
     user_config_file_contents = {
         "auxiliary_data_dir": "",
-        "config_file": values.get("USER_CONFIG_PATH", None),
         "config_developer_file": config_developer_file,
         "download_dir": "",
         "drs": {

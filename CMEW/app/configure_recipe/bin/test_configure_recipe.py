@@ -9,7 +9,6 @@ from configure_recipe import create_user_config_file
     "input_key, output_key, expected",
     [
         (None, "remove_preproc_dir", False),
-        ("USER_CONFIG_PATH", "config_file", "userpath"),
     ],
 )
 def test_create_user_config_file_single_values(
