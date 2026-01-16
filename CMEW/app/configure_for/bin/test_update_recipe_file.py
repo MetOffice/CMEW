@@ -6,8 +6,6 @@ import pytest
 import shutil
 import yaml
 
-pytestmark = pytest.mark.unittest
-
 
 @pytest.fixture
 def mock_env_vars(monkeypatch):

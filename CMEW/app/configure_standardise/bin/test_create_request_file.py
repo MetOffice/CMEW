@@ -1,10 +1,7 @@
 # (C) Crown Copyright 2024-2025, Met Office.
 # The LICENSE.md file contains full licensing details.
 import os
-import pytest
 from create_request_file import create_request
-
-pytestmark = pytest.mark.unittest
 
 
 def test_create_request(monkeypatch):
