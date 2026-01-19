@@ -47,7 +47,7 @@ def test_create_request(monkeypatch):
             "package": "round-1",
             "root_proc_dir": "/path/to/proc/dir/",
             "root_data_dir": "/path/to/data/dir/",
-            "workflow_basename": "UKESM1-0-LL_historical_r1i1p1f1_apm",
+            "workflow_basename": "CMEW_u-az513",
         },
         "data": {
             "end_date": "1994-01-01T00:00:00",
