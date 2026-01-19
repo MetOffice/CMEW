@@ -25,7 +25,7 @@ def get_workflow_basename():
     else:
         suite_id = os.environ["SUITE_ID"]
 
-    return f"CMEW_{suite_id}"
+    return f"{suite_id}"
 
 
 def create_request():
