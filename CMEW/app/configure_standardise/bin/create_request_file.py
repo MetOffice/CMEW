@@ -19,7 +19,6 @@ def get_workflow_basename():
     """
     request_path = os.environ["REQUEST_PATH"]
     request_ref = os.environ.get("REQUEST_PATH_REF", "")
-    request_eval = os.environ.get("REQUEST_PATH_EVAL", "")
 
     if request_path == request_ref:
         suite_id = os.environ["REF_SUITE_ID"]
