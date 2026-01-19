@@ -9,6 +9,26 @@ import os
 from pathlib import Path
 
 
+def get_workflow_basename():
+    """Get a unique suite id based on request type.
+
+    Returns
+    _________
+    Unique CDDS workflow basename
+
+    """
+    request_path = os.environ["REQUEST_PATH"]
+    request_ref = os.environ.get("REQUEST_PATH_REF", "")
+    request_eval = os.environ.get("REQUEST_PATH_EVAL", "")
+
+    if request_path == request_ref:
+        suite_id = os.environ["REF_SUITE_ID"]
+    else:
+        suite_id = os.environ["SUITE_ID"]
+
+    return f"CMEW_{suite_id}"
+
+
 def create_request():
     """Retrieve CDDS request information from Rose suite configuration.
 
@@ -45,10 +65,7 @@ def create_request():
         "package": "round-1",
         "root_proc_dir": os.environ["ROOT_PROC_DIR"],
         "root_data_dir": os.environ["ROOT_DATA_DIR"],
-        "workflow_basename": (
-            f"{os.environ['MODEL_ID']}_historical_"
-            f"{os.environ['VARIANT_LABEL']}_apm"
-        ),
+        "workflow_basename": get_workflow_basename(),
     }
     request["data"] = {
         "end_date": f"{end_year}-01-01T00:00:00",
