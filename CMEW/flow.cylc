@@ -10,7 +10,7 @@
 
 [task parameters]
     recipe = radiation_budget
-    run = ref, eval
+    run = ref, eval, eval2
 
 [scheduling]
     [[graph]]

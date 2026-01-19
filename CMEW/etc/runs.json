@@ -10,5 +10,11 @@
     "suite_id": "u-cw673",
     "calendar": "gregorian",
     "variant_label": "r1i1p1f1"
+  },
+  "eval2": {
+    "model_id": "UKESM1-0-LL",
+    "suite_id": "u-az513",
+    "calendar": "360_day",
+    "variant_label": "r1i1p1f1"
   }
 }
