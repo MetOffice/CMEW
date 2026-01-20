@@ -2,7 +2,7 @@
 # The LICENSE.md file contains full licensing details.
 # ESMValTool - Updated Radiation Budget
 # To be used for testing purposes. Represents KGO for `update_recipe`.
----
+#
 datasets:
 - activity: ESMVal
   alias: Ref Test Label
@@ -11,6 +11,7 @@ datasets:
   ensemble: r1i1p1f3
   exp: amip
   grid: gn
+  institute: MOHC
   project: ESMVal
   start_year: 1993
 - activity: ESMVal
@@ -20,6 +21,7 @@ datasets:
   ensemble: r1i1p1f1
   exp: amip
   grid: gn
+  institute: MOHC
   project: ESMVal
   start_year: 1993
 diagnostics:
