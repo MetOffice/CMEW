@@ -16,8 +16,11 @@ exclude = '''
 )
 '''
 
+
+
 # Configure pytest.
 [tool.pytest.ini_options]
+testpaths = ["CMEW"]
 filterwarnings = [
     # Ignore deprecation warnings from webob, esmpy and pkg_resources:
     "ignore:'cgi' is deprecated and slated for removal in Python 3.13:DeprecationWarning",
