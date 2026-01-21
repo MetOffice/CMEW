@@ -3,6 +3,7 @@
 import os
 from create_request_file import create_request
 
+
 def test_create_request(monkeypatch):
     # In the order defined in 'create_request_file.py'.
     monkeypatch.setenv("START_YEAR", "1993")

@@ -4,6 +4,7 @@
 import pytest
 from configure_recipe import create_user_config_file
 
+
 @pytest.mark.parametrize(
     "input_key, output_key, expected",
     [
