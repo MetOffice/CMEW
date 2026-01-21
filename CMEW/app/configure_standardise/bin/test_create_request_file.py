@@ -1,8 +1,7 @@
-# (C) Crown Copyright 2024-2025, Met Office.
+# (C) Crown Copyright 2024-2026, Met Office.
 # The LICENSE.md file contains full licensing details.
 import os
 from create_request_file import create_request
-
 
 def test_create_request(monkeypatch):
     # In the order defined in 'create_request_file.py'.

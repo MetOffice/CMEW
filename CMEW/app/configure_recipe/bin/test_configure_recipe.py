@@ -1,9 +1,8 @@
 #!/usr/bin/env python
-# (C) Crown Copyright 2024-2025, Met Office.
+# (C) Crown Copyright 2024-2026, Met Office.
 # The LICENSE.md file contains full licensing details.
-from configure_recipe import create_user_config_file
 import pytest
-
+from configure_recipe import create_user_config_file
 
 @pytest.mark.parametrize(
     "input_key, output_key, expected",
