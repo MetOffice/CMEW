@@ -18,13 +18,13 @@ def create_request():
         CDDS request configuration.
     """
     extract_flag = os.environ.get("EXTRACT", "true").lower() == "true"
-    extract_data_path = os.environ.get("EXTRACT_DATA_PATH", "").strip()
+    raw_data_path = os.environ.get("RAW_DATA_PATH", "").strip()
     end_year = int(os.environ["START_YEAR"]) + int(
         os.environ["NUMBER_OF_YEARS"]
     )
-    if not extract_flag and not extract_data_path:
+    if not extract_flag and not raw_data_path:
         raise ValueError(
-            "EXTRACT=False but EXTRACT_DATA_PATH is empty. "
+            "EXTRACT=False but RAW_DATA_PATH is empty. "
             "Provide a full path to previously extracted model output."
         )
     request = configparser.ConfigParser()
@@ -55,7 +55,7 @@ def create_request():
         "workflow_basename": "CMEW",
     }
     if not extract_flag:
-        request["common"]["root_data_dir"] = extract_data_path
+        request["common"]["root_data_dir"] = raw_data_path
     request["data"] = {
         "end_date": f"{end_year}-01-01T00:00:00",
         "mass_data_class": "crum",

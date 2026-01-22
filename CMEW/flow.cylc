@@ -41,7 +41,7 @@
         [[[environment]]]
             ESMVALTOOL_MODULE_NAME = {{ ESMVALTOOL_MODULE_NAME }}
             EXTRACT = {{ EXTRACT }}
-            EXTRACT_DATA_PATH = {{ EXTRACT_DATA_PATH }}
+            RAW_DATA_PATH = {{ RAW_DATA_PATH }}
             USER_CONFIG_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/etc
             USER_CONFIG_PATH = ${USER_CONFIG_DIR}/config-user.yml
             OUTPUT_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/cycle/${CYLC_TASK_CYCLE_POINT}
@@ -65,12 +65,11 @@
             ROOT_SOFTWARE_DIR = ${CDDS_SOFTWARE_DIR}
             CDDS_VERSION = {{ CDDS_VERSION }}
             {%- if EXTRACT in (False, "false", "False") %}
-            # When EXTRACT is False, reuse pre-extracted data from EXTRACT_DATA_PATH.
+            # When EXTRACT is False, reuse pre-extracted data from RAW_DATA_PATH.
             # Align ROOT_DATA_DIR (used by restructure_for_cmip6) with the path
             # that create_request_file.py writes into [common].root_data_dir.
-            ROOT_DATA_DIR = "{{ EXTRACT_DATA_PATH }}"
+            ROOT_DATA_DIR = "{{ RAW_DATA_PATH }}"
             {%- endif %}
-
 
     # Multi-run metadata family: reference and evaluation runs
     [[MODEL_RUNS]]
