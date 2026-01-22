@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# (C) Crown Copyright 2024-2025, Met Office.
+# (C) Crown Copyright 2024-2026, Met Office.
 # The LICENSE.md file contains full licensing details.
 """
 Generates the request configuration file from the ESMValTool recipe.
@@ -45,7 +45,7 @@ def create_request():
         "package": "round-1",
         "root_proc_dir": os.environ["ROOT_PROC_DIR"],
         "root_data_dir": os.environ["ROOT_DATA_DIR"],
-        "workflow_basename": "CMEW",
+        "workflow_basename": os.environ["SUITE_ID"],
     }
     request["data"] = {
         "end_date": f"{end_year}-01-01T00:00:00",
