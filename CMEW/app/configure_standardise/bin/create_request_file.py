@@ -19,7 +19,11 @@ def load_defaults():
     # 2. Source tree (works for Cylc vip + pytest)
     else:
         # create_request_file.py → bin → configure_standardise
-        cfg_path = Path(__file__).resolve().parents[1] / "etc" / "request_defaults.cfg"
+        cfg_path = (
+            Path(__file__).resolve().parents[1]
+            / "etc"
+            / "request_defaults.cfg"
+        )
 
     if not cfg_path.exists():
         raise FileNotFoundError(f"Defaults file not found: {cfg_path}")
