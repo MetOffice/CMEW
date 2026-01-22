@@ -10,19 +10,20 @@ from pathlib import Path
 
 
 def load_defaults():
-    """Load expected values from default_request.cfg."""
     cfg = configparser.ConfigParser()
 
-    if "CYLC_WORKFLOW_SHARE_DIR" in os.environ:
-        # Running inside Cylc
-        base_dir = Path(os.environ["CYLC_WORKFLOW_SHARE_DIR"])
-    else:
-        # Running under pytest / unittest / local execution
-        base_dir = Path(__file__).resolve().parents[1]
+    # 1. Explicit override (tests or power users)
+    if "REQUEST_DEFAULTS_CFG" in os.environ:
+        cfg_path = Path(os.environ["REQUEST_DEFAULTS_CFG"])
 
-    cfg_path = base_dir / "etc" / "request_defaults.cfg"
+    # 2. Source tree (works for Cylc vip + pytest)
+    else:
+        # create_request_file.py → bin → configure_standardise
+        cfg_path = Path(__file__).resolve().parents[1] / "etc" / "request_defaults.cfg"
+
     if not cfg_path.exists():
         raise FileNotFoundError(f"Defaults file not found: {cfg_path}")
+
     cfg.read(cfg_path)
     return cfg
 
