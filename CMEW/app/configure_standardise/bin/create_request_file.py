@@ -17,9 +17,16 @@ def create_request():
     configparser.ConfigParser()
         CDDS request configuration.
     """
+    extract_flag = os.environ.get("EXTRACT", "true").lower() == "true"
+    raw_data_path = os.environ.get("RAW_DATA_PATH", "").strip()
     end_year = int(os.environ["START_YEAR"]) + int(
         os.environ["NUMBER_OF_YEARS"]
     )
+    if not extract_flag and not raw_data_path:
+        raise ValueError(
+            "EXTRACT=False but RAW_DATA_PATH is empty. "
+            "Provide a full path to previously extracted model output."
+        )
     request = configparser.ConfigParser()
     request["metadata"] = {
         "base_date": "1850-01-01T00:00:00",
@@ -47,6 +54,8 @@ def create_request():
         "root_data_dir": os.environ["ROOT_DATA_DIR"],
         "workflow_basename": os.environ["SUITE_ID"],
     }
+    if not extract_flag:
+        request["common"]["root_data_dir"] = raw_data_path
     request["data"] = {
         "end_date": f"{end_year}-01-01T00:00:00",
         "mass_data_class": "crum",
@@ -65,6 +74,9 @@ def create_request():
         "skip_archive": "True",
         "cylc_args": "--no-detach -v",
     }
+    if not extract_flag:
+        request["conversion"]["skip_extract"] = "True"
+
     return request
 
 
