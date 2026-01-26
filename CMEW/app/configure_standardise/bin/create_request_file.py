@@ -45,7 +45,7 @@ def create_request():
         "package": "round-1",
         "root_proc_dir": os.environ["ROOT_PROC_DIR"],
         "root_data_dir": os.environ["ROOT_DATA_DIR"],
-        "workflow_basename": "CMEW",
+        "workflow_basename": os.environ["SUITE_ID"],
     }
     request["data"] = {
         "end_date": f"{end_year}-01-01T00:00:00",
