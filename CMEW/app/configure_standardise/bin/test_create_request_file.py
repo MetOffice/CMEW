@@ -10,7 +10,7 @@ def test_create_request(monkeypatch):
     monkeypatch.setenv("START_YEAR", "1993")
     monkeypatch.setenv("NUMBER_OF_YEARS", "1")
     monkeypatch.setenv("CALENDAR", "360_day")
-    monkeypatch.setenv("EXP_TYPE", "amip")
+    monkeypatch.setenv("EXPERIMENT_ID", "amip")
     monkeypatch.setenv("INSTITUTION_ID", "MOHC")
     monkeypatch.setenv("MODEL_ID", "UKESM1-0-LL")
     monkeypatch.setenv("ROOT_PROC_DIR", "/path/to/proc/dir/")

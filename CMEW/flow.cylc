@@ -66,14 +66,14 @@
             REF_SUITE_ID = {{ REF_SUITE_ID }}
             REF_CALENDAR = {{ REF_CALENDAR }}
             REF_VARIANT_LABEL = {{ REF_VARIANT_LABEL }}
-            REF_EXP_TYPE = {{ REF_EXP_TYPE }}
+            REF_EXPERIMENT_ID = {{ REF_EXPERIMENT_ID }}
 
             # Evaluation run metadata
             MODEL_ID = {{ MODEL_ID }}
             SUITE_ID = {{ SUITE_ID }}
             CALENDAR = {{ CALENDAR }}
             VARIANT_LABEL = {{ VARIANT_LABEL }}
-            EXP_TYPE = {{ EXP_TYPE }}
+            EXPERIMENT_ID = {{ EXPERIMENT_ID }}
 
     [[install_env_file]]
         [[[environment]]]

@@ -34,10 +34,10 @@ def update_recipe(recipe_path):
 
     datasets:
     - {activity: <activity>, alias: <ref_alias>, dataset: <ref_model_id>,
-      end_year: <end_year>, ensemble: <ref_variant>, exp: <ref_exp_type>,
+      end_year: <end_year>, ensemble: <ref_variant>, exp: <ref_experiment_id>,
       grid: <grid>, project: <project>, start_year: <start_year>}
     - {activity: <activity>, alias: <alias>, dataset: <eval_model_id>,
-      end_year: <end_year>, ensemble: <eval_variant>, exp: <eval_exp_type>,
+      end_year: <end_year>, ensemble: <eval_variant>, exp: <eval_experiment_id>,
       grid: <grid>, project: <project>, start_year: <start_year>}
 
     Notes
@@ -66,10 +66,10 @@ def update_recipe(recipe_path):
     # Model metadata from environment
     ref_model_id = os.environ["REF_MODEL_ID"]
     ref_variant = os.environ["REF_VARIANT_LABEL"]
-    ref_exp_type = os.environ["REF_EXP_TYPE"]
+    ref_experiment_id = os.environ["REF_EXPERIMENT_ID"]
     eval_model_id = os.environ["MODEL_ID"]
     eval_variant = os.environ["VARIANT_LABEL"]
-    eval_exp_type = os.environ["EXP_TYPE"]
+    eval_experiment_id = os.environ["EXPERIMENT_ID"]
 
     # Read given reference alias or use the suite ID
     if os.environ.get("REF_LABEL_FOR_PLOTS"):
@@ -99,7 +99,7 @@ def update_recipe(recipe_path):
         {
             "dataset": ref_model_id,
             "project": "ESMVal",
-            "exp": ref_exp_type,
+            "exp": ref_experiment_id,
             "activity": "ESMVal",
             "ensemble": ref_variant,
             "start_year": start_year,
@@ -114,7 +114,7 @@ def update_recipe(recipe_path):
         {
             "dataset": eval_model_id,
             "project": "ESMVal",
-            "exp": eval_exp_type,
+            "exp": eval_experiment_id,
             "activity": "ESMVal",
             "ensemble": eval_variant,
             "start_year": start_year,
