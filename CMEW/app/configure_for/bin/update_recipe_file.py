@@ -101,6 +101,7 @@ def update_recipe(recipe_path):
             "project": "ESMVal",
             "exp": ref_experiment_id,
             "activity": "ESMVal",
+            "institute": "MOHC",
             "ensemble": ref_variant,
             "start_year": start_year,
             "end_year": end_year,
@@ -116,6 +117,7 @@ def update_recipe(recipe_path):
             "project": "ESMVal",
             "exp": eval_experiment_id,
             "activity": "ESMVal",
+            "institute": "MOHC",
             "ensemble": eval_variant,
             "start_year": start_year,
             "end_year": end_year,
@@ -138,7 +140,12 @@ def write_recipe(updated_recipe, target_path):
         Location to write the updated ESMValTool recipe.
     """
     with open(target_path, "w") as file_handle:
-        yaml.dump(updated_recipe, file_handle, default_flow_style=False)
+        yaml.dump(
+            updated_recipe,
+            file_handle,
+            default_flow_style=False,
+            sort_keys=True,
+        )
 
 
 def main():

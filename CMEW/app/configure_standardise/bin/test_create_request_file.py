@@ -42,7 +42,7 @@ def test_create_request(monkeypatch):
             "external_plugin": "",
             "external_plugin_location": "",
             "mip_table_dir": os.path.expanduser(
-                "~cdds/etc/mip_tables/GCModelDev/0.0.9"
+                "~cdds/etc/mip_tables/GCModelDev/0.0.25"
             ),
             "mode": "relaxed",
             "package": "round-1",
