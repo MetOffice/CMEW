@@ -25,14 +25,14 @@ def create_request():
         "base_date": "1850-01-01T00:00:00",
         "branch_method": "no parent",
         "calendar": os.environ["CALENDAR"],
-        "experiment_id": os.environ["EXPERIMENT_ID"],
+        "experiment_id": os.environ["SUITE_ID"],
         "institution_id": os.environ["INSTITUTION_ID"],
         "license": "GCModelDev model data is licensed under the Open Government License v3 (https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/)",  # noqa: E501
         "mip": "ESMVal",
         "mip_era": "GCModelDev",
         "model_id": os.environ["MODEL_ID"],
         "model_type": "AGCM AER",
-        "sub_experiment_id": "none",
+        "sub_experiment_id": os.environ["EXPERIMENT_ID"],
         "variant_label": os.environ["VARIANT_LABEL"],
     }
     request["common"] = {

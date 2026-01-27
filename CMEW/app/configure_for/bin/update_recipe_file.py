@@ -100,7 +100,8 @@ def update_recipe(recipe_path):
         {
             "dataset": ref_model_id,
             "project": "ESMVal",
-            "exp": ref_experiment_id,
+            "exp": os.environ["REF_SUITE_ID"],
+            "sub_experiment": ref_experiment_id,
             "activity": "ESMVal",
             "institute": "MOHC",
             "ensemble": ref_variant,
@@ -116,7 +117,8 @@ def update_recipe(recipe_path):
         {
             "dataset": eval_model_id,
             "project": "ESMVal",
-            "exp": eval_experiment_id,
+            "exp": os.environ["SUITE_ID"],
+            "sub_experiment": eval_experiment_id,
             "activity": "ESMVal",
             "institute": "MOHC",
             "ensemble": eval_variant,
