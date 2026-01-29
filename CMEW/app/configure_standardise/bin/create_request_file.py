@@ -39,7 +39,7 @@ def create_request():
         "external_plugin": "",
         "external_plugin_location": "",
         "mip_table_dir": os.path.expanduser(
-            "~cdds/etc/mip_tables/GCModelDev/0.0.25"
+            "~naomi.parsons/CMEW_related/CDDS_related/gcmodeldev-cmor-tables/tables"
         ),
         "mode": "relaxed",
         "package": "round-1",

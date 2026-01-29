@@ -27,7 +27,7 @@
 ###############################################################################
 ---
 custom:
-  cmor_path: ~cdds/etc/mip_tables/GCModelDev/0.0.25
+  cmor_path: /home/users/naomi.parsons/CMEW_related/CDDS_related/gcmodeldev-cmor-tables/tables
 
 ESMVal:
   cmor_strict: true
