@@ -62,7 +62,7 @@ def create_request():
         ),
         "root_proc_dir": os.environ["ROOT_PROC_DIR"],
         "root_data_dir": os.environ["ROOT_DATA_DIR"],
-        "workflow_basename": "CMEW",
+        "workflow_basename": os.environ["SUITE_ID"],
     }
     request["data"] = {
         **defaults["data"],
