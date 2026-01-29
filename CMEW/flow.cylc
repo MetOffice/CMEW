@@ -7,7 +7,7 @@
 
 {% set _suite_ids = [] %}
 {% for _s in RUN_SUITE_IDS.split(",") %}
-  {% set _ = _suite_ids.append(_s.strip()) %}
+    {% set _ = _suite_ids.append(_s.strip()) %}
 {% endfor %}
 
 [scheduler]
