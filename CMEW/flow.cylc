@@ -5,12 +5,17 @@
 {{ assert(SITE != "", "SITE must be set to something other than an empty string") }}
 {{ assert(ESMVALTOOL_MODULE_NAME != "", "ESMVALTOOL_MODULE_NAME must be set to something other than an empty string") }}
 
+{% set _suite_ids = [] %}
+{% for _s in RUN_SUITE_IDS.split(",") %}
+  {% set _ = _suite_ids.append(_s.strip()) %}
+{% endfor %}
+
 [scheduler]
     UTC mode = True
 
 [task parameters]
     recipe = radiation_budget
-    run = ref, eval, eval2
+    run = {{ _suite_ids | join(", ") }}
 
 [scheduling]
     [[graph]]

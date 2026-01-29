@@ -4,9 +4,16 @@
 """
 Generates the request configuration file from the ESMValTool recipe.
 
-This version supports per-run metadata via an external JSON file pointed to
-by RUNS_CONFIG_PATH, while keeping backward compatibility with the
+This version supports per-run metadata via an external JSON file pointed
+to by RUNS_CONFIG_PATH, while keeping backward compatibility with the
 legacy environment variables MODEL_ID/SUITE_ID/CALENDAR/VARIANT_LABEL.
+
+Key behaviour (important for the new "run = suite_id" parameterisation):
+- RUN_LABEL may be either:
+    * a logical label key in runs.json (e.g. "ref", "eval", "eval2"), OR
+    * a suite_id value from runs.json (e.g. "u-bv526", "u-cw673", "u-az513")
+  In both cases, the script resolves the correct per-run metadata from
+  runs.json.
 
 Expected JSON structure (keys can be snake_case or legacy env-style keys):
 {
@@ -20,11 +27,13 @@ import configparser
 import json
 import os
 from pathlib import Path
+from typing import Any, Dict, Optional
 
 
-def _resolve_runs_config_path() -> Path | None:
+def _resolve_runs_config_path() -> Optional[Path]:
     """
     Resolve RUNS_CONFIG_PATH to an absolute Path.
+
     Supports:
       - absolute paths
       - paths relative to CYLC_WORKFLOW_SHARE_DIR
@@ -66,7 +75,7 @@ def _resolve_runs_config_path() -> Path | None:
     return candidate
 
 
-def _load_runs_config_file() -> dict:
+def _load_runs_config_file() -> Dict[str, Any]:
     """Load run mapping from RUNS_CONFIG_PATH JSON file;
     return {} if not configured."""
     path = _resolve_runs_config_path()
@@ -77,29 +86,30 @@ def _load_runs_config_file() -> dict:
         raise FileNotFoundError(
             f"RUNS_CONFIG_PATH points to missing file: {path}"
         )
+
     try:
         raw = path.read_text(encoding="utf-8")
     except Exception as e:
         raise RuntimeError(
             f"Failed to read runs config file: {path} ({e})"
         ) from e
+
     try:
         runs = json.loads(raw)
     except json.JSONDecodeError as e:
         raise ValueError(f"Runs config JSON is invalid in {path}: {e}") from e
+
     if not isinstance(runs, dict):
         raise ValueError(
-            f"Runs config in {path} must be a JSON object,\
-                          got {type(runs)}"
+            f"Runs config in {path} must be a JSON object, got {type(runs)}"
         )
 
     # Normalize top-level keys to lower-case for matching against RUN_LABEL
-    normalized = {}
+    normalized: Dict[str, Any] = {}
     for k, v in runs.items():
         if not isinstance(k, str):
             raise ValueError(
-                f"Runs config keys must be strings,\
-                             got key={k!r}"
+                f"Runs config keys must be strings, got key={k!r}"
             )
         normalized[k.strip().lower()] = v
 
@@ -107,65 +117,82 @@ def _load_runs_config_file() -> dict:
 
 
 def _get_required_env(name: str) -> str:
-    """Small helper: fetch env var or raise a KeyError with a clear message."""
+    """Fetch env var or raise a KeyError with a clear message."""
     val = os.environ.get(name, "").strip()
     if not val:
         raise KeyError(f"{name} must be set")
     return val
 
 
-def _resolve_run_metadata(run_label: str) -> dict:
+def _normalize_run_entry(run_key: str, cfg: Any) -> Dict[str, str]:
+    """Validate and normalize a single run entry object from runs.json."""
+    if not isinstance(cfg, dict):
+        raise ValueError(
+            f"Runs config entry for '{run_key}' must be an object,\
+                got {type(cfg)}"
+        )
+
+    # Support both snake_case and legacy env-style keys
+    model_id = cfg.get("model_id") or cfg.get("MODEL_ID")
+    suite_id = cfg.get("suite_id") or cfg.get("SUITE_ID")
+    calendar = cfg.get("calendar") or cfg.get("CALENDAR")
+    variant_label = cfg.get("variant_label") or cfg.get("VARIANT_LABEL")
+
+    missing = [
+        k
+        for k, v in {
+            "model_id": model_id,
+            "suite_id": suite_id,
+            "calendar": calendar,
+            "variant_label": variant_label,
+        }.items()
+        if not (isinstance(v, str) and v.strip())
+    ]
+    if missing:
+        raise KeyError(
+            f"Missing keys for run '{run_key}' in runs config: {missing}"
+        )
+
+    return {
+        "model_id": str(model_id).strip(),
+        "suite_id": str(suite_id).strip(),
+        "calendar": str(calendar).strip(),
+        "variant_label": str(variant_label).strip(),
+    }
+
+
+def _resolve_run_metadata(run_label: str) -> Dict[str, str]:
     """
     Resolve per-run metadata in priority order:
       1) RUNS_CONFIG_PATH JSON file (preferred)
       2) Legacy env vars MODEL_ID/SUITE_ID/CALENDAR/VARIANT_LABEL (fallback)
+
+    Important: with "run = suite_id" parameterisation, RUN_LABEL will often be
+    a suite_id (e.g. 'u-bv526'). In that case we search runs.json values for a
+    matching suite_id.
     """
     runs_cfg = _load_runs_config_file()
+
     if runs_cfg:
-        if run_label not in runs_cfg:
-            raise KeyError(
-                f"RUN_LABEL='{run_label}' not found in runs config keys: \
-                    {sorted(runs_cfg.keys())}"
-            )
+        # Case A: RUN_LABEL matches a top-level key (ref/eval/eval2)
+        if run_label in runs_cfg:
+            return _normalize_run_entry(run_label, runs_cfg[run_label])
 
-        cfg = runs_cfg[run_label]
-        if not isinstance(cfg, dict):
-            raise ValueError(
-                f"Runs config entry for '{run_label}' must be an object, \
-                        got {type(cfg)}"
-            )
+        # Case B: RUN_LABEL is a suite_id (u-xxxxx) - search entries
+        for key, cfg in runs_cfg.items():
+            if not isinstance(cfg, dict):
+                continue
+            suite_id = cfg.get("suite_id") or cfg.get("SUITE_ID")
+            if isinstance(suite_id, str) and suite_id.strip() == run_label:
+                return _normalize_run_entry(key, cfg)
 
-        # Support both snake_case and legacy env-style keys
-        model_id = cfg.get("model_id") or cfg.get("MODEL_ID")
-        suite_id = cfg.get("suite_id") or cfg.get("SUITE_ID")
-        calendar = cfg.get("calendar") or cfg.get("CALENDAR")
-        variant_label = cfg.get("variant_label") or cfg.get("VARIANT_LABEL")
+        raise KeyError(
+            f"RUN_LABEL='{run_label}' not found as a key in runs config"
+            f"and did not match any suite_id."
+            f"Available keys: {sorted(runs_cfg.keys())}"
+        )
 
-        missing = [
-            k
-            for k, v in {
-                "model_id": model_id,
-                "suite_id": suite_id,
-                "calendar": calendar,
-                "variant_label": variant_label,
-            }.items()
-            if not (isinstance(v, str) and v.strip())
-        ]
-
-        if missing:
-            raise KeyError(
-                f"Missing keys for run '{run_label}'\
-                            in runs config: {missing}"
-            )
-
-        return {
-            "model_id": str(model_id).strip(),
-            "suite_id": str(suite_id).strip(),
-            "calendar": str(calendar).strip(),
-            "variant_label": str(variant_label).strip(),
-        }
-
-    # Backward-compatible mode
+    # Backward-compatible mode (no runs.json configured)
     return {
         "model_id": _get_required_env("MODEL_ID"),
         "suite_id": _get_required_env("SUITE_ID"),
@@ -182,7 +209,9 @@ def create_request() -> configparser.ConfigParser:
 
     run_label = os.environ.get("RUN_LABEL", "").strip().lower()
     if not run_label:
-        raise KeyError("RUN_LABEL must be set (e.g. 'ref' or 'eval')")
+        raise KeyError(
+            "RUN_LABEL must be set (e.g. 'ref' or 'eval' or a suite_id)"
+        )
 
     meta = _resolve_run_metadata(run_label)
 
@@ -194,6 +223,8 @@ def create_request() -> configparser.ConfigParser:
     )
 
     # Safe, deterministic child name
+    # NOTE: run_label may be suite_id now; that's OK and is actually desirable
+    # if you want uniqueness per suite.
     workflow_basename = f"{workflow_prefix}_{parent_run}_{run_label}"
 
     request = configparser.ConfigParser()
