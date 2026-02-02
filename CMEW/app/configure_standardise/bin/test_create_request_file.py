@@ -1,17 +1,16 @@
 # (C) Crown Copyright 2024-2026, Met Office.
 # The LICENSE.md file contains full licensing details.
+from create_request_file import DEFAULT_REQUEST_DEFAULTS_PATH
 import os
 from create_request_file import create_request
 import configparser
-from pathlib import Path
 
 
 def load_expected_cfg() -> dict:
     """Load expected values from default_request.cfg into a dict."""
-    app_root = Path(__file__).resolve().parents[1]
-    cfg_path = app_root / "etc" / "request_defaults.cfg"
+
     parser = configparser.ConfigParser()
-    parser.read(cfg_path)
+    parser.read(DEFAULT_REQUEST_DEFAULTS_PATH)
 
     expected = {}
     for section in parser.sections():

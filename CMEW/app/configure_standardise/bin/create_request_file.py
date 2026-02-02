@@ -8,22 +8,21 @@ import configparser
 import os
 from pathlib import Path
 
+DEFAULT_REQUEST_DEFAULTS_PATH = (
+    Path(__file__).resolve().parents[1] / "etc" / "request_defaults.cfg"
+)
+
 
 def load_defaults():
     cfg = configparser.ConfigParser()
 
-    # 1. Explicit override (tests or power users)
-    if "REQUEST_DEFAULTS_CFG" in os.environ:
-        cfg_path = Path(os.environ["REQUEST_DEFAULTS_CFG"])
-
-    # 2. Source tree (works for Cylc vip + pytest)
-    else:
-        # create_request_file.py → bin → configure_standardise
-        cfg_path = (
-            Path(__file__).resolve().parents[1]
-            / "etc"
-            / "request_defaults.cfg"
+    # Explicit override (tests or power users)
+    cfg_path = Path(
+        os.environ.get(
+            "REQUEST_DEFAULTS_CFG",
+            str(DEFAULT_REQUEST_DEFAULTS_PATH),
         )
+    )
 
     if not cfg_path.exists():
         raise FileNotFoundError(f"Defaults file not found: {cfg_path}")
