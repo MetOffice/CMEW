@@ -15,7 +15,7 @@
 
 [task parameters]
     recipe = radiation_budget
-    run = {{ _suite_ids | join(", ") }}
+    dataset = {{ _suite_ids | join(", ") }}
 
 [scheduling]
     [[graph]]
@@ -27,10 +27,10 @@
             install_env_file => configure_recipe & configure_for<recipe>
 
             configure_for<recipe> => create_variables_file<recipe>
-            create_variables_file<recipe> => configure_standardise<recipe,run>
+            create_variables_file<recipe> => configure_standardise<recipe,dataset>
 
-            configure_standardise<recipe,run> => standardise_model_data<run>
-            standardise_model_data<run> => restructure_dirs
+            configure_standardise<recipe,dataset> => standardise_model_data<dataset>
+            standardise_model_data<dataset> => restructure_dirs
 
             configure_recipe & restructure_dirs => run_recipe<recipe>
             run_recipe<recipe> => housekeeping
@@ -123,22 +123,22 @@
             REF_LABEL_FOR_PLOTS = {{ REF_LABEL_FOR_PLOTS }}
             REF_SUITE_ID = {{ REF_SUITE_ID }}
 
-    [[configure_standardise<recipe,run>]]
+    [[configure_standardise<recipe,dataset>]]
         inherit = STANDARDISE, RECIPE, MODEL_RUNS
         [[[environment]]]
             ROSE_TASK_APP = configure_standardise
-            RUN_LABEL = %(run)s
-            REQUEST_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request_%(run)s.cfg
+            RUN_LABEL = %(dataset)s
+            REQUEST_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request_%(dataset)s.cfg
             START_YEAR = {{ START_YEAR }}
             NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
 
-    [[standardise_model_data<run>]]
+    [[standardise_model_data<dataset>]]
         inherit = STANDARDISE
         [[[environment]]]
             ROSE_TASK_APP = standardise_model_data
             SITE = {{ SITE }}
-            RUN_LABEL = %(run)s
-            REQUEST_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request_%(run)s.cfg
+            RUN_LABEL = %(dataset)s
+            REQUEST_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request_%(dataset)s.cfg
 
     [[restructure_dirs]]
         inherit = STANDARDISE
