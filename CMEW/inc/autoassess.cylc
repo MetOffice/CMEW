@@ -1,0 +1,110 @@
+#!jinja2
+# (C) Crown Copyright 2022-2025, Met Office.
+# The LICENSE.md file contains full licensing details.
+# autoassess.cylc
+
+[task parameters]
+    autoassess_area = {{ AUTOASSESS_AREAS | join(",") }}
+
+[scheduling]
+    [[graph]]
+        R1 = """
+{%- if not UNITTEST %}
+    {%- if AUTOASSESS %}
+            install_env_file => install_autoassess
+            install_autoassess
+                => retrieve_data<autoassess_area>_{{ REF_SUITE_ID }}
+                => index_data<autoassess_area>_{{ REF_SUITE_ID }}
+                => run_area<autoassess_area>
+            install_autoassess
+                => retrieve_data<autoassess_area>_{{ SUITE_ID }}
+                => index_data<autoassess_area>_{{ SUITE_ID }}
+                => run_area<autoassess_area>
+            run_area<autoassess_area>
+                => nac_plot<autoassess_area>
+                => html_page<autoassess_area>
+    {%- endif %}
+{%- endif %}
+        """
+
+
+[runtime]
+
+    [[AUTOASSESS]]
+        inherit = SITE_AUTOASSESS
+        [[[environment]]]
+            AUTOASSESS_DATA_DIR = $CYLC_WORKFLOW_SHARE_DIR/data/autoassess
+            ASSESSMENT_TITLE = {{ AUTOASSESS_TITLE }}
+            ESMVALTOOL_MODULE_NAME = {{ ESMVALTOOL_MODULE_NAME }}
+            START_DATE = {{ (START_YEAR-1)|string + '/12/01' }}
+            END_DATE = {{ (START_YEAR+NUMBER_OF_YEARS-1)|string + '/12/01' }}
+
+    [[install_autoassess]]
+        inherit = AUTOASSESS, SITE_AA_install
+
+    {%- for suite_id in [REF_SUITE_ID, SUITE_ID] %}
+    [[retrieve_data<autoassess_area>_{{ suite_id }}]]
+        inherit = AUTOASSESS, SITE_AA_retrieval
+        script = """
+        cmew-esmvaltool-env aa_retriever                \
+            --suite-id {{ suite_id }}                   \
+            --area $CYLC_TASK_PARAM_autoassess_area     \
+            --start-date $START_DATE                    \
+            --end-date $END_DATE                        \
+            --dest-dir $AUTOASSESS_DATA_DIR             \
+            --tmp-dir $CYLC_TASK_WORK_DIR               \
+            --procs 3
+        """
+
+    [[index_data<autoassess_area>_{{ suite_id }}]]
+        inherit = AUTOASSESS, SITE_AA_data_indexing
+        script = """
+        cmew-esmvaltool-env aa_data_indexer \
+            --data-dir $AUTOASSESS_DATA_DIR/{{ suite_id }}/$CYLC_TASK_PARAM_autoassess_area \
+            --suite-id {{ suite_id }}
+        """
+    {%- endfor %}
+
+    [[run_area<autoassess_area>]]
+        inherit = AUTOASSESS, SITE_AA_run_area
+        script = """
+        cmew-esmvaltool-env aa_run_area                \
+            --area $CYLC_TASK_PARAM_autoassess_area    \
+            --start-date $START_DATE                   \
+            --end-date $END_DATE                       \
+            --suite-id1 {{ REF_SUITE_ID }}             \
+            --suite-id2 {{ SUITE_ID }}                 \
+            --suite-title1 '{{ REF_LABEL_FOR_PLOTS }}' \
+            --suite-title2 '{{ LABEL_FOR_PLOTS }}'     \
+            --out-dir $OUTPUT_DIR                      \
+            --data-dir $AUTOASSESS_DATA_DIR            \
+            --obs-dir $OBS_CLIM_PATH                   \
+            --tmp-dir $CYLC_TASK_WORK_DIR              \
+            --ancil-dir $ANCIL_PATH
+        """
+
+    [[nac_plot<autoassess_area>]]
+        inherit = AUTOASSESS, SITE_AA_nac_plot
+        script = """
+        AREA_OUTPUT_PATH=$OUTPUT_DIR/{{ SUITE_ID }}_vs_{{ REF_SUITE_ID }}/$CYLC_TASK_PARAM_autoassess_area
+        cmew-esmvaltool-env aa_create_nac_plots       \
+            --plot-dir $AREA_OUTPUT_PATH/nac_plots    \
+            --out-dir $AREA_OUTPUT_PATH               \
+            --area $CYLC_TASK_PARAM_autoassess_area   \
+            --ref-suite-id {{ REF_SUITE_ID }}         \
+            --exp-suite-id {{ SUITE_ID }}             \
+            --ref-desc '{{ REF_LABEL_FOR_PLOTS }}'    \
+            --exp-desc '{{ LABEL_FOR_PLOTS }}'
+        """
+
+    [[html_page<autoassess_area>]]
+        inherit = AUTOASSESS, SITE_AA_html_page
+        script = """
+        cmew-esmvaltool-env aa_create_page             \
+            --title "$ASSESSMENT_TITLE"                \
+            --area $CYLC_TASK_PARAM_autoassess_area    \
+            --ref-suite-id {{ REF_SUITE_ID }}          \
+            --exp-suite-id {{ SUITE_ID }}              \
+            --start-date $START_DATE                   \
+            --end-date $END_DATE > $OUTPUT_DIR/{{ SUITE_ID }}_vs_{{ REF_SUITE_ID }}/${CYLC_TASK_PARAM_autoassess_area}.html
+        """
