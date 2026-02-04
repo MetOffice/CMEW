@@ -50,6 +50,13 @@
             --job-name=AutoAssess_run_area
             --mem=5GB
 
+    [[SITE_AA_run_area_base]]
+        inherit = SPICE
+        execution time limit = PT5H
+        [[[directives]]]
+            --job-name=AutoAssess_run_area
+            --mem=10GB
+
     [[SITE_AA_nac_plot]]
         inherit = SPICE
         execution time limit = PT10M

@@ -83,6 +83,44 @@
             --ancil-dir $ANCIL_PATH
         """
 
+    [[run_area<autoassess_area=australia>]]
+        inherit = AUTOASSESS, SITE_AA_run_area_base
+        script = """
+        AREA_OUTPUT_PATH=$OUTPUT_DIR/{{ SUITE_ID }}_vs_{{ REF_SUITE_ID }}/$CYLC_TASK_PARAM_autoassess_area
+        $EXEC_PATH/aa_australia                                            \
+            --area $CYLC_TASK_PARAM_autoassess_area                        \
+            --exp-suite-id {{ REF_SUITE_ID }} {{ SUITE_ID }}               \
+            --exp-desc '{{ REF_LABEL_FOR_PLOTS }}' '{{ LABEL_FOR_PLOTS }}' \
+            --ref-suite-id {{ REF_SUITE_ID }}                              \
+            --out-dir $AREA_OUTPUT_PATH                                    \
+            --data-dir $AUTOASSESS_DATA_DIR                                \
+            --start-date $START_DATE                                       \
+            --end-date $END_DATE                                           \
+            --obs-dir $OBS_CLIM_PATH                                       \
+            --tmp-dir $CYLC_TASK_WORK_DIR                                  \
+            --ancil-dir $ANCIL_PATH                                        \
+            --ncpu 1
+        """
+
+    [[run_area<autoassess_area=mjo>]]
+        inherit = AUTOASSESS, SITE_AA_run_area_base
+        script = """
+        AREA_OUTPUT_PATH=$OUTPUT_DIR/{{ SUITE_ID }}_vs_{{ REF_SUITE_ID }}/$CYLC_TASK_PARAM_autoassess_area
+        $EXEC_PATH/aa_mjo                                                  \
+            --area $CYLC_TASK_PARAM_autoassess_area                        \
+            --exp-suite-id {{ REF_SUITE_ID }} {{ SUITE_ID }}               \
+            --exp-desc '{{ REF_LABEL_FOR_PLOTS }}' '{{ LABEL_FOR_PLOTS }}' \
+            --ref-suite-id {{ REF_SUITE_ID }}                              \
+            --out-dir $AREA_OUTPUT_PATH                                    \
+            --data-dir $AUTOASSESS_DATA_DIR                                \
+            --start-date $START_DATE                                       \
+            --end-date $END_DATE                                           \
+            --obs-dir $OBS_CLIM_PATH                                       \
+            --tmp-dir $CYLC_TASK_WORK_DIR                                  \
+            --ancil-dir $ANCIL_PATH                                        \
+            --ncpu 1
+        """
+
     [[nac_plot<autoassess_area>]]
         inherit = AUTOASSESS, SITE_AA_nac_plot
         script = """
