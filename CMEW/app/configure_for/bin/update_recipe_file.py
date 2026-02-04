@@ -125,19 +125,85 @@ def update_recipe(recipe_path):
     return recipe
 
 
-def write_recipe(updated_recipe, target_path):
-    """Write updated ESMValTool recipe to a YAML file at ``target_path``.
+def add_cmip6_datasets(updated_recipe, cmip6_namelist):
+    """Add CMIP6 datasets to the updated ESMValTool recipe.
 
     Parameters
     ----------
     updated_recipe: dict
         Dictionary containing the updated ESMValTool recipe content.
 
+    cmip6_namelist: str
+        Path to a namelist file containing the CMIP6 datasets to add.
+
+    Returns
+    -------
+    extended_recipe: dict
+        Dictionary containing the updated ESMValTool recipe content with
+        added CMIP6 datasets.
+    """
+
+    # TODO: I've literally copied this from above - refactor to avoid duplication
+    # Time window from environment
+    start_year = int(os.environ["START_YEAR"])
+    end_year = (
+        int(os.environ["START_YEAR"]) + int(os.environ["NUMBER_OF_YEARS"]) - 1
+    )
+
+    # Read the namelist file
+    with open(cmip6_namelist, "r") as file:
+        content = file.read()
+
+    # Namelist files are separated by a line containing only "/"
+    datasets = content.split("\n/\n")
+
+    # Remove the linebreaks and &cmip6_datasets header from namelist creation
+    replaced_datasets = [
+        dataset.replace("\n", "").replace("&cmip6_datasets", "")
+        for dataset in datasets if dataset  # There is an empty dataset at the end
+    ]
+
+    # Initialise an empty list to hold the CMIP6 datasets
+    cmip6_datasets = []
+    for dataset in replaced_datasets:
+
+        # The facets are now key=value pairs
+        facets = dataset.split(",")
+        dataset_dict = {}
+        for facet in facets:
+            if facet:  # There's an empty facet at the end
+                key, value = facet.split("=")
+
+                # Add the key: value pair dictionary
+                dataset_dict[key.strip()] = value.strip()
+
+        # Add the start and end year from the environment
+        dataset_dict["start_year"] = start_year
+        dataset_dict["end_year"] = end_year
+        dataset_dict["project"] = "CMIP6"  # As this function is specific to CMIP6
+
+        # Add the dataset's dictionary to the list
+        cmip6_datasets.append(dataset_dict)
+
+    # Add the datasets to the datasets section of the recipe
+    updated_recipe["datasets"].extend(cmip6_datasets)
+
+    return updated_recipe
+
+
+def write_recipe(final_recipe, target_path):
+    """Write updated ESMValTool recipe to a YAML file at ``target_path``.
+
+    Parameters
+    ----------
+    final_recipe: dict
+        Dictionary containing the updated ESMValTool recipe content.
+
     target_path: str
         Location to write the updated ESMValTool recipe.
     """
     with open(target_path, "w") as file_handle:
-        yaml.dump(updated_recipe, file_handle, default_flow_style=False)
+        yaml.dump(final_recipe, file_handle, default_flow_style=False)
 
 
 def main():
@@ -147,7 +213,13 @@ def main():
     """
     recipe_path = os.environ["RECIPE_PATH"]
     updated_recipe = update_recipe(recipe_path)
-    write_recipe(updated_recipe, recipe_path)
+
+    # Add the CMIP6 datasets to the recipe
+    # TODO: read this from the same place
+    cmip6_namelist = f"{os.environ['CYLC_WORKFLOW_SHARE_DIR']}/dataset_lists/cmip6_datasets.nl"
+    extended_recipe = add_cmip6_datasets(updated_recipe, cmip6_namelist)
+
+    write_recipe(extended_recipe, recipe_path)
 
 
 if __name__ == "__main__":
