@@ -206,7 +206,7 @@ def write_recipe(final_recipe, target_path):
     """
     with open(target_path, "w") as file_handle:
         yaml.dump(
-            updated_recipe,
+            final_recipe,
             file_handle,
             default_flow_style=False,
             sort_keys=True,
