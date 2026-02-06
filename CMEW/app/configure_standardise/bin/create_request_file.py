@@ -216,17 +216,19 @@ def create_request() -> configparser.ConfigParser:
     meta = _resolve_run_metadata(run_label)
 
     # Use parent CMEW run name if available to avoid cross-run collisions
-    # parent_run = os.environ.get("CYLC_WORKFLOW_RUN_NAME", "").strip() \
+    parent_run = os.environ.get("CYLC_WORKFLOW_RUN_NAME", "").strip() or ""
     #        or "run"
-    # workflow_prefix = (
-    #     os.environ.get("CDDS_WORKFLOW_BASENAME_PREFIX", "CMEW").strip()
-    #     or "CMEW"
-    # )
+    workflow_prefix = (
+        os.environ.get("CDDS_WORKFLOW_BASENAME_PREFIX", "CMEW").strip()
+        or ""
+        #     or "CMEW"
+    )
 
     # Safe, deterministic child name
     # NOTE: run_label may be suite_id now; that's OK and is actually desirable
     # if you want uniqueness per suite.
     # workflow_basename = f"{workflow_prefix}_{parent_run}_{run_label}"
+    workflow_basename = f"{workflow_prefix}{parent_run}_{run_label}"
 
     request = configparser.ConfigParser()
 
@@ -255,7 +257,7 @@ def create_request() -> configparser.ConfigParser:
         "package": "round-1",
         "root_proc_dir": _get_required_env("ROOT_PROC_DIR"),
         "root_data_dir": _get_required_env("ROOT_DATA_DIR"),
-        "workflow_basename": os.environ["SUITE_ID"],
+        "workflow_basename": workflow_basename,
     }
 
     request["data"] = {
