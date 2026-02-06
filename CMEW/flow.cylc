@@ -18,8 +18,8 @@
             install_env_file => unittest
 {%- endif %}
 {%- if not UNITTEST %}
-            install_env_file => configure_recipe & additional_datasets
-            additional_datasets => configure_for<recipe>
+            install_env_file => configure_recipe & add_datasets
+            add_datasets => configure_for<recipe>
             configure_for<recipe> => configure_standardise<recipe>
             configure_recipe => run_recipe<recipe>
             configure_standardise<recipe> => standardise_model_data => run_recipe<recipe> & housekeeping
@@ -129,9 +129,9 @@
         [[[environment]]]
             ROSE_TASK_APP = run_recipe
 
-    [[additional_datasets]]
+    [[add_datasets]]
         [[[environment]]]
-            ROSE_TASK_APP = additional_datasets
+            ROSE_TASK_APP = add_datasets
             DATASETS_LIST_DIR = "${CYLC_WORKFLOW_SHARE_DIR}/dataset_lists"
 
     [[housekeeping]]
