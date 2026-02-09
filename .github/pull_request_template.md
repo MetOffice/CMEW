@@ -20,13 +20,19 @@ Closes #<issue_number>.
 - [ ] The change in this PR follows the requirements in the [wiki: Developer Guide](https://github.com/MetOffice/CMEW/wiki/Developer-Guide) (including copyrights).
 - [ ] The GitHub Actions workflow checks pass.
 - [ ] The tests run locally and pass (Note: the tests are not run by the GitHub Actions workflow, see [wiki: Run the tests locally](https://github.com/MetOffice/CMEW/wiki/Detailed-Working-Practices#run-the-tests-locally)).
+- Updating the Rose metadata (select one of the following):
+  - [ ] Rose metadata related to the change have been added or updated.
+  - [ ] The change does not require Rose metadata to be added or updated.
+- Rendering the Rose metadata (select one of the following):
+  - [ ] The change in this PR does not affect the Rose GUI.
+  - [ ] The Rose GUI shows the change as expected.
 - Updating the tests (select one of the following):
   - [ ] Tests related to the change have been added or updated.
   - [ ] The change does not require tests to be added or updated.
 - Updating the user documentation (i.e. everything in the `doc` directory, including the [Quick Start](https://github.com/MetOffice/CMEW/blob/main/doc/source/user_guide/quick_start.rst) section; select one of the following):
   - [ ] The change in this PR does not require the user documentation to be updated.
   - [ ] The user documentation related to the change has been updated appropriately.
-- Building the user documentation ([wiki: Build the documentation locally](https://github.com/MetOffice/CMEW/wiki/Detailed-Working-Practices#build-the-documentation-locally) provides instructions; select one of the following):
+- Rendering the user documentation ([wiki: Build the documentation locally](https://github.com/MetOffice/CMEW/wiki/Detailed-Working-Practices#build-the-documentation-locally) provides instructions; select one of the following):
   - [ ] The change in this PR does not affect the HTML pages.
   - [ ] The HTML pages show the change as expected.
 - Updating the API documentation (e.g. docstrings in Python modules; select one of the following):
@@ -55,3 +61,8 @@ Closes #<issue_number>.
 - [ ] Has the API documentation (e.g. docstrings in Python modules) related to the change been updated appropriately?
 - [ ] Has the user documentation (i.e. everything in the `doc` directory) related to the change been updated appropriately, including the [Quick Start](https://github.com/MetOffice/CMEW/blob/main/doc/source/user_guide/quick_start.rst) section?
 - [ ] Do the HTML pages render correctly? (See [wiki: Build the documentation locally](https://github.com/MetOffice/CMEW/wiki/Detailed-Working-Practices#build-the-documentation-locally))
+
+> [!IMPORTANT]
+> - Remember to re-check the Definition of Done following a review.
+> - The developer merges the PR.
+> - Remember to use the format `#<pull_request_number>: <pull_request_title>` when writing the merge commit message for the pull request, so the pull request number is immediately visible on GitHub, regardless of the length of the pull request title.
