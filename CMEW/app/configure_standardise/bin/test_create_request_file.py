@@ -1,20 +1,17 @@
 # (C) Crown Copyright 2024-2026, Met Office.
 # The LICENSE.md file contains full licensing details.
-from create_request_file import DEFAULT_REQUEST_DEFAULTS_PATH
+from create_request_file import load_request_defaults
 import os
 from create_request_file import create_request
-import configparser
 
 
-def load_expected_cfg() -> dict:
-    """Load expected values from default_request.cfg into a dict."""
+def expected_request():
+    """Return the expected request."""
 
-    parser = configparser.ConfigParser()
-    parser.read(DEFAULT_REQUEST_DEFAULTS_PATH)
-
+    request_defaults = load_request_defaults()
     expected = {}
-    for section in parser.sections():
-        expected[section] = dict(parser.items(section))
+    for section in request_defaults.sections():
+        expected[section] = dict(request_defaults.items(section))
 
     # Match runtime behaviour
     expected["common"]["mip_table_dir"] = os.path.expanduser(
@@ -41,6 +38,6 @@ def test_create_request(monkeypatch):
     actual = {
         section: dict(config.items(section)) for section in config.sections()
     }
-    expected = load_expected_cfg()
+    expected = expected_request()
 
     assert actual == expected

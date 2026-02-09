@@ -8,26 +8,14 @@ import configparser
 import os
 from pathlib import Path
 
-DEFAULT_REQUEST_DEFAULTS_PATH = (
+REQUEST_DEFAULTS_PATH = (
     Path(__file__).resolve().parents[1] / "etc" / "request_defaults.cfg"
 )
 
 
-def load_defaults():
+def load_request_defaults():
     cfg = configparser.ConfigParser()
-
-    # Explicit override (tests or power users)
-    cfg_path = Path(
-        os.environ.get(
-            "REQUEST_DEFAULTS_CFG",
-            str(DEFAULT_REQUEST_DEFAULTS_PATH),
-        )
-    )
-
-    if not cfg_path.exists():
-        raise FileNotFoundError(f"Defaults file not found: {cfg_path}")
-
-    cfg.read(cfg_path)
+    cfg.read(REQUEST_DEFAULTS_PATH)
     return cfg
 
 
@@ -40,7 +28,7 @@ def create_request():
         CDDS request configuration.
     """
 
-    defaults = load_defaults()
+    defaults = load_request_defaults()
     start_year = int(os.environ["START_YEAR"])
     end_year = int(os.environ["START_YEAR"]) + int(
         os.environ["NUMBER_OF_YEARS"]
