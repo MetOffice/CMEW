@@ -122,6 +122,7 @@
         inherit = STANDARDISE, MODEL_RUNS
         [[[environment]]]
             SITE = {{ SITE }}
+            RAW_DATA_DIR = {{ RAW_DATA_DIR }}
 
     [[run_recipe<recipe>]]
         inherit = None, COMPUTE, RECIPE
