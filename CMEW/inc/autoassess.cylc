@@ -24,7 +24,7 @@
         # Don't want to be hammering MASS!
         [[[mass_retrieval]]]
             limit = 4
-            members = SITE_AA_install
+            members = SITE_AA_INSTALL
 
 
 [runtime]
@@ -40,7 +40,7 @@
             END_DATE = {{ (START_YEAR+NUMBER_OF_YEARS-1)|string + '/12/01' }}
 
     [[install_autoassess]]
-        inherit = AUTOASSESS, SITE_AA_install
+        inherit = AUTOASSESS, SITE_AA_INSTALL
 
     [[retrieve_data<autoassess_area><suite_id>]]
         inherit = AUTOASSESS, SITE_AA_RETRIEVAL
