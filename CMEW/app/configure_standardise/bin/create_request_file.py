@@ -1,28 +1,19 @@
 #!/usr/bin/env python
 # (C) Crown Copyright 2024-2026, Met Office.
 # The LICENSE.md file contains full licensing details.
+
 """
 Generates the request configuration file from the ESMValTool recipe.
 
-This version supports per-run metadata via an external JSON file pointed
-to by RUNS_CONFIG_PATH, while keeping backward compatibility with the
-legacy environment variables MODEL_ID/SUITE_ID/CALENDAR/VARIANT_LABEL.
+Supports per-run metadata via RUNS_CONFIG_PATH + RUN_LABEL,
+while keeping backward compatibility with legacy env vars
+MODEL_ID/SUITE_ID/CALENDAR/VARIANT_LABEL.
 
-Key behaviour (important for the new "run = suite_id" parameterisation):
-- RUN_LABEL may be either:
-    * a logical label key in runs.json (e.g. "ref", "eval", "eval2"), OR
-    * a suite_id value from runs.json (e.g. "u-bv526", "u-cw673", "u-az513")
-  In both cases, the script resolves the correct per-run metadata from
-  runs.json.
-
-Expected JSON structure (keys can be snake_case or legacy env-style keys):
-{
-  "ref":  {"model_id": "...", "suite_id": "...", "calendar": "...",
-           "variant_label": "..."},
-  "eval": {"model_id": "...", "suite_id": "...", "calendar": "...",
-           "variant_label": "..."}
-}
+Naming requirement:
+- In ALL modes (legacy and multi-run), set workflow_basename = suite_id
+  so CDDS paths are cdds_<suite_id>.
 """
+
 import configparser
 import json
 import os
@@ -31,36 +22,21 @@ from typing import Any, Dict, Optional
 
 
 def _resolve_runs_config_path() -> Optional[Path]:
-    """
-    Resolve RUNS_CONFIG_PATH to an absolute Path.
-
-    Supports:
-      - absolute paths
-      - paths relative to CYLC_WORKFLOW_SHARE_DIR
-      - paths relative to workflow source directory,
-        e.g. CMEW/etc/runs.json in the repo checkout.
-    """
     raw = os.environ.get("RUNS_CONFIG_PATH", "").strip()
     if not raw:
         return None
 
-    # 1) Expand ~ and env vars
     candidate = Path(os.path.expandvars(os.path.expanduser(raw)))
 
-    # 2) If absolute and exists, accept
     if candidate.is_absolute() and candidate.exists():
         return candidate
 
-    # 3) Try relative to CYLC_WORKFLOW_SHARE_DIR (typical runtime)
     share_dir = os.environ.get("CYLC_WORKFLOW_SHARE_DIR", "").strip()
     if share_dir:
         p = Path(share_dir) / candidate
         if p.exists():
             return p
 
-    # 4) Try relative to the workflow source tree:
-    #    create_request_file.py usually lives under: CMEW/app/.../bin/
-    #    so parents[3] should be CMEW/ (adjust if the layout changes).
     try:
         repo_root = Path(__file__).resolve().parents[3]
         p = repo_root / candidate
@@ -69,15 +45,12 @@ def _resolve_runs_config_path() -> Optional[Path]:
     except Exception:
         pass
 
-    # Last resort: return the absolute-resolved path (for error messaging)
     if not candidate.is_absolute():
         candidate = (Path.cwd() / candidate).resolve()
     return candidate
 
 
 def _load_runs_config_file() -> Dict[str, Any]:
-    """Load run mapping from RUNS_CONFIG_PATH JSON file;
-    return {} if not configured."""
     path = _resolve_runs_config_path()
     if path is None:
         return {}
@@ -87,24 +60,14 @@ def _load_runs_config_file() -> Dict[str, Any]:
             f"RUNS_CONFIG_PATH points to missing file: {path}"
         )
 
-    try:
-        raw = path.read_text(encoding="utf-8")
-    except Exception as e:
-        raise RuntimeError(
-            f"Failed to read runs config file: {path} ({e})"
-        ) from e
-
-    try:
-        runs = json.loads(raw)
-    except json.JSONDecodeError as e:
-        raise ValueError(f"Runs config JSON is invalid in {path}: {e}") from e
+    raw = path.read_text(encoding="utf-8")
+    runs = json.loads(raw)
 
     if not isinstance(runs, dict):
         raise ValueError(
             f"Runs config in {path} must be a JSON object, got {type(runs)}"
         )
 
-    # Normalize top-level keys to lower-case for matching against RUN_LABEL
     normalized: Dict[str, Any] = {}
     for k, v in runs.items():
         if not isinstance(k, str):
@@ -117,7 +80,6 @@ def _load_runs_config_file() -> Dict[str, Any]:
 
 
 def _get_required_env(name: str) -> str:
-    """Fetch env var or raise a KeyError with a clear message."""
     val = os.environ.get(name, "").strip()
     if not val:
         raise KeyError(f"{name} must be set")
@@ -125,14 +87,12 @@ def _get_required_env(name: str) -> str:
 
 
 def _normalize_run_entry(run_key: str, cfg: Any) -> Dict[str, str]:
-    """Validate and normalize a single run entry object from runs.json."""
     if not isinstance(cfg, dict):
         raise ValueError(
-            f"Runs config entry for '{run_key}' must be an object,\
-                got {type(cfg)}"
+            f"Runs config entry for '{run_key}' must be an object, \
+            got {type(cfg)}"
         )
 
-    # Support both snake_case and legacy env-style keys
     model_id = cfg.get("model_id") or cfg.get("MODEL_ID")
     suite_id = cfg.get("suite_id") or cfg.get("SUITE_ID")
     calendar = cfg.get("calendar") or cfg.get("CALENDAR")
@@ -150,7 +110,8 @@ def _normalize_run_entry(run_key: str, cfg: Any) -> Dict[str, str]:
     ]
     if missing:
         raise KeyError(
-            f"Missing keys for run '{run_key}' in runs config: {missing}"
+            f"Missing keys for run '{run_key}' \
+                in runs config: {missing}"
         )
 
     return {
@@ -164,21 +125,19 @@ def _normalize_run_entry(run_key: str, cfg: Any) -> Dict[str, str]:
 def _resolve_run_metadata(run_label: str) -> Dict[str, str]:
     """
     Resolve per-run metadata in priority order:
-      1) RUNS_CONFIG_PATH JSON file (preferred)
-      2) Legacy env vars MODEL_ID/SUITE_ID/CALENDAR/VARIANT_LABEL (fallback)
+      1) runs.json (RUNS_CONFIG_PATH) if configured
+      2) Legacy env vars (MODEL_ID/SUITE_ID/CALENDAR/VARIANT_LABEL)
 
-    Important: with "run = suite_id" parameterisation, RUN_LABEL will often be
-    a suite_id (e.g. 'u-bv526'). In that case we search runs.json values for a
-    matching suite_id.
+    RUN_LABEL may be:
+      - a key in runs.json ("ref", "eval", ...)
+      - a suite_id value ("u-xxxxx") in runs.json entries
     """
     runs_cfg = _load_runs_config_file()
 
     if runs_cfg:
-        # Case A: RUN_LABEL matches a top-level key (ref/eval/eval2)
         if run_label in runs_cfg:
             return _normalize_run_entry(run_label, runs_cfg[run_label])
 
-        # Case B: RUN_LABEL is a suite_id (u-xxxxx) - search entries
         for key, cfg in runs_cfg.items():
             if not isinstance(cfg, dict):
                 continue
@@ -187,12 +146,12 @@ def _resolve_run_metadata(run_label: str) -> Dict[str, str]:
                 return _normalize_run_entry(key, cfg)
 
         raise KeyError(
-            f"RUN_LABEL='{run_label}' not found as a key in runs config"
-            f"and did not match any suite_id."
-            f"Available keys: {sorted(runs_cfg.keys())}"
+            f"RUN_LABEL='{run_label}' not found as a key in runs config "
+            f"and did not match any suite_id. Available keys: \
+            {sorted(runs_cfg.keys())}"
         )
 
-    # Backward-compatible mode (no runs.json configured)
+    # Legacy fallback
     return {
         "model_id": _get_required_env("MODEL_ID"),
         "suite_id": _get_required_env("SUITE_ID"),
@@ -202,33 +161,25 @@ def _resolve_run_metadata(run_label: str) -> Dict[str, str]:
 
 
 def create_request() -> configparser.ConfigParser:
-    """Retrieve CDDS request information from Rose suite configuration."""
     start_year = int(_get_required_env("START_YEAR"))
     number_of_years = int(_get_required_env("NUMBER_OF_YEARS"))
     end_year = start_year + number_of_years
 
     run_label = os.environ.get("RUN_LABEL", "").strip().lower()
-    if not run_label:
-        raise KeyError(
-            "RUN_LABEL must be set (e.g. 'ref' or 'eval' or a suite_id)"
-        )
 
-    meta = _resolve_run_metadata(run_label)
+    if run_label:
+        meta = _resolve_run_metadata(run_label)
+    else:
+        # Legacy mode: do NOT require RUN_LABEL (unit tests rely on this)
+        meta = {
+            "model_id": _get_required_env("MODEL_ID"),
+            "suite_id": _get_required_env("SUITE_ID"),
+            "calendar": _get_required_env("CALENDAR"),
+            "variant_label": _get_required_env("VARIANT_LABEL"),
+        }
 
-    # Use parent CMEW run name if available to avoid cross-run collisions
-    parent_run = os.environ.get("CYLC_WORKFLOW_RUN_NAME", "").strip() or ""
-    #        or "run"
-    workflow_prefix = (
-        os.environ.get("CDDS_WORKFLOW_BASENAME_PREFIX", "CMEW").strip()
-        or ""
-        #     or "CMEW"
-    )
-
-    # Safe, deterministic child name
-    # NOTE: run_label may be suite_id now; that's OK and is actually desirable
-    # if you want uniqueness per suite.
-    # workflow_basename = f"{workflow_prefix}_{parent_run}_{run_label}"
-    workflow_basename = f"{workflow_prefix}{parent_run}_{run_label}"
+    # REQUIREMENT: always use suite_id for basename
+    workflow_basename = meta["suite_id"]
 
     request = configparser.ConfigParser()
 
@@ -264,7 +215,6 @@ def create_request() -> configparser.ConfigParser:
         "end_date": f"{end_year}-01-01T00:00:00",
         "mass_data_class": "crum",
         "model_workflow_branch": "trunk",
-        # IMPORTANT: use per-run suite id (not the legacy env var)
         "model_workflow_id": meta["suite_id"],
         "model_workflow_revision": "not used except with data request",
         "start_date": f"{start_year}-01-01T00:00:00",
@@ -286,7 +236,6 @@ def create_request() -> configparser.ConfigParser:
 def write_request(
     request: configparser.ConfigParser, target_path: Path
 ) -> None:
-    """Write the request configuration to a file at ``target_path``."""
     with open(target_path, mode="w", encoding="utf-8") as file_handle:
         request.write(file_handle)
 

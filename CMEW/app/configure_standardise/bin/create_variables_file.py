@@ -5,10 +5,11 @@
 Generates the variables.txt file from the ESMValTool recipe.
 """
 import os
-from esmvalcore.experimental.recipe import Recipe
 
 
 def parse_variables_from_recipe(recipe_path):
+    from esmvalcore.experimental.recipe import Recipe
+
     """Retrieve variables from ESMValTool recipe.
 
     * Read the ESMValTool recipe YAML file from the provided ``recipe_path``
