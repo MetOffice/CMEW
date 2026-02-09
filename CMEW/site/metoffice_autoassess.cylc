@@ -22,48 +22,48 @@
         [[[environment]]]
             ROSE_LAUNCHER = mpiexec
 
-    [[SITE_AA_install]]
+    [[SITE_AA_INSTALL]]
         inherit = SPICE
         execution time limit = PT5M
         [[[directives]]]
             --job-name=AutoAssess_install
             --mem=2GB
 
-    [[SITE_AA_retrieval]]
+    [[SITE_AA_RETRIEVAL]]
         inherit = SPICE
         execution time limit = PT5H
         [[[directives]]]
             --job-name=AutoAssess_MOOSE_retrieval
             --mem=2GB
 
-    [[SITE_AA_data_indexing]]
+    [[SITE_AA_DATA_INDEXING]]
         inherit = SPICE
         execution time limit = PT2H
         [[[directives]]]
             --job-name=AutoAssess_data_indexing
             --mem=10GB
 
-    [[SITE_AA_run_area]]
+    [[SITE_AA_RUN_AREA]]
         inherit = SPICE
         execution time limit = PT5H
         [[[directives]]]
             --job-name=AutoAssess_run_area
             --mem=5GB
 
-    [[SITE_AA_run_area_base]]
+    [[SITE_AA_RUN_AREA_BASE]]
         inherit = SPICE
         execution time limit = PT5H
         [[[directives]]]
             --job-name=AutoAssess_run_area
             --mem=10GB
 
-    [[SITE_AA_nac_plot]]
+    [[SITE_AA_NAC_PLOT]]
         inherit = SPICE
         execution time limit = PT10M
         [[[directives]]]
             --job-name=AutoAssess_nac_plot
             --mem=250MB
 
-    [[SITE_AA_html_page]]
+    [[SITE_AA_HTML_PAGE]]
         inherit = LOCAL
         execution time limit = PT2M
