@@ -62,6 +62,11 @@
     # Multi-run metadata family: reference and evaluation runs
     [[MODEL_RUNS]]
         [[[environment]]]
+            # Directory containing dataset lists as YAML files
+            DATASETS_LIST_DIR = "${CYLC_WORKFLOW_SHARE_DIR}/dataset_lists"
+            START_YEAR = {{ START_YEAR }}
+            NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
+
             # Reference run metadata
             REF_MODEL_ID = {{ REF_MODEL_ID }}
             REF_SUITE_ID = {{ REF_SUITE_ID }}
@@ -105,8 +110,6 @@
         inherit = None, RECIPE, MODEL_RUNS
         [[[environment]]]
             ROSE_TASK_APP = configure_for
-            START_YEAR = {{ START_YEAR }}
-            NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
             LABEL_FOR_PLOTS = {{ LABEL_FOR_PLOTS }}
             SUITE_ID = {{ SUITE_ID }}
             REF_LABEL_FOR_PLOTS = {{ REF_LABEL_FOR_PLOTS }}
@@ -116,8 +119,6 @@
         inherit = STANDARDISE, RECIPE, MODEL_RUNS
         [[[environment]]]
             ROSE_TASK_APP = configure_standardise
-            START_YEAR = {{ START_YEAR }}
-            NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
 
     [[standardise_model_data]]
         inherit = STANDARDISE, MODEL_RUNS
@@ -130,9 +131,9 @@
             ROSE_TASK_APP = run_recipe
 
     [[add_datasets]]
+        inherit = MODEL_RUNS
         [[[environment]]]
             ROSE_TASK_APP = add_datasets
-            DATASETS_LIST_DIR = "${CYLC_WORKFLOW_SHARE_DIR}/dataset_lists"
 
     [[housekeeping]]
 
