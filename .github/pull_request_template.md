@@ -21,7 +21,7 @@ Closes #<issue_number>.
 - [ ] The GitHub Actions workflow checks pass.
 - [ ] The tests run locally and pass (Note: the tests are not run by the GitHub Actions workflow, see [wiki: Run the tests locally](https://github.com/MetOffice/CMEW/wiki/Detailed-Working-Practices#run-the-tests-locally)).
 - Updating the Rose metadata (select one of the following):
-  - [ ] Rose metadata related to the change have been added or updated.
+  - [ ] Rose metadata related to the change has been added or updated.
   - [ ] The change does not require Rose metadata to be added or updated.
 - Rendering the Rose metadata (select one of the following):
   - [ ] The Rose GUI shows the change as expected.
@@ -58,7 +58,7 @@ Closes #<issue_number>.
 - [ ] The GitHub Actions workflow checks pass.
 - [ ] The tests run locally and pass (Note: the tests are not run by the GitHub Actions workflow, see [wiki: Run the tests locally](https://github.com/MetOffice/CMEW/wiki/Detailed-Working-Practices#run-the-tests-locally)).
 - Updating the Rose metadata (select one of the following):
-  - [ ] Rose metadata related to the change have been added or updated.
+  - [ ] Rose metadata related to the change has been added or updated.
   - [ ] The change does not require Rose metadata to be added or updated.
 - Rendering the Rose metadata (select one of the following):
   - [ ] The Rose GUI shows the change as expected.
