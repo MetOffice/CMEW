@@ -25,13 +25,13 @@ datasets:
   project: ESMVal
   start_year: 1993
 - alias: CMIP6 dataset 002
-- dataset: UKESM1-0-LL
-- end_year: 1993
-- ensemble: r5i1p1f3
-- exp: historical
-- grid: gn
-- project: CMIP6
-- start_year: 1993
+  dataset: UKESM1-0-LL
+  end_year: 1993
+  ensemble: r5i1p1f3
+  exp: historical
+  grid: gn
+  project: CMIP6
+  start_year: 1993
 diagnostics:
   seasonal_radiation_budget:
     description: Seasonal radiation budget for HadGEM3 vs UKESM1.

@@ -23,6 +23,9 @@ def mock_env_vars(monkeypatch):
     monkeypatch.setenv("MODEL_ID", "UKESM1-0-LL")
     monkeypatch.setenv("VARIANT_LABEL", "r1i1p1f1")
 
+    # For adding CMIP6 datasets
+    monkeypatch.setenv("DATASETS_LIST_DIR", str(Path(__file__).parent.parent.parent / "unittest" / "kgo"))
+
 
 @pytest.fixture
 def path_to_updated_recipe_kgo():
@@ -42,6 +45,16 @@ def path_to_mock_original_recipe():
         / "unittest"
         / "mock_data"
         / "test_radiation_budget_recipe_v2.9.0.yml"
+    )
+    return path
+
+
+@pytest.fixture
+def path_to_kgo():
+    path = (
+        Path(__file__).parent.parent.parent
+        / "unittest"
+        / "kgo"
     )
     return path
 
