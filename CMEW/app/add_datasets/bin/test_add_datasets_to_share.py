@@ -1,3 +1,108 @@
-example_naml_file = """
+from add_datasets_to_share import extract_sections_from_naml, convert_str_to_facets, add_common_facets, process_naml_file
+from pathlib import Path
+import pytest
 
-"""
+
+@pytest.fixture
+def mock_env_vars(monkeypatch):
+    monkeypatch.setenv("START_YEAR", "1993")
+    monkeypatch.setenv("NUMBER_OF_YEARS", "10")
+
+
+@pytest.fixture
+def path_to_kgo_yaml():
+    path = (
+        Path(__file__).parent.parent.parent
+        / "unittest"
+        / "kgo"
+        / "test_model_runs.yml"
+    )
+    return str(path)
+
+
+@pytest.fixture
+def path_to_mock_nl():
+    path = (
+        Path(__file__).parent.parent.parent
+        / "unittest"
+        / "mock_data"
+        / "test_model_runs.nl"
+    )
+    return str(path)
+
+
+def test_extract_sections_from_naml(path_to_mock_nl):
+    expected = [
+        "calendar=gregorian,label_for_plots=HadGEM3-GC5E-LL N96ORCA1,model_id=HadGEM3-GC5E-LL,suite_id=u-cw673,variant_label=r1i1p1f1,",
+        "calendar=360_day,label_for_plots=HadGEM3-GC3.1 N96ORCA1,model_id=HadGEM3-GC31-LL,suite_id=u-bv526,variant_label=r5i1p1f3,"
+    ]
+
+    actual = extract_sections_from_naml(path_to_mock_nl)
+    assert actual == expected
+
+
+def test_convert_str_to_facets():
+    section = "calendar=gregorian,label_for_plots=HadGEM3-GC5E-LL N96ORCA1,model_id=HadGEM3-GC5E-LL,suite_id=u-cw673,variant_label=r1i1p1f1,"
+    expected = {
+        "calendar": "gregorian",
+        "label_for_plots": "HadGEM3-GC5E-LL N96ORCA1",
+        "model_id": "HadGEM3-GC5E-LL",
+        "suite_id": "u-cw673",
+        "variant_label": "r1i1p1f1",
+    }
+
+    actual = convert_str_to_facets(section)
+    assert actual == expected
+
+
+def test_add_common_facets(mock_env_vars):
+    dataset_dict = {
+        "calendar": "gregorian",
+        "label_for_plots": "HadGEM3-GC5E-LL N96ORCA1",
+        "model_id": "HadGEM3-GC5E-LL",
+        "suite_id": "u-cw673",
+        "variant_label": "r1i1p1f1",
+    }
+
+    expected = {
+        "calendar": "gregorian",
+        "label_for_plots": "HadGEM3-GC5E-LL N96ORCA1",
+        "model_id": "HadGEM3-GC5E-LL",
+        "suite_id": "u-cw673",
+        "variant_label": "r1i1p1f1",
+        "start_year": 1993,
+        "end_year": 2002,
+        "project": "CMIP6",
+    }
+
+
+    actual = add_common_facets(dataset_dict)
+    assert actual == expected
+
+
+def test_process_naml_file(path_to_mock_nl, mock_env_vars):
+    expected = [
+        {
+            'calendar': 'gregorian',
+            'label_for_plots': 'HadGEM3-GC5E-LL N96ORCA1',
+            'model_id': 'HadGEM3-GC5E-LL',
+            'suite_id': 'u-cw673',
+            'variant_label': 'r1i1p1f1',
+            'start_year': 1993,
+            'end_year': 2002,
+            'project': 'CMIP6'
+         },
+        {
+            'calendar': '360_day',
+            'label_for_plots': 'HadGEM3-GC3.1 N96ORCA1',
+            'model_id': 'HadGEM3-GC31-LL',
+            'suite_id': 'u-bv526',
+            'variant_label': 'r5i1p1f3',
+            'start_year': 1993,
+            'end_year': 2002,
+            'project': 'CMIP6'
+        }
+    ]
+
+    actual = process_naml_file(path_to_mock_nl)
+    assert actual == expected

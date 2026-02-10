@@ -9,7 +9,6 @@ Overwrite the ESMValTool recipe with an updated version. Include:
 """
 import os
 import yaml
-from common import write_dict_to_yaml
 
 
 def update_recipe(recipe_path):
@@ -152,6 +151,26 @@ def add_extra_datasets(recipe, yaml_filepath):
     return recipe
 
 
+def write_recipe(updated_recipe, target_path):
+    """Write updated ESMValTool recipe to a YAML file at ``target_path``.
+
+    Parameters
+    ----------
+    updated_recipe: dict
+        Dictionary containing the updated ESMValTool recipe content.
+
+    target_path: str
+        Location to write the updated ESMValTool recipe.
+    """
+    with open(target_path, "w") as file_handle:
+        yaml.dump(
+            updated_recipe,
+            file_handle,
+            default_flow_style=False,
+            sort_keys=True,
+        )
+
+
 def main():
     """
     Load and update the ESMValTool recipe. Overwrite the original recipe with
@@ -164,7 +183,7 @@ def main():
     cmip6_datasets_fp = f"{os.environ['DATASETS_LIST_DIR']}/cmip6_datasets.yml"
     extended_recipe = add_extra_datasets(updated_recipe, cmip6_datasets_fp)
 
-    write_dict_to_yaml(extended_recipe, recipe_path)
+    write_recipe(extended_recipe, recipe_path)
 
 
 if __name__ == "__main__":

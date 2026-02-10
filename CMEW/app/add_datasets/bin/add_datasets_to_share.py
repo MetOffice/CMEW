@@ -47,11 +47,13 @@ def extract_sections_from_naml(naml_fp):
 
     for dataset in datasets:
         if dataset:  # There is an empty dataset at the end
-            # Remove leading and trailing whitespace and newlines
-            dataset = dataset.strip()
-            dataset.replace("\n", "")
+            # Replace newlines with just commas
+            dataset = dataset.replace(",\n", ",")
 
-            # remove the header
+            # Remove remaining new lines
+            dataset = dataset.replace("\n", "")
+
+            # Remove the header
             dataset = dataset.replace(f"&{name}", "")
 
             # Add the datasets to the list
@@ -69,7 +71,7 @@ def convert_str_to_facets(section):
     section: str
         A string containing the amended content of a section of namelist file.
         The content is expected to be in the format of key=value pairs,
-        without a header and separated by commas rather than new lines.
+        without a header and separated by commas.
 
     Returns
     -------
@@ -80,7 +82,7 @@ def convert_str_to_facets(section):
     # Initialise a dictionary to hold the facets of the dataset
     section_dict = {}
 
-    # Seaparate the facets in the string to loop over
+    # Separate the facets in the string to loop over
     facets = section.split(",")
     for facet in facets:
         if facet:  # There's an empty facet at the end
@@ -146,6 +148,26 @@ def process_naml_file(naml_fp):
         dataset_dict = add_common_facets(dataset_dict)
         datasets.append(dataset_dict)
     return datasets
+
+
+def write_dict_to_yaml(dict_to_write, target_path):
+    """Write the contents of a dictionary to a YAML file at ``target_path``.
+
+    Parameters
+    ----------
+    dict_to_write dict
+        Dictionary containing the content to write.
+
+    target_path: str
+        Location at which to write the content.
+    """
+    with open(target_path, "w") as file_handle:
+        yaml.dump(
+            dict_to_write,
+            file_handle,
+            default_flow_style=False,
+            sort_keys=True,
+        )
 
 
 def write_datasets_to_yaml(datasets, name, target_dir):
