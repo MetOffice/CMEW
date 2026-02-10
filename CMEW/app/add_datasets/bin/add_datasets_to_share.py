@@ -184,29 +184,29 @@ def dict_namelists_in_grandparent_dir():
         if file.endswith(".nl"):
 
             # Read the name of the file for the key
-            name = os.path.basename(file)[:-3]
+            basename = os.path.basename(file)[:-3]
 
             # Use the filepath for the value
             namelist_fp = os.path.join(grandparent_dir, file)
 
             # Add to the dictionary
-            filepaths[name] = namelist_fp
+            filepaths[basename] = namelist_fp
 
     return filepaths
 
 
 if __name__ == "__main__":
-    # Read the target directory from the environment
+    # Read the target (shared) directory from the environment
     target_dir = os.environ["DATASETS_LIST_DIR"]
 
     # Create the target directory if it doesn't exist
     os.makedirs(target_dir, exist_ok=True)
 
     # Loop over the namelist files in the grandparent directory
-    for name, nl_fp in dict_namelists_in_grandparent_dir().items():
+    for basename, nl_fp in dict_namelists_in_grandparent_dir().items():
 
         # Extract the datasets from each file
         datasets = process_naml_file(nl_fp)
 
         # Write the datasets to a YAML file in the target directory
-        write_datasets_to_yaml(datasets, name, target_dir)
+        write_datasets_to_yaml(datasets, basename, target_dir)
