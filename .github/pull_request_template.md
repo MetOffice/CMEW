@@ -24,20 +24,20 @@ Closes #<issue_number>.
   - [ ] Rose metadata related to the change have been added or updated.
   - [ ] The change does not require Rose metadata to be added or updated.
 - Rendering the Rose metadata (select one of the following):
-  - [ ] The change in this PR does not affect the Rose GUI.
   - [ ] The Rose GUI shows the change as expected.
+  - [ ] The change in this PR does not affect the Rose GUI.
 - Updating the tests (select one of the following):
   - [ ] Tests related to the change have been added or updated.
   - [ ] The change does not require tests to be added or updated.
 - Updating the user documentation (i.e. everything in the `doc` directory, including the [Quick Start](https://github.com/MetOffice/CMEW/blob/main/doc/source/user_guide/quick_start.rst) section; select one of the following):
-  - [ ] The change in this PR does not require the user documentation to be updated.
   - [ ] The user documentation related to the change has been updated appropriately.
+  - [ ] The change in this PR does not require the user documentation to be updated.
 - Rendering the user documentation ([wiki: Build the documentation locally](https://github.com/MetOffice/CMEW/wiki/Detailed-Working-Practices#build-the-documentation-locally) provides instructions; select one of the following):
-  - [ ] The change in this PR does not affect the HTML pages.
   - [ ] The HTML pages show the change as expected.
+  - [ ] The change in this PR does not affect the HTML pages.
 - Updating the API documentation (e.g. docstrings in Python modules; select one of the following):
-  - [ ] The change in this PR does not affect the API documentation.
   - [ ] The API documentation related to the change has been updated appropriately.
+  - [ ] The change in this PR does not affect the API documentation.
 
 ## PR creation checklist for the _reviewer_
 
@@ -61,22 +61,22 @@ Closes #<issue_number>.
   - [ ] Rose metadata related to the change have been added or updated.
   - [ ] The change does not require Rose metadata to be added or updated.
 - Rendering the Rose metadata (select one of the following):
-  - [ ] The change in this PR does not affect the Rose GUI.
   - [ ] The Rose GUI shows the change as expected.
+  - [ ] The change in this PR does not affect the Rose GUI.
 - Updating the tests (select one of the following):
   - [ ] Tests related to the change have been added or updated.
   - [ ] The change does not require tests to be added or updated.
 - Updating the user documentation (i.e. everything in the `doc` directory, including the [Quick Start](https://github.com/MetOffice/CMEW/blob/main/doc/source/user_guide/quick_start.rst) section; select one of the following):
-  - [ ] The change in this PR does not require the user documentation to be updated.
   - [ ] The user documentation related to the change has been updated appropriately.
+  - [ ] The change in this PR does not require the user documentation to be updated.
 - Rendering the user documentation ([wiki: Build the documentation locally](https://github.com/MetOffice/CMEW/wiki/Detailed-Working-Practices#build-the-documentation-locally) provides instructions; select one of the following):
-  - [ ] The change in this PR does not affect the HTML pages.
   - [ ] The HTML pages show the change as expected.
+  - [ ] The change in this PR does not affect the HTML pages.
 - Updating the API documentation (e.g. docstrings in Python modules; select one of the following):
-  - [ ] The change in this PR does not affect the API documentation.
   - [ ] The API documentation related to the change has been updated appropriately.
+  - [ ] The change in this PR does not affect the API documentation.
 
 > [!IMPORTANT]
-> - Remember to re-check the Definition of Done following a review.
+> - Remember to re-check the Definition of Done after making changes in response to a review.
 > - The developer merges the PR.
 > - Remember to use the format `#<pull_request_number>: <pull_request_title>` when writing the merge commit message for the pull request, so the pull request number is immediately visible on GitHub, regardless of the length of the pull request title.
