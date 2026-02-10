@@ -176,14 +176,20 @@ def dict_namelists_in_grandparent_dir():
     """
     filepaths = {}
 
+    # Namelist files are written to the same directory as rose-app.conf
     grandparent_dir = os.path.dirname(os.path.dirname(__file__))
+
+    # Grab all the namelist files, in case we add more in future
     for file in os.listdir(grandparent_dir):
         if file.endswith(".nl"):
-            # Read the name of the file without the extension
+
+            # Read the name of the file for the key
             name = os.path.basename(file)[:-3]
 
-            #
+            # Use the filepath for the value
             namelist_fp = os.path.join(grandparent_dir, file)
+
+            # Add to the dictionary
             filepaths[name] = namelist_fp
 
     return filepaths
