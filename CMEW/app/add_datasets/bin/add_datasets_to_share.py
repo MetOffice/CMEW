@@ -11,7 +11,7 @@ converts the contents to a dictionary of datasets and their facets,
 then writes those dictionaries to YAML files in the share directory.
 """
 import os
-from common import write_dict_to_yaml
+import yaml
 
 
 def extract_sections_from_naml(naml_fp):
