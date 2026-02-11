@@ -82,11 +82,11 @@ def test_extract_sections_from_naml(path_to_mock_nl):
 
 def test_convert_str_to_facets():
     section = (
-            "calendar=gregorian,"
-            "label_for_plots=HadGEM3-GC5E-LL N96ORCA1,"
-            "model_id=HadGEM3-GC5E-LL,"
-            "suite_id=u-cw673,"
-            "variant_label=r1i1p1f1,"
+        "calendar=gregorian,"
+        "label_for_plots=HadGEM3-GC5E-LL N96ORCA1,"
+        "model_id=HadGEM3-GC5E-LL,"
+        "suite_id=u-cw673,"
+        "variant_label=r1i1p1f1,"
     )
     expected = {
         "calendar": "gregorian",
