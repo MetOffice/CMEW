@@ -155,14 +155,13 @@ def test_write_dict_to_yaml(path_to_kgo_dict):
 
 
 # I tested most of the functionality above, so this just checks the filename
-def test_write_datasets_to_yaml(monkeypatch):
-    def mock_write_dict_to_yaml(dict_to_write, target_path):
-        return target_path
+@patch("add_datasets_to_share.write_dict_to_yaml", return_value=None)
+def test_write_datasets_to_yaml(mock_writing):
 
-    monkeypatch.setattr("add_datasets_to_share.write_dict_to_yaml", mock_write_dict_to_yaml)
+    test_call = write_datasets_to_yaml({"key": "value"}, "test_name", "/a/b")
 
-    result = write_datasets_to_yaml({"a": 1}, "test_name", "/tmp")
-    assert result == "/tmp/test_name.yml"
+    # Filepath should be the second ([1]) argument of the call
+    assert mock_writing.call_args.args[1] == "/a/b/test_name.yml"
 
 
 # This was a massive mess of Googling / trawling Stack Exchange.
