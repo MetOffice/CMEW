@@ -1,8 +1,12 @@
-from add_datasets_to_share import extract_sections_from_naml, convert_str_to_facets, add_common_facets, process_naml_file, write_dict_to_yaml
+from add_datasets_to_share import extract_sections_from_naml, convert_str_to_facets, add_common_facets, process_naml_file, write_dict_to_yaml, dict_namelists_in_grandparent_dir
 from pathlib import Path
 import pytest
 import yaml
 import tempfile
+import unittest
+from unittest.mock import patch
+import sys
+import os
 
 
 @pytest.fixture
@@ -147,3 +151,21 @@ def test_write_dict_to_yaml(path_to_kgo_dict):
         expected = yaml.safe_load(file_handle)
 
     assert expected == actual
+
+
+# This was a massive mess of Googling / trawling Stack Exchange.
+# Please do tell me if it's not right / there are better ways.
+class TestDictNamelistsInGrandparentDir(unittest.TestCase):
+    @patch.object(sys.modules[__name__], "__file__", "/a/b/c/d/e.py")
+    def test_directory_is_grandparent(self):
+        assert os.path.dirname(os.path.dirname(__file__)) == "/a/b/c"
+
+    @patch("os.path.dirname", return_value="/a/b/c")
+    @patch("os.listdir", return_value=["this_one.nl", "this_two.nl", "not_this_one.txt", "subdir"])
+    def test_only_nl_files_listed(self, mock_dirname, mock_listdir):
+        expected = {
+            "this_one": "/a/b/c/this_one.nl",
+            "this_two": "/a/b/c/this_two.nl"
+        }
+        actual = dict_namelists_in_grandparent_dir()
+        assert expected == actual
