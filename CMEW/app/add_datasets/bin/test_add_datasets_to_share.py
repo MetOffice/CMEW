@@ -1,4 +1,4 @@
-from add_datasets_to_share import extract_sections_from_naml, convert_str_to_facets, add_common_facets, process_naml_file, write_dict_to_yaml, dict_namelists_in_grandparent_dir
+from add_datasets_to_share import extract_sections_from_naml, convert_str_to_facets, add_common_facets, process_naml_file, write_dict_to_yaml, write_datasets_to_yaml, dict_namelists_in_grandparent_dir
 from pathlib import Path
 import pytest
 import yaml
@@ -125,6 +125,7 @@ def test_process_naml_file(path_to_mock_nl, mock_env_vars):
     assert actual == expected
 
 
+# This one was only *some* random copying of Google
 def test_write_dict_to_yaml(path_to_kgo_dict):
     # Note the keys are not alphabetical here but are in the output
     test_dict = {
@@ -141,7 +142,7 @@ def test_write_dict_to_yaml(path_to_kgo_dict):
     }
 
     # Write the test dictionary to a temporary file
-    with tempfile.NamedTemporaryFile(delete_on_close=False) as tmp:
+    with tempfile.NamedTemporaryFile() as tmp:
         write_dict_to_yaml(test_dict, tmp.name)
         tmp.seek(0)
         actual = yaml.safe_load(tmp)
@@ -151,6 +152,17 @@ def test_write_dict_to_yaml(path_to_kgo_dict):
         expected = yaml.safe_load(file_handle)
 
     assert expected == actual
+
+
+# I tested most of the functionality above, so this just checks the filename
+def test_write_datasets_to_yaml(monkeypatch):
+    def mock_write_dict_to_yaml(dict_to_write, target_path):
+        return target_path
+
+    monkeypatch.setattr("add_datasets_to_share.write_dict_to_yaml", mock_write_dict_to_yaml)
+
+    result = write_datasets_to_yaml({"a": 1}, "test_name", "/tmp")
+    assert result == "/tmp/test_name.yml"
 
 
 # This was a massive mess of Googling / trawling Stack Exchange.
