@@ -29,7 +29,7 @@ def path_to_kgo_yaml():
         Path(__file__).parent.parent.parent
         / "unittest"
         / "kgo"
-        / "test_model_runs.yml"
+        / "model_runs.yml"
     )
     return str(path)
 
@@ -40,7 +40,7 @@ def path_to_mock_nl():
         Path(__file__).parent.parent.parent
         / "unittest"
         / "mock_data"
-        / "test_model_runs.nl"
+        / "model_runs.nl"
     )
     return str(path)
 
@@ -51,7 +51,7 @@ def path_to_kgo_dict():
         Path(__file__).parent.parent.parent
         / "unittest"
         / "kgo"
-        / "kgo_test_dict.yml"
+        / "basic_dict.yml"
     )
     return path
 
