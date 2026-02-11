@@ -57,9 +57,23 @@ def path_to_kgo_dict():
 
 
 def test_extract_sections_from_naml(path_to_mock_nl):
+    # Note that I actually expect one long string for each section,
+    # not a concatenated string, but this fails the flake8 tests.
     expected = [
-        "calendar=gregorian,label_for_plots=HadGEM3-GC5E-LL N96ORCA1,model_id=HadGEM3-GC5E-LL,suite_id=u-cw673,variant_label=r1i1p1f1,",
-        "calendar=360_day,label_for_plots=HadGEM3-GC3.1 N96ORCA1,model_id=HadGEM3-GC31-LL,suite_id=u-bv526,variant_label=r5i1p1f3,",
+        (
+            "calendar=gregorian,"
+            "label_for_plots=HadGEM3-GC5E-LL N96ORCA1,"
+            "model_id=HadGEM3-GC5E-LL,"
+            "suite_id=u-cw673,"
+            "variant_label=r1i1p1f1,"
+        ),
+        (
+            "calendar=360_day,"
+            "label_for_plots=HadGEM3-GC3.1 N96ORCA1,"
+            "model_id=HadGEM3-GC31-LL,"
+            "suite_id=u-bv526,"
+            "variant_label=r5i1p1f3,"
+        ),
     ]
 
     actual = extract_sections_from_naml(path_to_mock_nl)
@@ -67,7 +81,13 @@ def test_extract_sections_from_naml(path_to_mock_nl):
 
 
 def test_convert_str_to_facets():
-    section = "calendar=gregorian,label_for_plots=HadGEM3-GC5E-LL N96ORCA1,model_id=HadGEM3-GC5E-LL,suite_id=u-cw673,variant_label=r1i1p1f1,"
+    section = (
+            "calendar=gregorian,"
+            "label_for_plots=HadGEM3-GC5E-LL N96ORCA1,"
+            "model_id=HadGEM3-GC5E-LL,"
+            "suite_id=u-cw673,"
+            "variant_label=r1i1p1f1,"
+    )
     expected = {
         "calendar": "gregorian",
         "label_for_plots": "HadGEM3-GC5E-LL N96ORCA1",
