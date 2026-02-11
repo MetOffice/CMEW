@@ -1,4 +1,12 @@
-from add_datasets_to_share import extract_sections_from_naml, convert_str_to_facets, add_common_facets, process_naml_file, write_dict_to_yaml, write_datasets_to_yaml, dict_namelists_in_grandparent_dir
+from add_datasets_to_share import (
+    extract_sections_from_naml,
+    convert_str_to_facets,
+    add_common_facets,
+    process_naml_file,
+    write_dict_to_yaml,
+    write_datasets_to_yaml,
+    dict_namelists_in_grandparent_dir,
+)
 from pathlib import Path
 import pytest
 import yaml
@@ -51,7 +59,7 @@ def path_to_kgo_dict():
 def test_extract_sections_from_naml(path_to_mock_nl):
     expected = [
         "calendar=gregorian,label_for_plots=HadGEM3-GC5E-LL N96ORCA1,model_id=HadGEM3-GC5E-LL,suite_id=u-cw673,variant_label=r1i1p1f1,",
-        "calendar=360_day,label_for_plots=HadGEM3-GC3.1 N96ORCA1,model_id=HadGEM3-GC31-LL,suite_id=u-bv526,variant_label=r5i1p1f3,"
+        "calendar=360_day,label_for_plots=HadGEM3-GC3.1 N96ORCA1,model_id=HadGEM3-GC31-LL,suite_id=u-bv526,variant_label=r5i1p1f3,",
     ]
 
     actual = extract_sections_from_naml(path_to_mock_nl)
@@ -92,7 +100,6 @@ def test_add_common_facets(mock_env_vars):
         "project": "CMIP6",
     }
 
-
     actual = add_common_facets(dataset_dict)
     assert actual == expected
 
@@ -100,25 +107,25 @@ def test_add_common_facets(mock_env_vars):
 def test_process_naml_file(path_to_mock_nl, mock_env_vars):
     expected = [
         {
-            'calendar': 'gregorian',
-            'label_for_plots': 'HadGEM3-GC5E-LL N96ORCA1',
-            'model_id': 'HadGEM3-GC5E-LL',
-            'suite_id': 'u-cw673',
-            'variant_label': 'r1i1p1f1',
-            'start_year': 1993,
-            'end_year': 2002,
-            'project': 'CMIP6'
-         },
+            "calendar": "gregorian",
+            "label_for_plots": "HadGEM3-GC5E-LL N96ORCA1",
+            "model_id": "HadGEM3-GC5E-LL",
+            "suite_id": "u-cw673",
+            "variant_label": "r1i1p1f1",
+            "start_year": 1993,
+            "end_year": 2002,
+            "project": "CMIP6",
+        },
         {
-            'calendar': '360_day',
-            'label_for_plots': 'HadGEM3-GC3.1 N96ORCA1',
-            'model_id': 'HadGEM3-GC31-LL',
-            'suite_id': 'u-bv526',
-            'variant_label': 'r5i1p1f3',
-            'start_year': 1993,
-            'end_year': 2002,
-            'project': 'CMIP6'
-        }
+            "calendar": "360_day",
+            "label_for_plots": "HadGEM3-GC3.1 N96ORCA1",
+            "model_id": "HadGEM3-GC31-LL",
+            "suite_id": "u-bv526",
+            "variant_label": "r5i1p1f3",
+            "start_year": 1993,
+            "end_year": 2002,
+            "project": "CMIP6",
+        },
     ]
 
     actual = process_naml_file(path_to_mock_nl)
@@ -130,15 +137,11 @@ def test_write_dict_to_yaml(path_to_kgo_dict):
     # Note the keys are not alphabetical here but are in the output
     test_dict = {
         "key_1": "value_1",
-        "key_for_list": [
-            "item_1",
-            "item_2",
-            "item_3"
-        ],
+        "key_for_list": ["item_1", "item_2", "item_3"],
         "key_for_dict": {
             "nested_key_1": "nested_value_1",
-            "nested_key_2": "nested_value_2"
-        }
+            "nested_key_2": "nested_value_2",
+        },
     }
 
     # Write the test dictionary to a temporary file
@@ -158,7 +161,7 @@ def test_write_dict_to_yaml(path_to_kgo_dict):
 @patch("add_datasets_to_share.write_dict_to_yaml", return_value=None)
 def test_write_datasets_to_yaml(mock_writing):
 
-    test_call = write_datasets_to_yaml({"key": "value"}, "test_name", "/a/b")
+    write_datasets_to_yaml({"key": "value"}, "test_name", "/a/b")
 
     # Filepath should be the second ([1]) argument of the call
     assert mock_writing.call_args.args[1] == "/a/b/test_name.yml"
@@ -172,11 +175,19 @@ class TestDictNamelistsInGrandparentDir(unittest.TestCase):
         assert os.path.dirname(os.path.dirname(__file__)) == "/a/b/c"
 
     @patch("os.path.dirname", return_value="/a/b/c")
-    @patch("os.listdir", return_value=["this_one.nl", "this_two.nl", "not_this_one.txt", "subdir"])
+    @patch(
+        "os.listdir",
+        return_value=[
+            "this_one.nl",
+            "this_two.nl",
+            "not_this_one.txt",
+            "subdir",
+        ],
+    )
     def test_only_nl_files_listed(self, mock_dirname, mock_listdir):
         expected = {
             "this_one": "/a/b/c/this_one.nl",
-            "this_two": "/a/b/c/this_two.nl"
+            "this_two": "/a/b/c/this_two.nl",
         }
         actual = dict_namelists_in_grandparent_dir()
         assert expected == actual

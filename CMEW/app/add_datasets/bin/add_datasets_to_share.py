@@ -116,7 +116,7 @@ def add_common_facets(dataset_dict, project="CMIP6"):
     # Read the time window from environment
     start_year = int(os.environ["START_YEAR"])
     end_year = (
-            int(os.environ["START_YEAR"]) + int(os.environ["NUMBER_OF_YEARS"]) - 1
+        int(os.environ["START_YEAR"]) + int(os.environ["NUMBER_OF_YEARS"]) - 1
     )
 
     # Add the start year, end year and project to the dataset dictionary

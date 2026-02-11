@@ -24,7 +24,10 @@ def mock_env_vars(monkeypatch):
     monkeypatch.setenv("VARIANT_LABEL", "r1i1p1f1")
 
     # For adding CMIP6 datasets
-    monkeypatch.setenv("DATASETS_LIST_DIR", str(Path(__file__).parent.parent.parent / "unittest" / "mock_data"))
+    monkeypatch.setenv(
+        "DATASETS_LIST_DIR",
+        str(Path(__file__).parent.parent.parent / "unittest" / "mock_data"),
+    )
 
 
 @pytest.fixture
@@ -86,7 +89,11 @@ def test_update_recipe(
     assert actual == expected
 
 
-def test_add_extra_datasets(path_to_updated_recipe_kgo, path_to_extra_datasets_yaml, path_to_kgo_extended_recipe):
+def test_add_extra_datasets(
+    path_to_updated_recipe_kgo,
+    path_to_extra_datasets_yaml,
+    path_to_kgo_extended_recipe,
+):
     """Updated is the input file and extended is the output file."""
     with open(path_to_kgo_extended_recipe, "r") as file_handle_1:
         expected = yaml.safe_load(file_handle_1)
