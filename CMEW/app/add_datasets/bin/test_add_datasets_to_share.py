@@ -1,6 +1,8 @@
-from add_datasets_to_share import extract_sections_from_naml, convert_str_to_facets, add_common_facets, process_naml_file
+from add_datasets_to_share import extract_sections_from_naml, convert_str_to_facets, add_common_facets, process_naml_file, write_dict_to_yaml
 from pathlib import Path
 import pytest
+import yaml
+import tempfile
 
 
 @pytest.fixture
@@ -29,6 +31,17 @@ def path_to_mock_nl():
         / "test_model_runs.nl"
     )
     return str(path)
+
+
+@pytest.fixture
+def path_to_kgo_dict():
+    path = (
+        Path(__file__).parent.parent.parent
+        / "unittest"
+        / "kgo"
+        / "kgo_test_dict.yml"
+    )
+    return path
 
 
 def test_extract_sections_from_naml(path_to_mock_nl):
@@ -106,3 +119,31 @@ def test_process_naml_file(path_to_mock_nl, mock_env_vars):
 
     actual = process_naml_file(path_to_mock_nl)
     assert actual == expected
+
+
+def test_write_dict_to_yaml(path_to_kgo_dict):
+    # Note the keys are not alphabetical here but are in the output
+    test_dict = {
+        "key_1": "value_1",
+        "key_for_list": [
+            "item_1",
+            "item_2",
+            "item_3"
+        ],
+        "key_for_dict": {
+            "nested_key_1": "nested_value_1",
+            "nested_key_2": "nested_value_2"
+        }
+    }
+
+    # Write the test dictionary to a temporary file
+    with tempfile.NamedTemporaryFile(delete_on_close=False) as tmp:
+        write_dict_to_yaml(test_dict, tmp.name)
+        tmp.seek(0)
+        actual = yaml.safe_load(tmp)
+
+    # Load the expected dictionary
+    with open(path_to_kgo_dict, "r") as file_handle:
+        expected = yaml.safe_load(file_handle)
+
+    assert expected == actual

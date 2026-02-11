@@ -150,6 +150,8 @@ def process_naml_file(naml_fp):
     return datasets
 
 
+# Note: I've stolen this with a slight rename from update_recipe_file.py
+# Eventually the plan is to move it to a common directory
 def write_dict_to_yaml(dict_to_write, target_path):
     """Write the contents of a dictionary to a YAML file at ``target_path``.
 
