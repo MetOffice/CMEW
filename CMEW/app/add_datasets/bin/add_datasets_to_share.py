@@ -172,6 +172,8 @@ def write_dict_to_yaml(dict_to_write, target_path):
         )
 
 
+# If the above function does stay here, there's no reason to have this
+# whole function just to create a target path then call the above
 def write_datasets_to_yaml(datasets, name, target_dir):
     """
     Write a list of dataset dictionaries to a YAML file in the directory.
