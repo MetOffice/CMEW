@@ -94,7 +94,8 @@ def test_add_extra_datasets(path_to_updated_recipe_kgo, path_to_extra_datasets_y
     with open(path_to_updated_recipe_kgo, "r") as file_handle_2:
         pre_recipe = yaml.safe_load(file_handle_2)
 
-    actual = add_extra_datasets(pre_recipe, path_to_extra_datasets_yaml)
+    # Using str(filepath) here as update_recipe_file.py uses os, not pathlib
+    actual = add_extra_datasets(pre_recipe, str(path_to_extra_datasets_yaml))
     assert actual == expected
 
 
