@@ -11,4 +11,4 @@ User Guide
    Prerequisites <prerequisites_metoffice>
    quick_start
    workflow
-   adding_datasets
+   Adding Datasets <adding_datasets>

@@ -35,3 +35,8 @@ and then edit the details. To do this:
    :width: 600px
 
 * Overwrite the details with those of the new dataset to be added.
+
+.. warning::
+   Currently, the recipe "Radiation Budget" will not allow both a CMIP6 dataset and
+   a model devlopment run that share a common model ID (such as "HadGEM3-GC31-LL")
+   to be run in the same workflow.
