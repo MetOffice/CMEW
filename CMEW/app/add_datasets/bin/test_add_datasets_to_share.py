@@ -1,3 +1,5 @@
+# (C) Crown Copyright 2026, Met Office.
+# The LICENSE.md file contains full licensing details.
 from add_datasets_to_share import (
     extract_sections_from_naml,
     convert_str_to_facets,
