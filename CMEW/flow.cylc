@@ -114,7 +114,6 @@
             SUITE_ID = {{ SUITE_ID }}
             REF_LABEL_FOR_PLOTS = {{ REF_LABEL_FOR_PLOTS }}
             REF_SUITE_ID = {{ REF_SUITE_ID }}
-            DATASETS_LIST_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/dataset_lists
 
     [[configure_standardise<recipe>]]
         inherit = STANDARDISE, RECIPE, MODEL_RUNS
@@ -135,7 +134,6 @@
         inherit = MODEL_RUNS
         [[[environment]]]
             ROSE_TASK_APP = add_datasets
-            DATASETS_LIST_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/dataset_lists
 
     [[housekeeping]]
 
