@@ -23,7 +23,7 @@
 {%- if UNITTEST or TEST %}
             install_env_file => unittest
 {%- endif %}
-{%- if not UNITTEST %}           
+{%- if not UNITTEST %}
             install_env_file => configure_recipe & add_datasets
             add_datasets => configure_for<recipe>
 
