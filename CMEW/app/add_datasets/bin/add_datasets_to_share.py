@@ -191,9 +191,9 @@ def write_datasets_to_yaml(datasets, name, target_dir):
     write_dict_to_yaml(datasets, target_fp)
 
 
-def dict_namelists_in_grandparent_dir():
+def dict_namelists_in_work_dir():
     """
-    Looks for namelist files in the grandparent directory of the current file.
+    Looks for namelist files in the work directory of the current app.
 
     Returns
     -------
@@ -202,18 +202,18 @@ def dict_namelists_in_grandparent_dir():
     """
     filepaths = {}
 
-    # Namelist files are written to the same directory as rose-app.conf
-    grandparent_dir = os.path.dirname(os.path.dirname(__file__))
+    # Namelist files are written to the work directory of the add_datasets
+    work_dir = os.getenv("CYLC_TASK_WORK_DIR")
 
     # Grab all the namelist files, in case we add more in future
-    for file in os.listdir(grandparent_dir):
+    for file in os.listdir(work_dir):
         if file.endswith(".nl"):
 
-            # Read the name of the file for the key
+            # Read the name of the file for the key, minus ".nl"
             basename = os.path.basename(file)[:-3]
 
             # Use the filepath for the value
-            namelist_fp = os.path.join(grandparent_dir, file)
+            namelist_fp = os.path.join(work_dir, file)
 
             # Add to the dictionary
             filepaths[basename] = namelist_fp
@@ -228,8 +228,8 @@ if __name__ == "__main__":
     # Create the target directory if it doesn't exist
     os.makedirs(target_dir, exist_ok=True)
 
-    # Loop over the namelist files in the grandparent directory
-    for basename, nl_fp in dict_namelists_in_grandparent_dir().items():
+    # Loop over the namelist files in the work directory
+    for basename, nl_fp in dict_namelists_in_work_dir().items():
 
         # Extract the datasets from each file
         datasets = process_naml_file(nl_fp)

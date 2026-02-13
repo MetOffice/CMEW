@@ -5,7 +5,7 @@ from add_datasets_to_share import (
     process_naml_file,
     write_dict_to_yaml,
     write_datasets_to_yaml,
-    dict_namelists_in_grandparent_dir,
+    dict_namelists_in_work_dir,
 )
 from pathlib import Path
 import pytest
@@ -21,6 +21,7 @@ import os
 def mock_env_vars(monkeypatch):
     monkeypatch.setenv("START_YEAR", "1993")
     monkeypatch.setenv("NUMBER_OF_YEARS", "10")
+    monkeypatch.setenv("CYLC_TASK_WORK_DIR", "/a/b/c")
 
 
 @pytest.fixture
@@ -189,25 +190,20 @@ def test_write_datasets_to_yaml(mock_writing):
 
 # This was a massive mess of Googling / trawling Stack Exchange.
 # Please do tell me if it's not right / there are better ways.
-class TestDictNamelistsInGrandparentDir(unittest.TestCase):
-    @patch.object(sys.modules[__name__], "__file__", "/a/b/c/d/e.py")
-    def test_directory_is_grandparent(self):
-        assert os.path.dirname(os.path.dirname(__file__)) == "/a/b/c"
-
-    @patch("os.path.dirname", return_value="/a/b/c")
-    @patch(
-        "os.listdir",
-        return_value=[
-            "this_one.nl",
-            "this_two.nl",
-            "not_this_one.txt",
-            "subdir",
-        ],
-    )
-    def test_only_nl_files_listed(self, mock_dirname, mock_listdir):
-        expected = {
-            "this_one": "/a/b/c/this_one.nl",
-            "this_two": "/a/b/c/this_two.nl",
-        }
-        actual = dict_namelists_in_grandparent_dir()
-        assert expected == actual
+@patch("os.path.dirname", return_value="/a/b/c")
+@patch(
+    "os.listdir",
+    return_value=[
+        "this_one.nl",
+        "this_two.nl",
+        "not_this_one.txt",
+        "subdir",
+    ],
+)
+def test_dict_namelists_in_work_dir(mock_dirname, mock_listdir, mock_env_vars):
+    expected = {
+        "this_one": "/a/b/c/this_one.nl",
+        "this_two": "/a/b/c/this_two.nl",
+    }
+    actual = dict_namelists_in_work_dir()
+    assert expected == actual
