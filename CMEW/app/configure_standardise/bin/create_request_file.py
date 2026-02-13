@@ -8,14 +8,22 @@ import configparser
 import os
 from pathlib import Path
 
-REQUEST_DEFAULTS_PATH = (
-    Path(__file__).resolve().parents[1] / "etc" / "request_defaults.cfg"
-)
+
+def _get_request_defaults_path() -> Path:
+    """
+    Return path to request defaults file.
+    Prefer REQUEST_DEFAULTS_PATH from the environment (set by Cylc),
+    but fall back to the repository-relative path for standalone pytest runs.
+    """
+    env_path = os.environ.get("REQUEST_DEFAULTS_PATH")
+    if env_path:
+        return Path(env_path)
+    return Path(__file__).resolve().parents[1] / "etc" / "request_defaults.cfg"
 
 
 def load_request_defaults():
     cfg = configparser.ConfigParser()
-    cfg.read(REQUEST_DEFAULTS_PATH)
+    cfg.read(str(_get_request_defaults_path()))
     return cfg
 
 
