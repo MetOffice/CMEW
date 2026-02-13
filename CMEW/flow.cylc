@@ -5,11 +5,17 @@
 {{ assert(SITE != "", "SITE must be set to something other than an empty string") }}
 {{ assert(ESMVALTOOL_MODULE_NAME != "", "ESMVALTOOL_MODULE_NAME must be set to something other than an empty string") }}
 
+{% set _suite_ids = [] %}
+{% for _s in RUN_SUITE_IDS.split(",") %}
+    {% set _ = _suite_ids.append(_s.strip()) %}
+{% endfor %}
+
 [scheduler]
     UTC mode = True
 
 [task parameters]
     recipe = radiation_budget
+    dataset = {{ _suite_ids | join(", ") }}
 
 [scheduling]
     [[graph]]
@@ -17,12 +23,18 @@
 {%- if UNITTEST or TEST %}
             install_env_file => unittest
 {%- endif %}
-{%- if not UNITTEST %}
+{%- if not UNITTEST %}           
             install_env_file => configure_recipe & add_datasets
             add_datasets => configure_for<recipe>
-            configure_for<recipe> => configure_standardise<recipe>
-            configure_recipe => run_recipe<recipe>
-            configure_standardise<recipe> => standardise_model_data => run_recipe<recipe> & housekeeping
+
+            configure_for<recipe> => create_variables_file<recipe>
+            create_variables_file<recipe> => configure_standardise<recipe,dataset>
+
+            configure_standardise<recipe,dataset> => standardise_model_data<dataset>
+            standardise_model_data<dataset> => restructure_dirs
+
+            configure_recipe & restructure_dirs => run_recipe<recipe>
+            run_recipe<recipe> => housekeeping
     {%- if TEST %}
             run_recipe<recipe> => compare<recipe>
     {%- endif %}
@@ -35,6 +47,7 @@
         env-script = "eval $(rose task-env)"
         platform = localhost
         [[[environment]]]
+            RUNS_CONFIG_PATH = "{{ RUNS_CONFIG_PATH }}"
             ESMVALTOOL_MODULE_NAME = {{ ESMVALTOOL_MODULE_NAME }}
             CONFIG_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/etc/esmvaltool_config
             USER_CONFIG_PATH = ${CONFIG_DIR}/config-user.yml
@@ -42,8 +55,6 @@
             SHARE_DATA_CDDS = ${CYLC_WORKFLOW_SHARE_DIR}/data/cdds
             ROOT_PROC_DIR = ${SHARE_DATA_CDDS}/proc
             ROOT_DATA_DIR = ${SHARE_DATA_CDDS}/cdds_data
-            REQUEST_PATH_REF  = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request_ref.cfg
-            REQUEST_PATH_EVAL = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request_eval.cfg
             VARIABLES_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/variables.txt
 
     [[RECIPE]]
@@ -115,13 +126,25 @@
             REF_LABEL_FOR_PLOTS = {{ REF_LABEL_FOR_PLOTS }}
             REF_SUITE_ID = {{ REF_SUITE_ID }}
 
-    [[configure_standardise<recipe>]]
+    [[configure_standardise<recipe,dataset>]]
         inherit = STANDARDISE, RECIPE, MODEL_RUNS
         [[[environment]]]
             ROSE_TASK_APP = configure_standardise
+            RUN_LABEL = %(dataset)s
+            REQUEST_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request_%(dataset)s.cfg
+            START_YEAR = {{ START_YEAR }}
+            NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
 
-    [[standardise_model_data]]
-        inherit = STANDARDISE, MODEL_RUNS
+    [[standardise_model_data<dataset>]]
+        inherit = STANDARDISE
+        [[[environment]]]
+            ROSE_TASK_APP = standardise_model_data
+            SITE = {{ SITE }}
+            RUN_LABEL = %(dataset)s
+            REQUEST_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request_%(dataset)s.cfg
+
+    [[restructure_dirs]]
+        inherit = STANDARDISE
         [[[environment]]]
             SITE = {{ SITE }}
 
@@ -134,6 +157,11 @@
         inherit = MODEL_RUNS
         [[[environment]]]
             ROSE_TASK_APP = add_datasets
+
+    [[create_variables_file<recipe>]]
+        inherit = RECIPE
+        [[[environment]]]
+            ROSE_TASK_APP = create_variables_file
 
     [[housekeeping]]
 
