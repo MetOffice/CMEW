@@ -198,7 +198,8 @@ def dict_namelists_in_work_dir():
     Returns
     -------
     filepaths: dict
-        A dictionary of namelist file basenames and their file paths.
+        A dictionary of namelist file basenames and their file paths
+        based on the filenames ending ".nl".
     """
     filepaths = {}
 
