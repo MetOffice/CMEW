@@ -11,10 +11,7 @@ from pathlib import Path
 import pytest
 import yaml
 import tempfile
-import unittest
 from unittest.mock import patch
-import sys
-import os
 
 
 @pytest.fixture
@@ -188,8 +185,6 @@ def test_write_datasets_to_yaml(mock_writing):
     assert mock_writing.call_args.args[1] == "/a/b/test_name.yml"
 
 
-# This was a massive mess of Googling / trawling Stack Exchange.
-# Please do tell me if it's not right / there are better ways.
 @patch("os.path.dirname", return_value="/a/b/c")
 @patch(
     "os.listdir",
