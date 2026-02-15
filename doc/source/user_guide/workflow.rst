@@ -35,21 +35,21 @@ An overview of the workflow
 
 ``configure_for``
   :Description:
-     Copies an updated version of the |ESMValTool| recipe
+     Copies an updated version of the |ESMValTool| |recipe|
      into the Cylc workflow ``share/etc`` directory
      in the installed workflow and configures it
      to use standardised model data.
   :Runs on:
      Localhost
   :Executes:
-     For the required recipe,
+     For the required |recipe|,
      executes the ``esmvaltool recipes get`` command
      followed by the ``update_recipe_file.py`` script from the |Rose| app.
   :Details:
-     Runs once for each recipe,
+     Runs once for each |recipe|,
      immediately after the successful completion
      of the ``install_env_file`` job.
-     The recipe is updated with CMEW required variables
+     The |recipe| is updated with CMEW required variables
      (e.g. "Activity": "ESMVal")
      and also with user configurable variables
      from the |Rose Edit GUI|_/``rose-suite.conf``,
@@ -67,7 +67,7 @@ An overview of the workflow
   :Executes:
      The ``configure_standardise.sh`` script from the |Rose| app.
   :Details:
-     Runs once for each recipe, immediately after the successful
+     Runs once for each |recipe|, immediately after the successful
      completion of the ``configure_for`` job.
      Generates |CDDS| request metadata for each model run (reference and evaluation):
      ``request_ref.json``, ``request_eval.json``.
@@ -104,14 +104,14 @@ An overview of the workflow
 
 ``run_recipe``
   :Description:
-     Runs the requested recipes using |ESMValTool|
+     Runs the requested |recipes| using |ESMValTool|
   :Runs on:
      ``COMPUTE``, which depends on the ``SITE``; at the Met Office, the
      ``run_recipe`` jobs will run on SPICE.
   :Executes:
      The |ESMValTool| command line script
   :Details:
-     Runs once for each recipe,
+     Runs once for each |recipe|,
      after the successful completion of the ``standardise_model_data``
      and the ``configure_recipe`` jobs.
   :Families:
@@ -125,7 +125,7 @@ An overview of the workflow
   :Executes:
      The ``compare.sh`` script from the |Rose| app
   :Details:
-     Runs for every recipe defined in the workflow,
+     Runs for every |recipe| defined in the workflow,
      after the completion of the ``run_recipe`` job
 
 ``unittest``
@@ -171,7 +171,7 @@ The following families are used in the workflow:
 
 ``RECIPE``
   A family that is inherited by tasks that run
-  for each recipe independently
+  for each |recipe| independently
 
 Metadata
 ~~~~~~~~
@@ -185,5 +185,5 @@ Resources
 
 The resources used by the ``run_recipe`` jobs are defined in the
 ``site/<site>.cylc`` file, allowing the jobs to be configured by ``SITE`` as
-well as by recipe. This ensures only the required resources are requested when
+well as by |recipe|. This ensures only the required resources are requested when
 running each of the ``run_recipe`` jobs.
