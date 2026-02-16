@@ -27,6 +27,7 @@ def main():
     # Write the updated configuration values to the file defined by
     # 'USER_CONFIG_PATH'.
     user_config_path = values["USER_CONFIG_PATH"]
+    os.makedirs(os.path.dirname(user_config_path), exist_ok=True)
     write_yaml(user_config_path, user_config_file_contents)
 
 
