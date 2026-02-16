@@ -6,8 +6,13 @@
 BASH_XTRACEFD=1
 set -xeuo pipefail
 
+: "${ROOT_DATA_DIR:?ROOT_DATA_DIR must be set}"
+: "${CYLC_WORKFLOW_SHARE_DIR:?CYLC_WORKFLOW_SHARE_DIR must be set}"
+: "${CDDS_SOFTWARE_DIR:?CDDS_SOFTWARE_DIR must be set}"
+
 RESTRUCTURE_COMMAND="${CDDS_SOFTWARE_DIR}/ceda-mip-tools/bin/restructure_for_cmip6"
 ROOT_RESTRUCTURED_DIR="${CYLC_WORKFLOW_SHARE_DIR}/work/"
 
-# ROOT_DATA_DIR should point to the CDDS data root containing # both REF and TEST run outputs.
+# This ensures restructuring occurs once after both conversions complete.
+echo "[INFO] Restructuring ${ROOT_DATA_DIR} -> ${ROOT_RESTRUCTURED_DIR}"
 "${RESTRUCTURE_COMMAND}" -d "${ROOT_RESTRUCTURED_DIR}" "${ROOT_DATA_DIR}"

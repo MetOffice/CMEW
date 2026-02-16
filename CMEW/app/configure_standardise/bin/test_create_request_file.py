@@ -1,6 +1,8 @@
 # (C) Crown Copyright 2024-2026, Met Office.
 # The LICENSE.md file contains full licensing details.
+
 import os
+import pytest
 
 from create_request_file import create_request
 
@@ -18,7 +20,7 @@ def test_create_request(monkeypatch):
     monkeypatch.setenv("VARIABLES_PATH", "/path/to/variables.txt")
     monkeypatch.setenv("VARIANT_LABEL", "r1i1p1f1")
 
-    # New: required to match developer config custom.cmor_path
+    # required and must match developer config custom.cmor_path
     monkeypatch.setenv(
         "MIP_TABLE_DIR", "~cdds/etc/mip_tables/GCModelDev/0.0.25"
     )
@@ -81,3 +83,21 @@ def test_create_request(monkeypatch):
     }
 
     assert actual == expected
+
+
+# Added negative test to make regressions more obvious
+def test_create_request_requires_mip_table_dir(monkeypatch):
+    monkeypatch.setenv("START_YEAR", "1993")
+    monkeypatch.setenv("NUMBER_OF_YEARS", "1")
+    monkeypatch.setenv("CALENDAR", "360_day")
+    monkeypatch.setenv("INSTITUTION_ID", "MOHC")
+    monkeypatch.setenv("MODEL_ID", "UKESM1-0-LL")
+    monkeypatch.setenv("ROOT_PROC_DIR", "/path/to/proc/dir/")
+    monkeypatch.setenv("ROOT_DATA_DIR", "/path/to/data/dir/")
+    monkeypatch.setenv("SUITE_ID", "u-az513")
+    monkeypatch.setenv("VARIABLES_PATH", "/path/to/variables.txt")
+    monkeypatch.setenv("VARIANT_LABEL", "r1i1p1f1")
+    monkeypatch.delenv("MIP_TABLE_DIR", raising=False)
+
+    with pytest.raises(KeyError, match="MIP_TABLE_DIR must be set"):
+        create_request()
