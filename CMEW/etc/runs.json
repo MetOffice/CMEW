@@ -1,0 +1,14 @@
+{
+  "ref": {
+    "model_id": "HadGEM3-GC31-LL",
+    "suite_id": "u-bv526",
+    "calendar": "360_day",
+    "variant_label": "r5i1p1f3"
+  },
+  "eval": {
+    "model_id": "HadGEM3-GC5E-LL",
+    "suite_id": "u-cw673",
+    "calendar": "gregorian",
+    "variant_label": "r1i1p1f1"
+  }
+}
