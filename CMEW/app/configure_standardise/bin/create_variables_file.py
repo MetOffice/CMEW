@@ -1,15 +1,14 @@
 #!/usr/bin/env python
-# (C) Crown Copyright 2024-2026, Met Office.
+# (C) Crown Copyright 2024-2025, Met Office.
 # The LICENSE.md file contains full licensing details.
 """
 Generates the variables.txt file from the ESMValTool recipe.
 """
 import os
+from esmvalcore.experimental.recipe import Recipe
 
 
 def parse_variables_from_recipe(recipe_path):
-    from esmvalcore.experimental.recipe import Recipe
-
     """Retrieve variables from ESMValTool recipe.
 
     * Read the ESMValTool recipe YAML file from the provided ``recipe_path``
