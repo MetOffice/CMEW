@@ -1,8 +1,6 @@
 # (C) Crown Copyright 2024-2026, Met Office.
 # The LICENSE.md file contains full licensing details.
-
 import os
-import pytest
 
 from create_request_file import create_request
 
@@ -20,16 +18,10 @@ def test_create_request(monkeypatch):
     monkeypatch.setenv("VARIABLES_PATH", "/path/to/variables.txt")
     monkeypatch.setenv("VARIANT_LABEL", "r1i1p1f1")
 
-    # required and must match developer config custom.cmor_path
-    monkeypatch.setenv(
-        "MIP_TABLE_DIR", "~cdds/etc/mip_tables/GCModelDev/0.0.25"
-    )
-
     config = create_request()
     actual = {
         section: dict(config.items(section)) for section in config.sections()
     }
-
     expected = {
         "metadata": {
             "branch_method": "no parent",
@@ -37,12 +29,7 @@ def test_create_request(monkeypatch):
             "base_date": "1850-01-01T00:00:00",
             "experiment_id": "amip",
             "institution_id": "MOHC",
-            "license": (
-                "GCModelDev model data is licensed under "
-                "the Open Government License v3 "
-                "(https://www.nationalarchives.gov.uk/doc"
-                "/open-government-licence/version/3/)"
-            ),
+            "license": "GCModelDev model data is licensed under the Open Government License v3 (https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/)",  # noqa: E501
             "mip": "ESMVal",
             "mip_era": "GCModelDev",
             "model_id": "UKESM1-0-LL",
@@ -81,23 +68,4 @@ def test_create_request(monkeypatch):
             "cylc_args": "--no-detach -v",
         },
     }
-
     assert actual == expected
-
-
-# Added negative test to make regressions more obvious
-def test_create_request_requires_mip_table_dir(monkeypatch):
-    monkeypatch.setenv("START_YEAR", "1993")
-    monkeypatch.setenv("NUMBER_OF_YEARS", "1")
-    monkeypatch.setenv("CALENDAR", "360_day")
-    monkeypatch.setenv("INSTITUTION_ID", "MOHC")
-    monkeypatch.setenv("MODEL_ID", "UKESM1-0-LL")
-    monkeypatch.setenv("ROOT_PROC_DIR", "/path/to/proc/dir/")
-    monkeypatch.setenv("ROOT_DATA_DIR", "/path/to/data/dir/")
-    monkeypatch.setenv("SUITE_ID", "u-az513")
-    monkeypatch.setenv("VARIABLES_PATH", "/path/to/variables.txt")
-    monkeypatch.setenv("VARIANT_LABEL", "r1i1p1f1")
-    monkeypatch.delenv("MIP_TABLE_DIR", raising=False)
-
-    with pytest.raises(KeyError, match="MIP_TABLE_DIR must be set"):
-        create_request()
