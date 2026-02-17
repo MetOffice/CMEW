@@ -5,6 +5,7 @@
 Generate the required user configuration file for ESMValTool.
 """
 import os
+
 import yaml
 
 
@@ -15,10 +16,9 @@ def main():
     The user configuration file is written to the path defined by
     the environment variable ``USER_CONFIG_PATH``.
     """
+    # Retrieve the values defined in the environment for the
+    # 'configure_recipe' task.
     values = retrieve_values_from_task_env()
-
-    developer_config_path = create_developer_config_file(values)
-    values["CONFIG_DEVELOPER_FILE"] = developer_config_path
 
     # Create the contents for the user configuration file using these
     # values.
@@ -54,7 +54,6 @@ def retrieve_values_from_task_env():
         "DRS_OBS4MIPS": os.environ["DRS_OBS4MIPS"],
         "DRS_OBS6": os.environ["DRS_OBS6"],
         "MAX_PARALLEL_TASKS": os.environ["MAX_PARALLEL_TASKS"],
-        "MIP_TABLE_DIR": os.environ.get("MIP_TABLE_DIR", ""),
         "OUTPUT_DIR": os.environ["OUTPUT_DIR"],
         "ROOTPATH_ANA4MIPS": os.environ["ROOTPATH_ANA4MIPS"],
         "ROOTPATH_CMIP3": os.environ["ROOTPATH_CMIP3"],
@@ -69,62 +68,6 @@ def retrieve_values_from_task_env():
         "USER_CONFIG_PATH": os.environ["USER_CONFIG_PATH"],
     }
     return values_from_task_env
-
-
-def create_developer_config_file(values):
-    share_dir = values["CYLC_WORKFLOW_SHARE_DIR"]
-    developer_config_path = os.path.join(
-        share_dir, "etc", "config-developer.yml"
-    )
-    mip_table_dir = values.get("MIP_TABLE_DIR", "").strip()
-    if not mip_table_dir:
-        raise KeyError("MIP_TABLE_DIR must be set")
-    contents = {
-        "custom": {"cmor_path": os.path.expanduser(mip_table_dir)},
-        "ESMVal": {
-            "cmor_strict": True,
-            "input_dir": {
-                "default": "/",
-                "BADC": "{activity}/{institute}/{dataset}/{exp}/"
-                "{ensemble}/{mip}/{short_name}/{grid}/{version}",
-                "DKRZ": "{activity}/{institute}/{dataset}/{exp}/"
-                "{ensemble}/{mip}/{short_name}/{grid}/{version}",
-                "ESGF": "{project}/{activity}/{institute}/{dataset}/{exp}/"
-                "{ensemble}/{mip}/{short_name}/{grid}/{version}",
-                "ETHZ": "{exp}/{mip}/{short_name}/{dataset}/"
-                "{ensemble}/{grid}/",
-                "SYNDA": "{activity}/{institute}/{dataset}/{exp}/"
-                "{ensemble}/{mip}/{short_name}/{grid}/{version}",
-            },
-            "input_file": "{short_name}_{mip}_{dataset}_{exp}_{ensemble}"
-            "_{grid}*.nc",
-            "output_file": "{project}_{dataset}_{mip}_{exp}_{ensemble}"
-            "_{short_name}_{grid}",
-            "cmor_type": "CMIP6",
-            "cmor_default_table_prefix": "GCModelDev_",
-        },
-        "obs4MIPs": {
-            "cmor_strict": False,
-            "input_dir": {
-                "default": "Tier{tier}/{dataset}",
-                "ESGF": "{project}/{dataset}/{version}",
-                "RCAST": "/",
-                "IPSL": "{realm}/{short_name}/{freq}/{grid}/{institute}"
-                "/{dataset}/{latest_version}",
-            },
-            "input_file": {
-                "default": "{short_name}_*.nc",
-                "ESGF": "{short_name}_*.nc",
-            },
-            "output_file": "{project}_{dataset}_{short_name}",
-            "cmor_type": "CMIP6",
-            "cmor_path": "obs4mips",
-            "cmor_default_table_prefix": "obs4MIPs_",
-        },
-    }
-    os.makedirs(os.path.dirname(developer_config_path), exist_ok=True)
-    write_yaml(developer_config_path, contents)
-    return developer_config_path
 
 
 def create_user_config_file(values=None):
@@ -144,14 +87,19 @@ def create_user_config_file(values=None):
     if values is None:
         values = {}
 
-    # Developer config is now generated alongside the user config.
     if "CYLC_WORKFLOW_SHARE_DIR" in values:
+        config_developer_file = os.path.join(
+            values["CYLC_WORKFLOW_SHARE_DIR"],
+            "etc",
+            "config-developer.yml",
+        )
         esmval = os.path.join(
             values["CYLC_WORKFLOW_SHARE_DIR"],
             "work",
             "GCModelDev",
         )
     else:
+        config_developer_file = None
         esmval = None
 
     if "MAX_PARALLEL_TASKS" in values:
@@ -169,9 +117,7 @@ def create_user_config_file(values=None):
     # additional datasets, so may need to be configured in the future.
     user_config_file_contents = {
         "auxiliary_data_dir": "",
-        # CHANGED: point ESMValTool at the developer config we will generate,
-        # instead of relying on a hard-copied file.
-        "config_developer_file": values.get("CONFIG_DEVELOPER_FILE"),
+        "config_developer_file": config_developer_file,
         "download_dir": "",
         "drs": {
             "ana4mips": values.get("DRS_ANA4MIPS", None),

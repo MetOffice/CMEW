@@ -5,15 +5,13 @@
 """
 Generates the request configuration file from the ESMValTool recipe.
 
-Supports per-run metadata via RUNS_CONFIG_PATH + RUN_LABEL, while keeping
-backward compatibility with legacy env vars MODEL_ID/SUITE_ID/
-CALENDAR/VARIANT_LABEL.
+Supports per-run metadata via RUNS_CONFIG_PATH + RUN_LABEL,
+while keeping backward compatibility with legacy env vars
+MODEL_ID/SUITE_ID/CALENDAR/VARIANT_LABEL.
 
 Naming requirement:
 - In ALL modes (legacy and multi-run), set workflow_basename = suite_id
   so CDDS paths are cdds_<suite_id>.
-- MIP_TABLE_DIR must be set and written to common.mip_table_dir.
-  This must match ESMValTool developer config custom.cmor_path.
 """
 
 import configparser
@@ -88,26 +86,11 @@ def _get_required_env(name: str) -> str:
     return val
 
 
-def _get_required_mip_table_dir() -> str:
-    """
-    Return expanded MIP_TABLE_DIR.
-
-    Must match ESMValTool developer config custom.cmor_path.
-    """
-    mip_table_dir = os.environ.get("MIP_TABLE_DIR", "").strip()
-    if not mip_table_dir:
-        raise KeyError(
-            "MIP_TABLE_DIR must be set (must match ESMValTool developer "
-            "config custom.cmor_path)."
-        )
-    return os.path.expanduser(mip_table_dir)
-
-
 def _normalize_run_entry(run_key: str, cfg: Any) -> Dict[str, str]:
     if not isinstance(cfg, dict):
         raise ValueError(
-            f"Runs config entry for '{run_key}' must be an object, "
-            f"got {type(cfg)}"
+            f"Runs config entry for '{run_key}' must be an object, \
+            got {type(cfg)}"
         )
 
     model_id = cfg.get("model_id") or cfg.get("MODEL_ID")
@@ -127,7 +110,8 @@ def _normalize_run_entry(run_key: str, cfg: Any) -> Dict[str, str]:
     ]
     if missing:
         raise KeyError(
-            f"Missing keys for run '{run_key}' in runs config: {missing}"
+            f"Missing keys for run '{run_key}' \
+                in runs config: {missing}"
         )
 
     return {
@@ -163,8 +147,8 @@ def _resolve_run_metadata(run_label: str) -> Dict[str, str]:
 
         raise KeyError(
             f"RUN_LABEL='{run_label}' not found as a key in runs config "
-            f"and did not match any suite_id. Available keys: "
-            f"{sorted(runs_cfg.keys())}"
+            f"and did not match any suite_id. Available keys: \
+            {sorted(runs_cfg.keys())}"
         )
 
     # Legacy fallback
@@ -177,9 +161,6 @@ def _resolve_run_metadata(run_label: str) -> Dict[str, str]:
 
 
 def create_request() -> configparser.ConfigParser:
-    # required and must match ESMValTool developer config custom.cmor_path
-    mip_table_dir = _get_required_mip_table_dir()
-
     start_year = int(_get_required_env("START_YEAR"))
     number_of_years = int(_get_required_env("NUMBER_OF_YEARS"))
     end_year = start_year + number_of_years
@@ -220,7 +201,9 @@ def create_request() -> configparser.ConfigParser:
     request["common"] = {
         "external_plugin": "",
         "external_plugin_location": "",
-        "mip_table_dir": mip_table_dir,
+        "mip_table_dir": os.path.expanduser(
+            "~cdds/etc/mip_tables/GCModelDev/0.0.25"
+        ),
         "mode": "relaxed",
         "package": "round-1",
         "root_proc_dir": _get_required_env("ROOT_PROC_DIR"),
