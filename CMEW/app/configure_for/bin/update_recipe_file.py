@@ -127,6 +127,30 @@ def update_recipe(recipe_path):
     return recipe
 
 
+def add_extra_datasets(recipe, yaml_filepath):
+    """
+    Parameters
+    ----------
+    recipe: dict
+        The content of the ESMValTool recipe to which datasets are to be added.
+    yaml_filepath: str
+        The location of the YAML file containing the extra datasets.
+
+    Returns
+    -------
+    recipe: dict
+        The content of the ESMValTool recipe with an extended datasets section.
+    """
+    # Read the extra datasets from the provided YAML file
+    with open(yaml_filepath, "r") as file_handle:
+        extra_datasets = yaml.safe_load(file_handle)
+
+    # Add the datasets to the datasets section of the recipe
+    recipe["datasets"].extend(extra_datasets)
+
+    return recipe
+
+
 def write_recipe(updated_recipe, target_path):
     """Write updated ESMValTool recipe to a YAML file at ``target_path``.
 
@@ -154,7 +178,12 @@ def main():
     """
     recipe_path = os.environ["RECIPE_PATH"]
     updated_recipe = update_recipe(recipe_path)
-    write_recipe(updated_recipe, recipe_path)
+
+    # Add the CMIP6 datasets to the recipe
+    cmip6_datasets_fp = f"{os.environ['DATASETS_LIST_DIR']}/cmip6_datasets.yml"
+    extended_recipe = add_extra_datasets(updated_recipe, cmip6_datasets_fp)
+
+    write_recipe(extended_recipe, recipe_path)
 
 
 if __name__ == "__main__":

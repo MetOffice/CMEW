@@ -1,6 +1,6 @@
 # (C) Crown Copyright 2024-2026, Met Office.
 # The LICENSE.md file contains full licensing details.
-from update_recipe_file import update_recipe, main
+from update_recipe_file import update_recipe, add_extra_datasets, main
 from pathlib import Path
 import pytest
 import shutil
@@ -22,6 +22,12 @@ def mock_env_vars(monkeypatch):
     # Evaluation run metadata
     monkeypatch.setenv("MODEL_ID", "UKESM1-0-LL")
     monkeypatch.setenv("VARIANT_LABEL", "r1i1p1f1")
+
+    # For adding CMIP6 datasets
+    monkeypatch.setenv(
+        "DATASETS_LIST_DIR",
+        str(Path(__file__).parent.parent.parent / "unittest" / "mock_data"),
+    )
 
 
 @pytest.fixture
@@ -46,6 +52,28 @@ def path_to_mock_original_recipe():
     return path
 
 
+@pytest.fixture
+def path_to_kgo_extended_recipe():
+    path = (
+        Path(__file__).parent.parent.parent
+        / "unittest"
+        / "kgo"
+        / "extended_radiation_budget_recipe.yml"
+    )
+    return path
+
+
+@pytest.fixture
+def path_to_extra_datasets_yaml():
+    path = (
+        Path(__file__).parent.parent.parent
+        / "unittest"
+        / "mock_data"
+        / "cmip6_datasets.yml"
+    )
+    return path
+
+
 def test_update_recipe(
     mock_env_vars, path_to_updated_recipe_kgo, path_to_mock_original_recipe
 ):
@@ -61,10 +89,27 @@ def test_update_recipe(
     assert actual == expected
 
 
+def test_add_extra_datasets(
+    path_to_updated_recipe_kgo,
+    path_to_extra_datasets_yaml,
+    path_to_kgo_extended_recipe,
+):
+    """Updated is the input file and extended is the output file."""
+    with open(path_to_kgo_extended_recipe, "r") as file_handle_1:
+        expected = yaml.safe_load(file_handle_1)
+
+    with open(path_to_updated_recipe_kgo, "r") as file_handle_2:
+        pre_recipe = yaml.safe_load(file_handle_2)
+
+    # Using str(filepath) here as update_recipe_file.py uses os, not pathlib
+    actual = add_extra_datasets(pre_recipe, str(path_to_extra_datasets_yaml))
+    assert actual == expected
+
+
 def test_main(
     monkeypatch,
     mock_env_vars,
-    path_to_updated_recipe_kgo,
+    path_to_kgo_extended_recipe,
     path_to_mock_original_recipe,
     tmp_path,
 ):
@@ -83,7 +128,7 @@ def test_main(
     with open(path_to_temp_recipe, "r") as file_handle_1:
         actual_lines = file_handle_1.readlines()
 
-    with open(path_to_updated_recipe_kgo, "r") as file_handle_2:
+    with open(path_to_kgo_extended_recipe, "r") as file_handle_2:
         kgo_with_comment = file_handle_2.readlines()
 
     # Remove the five comment lines at the top of
