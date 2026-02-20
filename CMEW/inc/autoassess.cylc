@@ -32,7 +32,7 @@
     [[AUTOASSESS]]
         inherit = SITE_AUTOASSESS
         [[[environment]]]
-            AREA_OUTPUT_PATH = $OUTPUT_DIR/{{ SUITE_ID }}_vs_{{ REF_SUITE_ID }}/$CYLC_TASK_PARAM_autoassess_area
+            AUTOASSESS_OUTPUT_DIR = $OUTPUT_DIR/{{ SUITE_ID }}_vs_{{ REF_SUITE_ID }}
             AUTOASSESS_DATA_DIR = $CYLC_WORKFLOW_SHARE_DIR/data/autoassess
             ASSESSMENT_TITLE = {{ AUTOASSESS_TITLE }}
             ESMVALTOOL_MODULE_NAME = {{ ESMVALTOOL_MODULE_NAME }}
@@ -44,102 +44,43 @@
 
     [[retrieve_data<autoassess_area><suite_id>]]
         inherit = AUTOASSESS, SITE_AA_RETRIEVAL
-        script = """
-            cmew-esmvaltool-env aa_retriever            \
-                --suite-id $CYLC_TASK_PARAM_suite_id    \
-                --area $CYLC_TASK_PARAM_autoassess_area \
-                --start-date $START_DATE                \
-                --end-date $END_DATE                    \
-                --dest-dir $AUTOASSESS_DATA_DIR         \
-                --tmp-dir $CYLC_TASK_WORK_DIR           \
-                --procs 3
-        """
+        [[[environment]]]
+            ROSE_TASK_APP = aa_retrieve_data
+            SUITE_ID = $CYLC_TASK_PARAM_suite_id
+            AREA = $CYLC_TASK_PARAM_autoassess_area
 
     [[index_data<autoassess_area><suite_id>]]
         inherit = AUTOASSESS, SITE_AA_DATA_INDEXING
-        script = """
-            DATA_DIR=$AUTOASSESS_DATA_DIR/$CYLC_TASK_PARAM_suite_id/$CYLC_TASK_PARAM_autoassess_area
-            cmew-esmvaltool-env aa_data_indexer \
-                --data-dir $DATA_DIR            \
-                --suite-id $CYLC_TASK_PARAM_suite_id
-        """
-    {%- endfor %}
+        [[[environment]]]
+            ROSE_TASK_APP = aa_index_data
+            SUITE_ID = $CYLC_TASK_PARAM_suite_id
+            AREA = $CYLC_TASK_PARAM_autoassess_area
 
     [[run_area<autoassess_area>]]
         inherit = AUTOASSESS, SITE_AA_RUN_AREA
-        script = """
-            cmew-esmvaltool-env aa_run_area                \
-                --area $CYLC_TASK_PARAM_autoassess_area    \
-                --start-date $START_DATE                   \
-                --end-date $END_DATE                       \
-                --suite-id1 {{ REF_SUITE_ID }}             \
-                --suite-id2 {{ SUITE_ID }}                 \
-                --suite-title1 '{{ REF_LABEL_FOR_PLOTS }}' \
-                --suite-title2 '{{ LABEL_FOR_PLOTS }}'     \
-                --out-dir $OUTPUT_DIR                      \
-                --data-dir $AUTOASSESS_DATA_DIR            \
-                --obs-dir $OBS_CLIM_PATH                   \
-                --tmp-dir $CYLC_TASK_WORK_DIR              \
-                --ancil-dir $ANCIL_PATH
-        """
-
-    [[run_area<autoassess_area=australia>]]
-        inherit = AUTOASSESS, SITE_AA_RUN_AREA_BASE
-        script = """
-            cmew-esmvaltool-env aa_australia                                   \
-                --area $CYLC_TASK_PARAM_autoassess_area                        \
-                --exp-suite-id {{ REF_SUITE_ID }} {{ SUITE_ID }}               \
-                --exp-desc '{{ REF_LABEL_FOR_PLOTS }}' '{{ LABEL_FOR_PLOTS }}' \
-                --ref-suite-id {{ REF_SUITE_ID }}                              \
-                --out-dir $AREA_OUTPUT_PATH                                    \
-                --data-dir $AUTOASSESS_DATA_DIR                                \
-                --start-date $START_DATE                                       \
-                --end-date $END_DATE                                           \
-                --obs-dir $OBS_CLIM_PATH                                       \
-                --tmp-dir $CYLC_TASK_WORK_DIR                                  \
-                --ancil-dir $ANCIL_PATH                                        \
-                --ncpu 1
-        """
-
-    [[run_area<autoassess_area=mjo>]]
-        inherit = AUTOASSESS, SITE_AA_RUN_AREA_BASE
-        script = """
-            cmew-esmvaltool-env aa_mjo                                         \
-                --area $CYLC_TASK_PARAM_autoassess_area                        \
-                --exp-suite-id {{ REF_SUITE_ID }} {{ SUITE_ID }}               \
-                --exp-desc '{{ REF_LABEL_FOR_PLOTS }}' '{{ LABEL_FOR_PLOTS }}' \
-                --ref-suite-id {{ REF_SUITE_ID }}                              \
-                --out-dir $AREA_OUTPUT_PATH                                    \
-                --data-dir $AUTOASSESS_DATA_DIR                                \
-                --start-date $START_DATE                                       \
-                --end-date $END_DATE                                           \
-                --obs-dir $OBS_CLIM_PATH                                       \
-                --tmp-dir $CYLC_TASK_WORK_DIR                                  \
-                --ancil-dir $ANCIL_PATH                                        \
-                --ncpu 1
-        """
+        [[[environment]]]
+            ROSE_TASK_APP = aa_run_area
+            ROSE_APP_OPT_CONF_KEYS = ($CYLC_TASK_PARAM_autoassess_area)
+            AREA = $CYLC_TASK_PARAM_autoassess_area
+            REF_SUITE_ID = {{ REF_SUITE_ID }}
+            REF_SUITE_TITLE = {{ REF_LABEL_FOR_PLOTS }}
+            SUITE_ID = {{ SUITE_ID }}
+            SUITE_TITLE = {{ LABEL_FOR_PLOTS }}
 
     [[nac_plot<autoassess_area>]]
         inherit = AUTOASSESS, SITE_AA_NAC_PLOT
-        script = """
-            cmew-esmvaltool-env aa_create_nac_plots     \
-                --plot-dir $AREA_OUTPUT_PATH/nac_plots  \
-                --out-dir $AREA_OUTPUT_PATH             \
-                --area $CYLC_TASK_PARAM_autoassess_area \
-                --ref-suite-id {{ REF_SUITE_ID }}       \
-                --exp-suite-id {{ SUITE_ID }}           \
-                --ref-desc '{{ REF_LABEL_FOR_PLOTS }}'  \
-                --exp-desc '{{ LABEL_FOR_PLOTS }}'
-        """
+        [[[environment]]]
+            ROSE_TASK_APP = aa_nac_plot
+            AREA = $CYLC_TASK_PARAM_autoassess_area
+            REF_SUITE_ID = {{ REF_SUITE_ID }}
+            REF_SUITE_TITLE = {{ REF_LABEL_FOR_PLOTS }}
+            SUITE_ID = {{ SUITE_ID }}
+            SUITE_TITLE = {{ LABEL_FOR_PLOTS }}
 
     [[html_page<autoassess_area>]]
         inherit = AUTOASSESS, SITE_AA_HTML_PAGE
-        script = """
-            cmew-esmvaltool-env aa_create_page          \
-                --title "$ASSESSMENT_TITLE"             \
-                --area $CYLC_TASK_PARAM_autoassess_area \
-                --ref-suite-id {{ REF_SUITE_ID }}       \
-                --exp-suite-id {{ SUITE_ID }}           \
-                --start-date $START_DATE                \
-                --end-date $END_DATE > ${AREA_OUTPUT_PATH}.html
-        """
+        [[[environment]]]
+            ROSE_TASK_APP = aa_html_page
+            AREA = $CYLC_TASK_PARAM_autoassess_area
+            REF_SUITE_ID = {{ REF_SUITE_ID }}
+            SUITE_ID = {{ SUITE_ID }}
