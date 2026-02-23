@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# (C) Crown Copyright 2024-2025, Met Office.
+# (C) Crown Copyright 2024-2026, Met Office.
 # The LICENSE.md file contains full licensing details.
 """
 Tests for configure_standardise
@@ -8,7 +8,8 @@ from create_variables_file import parse_variables_from_recipe
 from pathlib import Path
 
 
-def test_parse_radiation_budget_variables():
+def test_parse_radiation_budget_variables(monkeypatch):
+    monkeypatch.setenv("STREAM_ID", "apm")
     recipe_path = (
         Path(__file__).parent.parent.parent
         / "unittest"
