@@ -66,15 +66,14 @@ def retrieve_values_from_task_env():
         "ROOTPATH_OBS6": os.environ["ROOTPATH_OBS6"],
         "ROOTPATH_RAWOBS": os.environ["ROOTPATH_RAWOBS"],
         "USER_CONFIG_PATH": os.environ["USER_CONFIG_PATH"],
+        "DEV_CONFIG_PATH": os.environ["DEV_CONFIG_PATH"],
     }
     return values_from_task_env
 
 
 def create_developer_config_file(values):
-    share_dir = values["CYLC_WORKFLOW_SHARE_DIR"]
-    developer_config_path = os.path.join(
-        share_dir, "etc", "config-developer.yml"
-    )
+    developer_config_path = values["DEV_CONFIG_PATH"]
+    
     mip_table_dir = values.get("MIP_TABLE_DIR", "").strip()
     if not mip_table_dir:
         raise KeyError("MIP_TABLE_DIR must be set")
