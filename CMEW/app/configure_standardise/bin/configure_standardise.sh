@@ -1,5 +1,5 @@
 #!/bin/bash
-# (C) Crown Copyright 2024-2025, Met Office.
+# (C) Crown Copyright 2024-2026, Met Office.
 # The LICENSE.md file contains full licensing details.
 # Send the output from 'set -x' to 'stdout' rather than 'stderr'.
 BASH_XTRACEFD=1
@@ -20,9 +20,11 @@ echo "[INFO] Using REQUEST_PATH_EVAL=${REQUEST_PATH_EVAL}"
 : "${REF_MODEL_ID:?REF_MODEL_ID must be set}"
 : "${REF_SUITE_ID:?REF_SUITE_ID must be set}"
 : "${REF_CALENDAR:?REF_CALENDAR must be set}"
+: "${REF_EXPERIMENT_ID:??REF_EXPERIMENT_ID must be set}"
 : "${MODEL_ID:?MODEL_ID (evaluation) must be set}"
 : "${SUITE_ID:?SUITE_ID (evaluation) must be set}"
 : "${CALENDAR:?CALENDAR (evaluation) must be set}"
+: "${EXPERIMENT_ID:?EXPERIMENT_ID (evaluation) must be set}"
 
 # ---------------------------------------------------------------------------
 # 1. Create variables.txt once (shared by both runs)
@@ -40,6 +42,7 @@ create_for_run() {
     local run_suite_id=""
     local run_calendar=""
     local run_variant=""
+    local run_experiment_id=""
     local run_request=""
 
     case "${RUN_LABEL}" in
@@ -48,6 +51,7 @@ create_for_run() {
             run_suite_id="${REF_SUITE_ID}"
             run_calendar="${REF_CALENDAR}"
             run_variant="${REF_VARIANT_LABEL:-}"
+            run_experiment_id="${REF_EXPERIMENT_ID}"
             run_request="${REQUEST_PATH_REF}"
             ;;
         EVAL)
@@ -56,6 +60,7 @@ create_for_run() {
             run_suite_id="${SUITE_ID}"
             run_calendar="${CALENDAR}"
             run_variant="${VARIANT_LABEL:-}"
+            run_experiment_id="${EXPERIMENT_ID}"
             run_request="${REQUEST_PATH_EVAL}"
             ;;
         *)
@@ -70,6 +75,7 @@ create_for_run() {
         export SUITE_ID="${run_suite_id}"
         export CALENDAR="${run_calendar}"
         export VARIANT_LABEL="${run_variant}"
+        export EXPERIMENT_ID="${run_experiment_id}"
         export REQUEST_PATH="${run_request}"
 
         echo "[INFO] Creating request for ${RUN_LABEL} run at: ${REQUEST_PATH}"
