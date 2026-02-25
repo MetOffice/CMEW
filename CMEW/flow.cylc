@@ -40,11 +40,17 @@
             USER_CONFIG_PATH = ${CONFIG_DIR}/config-user.yml
             OUTPUT_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/cycle/${CYLC_TASK_CYCLE_POINT}
             SHARE_DATA_CDDS = ${CYLC_WORKFLOW_SHARE_DIR}/data/cdds
-            ROOT_PROC_DIR = ${SHARE_DATA_CDDS}/proc
-            ROOT_DATA_DIR = ${SHARE_DATA_CDDS}/cdds_data
             REQUEST_PATH_REF  = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request_ref.cfg
             REQUEST_PATH_EVAL = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request_eval.cfg
             VARIABLES_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/variables.txt
+            RAW_DATA_DIR = {{ RAW_DATA_DIR }}
+            {% if RAW_DATA_DIR and RAW_DATA_DIR|string|trim != "" %}
+                ROOT_DATA_DIR = {{ RAW_DATA_DIR }}/cdds_data
+                ROOT_PROC_DIR = {{ RAW_DATA_DIR }}/proc
+            {% else %}
+                ROOT_DATA_DIR = ${SHARE_DATA_CDDS}/cdds_data
+                ROOT_PROC_DIR = ${SHARE_DATA_CDDS}/proc
+            {% endif %}
 
     [[RECIPE]]
         [[[environment]]]

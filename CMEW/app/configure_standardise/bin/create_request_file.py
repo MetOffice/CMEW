@@ -43,8 +43,12 @@ def create_request():
         ),
         "mode": "relaxed",
         "package": "round-1",
-        "root_proc_dir": os.environ["ROOT_PROC_DIR"],
-        "root_data_dir": os.environ["ROOT_DATA_DIR"],
+        "root_proc_dir": os.path.expandvars(
+            os.path.expanduser(os.environ["ROOT_PROC_DIR"])
+        ),
+        "root_data_dir": os.path.expandvars(
+            os.path.expanduser(os.environ["ROOT_DATA_DIR"])
+        ),
         "workflow_basename": os.environ["SUITE_ID"],
     }
     request["data"] = {
