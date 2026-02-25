@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# (C) Crown Copyright 2024-2025, Met Office.
+# (C) Crown Copyright 2024-2026, Met Office.
 # The LICENSE.md file contains full licensing details.
 """
 Generates the variables.txt file from the ESMValTool recipe.
@@ -52,8 +52,8 @@ def parse_variables_from_recipe(recipe_path):
         List of variables from the ESMValTool recipe,
         formatted as ``<mip>/<variable>:<stream>``.
     """
-    # For now, hard-code stream to apm, this is correct for Amon and Emon mip.
-    stream = "apm"
+    # For now there is only one stream, for Amon and Emon mip.
+    stream = os.environ["STREAM_ID"]
     recipe = Recipe(recipe_path)
     diagnostics = recipe.data["diagnostics"]
     formatted_variables = []

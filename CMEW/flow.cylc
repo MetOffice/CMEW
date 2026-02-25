@@ -121,6 +121,7 @@
             ROSE_TASK_APP = configure_standardise
             START_YEAR = {{ START_YEAR }}
             NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
+            STREAM_ID = "apm"
 
     [[standardise_model_data]]
         inherit = STANDARDISE, MODEL_RUNS
