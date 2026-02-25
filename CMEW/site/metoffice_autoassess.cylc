@@ -1,0 +1,69 @@
+#!jinja2
+# (C) Crown Copyright 2022-2025, Met Office.
+# The LICENSE.md file contains full licensing details.
+# metoffice_autoassess.cylc
+[runtime]
+
+    [[SITE_AUTOASSESS]]
+        [[[environment]]]
+            OBS_CLIM_PATH = /data/users/gc_eval/autoassess/clim
+            ANCIL_PATH = /data/users/gc_eval/autoassess/ancil
+
+    [[LOCAL]]
+        platform = localhost
+
+    [[SPICE]]
+        platform = spice
+        [[[directives]]]
+            --qos=normal
+            --partition=cpu
+            --export=NONE
+            --ntasks=1
+        [[[environment]]]
+            ROSE_LAUNCHER = mpiexec
+
+    [[SITE_AA_INSTALL]]
+        inherit = SPICE
+        execution time limit = PT5M
+        [[[directives]]]
+            --job-name=AutoAssess_install
+            --mem=2GB
+
+    [[SITE_AA_RETRIEVAL]]
+        inherit = SPICE
+        execution time limit = PT5H
+        [[[directives]]]
+            --job-name=AutoAssess_MOOSE_retrieval
+            --mem=2GB
+
+    [[SITE_AA_DATA_INDEXING]]
+        inherit = SPICE
+        execution time limit = PT2H
+        [[[directives]]]
+            --job-name=AutoAssess_data_indexing
+            --mem=10GB
+
+    [[SITE_AA_RUN_AREA]]
+        inherit = SPICE
+        execution time limit = PT5H
+        [[[directives]]]
+            --job-name=AutoAssess_run_area
+            --mem=5GB
+
+    [[SITE_AA_RUN_AREA_BASE]]
+        inherit = SPICE
+        execution time limit = PT5H
+        [[[directives]]]
+            --job-name=AutoAssess_run_area
+            --mem=10GB
+
+    [[SITE_AA_NAC_PLOT]]
+        inherit = SPICE
+        execution time limit = PT10M
+        [[[directives]]]
+            --job-name=AutoAssess_nac_plot
+            --mem=250MB
+
+    [[SITE_AA_HTML_PAGE]]
+        inherit = LOCAL
+        execution time limit = PT2M
