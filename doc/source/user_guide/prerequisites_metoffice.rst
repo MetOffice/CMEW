@@ -1,100 +1,80 @@
-# (C) Crown Copyright 2025, Met Office.
-# The LICENSE.md file contains full licensing details.
+.. (C) Crown Copyright 2025-2026, Met Office.
+.. The LICENSE.md file contains full licensing details.
 
-Prerequisites for Cloning and Running CMEW at the Met Office
-============================================================
+Prerequisites for running CMEW at the Met Office
+================================================
 
 .. include:: ../common.txt
 
-This page lists the prerequisites for the metoffice site:
-  * Cloning the Climate Model Evaluation Workflow (|CMEW|) repository
-  * Running |CMEW| on Met Office systems
+Multiple tools are required to run |CMEW|.
 
-|CMEW| users at the Met Office will need access to:
-  * Git
-  * Cylc
-  * MASS
-  * The ESMValTool community environment
-  * |CDDS|
+If you have a standard Linux account at the Met Office, these tools are typically already available, and the commands in the table below should work without additional setup.
 
-1 Cloning the CMEW repository
------------------------------
+Software prerequisites
+----------------------
 
-1.1. Access and Network
-^^^^^^^^^^^^^^^^^^^^^^^
+.. list-table::
+   :header-rows: 1
+   :widths: 20 25 25 30
 
-* A valid user account.
-* Internet access to the |CMEW| GitHub repository (via SSH or HTTPS).
+   * - Tool
+     - Command-line tool
+     - Available by default?
+     - Installation check
+   * - Git
+     - ``git``
+     - Yes
+     - ``which git``
+       ``git --version``
+   * - |Rose|
+     - ``rose``
+     - Yes
+     - ``which rose``
+       ``rose --version``
+   * - |Cylc|
+     - ``cylc``
+     - Yes
+     - ``which cylc``
+       ``cylc --version``
+   * - |CDDS|
+     - ``cdds_convert``
+     - No, run
+       ``source ~cdds/bin/setup_env_for_cdds 3.2.0``
+     - ``which cdds_convert``
+       ``cdds_convert --help``
+   * - MOOSE
+     - ``moo``
+     - Yes
+     - ``which moo``
+   * - |ESMValTool|
+     - ``esmvaltool``
+     - No, run
+       ``module load scitools/community/esmvaltool/2.12.0``
+     - ``which esmvaltool``
+       ``esmvaltool --version``
 
-1.2. Git Installed
-^^^^^^^^^^^^^^^^^^
+Account and access requirements
+--------------------------------
 
-**git** must be available on your login node.
+In addition to the software listed above, user accounts must be correctly configured for the following services.
 
-* Check::
+.. list-table::
+   :header-rows: 1
+   :widths: 20 35 35
 
-    git --version
+   * - Tool / service
+     - Access check
+     - Request account
+   * - GitHub
+     - https://github.com/login
+     - https://github.com/signup
+   * - MOOSE
+     - ``moo --help``
+     - ServiceNow
 
-1.3. GitHub Authentication
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+You must also be able to submit Slurm jobs under a valid Met Office account and project. A quick check is:
 
-You need either **SSH** or **HTTPS** authentication.
+::
 
-1.4 Access and Platform for Running CMEW
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-You must be able to submit Slurm jobs under a valid account/project.
-
-Quick checks::
-
-    sinfo
-    squeue -u $USER
-
-2 Cylc and Rose
----------------
-
-On the Met Office system, Cylc and Rose are normally provided centrally. These versions are known to work with the CMEW prototype:
-
-  * Cylc Flow 8.x (e.g. 8.6.1)
-  * Rose 2.x (e.g. 2.6.2)
-
-Verify you are using the system stack::
-
-    which cylc
-    cylc --version
-    which rose
-    rose --version
-
-Expected examples::
-
-    /usr/local/bin/cylc with Cylc 8.6.1
-    /usr/local/bin/rose with Rose 2.6.2
-
-2.1 Diagnostics Environment (ESMValTool)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-|CMEW| runs ESMValTool recipes for diagnostics. You need:
-
-  * a working ESMValTool installation available on your Linux system
-
-Sanity check after loading the esmvaltool module::
-
-  module load scitools/community/esmvaltool/2.10.0
-  esmvaltool --version
-
-2.2 Met Office MOOSE account is required
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Check that a valid MOOSE account exists.
-Verify that the credentials file is installed correctly and that MASS access is possible::
-
-  moo si -v
-
-Contact ServiceNow for a MOOSE account if there is no access to MASS.
-
-2.3 Standardisation Environment (CDDS / CMORisation)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-|CMEW| standardises model data prior to diagnostics using CDDS.
-
-  * |CDDS| is centrally installed on the Met Office system.
+   sinfo
+   squeue -u $USER
