@@ -16,7 +16,7 @@ Closes #<issue_number>.
 
 ## Definition of Done for the _developer_
 
-- [ ] The change in this PR addresses the above issue / all acceptance criteria have been met.
+- [ ] This PR contains **only** the changes needed to meet **all** acceptance criteria.
 - [ ] The change in this PR follows the requirements in the [wiki: Developer Guide](https://github.com/MetOffice/CMEW/wiki/Developer-Guide) (including copyrights).
 - [ ] The GitHub Actions workflow checks pass.
 - [ ] The tests run locally and pass (Note: the tests are not run by the GitHub Actions workflow, see [wiki: Run the tests locally](https://github.com/MetOffice/CMEW/wiki/Detailed-Working-Practices#run-the-tests-locally)).
