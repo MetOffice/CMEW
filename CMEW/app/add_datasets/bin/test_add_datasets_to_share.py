@@ -25,17 +25,6 @@ def mock_env_vars(monkeypatch):
 
 
 @pytest.fixture
-def path_to_kgo_yaml():
-    path = (
-        Path(__file__).parent.parent.parent
-        / "unittest"
-        / "kgo"
-        / "model_runs.yml"
-    )
-    return str(path)
-
-
-@pytest.fixture
 def path_to_mock_nl():
     path = (
         Path(__file__).parent.parent.parent
@@ -55,6 +44,28 @@ def path_to_kgo_dict():
         / "basic_dict.yml"
     )
     return path
+
+
+@pytest.fixture
+def path_to_mock_yaml_list():
+    path = (
+        Path(__file__).parent.parent.parent
+        / "unittest"
+        / "mock_data"
+        / "model_runs_as_list.yml"
+    )
+    return str(path)
+
+
+@pytest.fixture
+def path_to_kgo_yaml_dict():
+    path = (
+        Path(__file__).parent.parent.parent
+        / "unittest"
+        / "kgo"
+        / "model_runs_as_dict.yml"
+    )
+    return str(path)
 
 
 def test_extract_sections_from_naml(path_to_mock_nl):
@@ -206,5 +217,15 @@ def test_dict_namelists_in_work_dir(mock_dirname, mock_listdir, mock_env_vars):
     assert expected == actual
 
 
-def test_use_facet_as_key():
-    pass
+def test_use_facet_as_key(path_to_mock_yaml_list, path_to_kgo_yaml_dict):
+    # Write the test dictionary to a temporary file
+    with tempfile.NamedTemporaryFile() as tmp:
+        use_facet_as_key(path_to_mock_yaml_list)
+        tmp.seek(0)
+        actual = yaml.safe_load(tmp)
+
+    # Load the expected dictionary
+    with open(path_to_kgo_yaml_dict, "r") as file_handle:
+        expected = yaml.safe_load(file_handle)
+
+    assert actual == expected
