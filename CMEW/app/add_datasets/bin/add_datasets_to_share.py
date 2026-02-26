@@ -238,7 +238,7 @@ def use_facet_as_key(filepath, key_facet="suite_id"):
         The file path to the YAML file to be edited.
     key_facet: str
         The facet to use as the key in the new dictionary.
-        Defalts to 'suite_id', which is the unique identifier for now.
+        Defaults to 'suite_id', which is the unique identifier for now.
     """
     # Read the YAML file that has datasets as a list
     with open(filepath, "r") as f:
@@ -275,5 +275,5 @@ if __name__ == "__main__":
         # Write the datasets to a YAML file in the target directory
         write_datasets_to_yaml(datasets, basename, target_dir)
 
-    # Reformat the model_runs YAML file to use suite_ida as keya
+    # Reformat the model_runs YAML file to use suite_ids as keys
     use_facet_as_key(f"{target_dir}/model_runs.yml")
