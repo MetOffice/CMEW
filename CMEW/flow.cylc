@@ -24,7 +24,8 @@
             install_env_file => unittest
 {%- endif %}
 {%- if not UNITTEST %}
-            install_env_file => configure_recipe & configure_for<recipe>
+            install_env_file => configure_recipe & add_datasets
+            add_datasets => configure_for<recipe>
 
             configure_for<recipe> => create_variables_file<recipe>
             create_variables_file<recipe> => configure_standardise<recipe,dataset>
@@ -72,6 +73,11 @@
     # Multi-run metadata family: reference and evaluation runs
     [[MODEL_RUNS]]
         [[[environment]]]
+            # Directory containing dataset lists as YAML files
+            DATASETS_LIST_DIR = "${CYLC_WORKFLOW_SHARE_DIR}/dataset_lists"
+            START_YEAR = {{ START_YEAR }}
+            NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
+
             # Reference run metadata
             REF_MODEL_ID = {{ REF_MODEL_ID }}
             REF_SUITE_ID = {{ REF_SUITE_ID }}
@@ -115,8 +121,6 @@
         inherit = None, RECIPE, MODEL_RUNS
         [[[environment]]]
             ROSE_TASK_APP = configure_for
-            START_YEAR = {{ START_YEAR }}
-            NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
             LABEL_FOR_PLOTS = {{ LABEL_FOR_PLOTS }}
             SUITE_ID = {{ SUITE_ID }}
             REF_LABEL_FOR_PLOTS = {{ REF_LABEL_FOR_PLOTS }}
@@ -153,6 +157,10 @@
         inherit = RECIPE
         [[[environment]]]
             ROSE_TASK_APP = create_variables_file
+    [[add_datasets]]
+        inherit = MODEL_RUNS
+        [[[environment]]]
+            ROSE_TASK_APP = add_datasets
 
     [[housekeeping]]
 
