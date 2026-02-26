@@ -8,6 +8,7 @@ from add_datasets_to_share import (
     write_dict_to_yaml,
     write_datasets_to_yaml,
     dict_namelists_in_work_dir,
+    use_facet_as_key,
 )
 from pathlib import Path
 import pytest
@@ -204,3 +205,7 @@ def test_dict_namelists_in_work_dir(mock_dirname, mock_listdir, mock_env_vars):
     }
     actual = dict_namelists_in_work_dir()
     assert expected == actual
+
+
+def test_use_facet_as_key():
+    pass
