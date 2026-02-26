@@ -153,7 +153,6 @@ def test_process_naml_file(path_to_mock_nl, mock_env_vars):
     assert actual == expected
 
 
-# This one was only *some* random copying of Google
 def test_write_dict_to_yaml(path_to_kgo_dict):
     # Note the keys are not alphabetical here but are in the output
     test_dict = {
