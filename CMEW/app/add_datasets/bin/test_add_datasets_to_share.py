@@ -8,10 +8,12 @@ from add_datasets_to_share import (
     write_dict_to_yaml,
     write_datasets_to_yaml,
     dict_namelists_in_work_dir,
+    use_facet_as_key,
 )
 from pathlib import Path
 import pytest
 import yaml
+import shutil
 import tempfile
 from unittest.mock import patch
 
@@ -21,17 +23,6 @@ def mock_env_vars(monkeypatch):
     monkeypatch.setenv("START_YEAR", "1993")
     monkeypatch.setenv("NUMBER_OF_YEARS", "10")
     monkeypatch.setenv("CYLC_TASK_WORK_DIR", "/a/b/c")
-
-
-@pytest.fixture
-def path_to_kgo_yaml():
-    path = (
-        Path(__file__).parent.parent.parent
-        / "unittest"
-        / "kgo"
-        / "model_runs.yml"
-    )
-    return str(path)
 
 
 @pytest.fixture
@@ -54,6 +45,28 @@ def path_to_kgo_dict():
         / "basic_dict.yml"
     )
     return path
+
+
+@pytest.fixture
+def path_to_mock_yaml_list():
+    path = (
+        Path(__file__).parent.parent.parent
+        / "unittest"
+        / "mock_data"
+        / "model_runs_as_list.yml"
+    )
+    return str(path)
+
+
+@pytest.fixture
+def path_to_kgo_yaml_dict():
+    path = (
+        Path(__file__).parent.parent.parent
+        / "unittest"
+        / "kgo"
+        / "model_runs_as_dict.yml"
+    )
+    return str(path)
 
 
 def test_extract_sections_from_naml(path_to_mock_nl):
@@ -152,7 +165,6 @@ def test_process_naml_file(path_to_mock_nl, mock_env_vars):
     assert actual == expected
 
 
-# This one was only *some* random copying of Google
 def test_write_dict_to_yaml(path_to_kgo_dict):
     # Note the keys are not alphabetical here but are in the output
     test_dict = {
@@ -204,3 +216,22 @@ def test_dict_namelists_in_work_dir(mock_dirname, mock_listdir, mock_env_vars):
     }
     actual = dict_namelists_in_work_dir()
     assert expected == actual
+
+
+def test_use_facet_as_key(path_to_mock_yaml_list, path_to_kgo_yaml_dict):
+    # Copy known input to a temp file
+    with tempfile.NamedTemporaryFile() as tmp:
+        shutil.copyfile(path_to_mock_yaml_list, tmp.name)
+
+        # The filepath is given by .name
+        use_facet_as_key(str(tmp.name))
+
+        # Read the result
+        tmp.seek(0)
+        actual = yaml.safe_load(tmp)
+
+    # Load the expected output
+    with open(path_to_kgo_yaml_dict, "r") as file_handle:
+        expected = yaml.safe_load(file_handle)
+
+    assert actual == expected
