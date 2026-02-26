@@ -225,7 +225,7 @@ def dict_namelists_in_work_dir():
     return filepaths
 
 
-def use_facet_as_key(filepath, key_facet='suite_id'):
+def use_facet_as_key(filepath, key_facet="suite_id"):
     """
     Edit a YAML file in place, from a list to a dictionary.
 
@@ -241,7 +241,7 @@ def use_facet_as_key(filepath, key_facet='suite_id'):
         Defalts to 'suite_id', which is the unique identifier for now.
     """
     # Read the YAML file that has datasets as a list
-    with open(filepath, 'r') as f:
+    with open(filepath, "r") as f:
         data = yaml.safe_load(f)
 
     # Create a new dictionary with the same sections as the list
@@ -255,7 +255,7 @@ def use_facet_as_key(filepath, key_facet='suite_id'):
         new_dict[unique] = section
 
     # Write the new dictionary back to the existing YAML filepath
-    with open(filepath, 'w') as f:
+    with open(filepath, "w") as f:
         yaml.dump(new_dict, f)
 
 
@@ -276,4 +276,4 @@ if __name__ == "__main__":
         write_datasets_to_yaml(datasets, basename, target_dir)
 
     # Reformat the model_runs YAML file to use suite_ida as keya
-    use_facet_as_key(f'{target_dir}/model_runs.yml')
+    use_facet_as_key(f"{target_dir}/model_runs.yml")
