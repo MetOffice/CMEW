@@ -13,6 +13,7 @@ from add_datasets_to_share import (
 from pathlib import Path
 import pytest
 import yaml
+import shutil
 import tempfile
 from unittest.mock import patch
 
@@ -218,13 +219,18 @@ def test_dict_namelists_in_work_dir(mock_dirname, mock_listdir, mock_env_vars):
 
 
 def test_use_facet_as_key(path_to_mock_yaml_list, path_to_kgo_yaml_dict):
-    # Write the test dictionary to a temporary file
+    # Copy known input to a temp file
     with tempfile.NamedTemporaryFile() as tmp:
-        use_facet_as_key(path_to_mock_yaml_list)
+        shutil.copyfile(path_to_mock_yaml_list, tmp.name)
+
+        # The filepath is given by .name
+        use_facet_as_key(str(tmp.name))
+
+        # Read the result
         tmp.seek(0)
         actual = yaml.safe_load(tmp)
 
-    # Load the expected dictionary
+    # Load the expected output
     with open(path_to_kgo_yaml_dict, "r") as file_handle:
         expected = yaml.safe_load(file_handle)
 
