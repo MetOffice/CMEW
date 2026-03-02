@@ -41,6 +41,8 @@
 
     [[install_autoassess]]
         inherit = AUTOASSESS, SITE_AA_INSTALL
+#        [[[environment]]]
+#            ROSE_APP_OPT_CONF_KEYS = localmirror
 
     [[retrieve_data<autoassess_area><suite_id>]]
         inherit = AUTOASSESS, SITE_AA_RETRIEVAL
