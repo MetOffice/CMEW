@@ -5,17 +5,15 @@
 {{ assert(SITE != "", "SITE must be set to something other than an empty string") }}
 {{ assert(ESMVALTOOL_MODULE_NAME != "", "ESMVALTOOL_MODULE_NAME must be set to something other than an empty string") }}
 
-{% set _suite_ids = [] %}
-{% for _s in RUN_SUITE_IDS.split(",") %}
-    {% set _ = _suite_ids.append(_s.strip()) %}
-{% endfor %}
+{{ assert(REF_SUITE_ID != "", "REF_SUITE_ID must be set") }}
+{{ assert(SUITE_ID != "", "SUITE_ID must be set") }}
 
 [scheduler]
     UTC mode = True
 
 [task parameters]
     recipe = radiation_budget
-    dataset = {{ _suite_ids | join(", ") }}
+    dataset = {{ [REF_SUITE_ID, SUITE_ID] | join(", ") }}
 
 [scheduling]
     [[graph]]
