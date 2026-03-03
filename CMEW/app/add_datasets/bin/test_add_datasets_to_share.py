@@ -120,7 +120,7 @@ def test_add_common_facets(mock_env_vars):
         "project": "CMIP6",
     }
 
-    actual = add_common_facets(dataset_dict)
+    actual = add_common_facets(dataset_dict, "CMIP6")
     assert actual == expected
 
 
@@ -148,7 +148,7 @@ def test_process_naml_file(path_to_mock_nl, mock_env_vars):
         },
     ]
 
-    actual = process_naml_file(path_to_mock_nl)
+    actual = process_naml_file(path_to_mock_nl, "CMIP6")
     assert actual == expected
 
 
