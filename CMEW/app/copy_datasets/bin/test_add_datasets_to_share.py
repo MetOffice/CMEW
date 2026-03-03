@@ -197,7 +197,9 @@ def test_write_datasets_to_yaml(mock_writing):
         "subdir",
     ],
 )
-def test_dict_namelists_in_workflow_dir(mock_dirname, mock_listdir, mock_env_vars):
+def test_dict_namelists_in_workflow_dir(
+    mock_dirname, mock_listdir, mock_env_vars
+):
     expected = {
         "this_one": "/a/b/c/this_one.nl",
         "this_two": "/a/b/c/this_two.nl",
