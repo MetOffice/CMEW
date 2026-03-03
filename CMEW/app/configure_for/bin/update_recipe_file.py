@@ -145,6 +145,20 @@ def add_extra_datasets(recipe, yaml_filepath):
     with open(yaml_filepath, "r") as file_handle:
         extra_datasets = yaml.safe_load(file_handle)
 
+    # ESMValTool recipes expect keys to be "dataset", "ensemble", "exp" etc.
+    variables_conversion = {
+        "label_for_plots": "alias",
+        "model_id": "dataset",
+        "variant_label": "ensemble",
+        "experiment_id": "exp",
+    }
+
+    # Convert the variable names in the extra datasets
+    for dataset in extra_datasets:
+        for old_key, new_key in variables_conversion.items():
+            if old_key in dataset:
+                dataset[new_key] = dataset.pop(old_key)
+
     # Add the datasets to the datasets section of the recipe
     recipe["datasets"].extend(extra_datasets)
 
