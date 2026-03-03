@@ -141,6 +141,8 @@ def process_naml_file(naml_fp, project=None):
     ----------
     naml_fp: str
         The file path to the namelist file containing the datasets.
+    project: str, optional
+        A string indicating the project to which the dataset belongs.
 
     Returns
     -------
