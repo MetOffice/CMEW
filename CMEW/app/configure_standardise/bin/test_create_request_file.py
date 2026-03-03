@@ -6,22 +6,37 @@ from create_request_file import create_request
 
 
 def test_create_request(monkeypatch):
-    # In the order defined in 'create_request_file.py'.
+    # This create_request_file.py enforces "two-run legacy" even in unit tests,
+    # so we must set BOTH eval and ref environment variables.
+    #
+    # RUN_LABEL is intentionally NOT set here; the code defaults to SUITE_ID
+    # (i.e. generates the EVAL request).
+
+    # Shared / common env
     monkeypatch.setenv("START_YEAR", "1993")
     monkeypatch.setenv("NUMBER_OF_YEARS", "1")
-    monkeypatch.setenv("CALENDAR", "360_day")
     monkeypatch.setenv("INSTITUTION_ID", "MOHC")
-    monkeypatch.setenv("MODEL_ID", "UKESM1-0-LL")
     monkeypatch.setenv("ROOT_PROC_DIR", "/path/to/proc/dir/")
     monkeypatch.setenv("ROOT_DATA_DIR", "/path/to/data/dir/")
-    monkeypatch.setenv("SUITE_ID", "u-az513")
     monkeypatch.setenv("VARIABLES_PATH", "/path/to/variables.txt")
+
+    # Evaluation run env
+    monkeypatch.setenv("CALENDAR", "360_day")
+    monkeypatch.setenv("MODEL_ID", "UKESM1-0-LL")
+    monkeypatch.setenv("SUITE_ID", "u-az513")
     monkeypatch.setenv("VARIANT_LABEL", "r1i1p1f1")
+
+    # Reference run env
+    monkeypatch.setenv("REF_CALENDAR", "360_day")
+    monkeypatch.setenv("REF_MODEL_ID", "HadGEM3-GC31-LL")
+    monkeypatch.setenv("REF_SUITE_ID", "u-bv526")
+    monkeypatch.setenv("REF_VARIANT_LABEL", "r5i1p1f3")
 
     config = create_request()
     actual = {
         section: dict(config.items(section)) for section in config.sections()
     }
+
     expected = {
         "metadata": {
             "branch_method": "no parent",
@@ -68,4 +83,5 @@ def test_create_request(monkeypatch):
             "cylc_args": "--no-detach -v",
         },
     }
+
     assert actual == expected
