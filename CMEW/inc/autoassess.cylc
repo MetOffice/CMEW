@@ -24,7 +24,7 @@
         # Don't want to be hammering MASS!
         [[[mass_retrieval]]]
             limit = 4
-            members = SITE_AA_INSTALL
+            members = SITE_AA_RETRIEVAL
 
 
 [runtime]
