@@ -241,17 +241,13 @@ if __name__ == "__main__":
         # Check if it's model runs
         if basename == "model_runs":
 
-            # Extract the datasets from each file
+            # Write the datasets to a YAML file with ESMVal project
             datasets = process_naml_file(nl_fp, "ESMVal")
-
-            # Write the datasets to a YAML file in the target directory
             write_datasets_to_yaml(datasets, basename, target_dir)
 
         # Check if it's CMIP6:
         if basename == "cmip6_datasets":
 
-            # Extract the datasets from each file
+            # Write the datasets to a YAML file with CMIP6 project
             datasets = process_naml_file(nl_fp, "CMIP6")
-
-            # Write the datasets to a YAML file in the target directory
             write_datasets_to_yaml(datasets, basename, target_dir)
