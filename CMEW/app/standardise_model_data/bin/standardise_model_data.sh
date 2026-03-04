@@ -1,5 +1,5 @@
 #!/bin/bash
-# (C) Crown Copyright 2025, Met Office.
+# (C) Crown Copyright 2025-2026, Met Office.
 # The LICENSE.md file contains full licensing details.
 # Standardise data for both REF and EVAL runs via CDDS.
 
@@ -18,6 +18,10 @@ cmew-standardise-env cdds_convert "${REQUEST_PATH_REF}"
 echo "[INFO] Running cdds_convert for EVAL run using: ${REQUEST_PATH_EVAL}"
 cmew-standardise-env cdds_convert "${REQUEST_PATH_EVAL}"
 
+if [[ -n "${RAW_DATA_DIR:-}" ]]; then
+  echo "[INFO] Syncing RAW_DATA_DIR -> SHARE_DATA_CDDS: ${RAW_DATA_DIR} -> ${SHARE_DATA_CDDS}"
+  rsync -a "${RAW_DATA_DIR}" "${SHARE_DATA_CDDS}"
+fi
 # Restructure all data under ROOT_DATA_DIR into CMIP6-like layout.
 # restructure_dirs.sh already uses ROOT_DATA_DIR from the environment.
 echo "[INFO] Running restructure_dirs.sh over ROOT_DATA_DIR=${ROOT_DATA_DIR}"
