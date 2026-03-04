@@ -6,11 +6,8 @@ from create_request_file import create_request
 
 
 def test_create_request(monkeypatch):
-    # This create_request_file.py enforces "two-run legacy" even in unit tests,
-    # so we must set BOTH eval and ref environment variables.
-    #
-    # RUN_LABEL is intentionally NOT set here; the code defaults to SUITE_ID
-    # (i.e. generates the EVAL request).
+    # Two-run only: must set BOTH eval and ref environment variables
+    # and must set RUN_LABEL to select which request to generate.
 
     # Shared / common env
     monkeypatch.setenv("START_YEAR", "1993")
@@ -31,6 +28,9 @@ def test_create_request(monkeypatch):
     monkeypatch.setenv("REF_MODEL_ID", "HadGEM3-GC31-LL")
     monkeypatch.setenv("REF_SUITE_ID", "u-bv526")
     monkeypatch.setenv("REF_VARIANT_LABEL", "r5i1p1f3")
+
+    # Select EVAL branch explicitly
+    monkeypatch.setenv("RUN_LABEL", "u-az513")
 
     config = create_request()
     actual = {
@@ -74,9 +74,7 @@ def test_create_request(monkeypatch):
             "streams": "apm",
             "variable_list_file": "/path/to/variables.txt",
         },
-        "misc": {
-            "atmos_timestep": "1200",
-        },
+        "misc": {"atmos_timestep": "1200"},
         "conversion": {
             "mip_convert_plugin": "UKESM1",
             "skip_archive": "True",
