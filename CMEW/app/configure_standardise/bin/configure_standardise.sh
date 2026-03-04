@@ -6,7 +6,7 @@ BASH_XTRACEFD=1
 set -xeuo pipefail
 
 # ---------------------------------------------------------------------------
-# 0. Defensive programming (multi-run + legacy-safe)
+# 0. Defensive programming (multi-run)
 # ---------------------------------------------------------------------------
 : "${RUN_LABEL:?RUN_LABEL must be set (suite_id e.g. u-bv526)}"
 : "${REQUEST_PATH:?REQUEST_PATH must be set}"
@@ -44,7 +44,7 @@ if [[ -n "${REF_SUITE_ID}" && "${RUN_LABEL}" == "${REF_SUITE_ID}" ]]; then
   echo "[INFO] REF_CALENDAR=${REF_CALENDAR}"
   echo "[INFO] REF_VARIANT_LABEL=${REF_VARIANT_LABEL}"
 else
-  # Legacy / evaluation / default path
+  # evaluation / default path
   : "${MODEL_ID:?MODEL_ID must be set}"
   : "${SUITE_ID:?SUITE_ID must be set}"
   : "${CALENDAR:?CALENDAR must be set}"
