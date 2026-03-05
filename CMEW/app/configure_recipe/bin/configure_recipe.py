@@ -73,7 +73,7 @@ def retrieve_values_from_task_env():
 
 def create_developer_config_file(values):
     developer_config_path = values["DEV_CONFIG_PATH"]
-    
+
     mip_table_dir = values.get("MIP_TABLE_DIR", "").strip()
     if not mip_table_dir:
         raise KeyError("MIP_TABLE_DIR must be set")
