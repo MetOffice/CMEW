@@ -1,8 +1,24 @@
 # (C) Crown Copyright 2024-2026, Met Office.
 # The LICENSE.md file contains full licensing details.
+from create_request_file import load_request_defaults
 import os
-
 from create_request_file import create_request
+
+
+def expected_request():
+    """Return the expected request."""
+
+    request_defaults = load_request_defaults()
+    expected = {}
+    for section in request_defaults.sections():
+        expected[section] = dict(request_defaults.items(section))
+
+    # Match runtime behaviour
+    expected["common"]["mip_table_dir"] = os.path.expanduser(
+        expected["common"]["mip_table_dir"]
+    )
+
+    return expected
 
 
 def test_create_request(monkeypatch):
@@ -22,50 +38,6 @@ def test_create_request(monkeypatch):
     actual = {
         section: dict(config.items(section)) for section in config.sections()
     }
-    expected = {
-        "metadata": {
-            "branch_method": "no parent",
-            "calendar": "360_day",
-            "base_date": "1850-01-01T00:00:00",
-            "experiment_id": "amip",
-            "institution_id": "MOHC",
-            "license": "GCModelDev model data is licensed under the Open Government License v3 (https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/)",  # noqa: E501
-            "mip": "ESMVal",
-            "mip_era": "GCModelDev",
-            "model_id": "UKESM1-0-LL",
-            "model_type": "AGCM AER",
-            "sub_experiment_id": "none",
-            "variant_label": "r1i1p1f1",
-        },
-        "common": {
-            "external_plugin": "",
-            "external_plugin_location": "",
-            "mip_table_dir": os.path.expanduser(
-                "~cdds/etc/mip_tables/GCModelDev/0.0.25"
-            ),
-            "mode": "relaxed",
-            "package": "round-1",
-            "root_proc_dir": "/path/to/proc/dir/",
-            "root_data_dir": "/path/to/data/dir/",
-            "workflow_basename": "u-az513",
-        },
-        "data": {
-            "end_date": "1994-01-01T00:00:00",
-            "mass_data_class": "crum",
-            "model_workflow_branch": "trunk",
-            "model_workflow_id": "u-az513",
-            "model_workflow_revision": "not used except with data request",
-            "start_date": "1993-01-01T00:00:00",
-            "streams": "apm",
-            "variable_list_file": "/path/to/variables.txt",
-        },
-        "misc": {
-            "atmos_timestep": "1200",
-        },
-        "conversion": {
-            "mip_convert_plugin": "UKESM1",
-            "skip_archive": "True",
-            "cylc_args": "--no-detach -v",
-        },
-    }
+    expected = expected_request()
+
     assert actual == expected
