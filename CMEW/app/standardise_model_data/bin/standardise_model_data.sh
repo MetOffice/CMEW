@@ -4,7 +4,7 @@
 # Standardise data for both REF and EVAL runs via CDDS.
 
 BASH_XTRACEFD=1
-set -xeuo pipefail
+set -xeu
 
 : "${RUN_LABEL:?RUN_LABEL must be set (ref/eval)}"
 : "${REQUEST_PATH:?REQUEST_PATH must be set}"

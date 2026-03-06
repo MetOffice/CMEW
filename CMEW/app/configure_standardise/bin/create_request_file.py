@@ -29,14 +29,32 @@ Naming requirement:
 Environment variables are accessed directly via os.environ[...].
 """
 
-from __future__ import annotations
-
 import configparser
 import os
 from pathlib import Path
 
 
-def create_request() -> configparser.ConfigParser:
+def create_request():
+    """
+    Build a CDDS request configuration for the run identified by RUN_LABEL.
+
+    The function expects a two-run CMEW configuration to be present in the
+    environment: one reference run (REF_*) and
+                 one evaluation run (MODEL_ID/SUITE_ID/...).
+
+    Behaviour:
+    - Reads all required metadata directly from environment variables.
+    - Selects the reference or evaluation metadata according to RUN_LABEL.
+    - Raises KeyError if a required environment variable is missing.
+    - Raises KeyError if RUN_LABEL matches neither REF_SUITE_ID nor SUITE_ID.
+
+    Returns
+    -------
+    configparser.ConfigParser
+    A populated CDDS request configuration with sections:
+    metadata, common, data, misc, and conversion.
+    """
+
     # Required time window
     start_year = int(os.environ["START_YEAR"])
     number_of_years = int(os.environ["NUMBER_OF_YEARS"])
@@ -62,7 +80,6 @@ def create_request() -> configparser.ConfigParser:
     # Must be set in two-run mode
     run_label = os.environ["RUN_LABEL"].strip()
 
-    # Optional experiment IDs (default to "amip" if not provided)
     ref_experiment_id = (
         os.environ.get("REF_EXPERIMENT_ID", "amip").strip() or "amip"
     )
@@ -143,15 +160,35 @@ def create_request() -> configparser.ConfigParser:
     return request
 
 
-def write_request(
-    request: configparser.ConfigParser, target_path: Path
-) -> None:
+def write_request(request, target_path):
+    """
+    Write a CDDS request configuration to disk.
+
+    The parent directory of ``target_path`` is created if it does
+    not already exist.
+
+    Parameters
+    ----------
+    request : configparser.ConfigParser
+    The populated request configuration to write.
+    target_path : pathlib.Path
+    Destination file path for the generated request configuration.
+    """
+
     target_path.parent.mkdir(parents=True, exist_ok=True)
     with open(target_path, mode="w", encoding="utf-8") as fh:
         request.write(fh)
 
 
-def main() -> None:
+def main():
+    """
+    Generate and write the request file for the current task environment.
+
+    The output file location is taken from the REQUEST_PATH environment
+    variable. All other required inputs are read from the environment
+    by ``create_request()``.
+    """
+
     target_path = Path(os.environ["REQUEST_PATH"])
     request = create_request()
     write_request(request, target_path)
