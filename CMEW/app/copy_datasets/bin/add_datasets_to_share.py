@@ -228,8 +228,10 @@ def dict_namelists_in_workflow_dir():
 def use_facet_as_key(filepath, key_facet="suite_id"):
     """
     Edit a YAML file in place, from a list to a dictionary.
+
     The keys of the new dictionary are the values of the specified facet,
     wich must be present in each section of the list and be unique.
+
     Parameters
     ----------
     filepath: str
@@ -241,13 +243,17 @@ def use_facet_as_key(filepath, key_facet="suite_id"):
     # Read the YAML file that has datasets as a list
     with open(filepath, "r") as f:
         data = yaml.safe_load(f)
+
     # Create a new dictionary with the same sections as the list
     new_dict = {}
     for section in data:
+
         # Use the facet as a unique key
         unique = section[key_facet]
+
         # The information in each section remains unchanged
         new_dict[unique] = section
+
     # Write the new dictionary back to the existing YAML filepath
     with open(filepath, "w") as f:
         yaml.dump(new_dict, f)
