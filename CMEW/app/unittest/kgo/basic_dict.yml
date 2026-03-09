@@ -1,0 +1,8 @@
+key_1: value_1
+key_for_dict:
+  nested_key_1: nested_value_1
+  nested_key_2: nested_value_2
+key_for_list:
+- item_1
+- item_2
+- item_3
