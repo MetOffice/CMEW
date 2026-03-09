@@ -41,7 +41,7 @@ if [[ -n "${RAW_DATA_DIR:-}" ]]; then
     ref_src_dir="$(find "${ROOT_DATA_DIR}" -type d -path "*/input/${REF_SUITE_ID}" -print -quit)"
     eval_src_dir="$(find "${ROOT_DATA_DIR}" -type d -path "*/input/${SUITE_ID}" -print -quit)"
     set -x
-    
+
     if [[ -z "${ref_src_dir}" ]]; then
         echo "log.err: Could not find REF suite input directory for ${REF_SUITE_ID} under ${ROOT_DATA_DIR}" >&2
         exit 1
