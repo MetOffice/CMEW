@@ -18,10 +18,51 @@ cmew-standardise-env cdds_convert "${REQUEST_PATH_REF}"
 echo "[INFO] Running cdds_convert for EVAL run using: ${REQUEST_PATH_EVAL}"
 cmew-standardise-env cdds_convert "${REQUEST_PATH_EVAL}"
 
+# If RAW_DATA_DIR is configured, copy extracted raw data only when the target
+# directory is empty. If it is not empty, emit a log.err message and do not copy.
 if [[ -n "${RAW_DATA_DIR:-}" ]]; then
-  echo "[INFO] Syncing RAW_DATA_DIR -> SHARE_DATA_CDDS: ${RAW_DATA_DIR} -> ${SHARE_DATA_CDDS}"
-  rsync -a "${RAW_DATA_DIR}" "${SHARE_DATA_CDDS}"
+    echo "[INFO] RAW_DATA_DIR is set to: ${RAW_DATA_DIR}"
+    echo "[INFO] ROOT_DATA_DIR is set to: ${ROOT_DATA_DIR}"
+
+    mkdir -p "${RAW_DATA_DIR}"
+
+    shopt -s nullglob dotglob
+    raw_dir_contents=("${RAW_DATA_DIR}"/*)
+    shopt -u nullglob dotglob
+
+    if (( ${#raw_dir_contents[@]} > 0 )); then
+        echo "log.err: RAW_DATA_DIR was not empty: ${RAW_DATA_DIR}" >&2
+        exit 1
+    fi
+
+    echo "[INFO] RAW_DATA_DIR is empty, locating suite input directories"
+
+    set +x
+    ref_src_dir="$(find "${ROOT_DATA_DIR}" -type d -path "*/input/${REF_SUITE_ID}" -print -quit)"
+    eval_src_dir="$(find "${ROOT_DATA_DIR}" -type d -path "*/input/${SUITE_ID}" -print -quit)"
+    set -x
+    
+    if [[ -z "${ref_src_dir}" ]]; then
+        echo "log.err: Could not find REF suite input directory for ${REF_SUITE_ID} under ${ROOT_DATA_DIR}" >&2
+        exit 1
+    fi
+
+    if [[ -z "${eval_src_dir}" ]]; then
+        echo "log.err: Could not find EVAL suite input directory for ${SUITE_ID} under ${ROOT_DATA_DIR}" >&2
+        exit 1
+    fi
+
+    echo "[INFO] Copying REF raw data: ${ref_src_dir}"
+    cp -a "${ref_src_dir}" "${RAW_DATA_DIR}/"
+
+    echo "[INFO] Copying EVAL raw data: ${eval_src_dir}"
+    cp -a "${eval_src_dir}" "${RAW_DATA_DIR}/"
+
+    echo "[INFO] Raw suite input directories copied to ${RAW_DATA_DIR}"
+else
+    echo "[INFO] RAW_DATA_DIR is not set, skipping raw data copy"
 fi
+
 # Restructure all data under ROOT_DATA_DIR into CMIP6-like layout.
 # restructure_dirs.sh already uses ROOT_DATA_DIR from the environment.
 echo "[INFO] Running restructure_dirs.sh over ROOT_DATA_DIR=${ROOT_DATA_DIR}"

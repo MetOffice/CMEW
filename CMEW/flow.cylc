@@ -39,15 +39,8 @@
             USER_CONFIG_PATH = ${CONFIG_DIR}/config-user.yml
             OUTPUT_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/cycle/${CYLC_TASK_CYCLE_POINT}
             SHARE_DATA_CDDS = ${CYLC_WORKFLOW_SHARE_DIR}/data/cdds
-            {% if RAW_DATA_DIR and RAW_DATA_DIR|trim != "" %}
-                RAW_DATA_DIR = {{ RAW_DATA_DIR }}
-                ROOT_DATA_DIR = {{ RAW_DATA_DIR }}/cdds_data
-                ROOT_PROC_DIR = {{ RAW_DATA_DIR }}/proc
-            {% else %}
-                RAW_DATA_DIR = ""
-                ROOT_DATA_DIR = ${SHARE_DATA_CDDS}/cdds_data
-                ROOT_PROC_DIR = ${SHARE_DATA_CDDS}/proc
-            {% endif %}
+            ROOT_PROC_DIR = ${SHARE_DATA_CDDS}/proc
+            ROOT_DATA_DIR = ${SHARE_DATA_CDDS}/cdds_data
             REQUEST_PATH_REF  = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request_ref.cfg
             REQUEST_PATH_EVAL = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request_eval.cfg
             VARIABLES_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/variables.txt
@@ -129,6 +122,7 @@
         inherit = STANDARDISE, MODEL_RUNS
         [[[environment]]]
             SITE = {{ SITE }}
+            RAW_DATA_DIR = {{ RAW_DATA_DIR }}
 
     [[run_recipe<recipe>]]
         inherit = None, COMPUTE, RECIPE
