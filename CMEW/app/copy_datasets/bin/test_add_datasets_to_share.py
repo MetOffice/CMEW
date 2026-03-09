@@ -227,7 +227,7 @@ def test_use_facet_as_key(path_to_mock_yaml_list, path_to_kgo_yaml_dict):
         shutil.copyfile(path_to_mock_yaml_list, tmp.name)
 
         # The filepath is given by .name
-        use_facet_as_key(str(tmp.name))
+        use_facet_as_key(str(tmp.name), "suite_id")
 
         # Read the result
         tmp.seek(0)

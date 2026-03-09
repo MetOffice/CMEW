@@ -225,7 +225,7 @@ def dict_namelists_in_workflow_dir():
     return filepaths
 
 
-def use_facet_as_key(filepath, key_facet="suite_id"):
+def use_facet_as_key(filepath, key_facet):
     """
     Edit a YAML file in place, from a list to a dictionary.
 
@@ -275,5 +275,6 @@ if __name__ == "__main__":
         # Write the datasets to a YAML file in the target directory
         write_datasets_to_yaml(datasets, basename, target_dir)
 
-    # Reformat the model_runs YAML file to use suite_ids as keys
-    use_facet_as_key(f"{target_dir}/model_runs.yml")
+    # Reformat the YAML files to use unique identifiers as keys
+    use_facet_as_key(f"{target_dir}/model_runs.yml", "suite_id")
+    use_facet_as_key(f"{target_dir}/cmip6_datasets.yml", "model_id")
