@@ -10,7 +10,7 @@ datasets:
   dataset: HadGEM3-GC31-LL
   end_year: 1993
   ensemble: r1i1p1f3
-  exp: amip
+  exp: historical
   grid: gn
   institute: MOHC
   project: ESMVal
