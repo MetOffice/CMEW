@@ -54,7 +54,8 @@ def create_request():
         "model_workflow_id": os.environ["SUITE_ID"],
         "model_workflow_revision": "not used except with data request",
         "start_date": f"{os.environ['START_YEAR']}-01-01T00:00:00",
-        "streams": "apm",
+        # For now there is only one stream, for Amon and Emon mip.
+        "streams": os.environ["STREAM_ID"],
         "variable_list_file": os.environ["VARIABLES_PATH"],
     }
     request["misc"] = {
