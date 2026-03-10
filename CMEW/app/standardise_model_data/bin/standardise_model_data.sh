@@ -21,9 +21,6 @@ cmew-standardise-env cdds_convert "${REQUEST_PATH_EVAL}"
 # If RAW_DATA_DIR is configured, copy extracted raw data only when the target
 # directory is empty. If it is not empty, emit a log.err message and do not copy.
 if [[ -n "${RAW_DATA_DIR:-}" ]]; then
-    echo "[INFO] RAW_DATA_DIR is set to: ${RAW_DATA_DIR}"
-    echo "[INFO] ROOT_DATA_DIR is set to: ${ROOT_DATA_DIR}"
-
     mkdir -p "${RAW_DATA_DIR}"
 
     shopt -s nullglob dotglob
