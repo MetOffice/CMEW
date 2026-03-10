@@ -81,12 +81,14 @@
             REF_SUITE_ID = {{ REF_SUITE_ID }}
             REF_CALENDAR = {{ REF_CALENDAR }}
             REF_VARIANT_LABEL = {{ REF_VARIANT_LABEL }}
+            REF_EXPERIMENT_ID = {{ REF_EXPERIMENT_ID }}
 
             # Evaluation run metadata
             MODEL_ID = {{ MODEL_ID }}
             SUITE_ID = {{ SUITE_ID }}
             CALENDAR = {{ CALENDAR }}
             VARIANT_LABEL = {{ VARIANT_LABEL }}
+            EXPERIMENT_ID = {{ EXPERIMENT_ID }}
 
     [[install_env_file]]
         [[[environment]]]
@@ -120,9 +122,7 @@
         [[[environment]]]
             ROSE_TASK_APP = configure_for
             LABEL_FOR_PLOTS = {{ LABEL_FOR_PLOTS }}
-            SUITE_ID = {{ SUITE_ID }}
             REF_LABEL_FOR_PLOTS = {{ REF_LABEL_FOR_PLOTS }}
-            REF_SUITE_ID = {{ REF_SUITE_ID }}
 
     [[configure_standardise<recipe,dataset>]]
         inherit = STANDARDISE, RECIPE, MODEL_RUNS, PER_DATASET
@@ -130,6 +130,7 @@
             ROSE_TASK_APP = configure_standardise
             START_YEAR = {{ START_YEAR }}
             NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
+            STREAM_ID = "apm"
 
     [[standardise_model_data<dataset>]]
         inherit = STANDARDISE, PER_DATASET

@@ -145,11 +145,14 @@ def create_request():
         "model_workflow_id": chosen_suite_id,
         "model_workflow_revision": "not used except with data request",
         "start_date": f"{start_year}-01-01T00:00:00",
-        "streams": "apm",
+        # For now there is only one stream, for Amon and Emon mip.
+        "streams": os.environ["STREAM_ID"],
         "variable_list_file": variables_path,
     }
 
-    request["misc"] = {"atmos_timestep": "1200"}
+    request["misc"] = {
+        "atmos_timestep": "1200",
+    }
 
     request["conversion"] = {
         "mip_convert_plugin": "UKESM1",

@@ -99,7 +99,7 @@ def convert_str_to_facets(section):
     return section_dict
 
 
-def add_common_facets(dataset_dict, project="CMIP6"):
+def add_common_facets(dataset_dict, project):
     """
     Add start year, end year and project to a dataset dictionary.
 
@@ -109,7 +109,6 @@ def add_common_facets(dataset_dict, project="CMIP6"):
         A dictionary containing the facets of a dataset.
     project: str
         A string indicating the project to which the dataset belongs.
-        Default is "CMIP6".
 
     Returns
     -------
@@ -127,10 +126,14 @@ def add_common_facets(dataset_dict, project="CMIP6"):
     dataset_dict["end_year"] = end_year
     dataset_dict["project"] = project
 
+    # Add MOHC as an institute only for generated CMEW runs
+    if dataset_dict["project"] == "ESMVal":
+        dataset_dict["institute"] = "MOHC"
+
     return dataset_dict
 
 
-def process_naml_file(naml_fp):
+def process_naml_file(naml_fp, project=None):
     """
     Extract the datasets and their facets from a namelist file.
 
@@ -138,6 +141,8 @@ def process_naml_file(naml_fp):
     ----------
     naml_fp: str
         The file path to the namelist file containing the datasets.
+    project: str, optional
+        A string indicating the project to which the dataset belongs.
 
     Returns
     -------
@@ -148,7 +153,7 @@ def process_naml_file(naml_fp):
     sections = extract_sections_from_naml(naml_fp)
     for section in sections:
         dataset_dict = convert_str_to_facets(section)
-        dataset_dict = add_common_facets(dataset_dict)
+        dataset_dict = add_common_facets(dataset_dict, project)
         datasets.append(dataset_dict)
     return datasets
 
@@ -225,6 +230,40 @@ def dict_namelists_in_work_dir():
     return filepaths
 
 
+def use_facet_as_key(filepath, key_facet="suite_id"):
+    """
+    Edit a YAML file in place, from a list to a dictionary.
+
+    The keys of the new dictionary are the values of the specified facet,
+    wich must be present in each section of the list and be unique.
+
+    Parameters
+    ----------
+    filepath: str
+        The file path to the YAML file to be edited.
+    key_facet: str
+        The facet to use as the key in the new dictionary.
+        Defaults to 'suite_id', which is the unique identifier for now.
+    """
+    # Read the YAML file that has datasets as a list
+    with open(filepath, "r") as f:
+        data = yaml.safe_load(f)
+
+    # Create a new dictionary with the same sections as the list
+    new_dict = {}
+    for section in data:
+
+        # Use the facet as a unique key
+        unique = section[key_facet]
+
+        # The information in each section remains unchanged
+        new_dict[unique] = section
+
+    # Write the new dictionary back to the existing YAML filepath
+    with open(filepath, "w") as f:
+        yaml.dump(new_dict, f)
+
+
 if __name__ == "__main__":
     # Read the target (shared) directory from the environment
     target_dir = os.environ["DATASETS_LIST_DIR"]
@@ -235,8 +274,19 @@ if __name__ == "__main__":
     # Loop over the namelist files in the work directory
     for basename, nl_fp in dict_namelists_in_work_dir().items():
 
-        # Extract the datasets from each file
-        datasets = process_naml_file(nl_fp)
+        # Check if it's model runs
+        if basename == "model_runs":
 
-        # Write the datasets to a YAML file in the target directory
-        write_datasets_to_yaml(datasets, basename, target_dir)
+            # Write the datasets to a YAML file with ESMVal project
+            datasets = process_naml_file(nl_fp, "ESMVal")
+            write_datasets_to_yaml(datasets, basename, target_dir)
+
+        # Check if it's CMIP6:
+        if basename == "cmip6_datasets":
+
+            # Write the datasets to a YAML file with CMIP6 project
+            datasets = process_naml_file(nl_fp, "CMIP6")
+            write_datasets_to_yaml(datasets, basename, target_dir)
+
+    # Reformat the model_runs YAML file to use suite_ids as keys
+    use_facet_as_key(f"{target_dir}/model_runs.yml")
