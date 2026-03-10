@@ -8,7 +8,6 @@ from add_datasets_to_share import (
     write_dict_to_yaml,
     write_datasets_to_yaml,
     dict_namelists_in_workflow_dir,
-    dict_namelists_in_work_dir,
     use_facet_as_key,
 )
 from pathlib import Path
