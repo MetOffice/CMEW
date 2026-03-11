@@ -4,7 +4,7 @@
 # Standardise data for both REF and EVAL runs via CDDS.
 
 BASH_XTRACEFD=1
-set -xeuo pipefail
+set -xeu
 
 echo "[INFO] Running standardise_model_data for REF and EVAL runs"
 
