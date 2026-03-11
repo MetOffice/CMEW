@@ -1,0 +1,88 @@
+#!jinja2
+# (C) Crown Copyright 2022-2025, Met Office.
+# The LICENSE.md file contains full licensing details.
+# autoassess.cylc
+
+[task parameters]
+    autoassess_area = {{ AUTOASSESS_AREAS | join(",") }}
+    suite_id = {{ REF_SUITE_ID }},{{ SUITE_ID }}
+
+
+[scheduling]
+    [[graph]]
+        R1 = """
+            install_env_file
+                => install_autoassess
+                => retrieve_data<autoassess_area><suite_id>
+                => index_data<autoassess_area><suite_id>
+                => run_area<autoassess_area>
+                => nac_plot<autoassess_area>
+                => html_page<autoassess_area>
+        """
+
+    [[queues]]
+        # Don't want to be hammering MASS!
+        [[[mass_retrieval]]]
+            limit = 4
+            members = SITE_AA_RETRIEVAL
+
+
+[runtime]
+
+    [[AUTOASSESS]]
+        inherit = SITE_AUTOASSESS
+        [[[environment]]]
+            AUTOASSESS_OUTPUT_DIR = $OUTPUT_DIR/{{ SUITE_ID }}_vs_{{ REF_SUITE_ID }}
+            AUTOASSESS_DATA_DIR = $CYLC_WORKFLOW_SHARE_DIR/data/autoassess
+            ASSESSMENT_TITLE = {{ AUTOASSESS_TITLE }}
+            ESMVALTOOL_MODULE_NAME = {{ ESMVALTOOL_MODULE_NAME }}
+            START_DATE = {{ (START_YEAR-1)|string + '/12/01' }}
+            END_DATE = {{ (START_YEAR+NUMBER_OF_YEARS-1)|string + '/12/01' }}
+
+    [[install_autoassess]]
+        inherit = AUTOASSESS, SITE_AA_INSTALL
+        [[[environment]]]
+            ROSE_APP_OPT_CONF_KEYS = localmirror
+
+    [[retrieve_data<autoassess_area><suite_id>]]
+        inherit = AUTOASSESS, SITE_AA_RETRIEVAL
+        [[[environment]]]
+            ROSE_TASK_APP = aa_retrieve_data
+            SUITE_ID = $CYLC_TASK_PARAM_suite_id
+            AREA = $CYLC_TASK_PARAM_autoassess_area
+
+    [[index_data<autoassess_area><suite_id>]]
+        inherit = AUTOASSESS, SITE_AA_DATA_INDEXING
+        [[[environment]]]
+            ROSE_TASK_APP = aa_index_data
+            SUITE_ID = $CYLC_TASK_PARAM_suite_id
+            AREA = $CYLC_TASK_PARAM_autoassess_area
+
+    [[run_area<autoassess_area>]]
+        inherit = AUTOASSESS, SITE_AA_RUN_AREA
+        [[[environment]]]
+            ROSE_TASK_APP = aa_run_area
+            ROSE_APP_OPT_CONF_KEYS = ($CYLC_TASK_PARAM_autoassess_area)
+            AREA = $CYLC_TASK_PARAM_autoassess_area
+            REF_SUITE_ID = {{ REF_SUITE_ID }}
+            REF_SUITE_TITLE = {{ REF_LABEL_FOR_PLOTS }}
+            SUITE_ID = {{ SUITE_ID }}
+            SUITE_TITLE = {{ LABEL_FOR_PLOTS }}
+
+    [[nac_plot<autoassess_area>]]
+        inherit = AUTOASSESS, SITE_AA_NAC_PLOT
+        [[[environment]]]
+            ROSE_TASK_APP = aa_nac_plot
+            AREA = $CYLC_TASK_PARAM_autoassess_area
+            REF_SUITE_ID = {{ REF_SUITE_ID }}
+            REF_SUITE_TITLE = {{ REF_LABEL_FOR_PLOTS }}
+            SUITE_ID = {{ SUITE_ID }}
+            SUITE_TITLE = {{ LABEL_FOR_PLOTS }}
+
+    [[html_page<autoassess_area>]]
+        inherit = AUTOASSESS, SITE_AA_HTML_PAGE
+        [[[environment]]]
+            ROSE_TASK_APP = aa_html_page
+            AREA = $CYLC_TASK_PARAM_autoassess_area
+            REF_SUITE_ID = {{ REF_SUITE_ID }}
+            SUITE_ID = {{ SUITE_ID }}
