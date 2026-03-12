@@ -6,24 +6,40 @@ from create_request_file import create_request
 
 
 def test_create_request(monkeypatch):
-    # In the order defined in 'create_request_file.py'.
+    # Two-run only: must set BOTH eval and ref environment variables
+    # and must set CYLC_TASK_PARAM_dataset to select which request to generate.
+
+    # Shared / common env
     monkeypatch.setenv("START_YEAR", "1993")
     monkeypatch.setenv("NUMBER_OF_YEARS", "1")
     monkeypatch.setenv("CALENDAR", "360_day")
     monkeypatch.setenv("EXPERIMENT_ID", "amip")
     monkeypatch.setenv("INSTITUTION_ID", "MOHC")
-    monkeypatch.setenv("MODEL_ID", "UKESM1-0-LL")
     monkeypatch.setenv("ROOT_PROC_DIR", "/path/to/proc/dir/")
     monkeypatch.setenv("ROOT_DATA_DIR", "/path/to/data/dir/")
-    monkeypatch.setenv("SUITE_ID", "u-az513")
     monkeypatch.setenv("VARIABLES_PATH", "/path/to/variables.txt")
+
+    # Evaluation run env
+    monkeypatch.setenv("CALENDAR", "360_day")
+    monkeypatch.setenv("MODEL_ID", "UKESM1-0-LL")
+    monkeypatch.setenv("SUITE_ID", "u-az513")
     monkeypatch.setenv("VARIANT_LABEL", "r1i1p1f1")
     monkeypatch.setenv("STREAM_ID", "apm")
+
+    # Reference run env
+    monkeypatch.setenv("REF_CALENDAR", "360_day")
+    monkeypatch.setenv("REF_MODEL_ID", "HadGEM3-GC31-LL")
+    monkeypatch.setenv("REF_SUITE_ID", "u-bv526")
+    monkeypatch.setenv("REF_VARIANT_LABEL", "r5i1p1f3")
+
+    # Select EVAL branch explicitly
+    monkeypatch.setenv("CYLC_TASK_PARAM_dataset", "u-az513")
 
     config = create_request()
     actual = {
         section: dict(config.items(section)) for section in config.sections()
     }
+
     expected = {
         "metadata": {
             "branch_method": "no parent",
@@ -61,13 +77,12 @@ def test_create_request(monkeypatch):
             "streams": "apm",
             "variable_list_file": "/path/to/variables.txt",
         },
-        "misc": {
-            "atmos_timestep": "1200",
-        },
+        "misc": {"atmos_timestep": "1200"},
         "conversion": {
             "mip_convert_plugin": "UKESM1",
             "skip_archive": "True",
             "cylc_args": "--no-detach -v",
         },
     }
+
     assert actual == expected
