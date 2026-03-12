@@ -3,7 +3,7 @@
 # The LICENSE.md file contains full licensing details.
 # Send the output from 'set -x' to 'stdout' rather than 'stderr'.
 BASH_XTRACEFD=1
-set -xeu
+set -eux
 
 RESTRUCTURE_COMMAND="${CDDS_SOFTWARE_DIR}/ceda-mip-tools/bin/restructure_for_cmip6"
 ROOT_RESTRUCTURED_DIR="${CYLC_WORKFLOW_SHARE_DIR}/work/"

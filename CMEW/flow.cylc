@@ -64,7 +64,6 @@
 
     [[PER_DATASET]]
         [[[environment]]]
-            RUN_LABEL = ${CYLC_TASK_PARAM_dataset}
             REQUEST_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request_${CYLC_TASK_PARAM_dataset}.cfg
             VARIABLES_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/variables_${CYLC_TASK_PARAM_dataset}.txt
 

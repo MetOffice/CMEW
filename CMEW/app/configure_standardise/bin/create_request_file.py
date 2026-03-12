@@ -19,9 +19,10 @@ Evaluation run (non-REF):
   - VARIANT_LABEL
 
 Selection rule:
-- RUN_LABEL must be set and must match either REF_SUITE_ID or SUITE_ID.
-- If RUN_LABEL == REF_SUITE_ID -> use REF_* metadata.
-- If RUN_LABEL == SUITE_ID     -> use non-REF metadata.
+- CYLC_TASK_PARAM_dataset must be set and must match either REF_SUITE_ID
+  or SUITE_ID.
+- If CYLC_TASK_PARAM_dataset == REF_SUITE_ID -> use REF_* metadata.
+- If CYLC_TASK_PARAM_dataset == SUITE_ID     -> use non-REF metadata.
 
 Naming requirement:
 - ALWAYS set workflow_basename = suite_id so CDDS paths are cdds_<suite_id>.
@@ -36,7 +37,8 @@ from pathlib import Path
 
 def create_request():
     """
-    Build a CDDS request configuration for the run identified by RUN_LABEL.
+    Build a CDDS request configuration for the run identified by
+    CYLC_TASK_PARAM_dataset.
 
     The function expects a two-run CMEW configuration to be present in the
     environment: one reference run (REF_*) and
@@ -44,9 +46,11 @@ def create_request():
 
     Behaviour:
     - Reads all required metadata directly from environment variables.
-    - Selects the reference or evaluation metadata according to RUN_LABEL.
+    - Selects the reference or evaluation metadata according to
+      CYLC_TASK_PARAM_dataset.
     - Raises KeyError if a required environment variable is missing.
-    - Raises KeyError if RUN_LABEL matches neither REF_SUITE_ID nor SUITE_ID.
+    - Raises KeyError if CYLC_TASK_PARAM_dataset matches neither
+      REF_SUITE_ID nor SUITE_ID.
 
     Returns
     -------
@@ -78,7 +82,7 @@ def create_request():
     variant_label = os.environ["VARIANT_LABEL"]
 
     # Must be set in two-run mode
-    run_label = os.environ["RUN_LABEL"].strip()
+    run_label = os.environ["CYLC_TASK_PARAM_dataset"].strip()
 
     ref_experiment_id = (
         os.environ.get("REF_EXPERIMENT_ID", "amip").strip() or "amip"
@@ -99,9 +103,9 @@ def create_request():
         chosen_experiment_id = experiment_id
     else:
         raise KeyError(
-            "RUN_LABEL must match REF_SUITE_ID or SUITE_ID. "
-            f"Got RUN_LABEL='{run_label}', REF_SUITE_ID='{ref_suite_id}',"
-            f"SUITE_ID='{suite_id}'."
+            "CYLC_TASK_PARAM_dataset must match REF_SUITE_ID or SUITE_ID. "
+            f"Got CYLC_TASK_PARAM_dataset='{run_label}', "
+            f"REF_SUITE_ID='{ref_suite_id}', SUITE_ID='{suite_id}'."
         )
 
     # Requirement: ALWAYS use suite_id for basename (so cdds_<suite_id>)

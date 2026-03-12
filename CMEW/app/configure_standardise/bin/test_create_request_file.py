@@ -7,7 +7,7 @@ from create_request_file import create_request
 
 def test_create_request(monkeypatch):
     # Two-run only: must set BOTH eval and ref environment variables
-    # and must set RUN_LABEL to select which request to generate.
+    # and must set CYLC_TASK_PARAM_dataset to select which request to generate.
 
     # Shared / common env
     monkeypatch.setenv("START_YEAR", "1993")
@@ -33,7 +33,7 @@ def test_create_request(monkeypatch):
     monkeypatch.setenv("REF_VARIANT_LABEL", "r5i1p1f3")
 
     # Select EVAL branch explicitly
-    monkeypatch.setenv("RUN_LABEL", "u-az513")
+    monkeypatch.setenv("CYLC_TASK_PARAM_dataset", "u-az513")
 
     config = create_request()
     actual = {
