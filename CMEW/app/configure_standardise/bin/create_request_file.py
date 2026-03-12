@@ -9,21 +9,27 @@ import os
 from pathlib import Path
 
 
-def _get_request_defaults_path() -> Path:
-    """
-    Return path to request defaults file.
-    Prefer REQUEST_DEFAULTS_PATH from the environment (set by Cylc),
-    but fall back to the repository-relative path for standalone pytest runs.
-    """
-    env_path = os.environ.get("REQUEST_DEFAULTS_PATH")
-    if env_path:
-        return Path(env_path)
-    return Path(__file__).resolve().parents[1] / "etc" / "request_defaults.cfg"
-
-
 def load_request_defaults():
     cfg = configparser.ConfigParser()
-    cfg.read(str(_get_request_defaults_path()))
+    request_defaults_path = os.environ.get("REQUEST_DEFAULTS_PATH")
+
+    if not request_defaults_path:
+        raise ValueError("REQUEST_DEFAULTS_PATH is not set")
+
+    read_files = cfg.read(request_defaults_path)
+    if not read_files:
+        raise FileNotFoundError(
+            f"Could not read request defaults file: {request_defaults_path}"
+        )
+
+    required_sections = {"metadata", "common", "data", "misc", "conversion"}
+    missing_sections = required_sections - set(cfg.sections())
+    if missing_sections:
+        missing = ", ".join(sorted(missing_sections))
+        raise ValueError(
+            f"Request defaults file is missing required sections: {missing}"
+        )
+
     return cfg
 
 
