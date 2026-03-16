@@ -4,8 +4,8 @@
 """
 Process and copy the dataset namelist files to a shared directory.
 
-Namelist files are created by rose from the sections in
-CMEW/app/add_datasets/rose-app.conf. These may be edited in the GUI.
+Namelist files are created by rose from the sections in rose-suite.conf.
+These may be edited in the GUI.
 This application reads the namelist files,
 converts the contents to a dictionary of datasets and their facets,
 then writes those dictionaries to YAML files in the share directory.
@@ -199,9 +199,9 @@ def write_datasets_to_yaml(datasets, name, target_dir):
     write_dict_to_yaml(datasets, target_fp)
 
 
-def dict_namelists_in_work_dir():
+def dict_namelists_in_workflow_dir():
     """
-    Looks for namelist files in the work directory of the current app.
+    Looks for namelist files in the main workflow directory.
 
     Returns
     -------
@@ -211,18 +211,18 @@ def dict_namelists_in_work_dir():
     """
     filepaths = {}
 
-    # Namelist files are written to the work directory of the add_datasets
-    work_dir = os.getenv("CYLC_TASK_WORK_DIR")
+    # Namelist files are written to the main workflow directory
+    workflow_dir = os.getenv("CYLC_WORKFLOW_RUN_DIR")
 
     # Grab all the namelist files, in case we add more in future
-    for file in os.listdir(work_dir):
+    for file in os.listdir(workflow_dir):
         if file.endswith(".nl"):
 
             # Read the name of the file for the key, minus ".nl"
             basename = os.path.basename(file)[:-3]
 
             # Use the filepath for the value
-            namelist_fp = os.path.join(work_dir, file)
+            namelist_fp = os.path.join(workflow_dir, file)
 
             # Add to the dictionary
             filepaths[basename] = namelist_fp
@@ -230,7 +230,7 @@ def dict_namelists_in_work_dir():
     return filepaths
 
 
-def use_facet_as_key(filepath, key_facet="suite_id"):
+def use_facet_as_key(filepath, key_facet):
     """
     Edit a YAML file in place, from a list to a dictionary.
 
@@ -272,7 +272,7 @@ if __name__ == "__main__":
     os.makedirs(target_dir, exist_ok=True)
 
     # Loop over the namelist files in the work directory
-    for basename, nl_fp in dict_namelists_in_work_dir().items():
+    for basename, nl_fp in dict_namelists_in_workflow_dir().items():
 
         # Check if it's model runs
         if basename == "model_runs":
@@ -288,5 +288,6 @@ if __name__ == "__main__":
             datasets = process_naml_file(nl_fp, "CMIP6")
             write_datasets_to_yaml(datasets, basename, target_dir)
 
-    # Reformat the model_runs YAML file to use suite_ids as keys
-    use_facet_as_key(f"{target_dir}/model_runs.yml")
+    # Reformat the YAML files to use unique identifiers as keys
+    use_facet_as_key(f"{target_dir}/model_runs.yml", "suite_id")
+    use_facet_as_key(f"{target_dir}/cmip6_datasets.yml", "model_id")
