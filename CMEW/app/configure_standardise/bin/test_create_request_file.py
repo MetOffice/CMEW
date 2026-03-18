@@ -18,13 +18,11 @@ def test_create_request(monkeypatch):
     monkeypatch.setenv("SUITE_ID", "u-az513")
     monkeypatch.setenv("VARIABLES_PATH", "/path/to/variables.txt")
     monkeypatch.setenv("VARIANT_LABEL", "r1i1p1f1")
-<<<<<<< 212_remove_hard_coded_dev_config
     monkeypatch.setenv(
-        "MIP_TABLE_DIR", "~cdds/etc/mip_tables/GCModelDev/0.0.25"
+        "MIP_TABLE_DIR",
+        "~cdds/etc/mip_tables/GCModelDev/0.0.25",
     )
-=======
     monkeypatch.setenv("STREAM_ID", "apm")
->>>>>>> main
 
     config = create_request()
     actual = {
