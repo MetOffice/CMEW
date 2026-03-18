@@ -1,4 +1,4 @@
-.. (C) Crown Copyright 2022-2025, Met Office.
+.. (C) Crown Copyright 2022-2026, Met Office.
 .. The LICENSE.md file contains full licensing details.
 .. include:: ../common.txt
 
@@ -19,6 +19,18 @@ An overview of the workflow
      The ``install_env_file.sh`` script from the |Rose| app.
   :Details:
      Runs once at the start of the workflow.
+
+``copy_datasets``
+  :Description:
+     Reads the namelist files in the top level of the cylc workflow,
+     then copies these details to YAML files
+     in the cylc workflow ``share/etc`` directory.
+  :Runs on:
+     Localhost
+  :Executes:
+     The ``add_datasets_to_share.py`` script from the |Rose| app.
+  :Details:
+     Runs once.
 
 ``configure_recipe``
   :Description:

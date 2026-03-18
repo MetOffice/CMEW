@@ -10,6 +10,7 @@ def test_create_request(monkeypatch):
     monkeypatch.setenv("START_YEAR", "1993")
     monkeypatch.setenv("NUMBER_OF_YEARS", "1")
     monkeypatch.setenv("CALENDAR", "360_day")
+    monkeypatch.setenv("EXPERIMENT_ID", "amip")
     monkeypatch.setenv("INSTITUTION_ID", "MOHC")
     monkeypatch.setenv("MODEL_ID", "UKESM1-0-LL")
     monkeypatch.setenv("ROOT_PROC_DIR", "/path/to/proc/dir/")
@@ -17,9 +18,13 @@ def test_create_request(monkeypatch):
     monkeypatch.setenv("SUITE_ID", "u-az513")
     monkeypatch.setenv("VARIABLES_PATH", "/path/to/variables.txt")
     monkeypatch.setenv("VARIANT_LABEL", "r1i1p1f1")
+<<<<<<< 212_remove_hard_coded_dev_config
     monkeypatch.setenv(
         "MIP_TABLE_DIR", "~cdds/etc/mip_tables/GCModelDev/0.0.25"
     )
+=======
+    monkeypatch.setenv("STREAM_ID", "apm")
+>>>>>>> main
 
     config = create_request()
     actual = {
