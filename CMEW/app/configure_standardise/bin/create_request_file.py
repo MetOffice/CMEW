@@ -18,11 +18,6 @@ def create_request():
         CDDS request configuration.
     """
     mip_table_dir = os.environ["MIP_TABLE_DIR"]
-    if not mip_table_dir:
-        raise KeyError(
-            "MIP_TABLE_DIR must be set (must match ESMValTool "
-            "developer config custom.cmor_path)."
-        )
 
     end_year = int(os.environ["START_YEAR"]) + int(
         os.environ["NUMBER_OF_YEARS"]
