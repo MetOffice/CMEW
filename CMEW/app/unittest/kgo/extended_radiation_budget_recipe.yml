@@ -5,18 +5,18 @@
 ---
 datasets:
 - activity: ESMVal
-  alias: Ref test label
+  alias: Ref Test Label
   dataset: HadGEM3-GC31-LL
-  end_year: 1993
-  ensemble: r1i1p1f3
+  end_year: 2002
+  ensemble: r5i1p1f3
   exp: historical
   grid: gn
   institute: MOHC
   project: ESMVal
-  start_year: 2002
+  start_year: 1993
 - activity: ESMVal
-  alias: Test label
-  dataset: UKESM1-0-LL
+  alias: Test Label
+  dataset: HadGEM3-GC5E-LL
   end_year: 2002
   ensemble: r1i1p1f1
   exp: amip
@@ -30,6 +30,7 @@ datasets:
   ensemble: r5i1p1f3
   exp: historical
   grid: gn
+  institute: MOHC
   project: CMIP6
   start_year: 1993
 diagnostics:

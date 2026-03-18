@@ -1,18 +1,26 @@
 u-bv526:
+  activity: ESMVal
   calendar: 360_day
   end_year: 2002
-  label_for_plots: Ref test label
+  experiment_id: historical
+  grid: gn
+  institute: MOHC
+  label_for_plots: Ref Test Label
   model_id: HadGEM3-GC31-LL
-  project: CMIP6
+  project: ESMVal
   start_year: 1993
   suite_id: u-bv526
   variant_label: r5i1p1f3
 u-cw673:
+  activity: ESMVal
   calendar: gregorian
   end_year: 2002
-  label_for_plots: Test label
+  experiment_id: amip
+  grid: gn
+  institute: MOHC
+  label_for_plots: Test Label
   model_id: HadGEM3-GC5E-LL
-  project: CMIP6
+  project: ESMVal
   start_year: 1993
   suite_id: u-cw673
   variant_label: r1i1p1f1
