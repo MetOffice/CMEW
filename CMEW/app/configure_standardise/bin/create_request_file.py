@@ -7,33 +7,39 @@ Generates the request configuration file from the ESMValTool recipe.
 import configparser
 import os
 from pathlib import Path
+import yaml
 
 
-def create_request():
-    """Retrieve CDDS request information from Rose suite configuration.
+def create_request(model_run):
+    """Define CDDS request information from a suite_id.
+
+    Uses information from the model_runs.yml file.
 
     Returns
     -------
     configparser.ConfigParser()
         CDDS request configuration.
     """
-    end_year = int(os.environ["START_YEAR"]) + int(
-        os.environ["NUMBER_OF_YEARS"]
-    )
+    # Read the model run information from the model_runs.yml file
+    model_runs_yaml = Path(os.environ["DATASETS_LIST_DIR"] / "model_runs.yml")
+    with open(model_runs_yaml, "r") as f:
+        dataset_dict = yaml.safe_load(f)[model_run]
+
+    # Create the CDDS request
     request = configparser.ConfigParser()
     request["metadata"] = {
         "base_date": "1850-01-01T00:00:00",
         "branch_method": "no parent",
-        "calendar": os.environ["CALENDAR"],
-        "experiment_id": os.environ["EXPERIMENT_ID"],
-        "institution_id": os.environ["INSTITUTION_ID"],
+        "calendar": dataset_dict["calendar"],
+        "experiment_id": dataset_dict["experiment_id"],
+        "institution_id": dataset_dict["institute"],
         "license": "GCModelDev model data is licensed under the Open Government License v3 (https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/)",  # noqa: E501
         "mip": "ESMVal",
         "mip_era": "GCModelDev",
-        "model_id": os.environ["MODEL_ID"],
+        "model_id": dataset_dict["model_id"],
         "model_type": "AGCM AER",
         "sub_experiment_id": "none",
-        "variant_label": os.environ["VARIANT_LABEL"],
+        "variant_label": dataset_dict["variant_label"],
     }
     request["common"] = {
         "external_plugin": "",
@@ -45,15 +51,15 @@ def create_request():
         "package": "round-1",
         "root_proc_dir": os.environ["ROOT_PROC_DIR"],
         "root_data_dir": os.environ["ROOT_DATA_DIR"],
-        "workflow_basename": os.environ["SUITE_ID"],
+        "workflow_basename": dataset_dict["suite_id"],
     }
     request["data"] = {
-        "end_date": f"{end_year}-01-01T00:00:00",
+        "end_date": f"{dataset_dict["end_year"]}-01-01T00:00:00",
         "mass_data_class": "crum",
         "model_workflow_branch": "trunk",
-        "model_workflow_id": os.environ["SUITE_ID"],
+        "model_workflow_id": dataset_dict["suite_id"],
         "model_workflow_revision": "not used except with data request",
-        "start_date": f"{os.environ['START_YEAR']}-01-01T00:00:00",
+        "start_date": f"{dataset_dict["start_year"]}-01-01T00:00:00",
         # For now there is only one stream, for Amon and Emon mip.
         "streams": os.environ["STREAM_ID"],
         "variable_list_file": os.environ["VARIABLES_PATH"],
@@ -86,8 +92,12 @@ def write_request(request, target_path):
 
 
 def main():
-    target_path = Path(os.environ["REQUEST_PATH"])
-    request = create_request()
+    model_run = os.environ["CYLC_TASK_PARAM_dataset"]
+    filename = f"request_{model_run}.cfg"
+    target_path = Path(
+        os.environ["CYLC_WORKFLOW_SHARE_DIR"] / "etc" / filename
+    )
+    request = create_request(model_run)
     write_request(request, target_path)
 
 
