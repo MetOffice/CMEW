@@ -90,7 +90,6 @@ def path_to_cmip6_datasets_yaml():
     return path
 
 
-
 def test_return_blank_recipe(
     path_to_blank_recipe_kgo, path_to_mock_original_recipe
 ):
@@ -102,7 +101,7 @@ def test_return_blank_recipe(
 
 def test_add_extra_datasets(
     path_to_updated_recipe_kgo,
-        path_to_cmip6_datasets_yaml,
+    path_to_cmip6_datasets_yaml,
     path_to_kgo_extended_recipe,
 ):
     with open(path_to_kgo_extended_recipe, "r") as file_handle_1:
