@@ -17,8 +17,6 @@ def test_create_request(monkeypatch):
     monkeypatch.setenv("SUITE_ID", "u-az513")
     monkeypatch.setenv("VARIABLES_PATH", "/path/to/variables.txt")
     monkeypatch.setenv("VARIANT_LABEL", "r1i1p1f1")
-
-    # New: required to match developer config custom.cmor_path
     monkeypatch.setenv(
         "MIP_TABLE_DIR", "~cdds/etc/mip_tables/GCModelDev/0.0.25"
     )

@@ -16,9 +16,7 @@ def main():
     the environment variable ``USER_CONFIG_PATH``.
     """
     values = retrieve_values_from_task_env()
-
-    developer_config_path = create_developer_config_file(values)
-    values["CONFIG_DEVELOPER_FILE"] = developer_config_path
+    values["CONFIG_DEVELOPER_FILE"] = create_developer_config_file(values)
 
     # Create the contents for the user configuration file using these
     # values.
@@ -53,7 +51,7 @@ def retrieve_values_from_task_env():
         "DRS_OBS4MIPS": os.environ["DRS_OBS4MIPS"],
         "DRS_OBS6": os.environ["DRS_OBS6"],
         "MAX_PARALLEL_TASKS": os.environ["MAX_PARALLEL_TASKS"],
-        "MIP_TABLE_DIR": os.environ.get("MIP_TABLE_DIR", ""),
+        "MIP_TABLE_DIR": os.environ["MIP_TABLE_DIR"],
         "OUTPUT_DIR": os.environ["OUTPUT_DIR"],
         "ROOTPATH_ANA4MIPS": os.environ["ROOTPATH_ANA4MIPS"],
         "ROOTPATH_CMIP3": os.environ["ROOTPATH_CMIP3"],
@@ -75,8 +73,6 @@ def create_developer_config_file(values):
     developer_config_path = values["DEV_CONFIG_PATH"]
 
     mip_table_dir = values.get("MIP_TABLE_DIR", "").strip()
-    if not mip_table_dir:
-        raise KeyError("MIP_TABLE_DIR must be set")
     contents = {
         "custom": {"cmor_path": os.path.expanduser(mip_table_dir)},
         "ESMVal": {
@@ -142,7 +138,6 @@ def create_user_config_file(values=None):
     if values is None:
         values = {}
 
-    # Developer config is now generated alongside the user config.
     if "CYLC_WORKFLOW_SHARE_DIR" in values:
         esmval = os.path.join(
             values["CYLC_WORKFLOW_SHARE_DIR"],
@@ -167,8 +162,6 @@ def create_user_config_file(values=None):
     # additional datasets, so may need to be configured in the future.
     user_config_file_contents = {
         "auxiliary_data_dir": "",
-        # CHANGED: point ESMValTool at the developer config we will generate,
-        # instead of relying on a hard-copied file.
         "config_developer_file": values.get("CONFIG_DEVELOPER_FILE"),
         "download_dir": "",
         "drs": {

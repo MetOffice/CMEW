@@ -17,7 +17,7 @@ def create_request():
     configparser.ConfigParser()
         CDDS request configuration.
     """
-    mip_table_dir = os.environ.get("MIP_TABLE_DIR", "").strip()
+    mip_table_dir = os.environ["MIP_TABLE_DIR"]
     if not mip_table_dir:
         raise KeyError(
             "MIP_TABLE_DIR must be set (must match ESMValTool "
