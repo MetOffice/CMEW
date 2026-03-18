@@ -13,6 +13,8 @@ Test data files:
     input for test_add_extra_datasets
 /app/unittest/mock_data/cmip6_datasets.yml
     input for test_add_extra_datasets
+/app/unittest/mock_data/model_runs.yml
+    input for test_main
 /app/unittest/kgo/extended_radiation_budget_recipe.yml
     kgo for test_add_extra_datasets
     kgo for test_main
@@ -67,17 +69,6 @@ def path_to_updated_recipe_kgo():
 
 
 @pytest.fixture
-def path_to_extra_datasets_yaml():
-    path = (
-        Path(__file__).parent.parent.parent
-        / "unittest"
-        / "mock_data"
-        / "cmip6_datasets.yml"
-    )
-    return path
-
-
-@pytest.fixture
 def path_to_kgo_extended_recipe():
     path = (
         Path(__file__).parent.parent.parent
@@ -86,6 +77,18 @@ def path_to_kgo_extended_recipe():
         / "extended_radiation_budget_recipe.yml"
     )
     return path
+
+
+@pytest.fixture
+def path_to_cmip6_datasets_yaml():
+    path = (
+        Path(__file__).parent.parent.parent
+        / "unittest"
+        / "mock_data"
+        / "cmip6_datasets.yml"
+    )
+    return path
+
 
 
 def test_return_blank_recipe(
@@ -99,7 +102,7 @@ def test_return_blank_recipe(
 
 def test_add_extra_datasets(
     path_to_updated_recipe_kgo,
-    path_to_extra_datasets_yaml,
+        path_to_cmip6_datasets_yaml,
     path_to_kgo_extended_recipe,
 ):
     with open(path_to_kgo_extended_recipe, "r") as file_handle_1:
@@ -109,7 +112,7 @@ def test_add_extra_datasets(
         pre_recipe = yaml.safe_load(file_handle_2)
 
     # Using str(filepath) here as update_recipe_file.py uses os, not pathlib
-    actual = add_extra_datasets(pre_recipe, str(path_to_extra_datasets_yaml))
+    actual = add_extra_datasets(pre_recipe, str(path_to_cmip6_datasets_yaml))
     assert actual == expected
 
 
