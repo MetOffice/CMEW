@@ -20,15 +20,15 @@ An overview of the workflow
   :Details:
      Runs once at the start of the workflow.
 
-``add_datasets``
+``copy_datasets``
   :Description:
-     Exports the sections listed in the ``app/add_datasets/rose-app.conf`` file
-     to namelist files in the cylc workflow, then copies these details to YAML
-     files in the cylc workflow ``share/etc`` directory.
+     Reads the namelist files in the top level of the cylc workflow,
+     then copies these details to YAML files
+     in the cylc workflow ``share/etc`` directory.
   :Runs on:
      Localhost
   :Executes:
-     The ``add_datasets_to_sahre.py`` script from the |Rose| app.
+     The ``add_datasets_to_share.py`` script from the |Rose| app.
   :Details:
      Runs once.
 

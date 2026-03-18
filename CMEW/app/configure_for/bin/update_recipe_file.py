@@ -156,13 +156,16 @@ def add_extra_datasets(recipe, yaml_filepath):
     }
 
     # Convert the variable names in the extra datasets
-    for dataset in extra_datasets:
+    for dataset, inner_dict in extra_datasets.items():
         for old_key, new_key in variables_conversion.items():
-            if old_key in dataset:
-                dataset[new_key] = dataset.pop(old_key)
+            if old_key in inner_dict:
+                inner_dict[new_key] = inner_dict.pop(old_key)
+
+    # Collect the new inner dicts to append to datasets section of the recipe
+    extra_datasets_list = list(extra_datasets.values())
 
     # Add the datasets to the datasets section of the recipe
-    recipe["datasets"].extend(extra_datasets)
+    recipe["datasets"].extend(extra_datasets_list)
 
     return recipe
 

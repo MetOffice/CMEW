@@ -18,8 +18,8 @@
             install_env_file => unittest
 {%- endif %}
 {%- if not UNITTEST %}
-            install_env_file => configure_recipe & add_datasets
-            add_datasets => configure_for<recipe>
+            install_env_file => configure_recipe & copy_datasets
+            copy_datasets => configure_for<recipe>
             configure_for<recipe> => configure_standardise<recipe>
             configure_recipe => run_recipe<recipe>
             configure_standardise<recipe> => standardise_model_data => run_recipe<recipe> & housekeeping
@@ -134,10 +134,10 @@
         [[[environment]]]
             ROSE_TASK_APP = run_recipe
 
-    [[add_datasets]]
+    [[copy_datasets]]
         inherit = MODEL_RUNS
         [[[environment]]]
-            ROSE_TASK_APP = add_datasets
+            ROSE_TASK_APP = copy_datasets
 
     [[housekeeping]]
 

@@ -9,7 +9,7 @@ Adding Datasets to CMEW
 The easiest way to add datasets to |CMEW| is to clone an existing dataset in the Rose GUI
 and then edit the details. To do this:
 
-* Navigate to the CMEW directory, or the "add datasets" app wthin |CMEW| e.g.::
+* Navigate to the CMEW directory, e.g.::
 
     cd CMEW/CMEW
 
@@ -19,7 +19,7 @@ and then edit the details. To do this:
     rose edit
 
 
-* In the Rose GUI, click the triangle to the left of "add_datasets" to expand the app.
+* In the Rose GUI, click the triangle to the left of "suite conf" to expose a submenu.
 
 * Click the triangle to the left of "namelist" to expand the namelist sections.
 

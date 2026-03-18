@@ -1,4 +1,5 @@
-- alias: CMIP6 dataset 002
+UKESM1-0-LL:
+  alias: CMIP6 dataset 002
   dataset: UKESM1-0-LL
   end_year: 1993
   ensemble: r5i1p1f3
