@@ -14,6 +14,7 @@ datasets:
   institute: MOHC
   project: ESMVal
   start_year: 1993
+  sub_experiment: ubv526
 - activity: ESMVal
   alias: Test Label
   dataset: UKESM1-0-LL
@@ -24,6 +25,7 @@ datasets:
   institute: MOHC
   project: ESMVal
   start_year: 1993
+  sub_experiment: uaz513
 - alias: CMIP6 dataset 002
   dataset: UKESM1-0-LL
   end_year: 1993

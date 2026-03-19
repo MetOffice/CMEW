@@ -68,9 +68,11 @@ def update_recipe(recipe_path):
     ref_model_id = os.environ["REF_MODEL_ID"]
     ref_variant = os.environ["REF_VARIANT_LABEL"]
     ref_experiment_id = os.environ["REF_EXPERIMENT_ID"]
+    ref_suite_amended = os.environ["REF_SUITE_ID"].replace("-", "")
     eval_model_id = os.environ["MODEL_ID"]
     eval_variant = os.environ["VARIANT_LABEL"]
     eval_experiment_id = os.environ["EXPERIMENT_ID"]
+    eval_suite_amended = os.environ["SUITE_ID"].replace("-", "")
 
     # Read given reference alias or use the suite ID
     if os.environ.get("REF_LABEL_FOR_PLOTS"):
@@ -107,6 +109,7 @@ def update_recipe(recipe_path):
             "start_year": start_year,
             "end_year": end_year,
             "alias": ref_alias,
+            "sub_experiment": ref_suite_amended,
         }
     )
 
@@ -123,6 +126,7 @@ def update_recipe(recipe_path):
             "start_year": start_year,
             "end_year": end_year,
             "alias": alias,
+            "sub_experiment": eval_suite_amended,
         }
     )
 

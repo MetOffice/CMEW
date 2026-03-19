@@ -32,7 +32,7 @@ def create_request():
         "mip_era": "GCModelDev",
         "model_id": os.environ["MODEL_ID"],
         "model_type": "AGCM AER",
-        "sub_experiment_id": "none",
+        "sub_experiment_id": os.environ["SUITE_ID"].replace("-", ""),
         "variant_label": os.environ["VARIANT_LABEL"],
     }
     request["common"] = {
