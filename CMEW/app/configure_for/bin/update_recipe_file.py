@@ -35,12 +35,12 @@ def update_recipe(recipe_path):
     datasets:
     - {activity: <activity>, alias: <ref_alias>, dataset: <ref_model_id>,
       end_year: <end_year>, ensemble: <ref_variant>, exp: <ref_experiment_id>,
-      grid: <grid>, project: <project>, start_year: <start_year>},
+      grid: <grid>, project: <project>, start_year: <start_year>,
       sub_experiment: <ref_suite_amended>}
     - {activity: <activity>, alias: <alias>, dataset: <eval_model_id>,
       end_year: <end_year>, ensemble: <eval_variant>,
       exp: <eval_experiment_id>, grid: <grid>, project: <project>,
-      start_year: <start_year>}, sub_experiment: <eval_suite_amended>}
+      start_year: <start_year>, sub_experiment: <eval_suite_amended>}
 
     Notes
     -----
