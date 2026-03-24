@@ -1,5 +1,19 @@
 # (C) Crown Copyright 2026, Met Office.
 # The LICENSE.md file contains full licensing details.
+"""
+Unit tests for add_datasets_to_share.py
+
+Test data files:
+/app/unittest/mock_data/model_runs.nl
+    input for test_extract_sections_from_naml
+    input for test_process_naml_file
+/app/unittest/mock_data/model_runs_as_list.yml
+    input for test_use_facet_as_key
+/app/unittest/kgo/model_runs_as_dict.yml
+    kgo for test_use_facet_as_key
+/app/unittest/kgo/basic_dict.yml
+    kgo for test_write_dict_to_yaml
+"""
 from add_datasets_to_share import (
     extract_sections_from_naml,
     convert_str_to_facets,
