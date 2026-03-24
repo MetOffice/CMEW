@@ -5,66 +5,24 @@
 Generates the variables.txt file from the ESMValTool recipe.
 """
 import os
+import subprocess
 from esmvalcore.experimental.recipe import Recipe
 
 
-def parse_variables_from_recipe(recipe_path):
-    """Retrieve variables from ESMValTool recipe.
+def collect_variables_from_lists(directory):
+    """Combine lists from all recipes in directory"""
+    separate_lists = [f for f in os.listdir(directory) if f.startswith("variables_")]
+    variables = []
+    for list_file in separate_lists:
+        with open(os.path.join(directory, list_file), "r") as file_handle:
+            variables += [line.strip() for line in file_handle if line.strip()]
+    return variables
 
-    * Read the ESMValTool recipe YAML file from the provided ``recipe_path``
-    * For each diagnostic defined in the recipe, extract the variables required
-      for that diagnostic
-    * For each variable, extract the mip table name
-    * Output a newline-separated list of variables, with each line formatted
-      as ``<mip>/<variable>:<stream>``
 
-    Recipe file snippet::
-
-        diagnostics:
-          <diagnostic_1>:
-            variables:
-              <variable_1a>:
-                mip: <mip_1a>
-              <variable_1b>:
-                mip: <mip_1b>
-          <diagnostic_2>:
-            variables:
-              <variable_2a>:
-                mip: <mip_2a>
-              <variable_2b>:
-                mip: <mip_2b>
-
-    Will be formatted as::
-
-        <mip_1a>/<variable_1a>:<stream>
-        <mip_1b>/<variable_1b>:<stream>
-        <mip_2a>/<variable_2a>:<stream>
-        <mip_2b>/<variable_2b>:<stream>
-
-    Parameters
-    ----------
-    recipe_path : str
-        Location of the ESMValTool recipe file.
-
-    Returns
-    -------
-    list[str]
-        List of variables from the ESMValTool recipe,
-        formatted as ``<mip>/<variable>:<stream>``.
-    """
-    # For now there is only one stream, for Amon and Emon mip.
-    stream = os.environ["STREAM_ID"]
-    recipe = Recipe(recipe_path)
-    diagnostics = recipe.data["diagnostics"]
-    formatted_variables = []
-    for diagnostic in diagnostics:
-        variables = diagnostics[diagnostic]["variables"]
-        for variable in variables:
-            mip = variables[variable]["mip"]
-            formatted_variable = f"{mip}/{variable}:{stream}"
-            if formatted_variable not in formatted_variables:
-                formatted_variables.append(formatted_variable)
-    return formatted_variables
+def add_streams_to_variables(input_file, output_file):
+    """stream_mappings --varfile variables.txt --outfile vairables_with_streams.txt"""
+    command = f"cmew-standardise-env stream_mappings --varfile {input_file} --outfile {output_file}"
+    subprocess.run(command)
 
 
 def write_variables(variables, target_path):
@@ -84,9 +42,16 @@ def write_variables(variables, target_path):
 
 
 def main():
-    recipe_path = os.environ["RECIPE_PATH"]
-    variables = parse_variables_from_recipe(recipe_path)
-    write_variables(variables, os.environ["VARIABLES_PATH"])
+    # Write a single list of variables
+    variables_list_dir = os.environ["INTERIM_VARIABLES_DIR"]
+    dataset = os.environ["CYLC_TASK_PARAM_dataset"]
+    unstreamed_list_path = os.path.join(variables_list_dir, f"{dataset}_unstreamed.txt")
+    variables = collect_variables_from_lists(variables_list_dir)
+    write_variables(variables, unstreamed_list_path)
+
+    # Add stream information to the variables list
+    output_file = os.environ["VARIABLES_PATH"]
+    variables_with_streams = add_streams_to_variables(unstreamed_list_path, output_file)
 
 
 if __name__ == "__main__":

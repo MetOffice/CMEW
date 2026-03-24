@@ -12,7 +12,7 @@
     UTC mode = True
 
 [task parameters]
-    recipe = radiation_budget
+    recipe = radiation_budget, seaice
     dataset = {{ [REF_SUITE_ID, SUITE_ID] | join(", ") }}
 
 [scheduling]
@@ -72,6 +72,8 @@
         [[[environment]]]
             # Directory containing dataset lists as YAML files
             DATASETS_LIST_DIR = "${CYLC_WORKFLOW_SHARE_DIR}/dataset_lists"
+            # Directory containing variables for each recipe
+            INTERIM_VARIABLES_DIR = "${CYLC_WORKFLOW_SHARE_DIR}/recipe_variables/"
             START_YEAR = {{ START_YEAR }}
             NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
 
