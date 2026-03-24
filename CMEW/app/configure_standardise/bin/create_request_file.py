@@ -125,7 +125,7 @@ def create_request():
         "mip_era": "GCModelDev",
         "model_id": chosen_model_id,
         "model_type": "AGCM AER",
-        "sub_experiment_id": "none",
+        "sub_experiment_id": chosen_suite_id.replace("-", ""),
         "variant_label": chosen_variant_label,
     }
 
