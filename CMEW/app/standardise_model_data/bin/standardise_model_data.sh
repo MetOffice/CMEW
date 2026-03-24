@@ -13,10 +13,12 @@ echo "[INFO] Running standardise_model_data for REF and EVAL runs"
 #   REQUEST_PATH_EVAL
 
 echo "[INFO] Running cdds_convert for REF run using: ${REQUEST_PATH_REF}"
-cmew-standardise-env cdds_convert "${REQUEST_PATH_REF}"
+cmew-standardise-env cdds_convert "${REQUEST_PATH_REF}" &
 
 echo "[INFO] Running cdds_convert for EVAL run using: ${REQUEST_PATH_EVAL}"
-cmew-standardise-env cdds_convert "${REQUEST_PATH_EVAL}"
+cmew-standardise-env cdds_convert "${REQUEST_PATH_EVAL}" &
+
+wait
 
 # If RAW_DATA_DIR is configured, copy extracted raw data only when the target
 # directory is empty. If it is not empty, emit a log.err message and do not copy.

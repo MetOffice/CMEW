@@ -131,6 +131,9 @@ def add_common_facets(dataset_dict, project):
         dataset_dict["activity"] = "ESMVal"
         dataset_dict["grid"] = "gn"
         dataset_dict["institute"] = os.environ["INSTITUTION_ID"]
+        dataset_dict["sub_experiment"] = dataset_dict["suite_id"].replace(
+            "-", ""
+        )
 
     return dataset_dict
 
