@@ -1,6 +1,25 @@
 # (C) Crown Copyright 2024-2026, Met Office.
 # The LICENSE.md file contains full licensing details.
-from update_recipe_file import update_recipe, add_extra_datasets, main
+"""
+Unit tests for update_recipe_file.py
+
+Test data files:
+/app/unittest/mock_data/original_recipe_radiation_budget.yml
+    input for test_return_blank_recipe
+    input for test_main
+/app/unittest/kgo/blank_recipe_radiation_budget.yml
+    kgo for test_return_blank_recipe
+/app/unittest/mock_data/updated_recipe_radiation_budget.yml
+    input for test_add_extra_datasets
+/app/unittest/mock_data/cmip6_datasets.yml
+    input for test_add_extra_datasets
+/app/unittest/mock_data/model_runs.yml
+    input for test_main
+/app/unittest/kgo/extended_radiation_budget_recipe.yml
+    kgo for test_add_extra_datasets
+    kgo for test_main
+"""
+from update_recipe_file import return_blank_recipe, add_extra_datasets, main
 from pathlib import Path
 import pytest
 import shutil
@@ -9,40 +28,11 @@ import yaml
 
 @pytest.fixture
 def mock_env_vars(monkeypatch):
-    # Time window
-    monkeypatch.setenv("START_YEAR", "1993")
-    monkeypatch.setenv("NUMBER_OF_YEARS", "1")
-
-    # Reference run metadata
-    monkeypatch.setenv("REF_MODEL_ID", "HadGEM3-GC31-LL")
-    monkeypatch.setenv("REF_VARIANT_LABEL", "r1i1p1f3")
-    monkeypatch.setenv("REF_LABEL_FOR_PLOTS", "Ref Test Label")
-    monkeypatch.setenv("REF_EXPERIMENT_ID", "historical")
-    monkeypatch.setenv("REF_SUITE_ID", "u-bv526")
-
-    # Evaluation run metadata
-    monkeypatch.setenv("MODEL_ID", "UKESM1-0-LL")
-    monkeypatch.setenv("VARIANT_LABEL", "r1i1p1f1")
-    monkeypatch.setenv("LABEL_FOR_PLOTS", "Test Label")
-    monkeypatch.setenv("EXPERIMENT_ID", "amip")
-    monkeypatch.setenv("SUITE_ID", "u-az513")
-
-    # For adding CMIP6 datasets
+    # For adding extra datasets
     monkeypatch.setenv(
         "DATASETS_LIST_DIR",
         str(Path(__file__).parent.parent.parent / "unittest" / "mock_data"),
     )
-
-
-@pytest.fixture
-def path_to_updated_recipe_kgo():
-    path = (
-        Path(__file__).parent.parent.parent
-        / "unittest"
-        / "kgo"
-        / "test_updated_radiation_budget_recipe.yml"
-    )
-    return path
 
 
 @pytest.fixture
@@ -51,7 +41,29 @@ def path_to_mock_original_recipe():
         Path(__file__).parent.parent.parent
         / "unittest"
         / "mock_data"
-        / "test_radiation_budget_recipe_v2.9.0.yml"
+        / "original_recipe_radiation_budget.yml"
+    )
+    return path
+
+
+@pytest.fixture
+def path_to_blank_recipe_kgo():
+    path = (
+        Path(__file__).parent.parent.parent
+        / "unittest"
+        / "kgo"
+        / "blank_recipe_radiation_budget.yml"
+    )
+    return path
+
+
+@pytest.fixture
+def path_to_updated_recipe_kgo():
+    path = (
+        Path(__file__).parent.parent.parent
+        / "unittest"
+        / "mock_data"
+        / "updated_recipe_radiation_budget.yml"
     )
     return path
 
@@ -68,7 +80,7 @@ def path_to_kgo_extended_recipe():
 
 
 @pytest.fixture
-def path_to_extra_datasets_yaml():
+def path_to_cmip6_datasets_yaml():
     path = (
         Path(__file__).parent.parent.parent
         / "unittest"
@@ -78,27 +90,20 @@ def path_to_extra_datasets_yaml():
     return path
 
 
-def test_update_recipe(
-    mock_env_vars, path_to_updated_recipe_kgo, path_to_mock_original_recipe
+def test_return_blank_recipe(
+    path_to_blank_recipe_kgo, path_to_mock_original_recipe
 ):
-    """update_recipe should produce the KGO with both datasets updated.
-
-    - Dataset[0] uses REF_MODEL_ID / REF_VARIANT_LABEL
-    - Dataset[1] uses MODEL_ID / VARIANT_LABEL
-    - start_year and end_year are set from START_YEAR / NUMBER_OF_YEARS
-    """
-    with open(path_to_updated_recipe_kgo, "r") as file_handle:
+    with open(path_to_blank_recipe_kgo, "r") as file_handle:
         expected = yaml.safe_load(file_handle)
-    actual = update_recipe(path_to_mock_original_recipe)
+    actual = return_blank_recipe(path_to_mock_original_recipe)
     assert actual == expected
 
 
 def test_add_extra_datasets(
     path_to_updated_recipe_kgo,
-    path_to_extra_datasets_yaml,
+    path_to_cmip6_datasets_yaml,
     path_to_kgo_extended_recipe,
 ):
-    """Updated is the input file and extended is the output file."""
     with open(path_to_kgo_extended_recipe, "r") as file_handle_1:
         expected = yaml.safe_load(file_handle_1)
 
@@ -106,7 +111,7 @@ def test_add_extra_datasets(
         pre_recipe = yaml.safe_load(file_handle_2)
 
     # Using str(filepath) here as update_recipe_file.py uses os, not pathlib
-    actual = add_extra_datasets(pre_recipe, str(path_to_extra_datasets_yaml))
+    actual = add_extra_datasets(pre_recipe, str(path_to_cmip6_datasets_yaml))
     assert actual == expected
 
 
@@ -136,7 +141,7 @@ def test_main(
         kgo_with_comment = file_handle_2.readlines()
 
     # Remove the five comment lines at the top of
-    # 'test_updated_radiation_budget_recipe.yml'.
+    # 'updated_recipe_radiation_budget.yml'.
     kgo_without_comment = kgo_with_comment[5:]
 
     assert actual_lines == kgo_without_comment
