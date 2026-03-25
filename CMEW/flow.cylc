@@ -9,7 +9,7 @@
     UTC mode = True
 
 [task parameters]
-    recipe = radiation_budget
+    recipe = radiation_budget, seaice
 
 [scheduling]
     [[graph]]
@@ -50,6 +50,7 @@
         [[[environment]]]
             RECIPE_NAME = "recipe_${CYLC_TASK_PARAM_recipe}.yml"
             RECIPE_PATH = "${CYLC_WORKFLOW_SHARE_DIR}/etc/${RECIPE_NAME}"
+            RECIPE_VARIABLES_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/variables_lists/${CYLC_TASK_PARAM_recipe}_variables.txt
 
     [[STANDARDISE]]
         [[[environment]]]
