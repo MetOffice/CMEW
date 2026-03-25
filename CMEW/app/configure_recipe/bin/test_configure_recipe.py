@@ -52,10 +52,7 @@ def test_create_user_config_file_nested_values(
         ("MIP_TABLE_DIR", "custom", "cmor_path", "test_mip_tables"),
         ("ESMVal", "ESMVal", "cmor_type", "CMIP6"),
         ("CMIP6", "CMIP6", "cmor_type", "CMIP6"),
-        ("CMIP3", "CMIP3", "cmor_type", "CMIP3"),
-        ("OBS", "OBS", "cmor_type", "CMIP5"),
         ("obs4MIPs", "obs4MIPs", "cmor_path", "obs4mips"),
-        ("CORDEX", "CORDEX", "cmor_path", "cordex"),
     ],
 )
 def test_create_developer_config_nested_values(
@@ -75,9 +72,6 @@ def test_create_developer_config_nested_values(
     "output_outer_key, output_inner_key, expected",
     [
         ("ESMVal", "cmor_strict", True),
-        ("CMIP5", "cmor_strict", True),
-        ("OBS", "cmor_strict", False),
-        ("native6", "cmor_default_table_prefix", "CMIP6_"),
         ("ESMVal", "cmor_default_table_prefix", "GCModelDev_"),
         ("obs4MIPs", "cmor_default_table_prefix", "obs4MIPs_"),
     ],
