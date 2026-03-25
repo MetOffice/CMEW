@@ -34,24 +34,25 @@ def combine_variable_lists(directory):
     return variables
 
 
-def manually_amend_variables(variables):
-    """Make CMEW-specific amendments to a list of variables.
-
-    Currently just adding stream information.
+def add_stream_to_variables(variables):
+    """Add stream information to a list of variables.
 
     Parameters
     ----------
     variables : list[str]
-        List of variables to be amended.
+        List of variables in the format "MIP_table/variable_name"
 
     Returns
     -------
     list[str]
-        Amended list of variables.
+        List of variables in the format "MIP_table/variable_name:stream"
     """
-    # Add stream information here instead of using CDDS's stream_mappings
+    # Adding single prescribed stream to match current approach
+    prescribed_stream = os.environ["STREAM_ID"]
+
+    # But setting up a dictionary to allow for future expansion
     stream_dict = {
-        "apm": [
+        prescribed_stream: [
             "Amon/hfls",
             "Amon/hfss",
             "Amon/rlds",
@@ -65,6 +66,8 @@ def manually_amend_variables(variables):
             "Emon/rss",
         ],
     }
+
+    # Writing the stream according to the dictionary
     streamed_variables = []
     for var in variables:
         for stream, var_list in stream_dict.items():
@@ -72,6 +75,11 @@ def manually_amend_variables(variables):
                 streamed_var = f"{var}:{stream}"
                 streamed_variables.append(streamed_var)
                 break
+        # But still using the prescribed stream for any variables not in the dictionary
+        else:
+            default_stream = os.environ["STREAM_ID"]
+            streamed_var = f"{var}:{default_stream}"
+            streamed_variables.append(streamed_var)
 
     return streamed_variables
 
@@ -94,8 +102,8 @@ def write_variables(variables, target_path):
 
 def main():
     variables = combine_variable_lists(os.environ["VARIABLES_LIST_DIR"])
-    variables = manually_amend_variables(variables)
-    write_variables(variables, os.environ["VARIABLES_PATH"])
+    streamed_variables = add_stream_to_variables(variables)
+    write_variables(streamed_variables, os.environ["VARIABLES_PATH"])
 
 
 if __name__ == "__main__":
