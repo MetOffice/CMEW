@@ -24,7 +24,7 @@ def combine_variable_lists(directory):
         A combined list of unique variables from all files in the directory.
     """
     variables = []
-    for filename in os.listdir(directory):
+    for filename in sorted(os.listdir(directory)):  # sorted only to unit test
         if filename.endswith("_variables.txt"):
             with open(os.path.join(directory, filename), "r") as file:
                 recipe_vars = file.read().splitlines()

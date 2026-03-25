@@ -38,7 +38,6 @@ def path_to_radiation_budget_variables():
     return path
 
 
-
 def test_parse_variables_from_recipe(path_to_radiation_budget_recipe):
 
     actual = parse_variables_from_recipe(path_to_radiation_budget_recipe)
@@ -81,7 +80,7 @@ def test_write_variables(path_to_radiation_budget_variables):
         tmp.seek(0)
         actual = tmp.read().decode("utf-8")  # decode bytes to string
 
-    # Load the expected dictionary
+    # Load the expected list
     with open(path_to_radiation_budget_variables, "r") as file_handle:
         expected = file_handle.read()
 
