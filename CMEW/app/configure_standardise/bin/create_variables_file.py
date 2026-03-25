@@ -49,17 +49,6 @@ def manually_amend_variables(variables):
     list[str]
         Amended list of variables.
     """
-    # Remove fixed variables that don't need retrieving from MASS
-    vars_to_remove = ["fx/areacello"]
-    for var in variables:
-        if var in vars_to_remove:
-            variables.remove(var)
-
-    # Change OImon to SImon
-    for i, var in enumerate(variables):
-        if var.startswith("OImon/"):
-            variables[i] = var.replace("OImon/", "SImon/")
-
     # Add stream information here instead of using CDDS's stream_mappings
     stream_dict = {
         "apm": [
@@ -74,11 +63,6 @@ def manually_amend_variables(variables):
             "Amon/rsutcs",
             "Emon/rls",
             "Emon/rss",
-            "Amon/tas",  # This is new, might not be right
-            "Amon/pr",  # This is new, might not be right
-        ],
-        "inm": [
-            "SImon/sic",  # Also new, from guessing streams with CDDS
         ],
     }
     streamed_variables = []
