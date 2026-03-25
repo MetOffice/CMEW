@@ -37,6 +37,8 @@ def combine_variable_lists(directory):
 def manually_amend_variables(variables):
     """Make CMEW-specific amendments to a list of variables.
 
+    Currently just adding stream information.
+
     Parameters
     ----------
     variables : list[str]
