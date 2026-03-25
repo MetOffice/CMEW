@@ -5,66 +5,89 @@
 Generates the variables.txt file from the ESMValTool recipe.
 """
 import os
-from esmvalcore.experimental.recipe import Recipe
 
 
-def parse_variables_from_recipe(recipe_path):
-    """Retrieve variables from ESMValTool recipe.
+def combine_variable_lists(directory):
+    """Combine all variables list files from a directory.
 
-    * Read the ESMValTool recipe YAML file from the provided ``recipe_path``
-    * For each diagnostic defined in the recipe, extract the variables required
-      for that diagnostic
-    * For each variable, extract the mip table name
-    * Output a newline-separated list of variables, with each line formatted
-      as ``<mip>/<variable>:<stream>``
-
-    Recipe file snippet::
-
-        diagnostics:
-          <diagnostic_1>:
-            variables:
-              <variable_1a>:
-                mip: <mip_1a>
-              <variable_1b>:
-                mip: <mip_1b>
-          <diagnostic_2>:
-            variables:
-              <variable_2a>:
-                mip: <mip_2a>
-              <variable_2b>:
-                mip: <mip_2b>
-
-    Will be formatted as::
-
-        <mip_1a>/<variable_1a>:<stream>
-        <mip_1b>/<variable_1b>:<stream>
-        <mip_2a>/<variable_2a>:<stream>
-        <mip_2b>/<variable_2b>:<stream>
+    Looks for files ending with "_variables.txt" in the specified directory,
+    reads the lines of each file, deletes any duplicates and
+    then returns a single list of unique lines.
 
     Parameters
     ----------
-    recipe_path : str
-        Location of the ESMValTool recipe file.
+    directory : str
+        Path to the directory containing variables list files.
+    Returns
+    -------
+    list[str]
+        A combined list of unique variables from all files in the directory.
+    """
+    variables = []
+    for filename in os.listdir(directory):
+        if filename.endswith("_variables.txt"):
+            with open(os.path.join(directory, filename), "r") as file:
+                recipe_vars = file.read().splitlines()
+                for var in recipe_vars:
+                    if var not in variables:
+                        variables.append(var)
+    return variables
+
+
+def manually_amend_variables(variables):
+    """Make CMEW-specific amendments to a list of variables.
+
+    Parameters
+    ----------
+    variables : list[str]
+        List of variables to be amended.
 
     Returns
     -------
     list[str]
-        List of variables from the ESMValTool recipe,
-        formatted as ``<mip>/<variable>:<stream>``.
+        Amended list of variables.
     """
-    # For now there is only one stream, for Amon and Emon mip.
-    stream = os.environ["STREAM_ID"]
-    recipe = Recipe(recipe_path)
-    diagnostics = recipe.data["diagnostics"]
-    formatted_variables = []
-    for diagnostic in diagnostics:
-        variables = diagnostics[diagnostic]["variables"]
-        for variable in variables:
-            mip = variables[variable]["mip"]
-            formatted_variable = f"{mip}/{variable}:{stream}"
-            if formatted_variable not in formatted_variables:
-                formatted_variables.append(formatted_variable)
-    return formatted_variables
+    # Remove fixed variables that don't need retrieving from MASS
+    vars_to_remove = ["fx/areacello"]
+    for var in variables:
+        if var in vars_to_remove:
+            variables.remove(var)
+
+    # Change OImon to SImon
+    for i, var in enumerate(variables):
+        if var.startswith("OImon/"):
+            variables[i] = var.replace("OImon/", "SImon/")
+
+    # Add stream information here instead of using CDDS's stream_mappings
+    stream_dict = {
+        "apm": [
+            "Amon/hfls",
+            "Amon/hfss",
+            "Amon/rlds",
+            "Amon/rlut",
+            "Amon/rlutcs",
+            "Amon/rsds",
+            "Amon/rsdt",
+            "Amon/rsut",
+            "Amon/rsutcs",
+            "Emon/rls",
+            "Emon/rss",
+            "Amon/tas",  # This is new, might not be right
+            "Amon/pr",  # This is new, might not be right
+        ],
+        "inm": [
+            "SImon/sic",  # Also new, from guessing streams with CDDS
+        ],
+    }
+    streamed_variables = []
+    for var in variables:
+        for stream, var_list in stream_dict.items():
+            if var in var_list:
+                streamed_var = f"{var}:{stream}"
+                streamed_variables.append(streamed_var)
+                break
+
+    return streamed_variables
 
 
 def write_variables(variables, target_path):
@@ -84,8 +107,8 @@ def write_variables(variables, target_path):
 
 
 def main():
-    recipe_path = os.environ["RECIPE_PATH"]
-    variables = parse_variables_from_recipe(recipe_path)
+    variables = combine_variable_lists(os.environ["VARIABLES_LIST_DIR"])
+    variables = manually_amend_variables(variables)
     write_variables(variables, os.environ["VARIABLES_PATH"])
 
 
