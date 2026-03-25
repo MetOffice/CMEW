@@ -14,7 +14,7 @@ def test_parse_radiation_budget_variables(monkeypatch):
         Path(__file__).parent.parent.parent
         / "unittest"
         / "mock_data"
-        / "test_radiation_budget_recipe_v2.9.0.yml"
+        / "original_recipe_radiation_budget.yml"
     )
     actual = parse_variables_from_recipe(recipe_path)
     expected = [

@@ -1,40 +1,9 @@
 # (C) Crown Copyright 2026, Met Office.
 # The LICENSE.md file contains full licensing details.
 # ESMValTool - Updated Radiation Budget
-# To be used for testing purposes. Represents KGO for `add_extra_datasets`.
+# To be used for testing purposes. Represents KGO for `return_blank_recipe`.
 ---
-datasets:
-- activity: ESMVal
-  alias: Ref Test Label
-  dataset: HadGEM3-GC31-LL
-  end_year: 2002
-  ensemble: r5i1p1f3
-  exp: historical
-  grid: gn
-  institute: MOHC
-  project: ESMVal
-  start_year: 1993
-  sub_experiment: ubv526
-- activity: ESMVal
-  alias: Test Label
-  dataset: HadGEM3-GC5E-LL
-  end_year: 2002
-  ensemble: r1i1p1f1
-  exp: amip
-  grid: gn
-  institute: MOHC
-  project: ESMVal
-  start_year: 1993
-  sub_experiment: ucw673
-- alias: CMIP6 dataset 001
-  dataset: UKESM1-0-LL
-  end_year: 2002
-  ensemble: r5i1p1f3
-  exp: historical
-  grid: gn
-  institute: MOHC
-  project: CMIP6
-  start_year: 1993
+datasets: []
 diagnostics:
   seasonal_radiation_budget:
     description: Seasonal radiation budget for HadGEM3 vs UKESM1.
