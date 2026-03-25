@@ -9,7 +9,7 @@
     UTC mode = True
 
 [task parameters]
-    recipe = radiation_budget, seaice
+    recipe = radiation_budget
 
 [scheduling]
     [[graph]]
