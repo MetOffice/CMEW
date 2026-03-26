@@ -51,12 +51,16 @@ An overview of the workflow
      into the Cylc workflow ``share/etc`` directory
      in the installed workflow and configures it
      to use standardised model data.
+     Also reads the required variables from the recipe
+     and writes these to a folder in the Cylc workflow ``share/etc`` directory
+     for use later in the workflow.
   :Runs on:
      Localhost
   :Executes:
      For the required recipe,
      executes the ``esmvaltool recipes get`` command
-     followed by the ``update_recipe_file.py`` script from the |Rose| app.
+     followed by the ``update_recipe_file.py`` and ``outpur_variables.py``
+     scripts from the |Rose| app.
   :Details:
      Runs once for each recipe,
      immediately after the successful completion
@@ -83,6 +87,8 @@ An overview of the workflow
      completion of the ``configure_for`` job.
      Generates |CDDS| request metadata for each model run (reference and evaluation):
      ``request_ref.json``, ``request_eval.json``.
+     Generates a list of variables to standardise for each model run
+     based on the lists of variables required for each recipe.
      Reads model-specific values from the workflow environment.
      Creates the required directory structure to support
      multiple |CDDS| standardisation workflows
