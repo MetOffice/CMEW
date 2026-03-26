@@ -75,7 +75,7 @@ def add_stream_to_variables(variables):
                 streamed_var = f"{var}:{stream}"
                 streamed_variables.append(streamed_var)
                 break
-        # But still using the prescribed stream for any variables not in the dictionary
+        # But still using prescribed stream for other variables
         else:
             default_stream = os.environ["STREAM_ID"]
             streamed_var = f"{var}:{default_stream}"
