@@ -20,8 +20,6 @@ def main():
     ensure_parent_dir(developer_config_path)
     write_yaml(developer_config_path, developer_config_contents)
 
-    values["CONFIG_DEVELOPER_FILE"] = developer_config_path
-
     user_config_path = values["USER_CONFIG_PATH"]
     user_config_contents = create_user_config(values)
     ensure_parent_dir(user_config_path)
@@ -220,7 +218,7 @@ def create_user_config(values=None):
 
     user_config_file_contents = {
         "auxiliary_data_dir": "",
-        "config_developer_file": values.get("CONFIG_DEVELOPER_FILE"),
+        "config_developer_file": values.get("DEV_CONFIG_PATH"),
         "download_dir": "",
         "drs": {
             "ana4mips": values.get("DRS_ANA4MIPS"),
