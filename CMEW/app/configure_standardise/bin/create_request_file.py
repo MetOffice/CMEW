@@ -17,6 +17,8 @@ def create_request():
     configparser.ConfigParser()
         CDDS request configuration.
     """
+    mip_table_dir = os.environ["MIP_TABLE_DIR"]
+
     end_year = int(os.environ["START_YEAR"]) + int(
         os.environ["NUMBER_OF_YEARS"]
     )
@@ -38,9 +40,7 @@ def create_request():
     request["common"] = {
         "external_plugin": "",
         "external_plugin_location": "",
-        "mip_table_dir": os.path.expanduser(
-            "~cdds/etc/mip_tables/GCModelDev/0.0.25"
-        ),
+        "mip_table_dir": os.path.expanduser(mip_table_dir),
         "mode": "relaxed",
         "package": "round-1",
         "root_proc_dir": os.environ["ROOT_PROC_DIR"],

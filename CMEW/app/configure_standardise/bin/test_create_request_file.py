@@ -18,12 +18,17 @@ def test_create_request(monkeypatch):
     monkeypatch.setenv("SUITE_ID", "u-az513")
     monkeypatch.setenv("VARIABLES_PATH", "/path/to/variables.txt")
     monkeypatch.setenv("VARIANT_LABEL", "r1i1p1f1")
+    monkeypatch.setenv(
+        "MIP_TABLE_DIR",
+        "~cdds/etc/mip_tables/GCModelDev/0.0.25",
+    )
     monkeypatch.setenv("STREAM_ID", "apm")
 
     config = create_request()
     actual = {
         section: dict(config.items(section)) for section in config.sections()
     }
+
     expected = {
         "metadata": {
             "branch_method": "no parent",
@@ -31,7 +36,12 @@ def test_create_request(monkeypatch):
             "base_date": "1850-01-01T00:00:00",
             "experiment_id": "amip",
             "institution_id": "MOHC",
-            "license": "GCModelDev model data is licensed under the Open Government License v3 (https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/)",  # noqa: E501
+            "license": (
+                "GCModelDev model data is licensed under "
+                "the Open Government License v3 "
+                "(https://www.nationalarchives.gov.uk/doc"
+                "/open-government-licence/version/3/)"
+            ),
             "mip": "ESMVal",
             "mip_era": "GCModelDev",
             "model_id": "UKESM1-0-LL",
@@ -70,4 +80,5 @@ def test_create_request(monkeypatch):
             "cylc_args": "--no-detach -v",
         },
     }
+
     assert actual == expected
