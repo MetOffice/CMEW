@@ -35,7 +35,7 @@ An overview of the workflow
 ``configure_recipe``
   :Description:
      Creates and modifies the |ESMValTool| user and developer configuration files,
-     and writes it to the cylc workflow ``share/etc`` directory.
+     and writes them to the cylc workflow ``share/etc`` directory.
   :Runs on:
      Localhost
   :Executes:
