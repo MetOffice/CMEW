@@ -79,8 +79,7 @@ def add_stream_to_variables(variables):
 
     # Listing the input variables together with their stream
     streamed_variables = [
-        f"{var}:{var_to_stream.get(var, default_stream)}"
-        for var in variables
+        f"{var}:{var_to_stream.get(var, default_stream)}" for var in variables
     ]
 
     return streamed_variables
