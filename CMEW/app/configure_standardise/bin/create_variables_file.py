@@ -67,19 +67,21 @@ def add_stream_to_variables(variables):
         ],
     }
 
-    # Writing the stream according to the dictionary
-    streamed_variables = []
-    for var in variables:
-        for stream, var_list in stream_dict.items():
-            if var in var_list:
-                streamed_var = f"{var}:{stream}"
-                streamed_variables.append(streamed_var)
-                break
-        # But still using prescribed stream for other variables
-        else:
-            default_stream = os.environ["STREAM_ID"]
-            streamed_var = f"{var}:{default_stream}"
-            streamed_variables.append(streamed_var)
+    # Setting a default stream for variables not listed
+    default_stream = os.environ["STREAM_ID"]
+
+    # Using a second dictionary to avoid looping
+    var_to_stream = {
+        var: stream
+        for stream, var_list in stream_dict.items()
+        for var in var_list
+    }
+
+    # Listing the input variables together with their stream
+    streamed_variables = [
+        f"{var}:{var_to_stream.get(var, default_stream)}"
+        for var in variables
+    ]
 
     return streamed_variables
 
