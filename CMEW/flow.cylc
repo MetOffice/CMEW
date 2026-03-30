@@ -38,6 +38,7 @@
             ESMVALTOOL_MODULE_NAME = {{ ESMVALTOOL_MODULE_NAME }}
             CONFIG_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/etc/esmvaltool_config
             USER_CONFIG_PATH = ${CONFIG_DIR}/config-user.yml
+            DEV_CONFIG_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/config-developer.yml
             OUTPUT_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/cycle/${CYLC_TASK_CYCLE_POINT}
             SHARE_DATA_CDDS = ${CYLC_WORKFLOW_SHARE_DIR}/data/cdds
             ROOT_PROC_DIR = ${SHARE_DATA_CDDS}/proc
@@ -99,6 +100,7 @@
             DRS_NATIVE6 = {{ DRS_NATIVE6 }}
             DRS_OBS4MIPS = {{ DRS_OBS4MIPS }}
             MAX_PARALLEL_TASKS = {{ MAX_PARALLEL_TASKS }}
+            MIP_TABLE_DIR = {{ MIP_TABLE_DIR }}
             ROOTPATH_CMIP3 = {{ ROOTPATH_CMIP3 }}
             ROOTPATH_CMIP5 = {{ ROOTPATH_CMIP5 }}
             ROOTPATH_CMIP6 = {{ ROOTPATH_CMIP6 }}
@@ -123,6 +125,7 @@
             ROSE_TASK_APP = configure_standardise
             START_YEAR = {{ START_YEAR }}
             NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
+            MIP_TABLE_DIR = {{ MIP_TABLE_DIR }}
             STREAM_ID = "apm"
 
     [[standardise_model_data]]
