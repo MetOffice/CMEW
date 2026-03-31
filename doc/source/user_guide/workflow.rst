@@ -58,7 +58,7 @@ An overview of the workflow
   :Executes:
      For the required recipe,
      executes the ``esmvaltool recipes get`` command
-     followed by the ``update_recipe_file.py`` and ``outpur_variables.py``
+     followed by the ``update_recipe_file.py`` and ``output_variables.py``
      scripts from the |Rose| app.
   :Details:
      Runs once for each recipe,
