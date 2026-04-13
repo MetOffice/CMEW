@@ -58,6 +58,8 @@
         [[[environment]]]
             CDDS_BIN_DIR = "~cdds/bin"
             CDDS_SOFTWARE_DIR = "~cdds/software"
+            RAW_DATA_DIR = {{ RAW_DATA_DIR }}
+            RAW_DATA_AlREADY_EXTRACTED = {{ RAW_DATA_AlREADY_EXTRACTED }}
             # Workaround for bug in CDDS: ROOT_SOFTWARE_DIR: unbound variable.
             ROOT_SOFTWARE_DIR = ${CDDS_SOFTWARE_DIR}
             CDDS_VERSION = {{ CDDS_VERSION }}
@@ -132,7 +134,6 @@
         inherit = STANDARDISE, MODEL_RUNS
         [[[environment]]]
             SITE = {{ SITE }}
-            RAW_DATA_DIR = {{ RAW_DATA_DIR }}
 
     [[run_recipe<recipe>]]
         inherit = None, COMPUTE, RECIPE

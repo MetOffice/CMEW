@@ -22,7 +22,7 @@ wait
 
 # If RAW_DATA_DIR is configured, copy extracted raw data only when the target
 # directory is empty. If it is not empty, emit a log.err message and do not copy.
-if [[ -n "${RAW_DATA_DIR:-}" ]]; then
+if [[ -n "${RAW_DATA_DIR:-}" && "${RAW_DATA_AlREADY_EXTRACTED}" == "False" ]]; then
     mkdir -p "${RAW_DATA_DIR}"
 
     shopt -s nullglob dotglob
