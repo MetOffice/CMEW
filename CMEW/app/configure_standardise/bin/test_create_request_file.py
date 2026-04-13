@@ -2,45 +2,8 @@
 # The LICENSE.md file contains full licensing details.
 
 import os
-from pathlib import Path
 
 from create_request_file import create_request, load_request_defaults
-
-
-def write_request_defaults(tmp_path: Path) -> Path:
-    """Create a temporary request defaults config file."""
-    request_defaults = tmp_path / "request_defaults.cfg"
-    request_defaults.write_text(
-        "\n".join(
-            [
-                "[metadata]",
-                "calendar = gregorian",
-                "institution_id = TEST",
-                "model_id = TEST-MODEL",
-                "variant_label = r1i1p1f1",
-                "",
-                "[common]",
-                "mip_table_dir = ~/mip_tables",
-                "root_proc_dir = /default/proc",
-                "root_data_dir = /default/data",
-                "workflow_basename = default-suite",
-                "",
-                "[data]",
-                "start_date = 1990-01-01T00:00:00",
-                "end_date = 1991-01-01T00:00:00",
-                "model_workflow_id = default-suite",
-                "variable_list_file = /default/variables.txt",
-                "",
-                "[misc]",
-                "dummy_misc = value",
-                "",
-                "[conversion]",
-                "dummy_conversion = value",
-                "",
-            ]
-        )
-    )
-    return request_defaults
 
 
 def expected_request():
@@ -81,7 +44,14 @@ def expected_request():
 
 
 def test_create_request(monkeypatch, tmp_path):
-    request_defaults_path = write_request_defaults(tmp_path)
+    # Note that this test only works within the workflow due to the
+    # following environment variable use. For command line pytest use, export
+    # CYLC_WORKFLOW_RUN_DIR to point to a previous workflow run dir, or
+    # workflow source dir.
+    request_defaults_path = os.path.join(
+        os.environ.get("CYLC_WORKFLOW_RUN_DIR"),
+        "app/configure_standardise/etc/request_defaults.cfg",
+    )
 
     monkeypatch.setenv("START_YEAR", "1993")
     monkeypatch.setenv("NUMBER_OF_YEARS", "1")
