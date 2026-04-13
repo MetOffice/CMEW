@@ -50,6 +50,7 @@ def test_create_request(monkeypatch):
             "calendar": "360_day",
             "institution_id": "MOHC",
             "model_id": "UKESM1-0-LL",
+            "sub_experiment_id": "uaz513",
             "variant_label": "r1i1p1f1",
         }
     )
