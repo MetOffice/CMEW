@@ -15,7 +15,9 @@ def test_create_request(monkeypatch):
         os.environ.get("CYLC_WORKFLOW_RUN_DIR"),
         "app/configure_standardise/etc/request_defaults.cfg",
     )
-
+    monkeypatch.setenv("REQUEST_DEFAULTS_PATH", str(request_defaults_path))
+    
+    # In the order defined in 'create_request_file.py'.
     monkeypatch.setenv("START_YEAR", "1993")
     monkeypatch.setenv("NUMBER_OF_YEARS", "1")
     monkeypatch.setenv("CALENDAR", "360_day")
@@ -27,7 +29,6 @@ def test_create_request(monkeypatch):
     monkeypatch.setenv("SUITE_ID", "u-az513")
     monkeypatch.setenv("VARIABLES_PATH", "/path/to/variables.txt")
     monkeypatch.setenv("VARIANT_LABEL", "r1i1p1f1")
-    monkeypatch.setenv("REQUEST_DEFAULTS_PATH", str(request_defaults_path))
     monkeypatch.setenv(
         "MIP_TABLE_DIR",
         "~cdds/etc/mip_tables/GCModelDev/0.0.25",
