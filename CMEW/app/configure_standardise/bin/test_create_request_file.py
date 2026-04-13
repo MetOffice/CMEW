@@ -6,7 +6,7 @@ import os
 from create_request_file import create_request, load_request_defaults
 
 
-def test_create_request(monkeypatch, tmp_path):
+def test_create_request(monkeypatch):
     # Note that this test only works within the workflow due to the
     # following environment variable use. For command line pytest use, export
     # CYLC_WORKFLOW_RUN_DIR to point to a previous workflow run dir, or
