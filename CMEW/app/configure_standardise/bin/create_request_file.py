@@ -25,7 +25,7 @@ def create_request():
         CDDS request configuration.
     """
     defaults = load_request_defaults()
-    
+
     mip_table_dir = os.environ["MIP_TABLE_DIR"]
     end_year = int(os.environ["START_YEAR"]) + int(
         os.environ["NUMBER_OF_YEARS"]
@@ -50,7 +50,6 @@ def create_request():
     }
     request["data"] = {
         **defaults["data"],
-        "start_date": f"{start_year}-01-01T00:00:00",
         "end_date": f"{end_year}-01-01T00:00:00",
         "model_workflow_id": os.environ["SUITE_ID"],
         "start_date": f"{os.environ['START_YEAR']}-01-01T00:00:00",

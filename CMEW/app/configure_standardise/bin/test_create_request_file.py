@@ -16,7 +16,7 @@ def test_create_request(monkeypatch):
         "app/configure_standardise/etc/request_defaults.cfg",
     )
     monkeypatch.setenv("REQUEST_DEFAULTS_PATH", str(request_defaults_path))
-    
+
     # In the order defined in 'create_request_file.py'.
     monkeypatch.setenv("START_YEAR", "1993")
     monkeypatch.setenv("NUMBER_OF_YEARS", "1")
