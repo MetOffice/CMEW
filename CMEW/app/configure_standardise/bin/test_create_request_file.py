@@ -15,10 +15,10 @@ def test_create_request(monkeypatch):
 
     monkeypatch.setenv("START_YEAR", "1993")
     monkeypatch.setenv("NUMBER_OF_YEARS", "1")
-    monkeypatch.setenv("CALENDAR", "360_day")
+    monkeypatch.setenv("CALENDAR", "standard")
     monkeypatch.setenv("EXPERIMENT_ID", "amip")
     monkeypatch.setenv("INSTITUTION_ID", "MOHC")
-    monkeypatch.setenv("MODEL_ID", "UKESM1-0-LL")
+    monkeypatch.setenv("MODEL_ID", "HadGEM2-GC31-HH")
     monkeypatch.setenv("ROOT_PROC_DIR", "/path/to/proc/dir/")
     monkeypatch.setenv("ROOT_DATA_DIR", "/path/to/data/dir/")
     monkeypatch.setenv("SUITE_ID", "u-az513")
@@ -42,9 +42,9 @@ def test_create_request(monkeypatch):
 
     expected["metadata"].update(
         {
-            "calendar": "360_day",
+            "calendar": "standard",
             "institution_id": "MOHC",
-            "model_id": "UKESM1-0-LL",
+            "model_id": "HadGEM2-GC31-HH",
             "sub_experiment_id": "uaz513",
             "variant_label": "r1i1p1f1",
         }
