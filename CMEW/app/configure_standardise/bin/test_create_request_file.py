@@ -23,6 +23,7 @@ def test_create_request(monkeypatch):
         "~cdds/etc/mip_tables/GCModelDev/0.0.25",
     )
     monkeypatch.setenv("STREAM_ID", "apm")
+    monkeypatch.setenv("RAW_DATA_ALREADY_EXTRACTED", "True")
 
     config = create_request()
     actual = {
@@ -78,6 +79,7 @@ def test_create_request(monkeypatch):
             "mip_convert_plugin": "UKESM1",
             "skip_archive": "True",
             "cylc_args": "--no-detach -v",
+            "skip_extract": "True",
         },
     }
 
