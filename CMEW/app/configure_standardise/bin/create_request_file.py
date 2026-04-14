@@ -10,6 +10,14 @@ from pathlib import Path
 
 
 def load_request_defaults():
+    """
+    Load default values for request file.
+
+    Returns
+    -------
+    configparser.ConfigParser()
+        CDDS request configuration default settings.
+    """
     cfg = configparser.ConfigParser()
     cfg.read(os.environ.get("REQUEST_DEFAULTS_PATH"))
 
