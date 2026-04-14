@@ -6,14 +6,16 @@ Copies model data pp files to the workflow's share directory
 """
 import os
 import yaml
+from pathlib import Path
 import logging
 
+logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 
-def create_target_path(model_run_dict):
+def determine_target_path(model_run_dict):
     """
-    Creates the path to which the raw data should be symlinked.
+    Determines the path to which the raw data should be symlinked.
 
     Uses model run information from the model_runs.yml file.
 
@@ -38,7 +40,6 @@ def create_target_path(model_run_dict):
         "round-1",  # CDDS's "package"
         "input",
         model_run_dict["suite_id"],
-        os.environ["STREAM_ID"],
     )
 
     logger.info("Target path: {}".format(target_path))
@@ -57,16 +58,22 @@ def symlink_pp_dirs():
     for model_run, inner_dict in model_runs.items():
         logger.info("Model run: {}".format(model_run))
 
-        source_path = os.path.join(raw_data_parent_dir, model_run)
-        logger.info("Source directory: {}".format(source_path))
+        source_parent_dir = os.path.join(raw_data_parent_dir, model_run)
+        logger.info("Source directory: {}".format(source_parent_dir))
 
-        target_path = create_target_path(inner_dict)
+        target_path = determine_target_path(inner_dict)
 
-        # Ensure parent directory exists
+        # Ensure target parent directory exists
         os.makedirs(os.path.dirname(target_path), exist_ok=True)
 
-        # Create symlink
-        os.symlink(source_path, target_path)
+        # Streams should be subdirs in the source dir
+        for item in Path(source_parent_dir).rglob("*"):
+            rel_path = item.relative_to(source_parent_dir)
+            dst = target_path / rel_path
+            # Only symlink pp files
+            if item.is_file() and item.suffix == ".pp":
+                dst.parent.mkdir(parents=True, exist_ok=True)
+                dst.symlink_to(item)
 
 
 def main():
