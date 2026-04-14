@@ -13,7 +13,7 @@ logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 
-def determine_target_path(model_run_dict):
+def determine_target_dir(model_run_dict):
     """
     Determines the path to which the raw data should be symlinked.
 
@@ -46,7 +46,7 @@ def determine_target_path(model_run_dict):
     return target_path
 
 
-def symlink_pp_dirs():
+def symlink_pp_files():
     model_runs_yml_fp = os.path.join(
         os.environ["DATASETS_LIST_DIR"], "model_runs.yml"
     )
@@ -63,25 +63,25 @@ def symlink_pp_dirs():
         source_parent_dir = os.path.join(raw_data_parent_dir, model_run)
         logger.info("Source directory: {}".format(source_parent_dir))
 
-        target_path = determine_target_path(inner_dict)
+        target_dir = determine_target_dir(inner_dict)
 
         # Ensure target parent directory exists
-        os.makedirs(os.path.dirname(target_path), exist_ok=True)
+        os.makedirs(os.path.dirname(target_dir), exist_ok=True)
 
         # Streams should be subdirs in the source dir
         for item in Path(source_parent_dir).rglob("*"):
             rel_path = item.relative_to(source_parent_dir)
-            dst = target_path / rel_path
+            target_path = target_dir / rel_path
             # Only symlink pp files
             if item.is_file() and item.suffix == ".pp":
-                dst.parent.mkdir(parents=True, exist_ok=True)
-                dst.symlink_to(item)
+                target_path.parent.mkdir(parents=True, exist_ok=True)
+                target_path.symlink_to(item)
 
 
 def main():
     # Only do anything if the data has already been extracted
     if os.environ["RAW_DATA_ALREADY_EXTRACTED"] == "True":
-        symlink_pp_dirs()
+        symlink_pp_files()
     else:
         pass
 
