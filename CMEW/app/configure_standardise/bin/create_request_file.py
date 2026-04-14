@@ -17,7 +17,7 @@ def create_request():
     configparser.ConfigParser()
         CDDS request configuration.
     """
-    if os.environ["RAW_DATA_ALREADY_EXTRACTED"]:
+    if os.environ["RAW_DATA_ALREADY_EXTRACTED"] == "True":
         skip_extract = "True"
     else:
         skip_extract = "False"

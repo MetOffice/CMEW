@@ -78,7 +78,7 @@ def symlink_pp_dirs():
 
 def main():
     # Only do anything if the data has already been extracted
-    if os.environ["RAW_DATA_ALREADY_EXTRACTED"]:
+    if os.environ["RAW_DATA_ALREADY_EXTRACTED"] == "True":
         symlink_pp_dirs()
     else:
         pass
