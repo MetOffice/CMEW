@@ -48,7 +48,6 @@ def create_request():
         "sub_experiment_id": os.environ["SUITE_ID"].replace("-", ""),
         "variant_label": os.environ["VARIANT_LABEL"],
     }
-
     request["common"] = {
         **defaults["common"],
         "mip_table_dir": os.path.expanduser(mip_table_dir),
