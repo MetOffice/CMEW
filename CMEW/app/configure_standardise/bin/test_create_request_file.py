@@ -2,20 +2,16 @@
 # The LICENSE.md file contains full licensing details.
 
 import os
+from pathlib import Path
 
 from create_request_file import create_request, load_request_defaults
 
 
 def test_create_request(monkeypatch):
-    # Note that this test only works within the workflow due to the
-    # following environment variable use. For command line pytest use, export
-    # CYLC_WORKFLOW_RUN_DIR to point to a previous workflow run dir, or
-    # workflow source dir.
-    request_defaults_path = os.path.join(
-        os.environ.get("CYLC_WORKFLOW_RUN_DIR"),
-        "app/configure_standardise/etc/request_defaults.cfg",
+    request_defaults_path = (
+        Path(__file__).parent.parent / "etc" / "request_defaults.cfg"
     )
-    monkeypatch.setenv("REQUEST_DEFAULTS_PATH", str(request_defaults_path))
+    monkeypatch.setenv("REQUEST_DEFAULTS_PATH", request_defaults_path)
 
     # In the order defined in 'create_request_file.py'.
     monkeypatch.setenv("START_YEAR", "1993")
