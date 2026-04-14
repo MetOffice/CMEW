@@ -21,12 +21,13 @@ def determine_target_dir(model_run_dict):
 
     Parameters
     ----------
-    model_run: dict
+    model_run_dict: dict
+        The indented contents of a section of the model_runs.yml file.
 
     Returns
     -------
     str
-         The path to which the raw data should be symlinked.
+         The path to which the raw data (pp file) should be symlinked.
     """
     logger.debug("Model run dictionary: \n%s", model_run_dict)
 
