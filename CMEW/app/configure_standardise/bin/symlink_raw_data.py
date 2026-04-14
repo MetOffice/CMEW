@@ -47,7 +47,9 @@ def determine_target_path(model_run_dict):
 
 
 def symlink_pp_dirs():
-    model_runs_yml_fp = os.path.join(os.environ["DATASETS_LIST_DIR"], "model_runs.yml")
+    model_runs_yml_fp = os.path.join(
+        os.environ["DATASETS_LIST_DIR"], "model_runs.yml"
+    )
     raw_data_parent_dir = os.environ["RAW_DATA_DIR"]
 
     with open(model_runs_yml_fp, "r") as f:

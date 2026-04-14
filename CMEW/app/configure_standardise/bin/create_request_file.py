@@ -70,7 +70,7 @@ def create_request():
         "mip_convert_plugin": "UKESM1",
         "skip_archive": "True",
         "cylc_args": "--no-detach -v",
-        "skip_extract": skip_extract
+        "skip_extract": skip_extract,
     }
     return request
 
