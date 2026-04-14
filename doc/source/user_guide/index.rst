@@ -11,4 +11,5 @@ User Guide
    Prerequisites <prerequisites_metoffice>
    quick_start
    workflow
-   Adding Datasets <adding_datasets>
+   Adding datasets <adding_datasets>
+   Reusing raw (pp) data  <reusing_raw_data>
