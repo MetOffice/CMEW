@@ -5,9 +5,7 @@
 Unit tests for symlink_raw_data.py
 """
 from unittest.mock import patch
-import tempfile
-from pathlib import Path
-from symlink_raw_data import determine_target_dir, symlink_pp_files, main
+from symlink_raw_data import determine_target_dir, main
 
 
 def test_determine_target_dir(monkeypatch):
@@ -54,6 +52,7 @@ class TestMain:
             main()
             mock_symlink.assert_called_once()
         pass
+
     def test_not_extracted(self, monkeypatch):
         monkeypatch.setenv("RAW_DATA_ALREADY_EXTRACTED", "False")
         # Otherwise should not call symlink_pp_dirs
