@@ -5,10 +5,10 @@
 Unit tests for symlink_raw_data.py
 """
 from unittest.mock import patch
-from symlink_raw_data import determine_target_dir, main
+from symlink_raw_data import determine_target_parent_dir, main
 
 
-def test_determine_target_dir(monkeypatch):
+def test_determine_target_parent_dir(monkeypatch):
     monkeypatch.setenv("ROOT_DATA_DIR", "/path/to/cdds_data")
     mock_dict = {
         "activity": "ESMVal",

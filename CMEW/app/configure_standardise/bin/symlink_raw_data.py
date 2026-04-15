@@ -9,11 +9,11 @@ import yaml
 from pathlib import Path
 import logging
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-def determine_target_dir(model_run_dict):
+def determine_target_parent_dir(model_run_dict):
     """
     Determines the directory into which the raw data should be symlinked.
 
@@ -47,11 +47,10 @@ def determine_target_dir(model_run_dict):
     return target_path
 
 
-def symlink_pp_files():
+def symlink_pp_files(raw_data_parent_dir):
     model_runs_yml_fp = os.path.join(
         os.environ["DATASETS_LIST_DIR"], "model_runs.yml"
     )
-    raw_data_parent_dir = os.environ["RAW_DATA_DIR"]
 
     with open(model_runs_yml_fp, "r") as f:
         model_runs = yaml.safe_load(f)
@@ -64,7 +63,7 @@ def symlink_pp_files():
         source_parent_dir = os.path.join(raw_data_parent_dir, model_run)
         logger.info("Source directory: {}".format(source_parent_dir))
 
-        target_dir = determine_target_dir(inner_dict)
+        target_dir = determine_target_parent_dir(inner_dict)
 
         # Ensure target parent directory exists
         os.makedirs(os.path.dirname(target_dir), exist_ok=True)
@@ -82,7 +81,8 @@ def symlink_pp_files():
 def main():
     # Only do anything if the data has already been extracted
     if os.environ["RAW_DATA_ALREADY_EXTRACTED"] == "True":
-        symlink_pp_files()
+        pp_data_parent_dir = os.environ["RAW_DATA_DIR"]
+        symlink_pp_files(pp_data_parent_dir)
     else:
         pass
 
