@@ -56,7 +56,7 @@ def symlink_pp_files(src_dir, target_dir):
     """
     # Traverse source and symlink any pp files
     for item in Path(src_dir).rglob("*"):
-        if item.is_file():
+        if item.is_file() and item.suffix == ".pp":
             # Get the relative paths
             rel_file_path = item.relative_to(src_dir)
             target_file_path = Path(target_dir) / rel_file_path
