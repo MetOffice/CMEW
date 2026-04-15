@@ -36,7 +36,7 @@ def test_determine_target_parent_dir(monkeypatch):
         "input/"
         "u-bv526"
     )
-    actual = determine_target_dir(mock_dict)
+    actual = determine_target_parent_dir(mock_dict)
     assert actual == expected
 
 
