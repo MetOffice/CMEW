@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 def determine_target_dir(model_run_dict):
     """
-    Determines the path to which the raw data should be symlinked.
+    Determines the directory into which the raw data should be symlinked.
 
     Uses model run information from the model_runs.yml file.
 
