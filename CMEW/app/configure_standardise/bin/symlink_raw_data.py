@@ -109,7 +109,7 @@ def main():
     # Only do anything if the data has already been extracted
     if os.environ["RAW_DATA_ALREADY_EXTRACTED"] == "True":
         raw_data_parent_dir = os.environ["RAW_DATA_DIR"]
-        symlink_pp_files(raw_data_parent_dir)
+        symlink_raw_data(raw_data_parent_dir)
     else:
         pass
 
