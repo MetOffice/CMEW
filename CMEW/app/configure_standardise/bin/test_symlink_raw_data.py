@@ -5,12 +5,13 @@
 Unit tests for symlink_raw_data.py
 """
 from unittest.mock import patch
+import pytest
 import tempfile
 from pathlib import Path
-from symlink_raw_data import determine_target_parent_dir, symlink_pp_files, main
+from symlink_raw_data import determine_model_run_target_dir, symlink_pp_files, main
 
 
-def test_determine_target_parent_dir(monkeypatch):
+def test_determine_model_run_target_dir(monkeypatch):
     monkeypatch.setenv("ROOT_DATA_DIR", "/path/to/cdds_data")
     mock_dict = {
         "activity": "ESMVal",
@@ -38,17 +39,11 @@ def test_determine_target_parent_dir(monkeypatch):
         "input/"
         "u-bv526"
     )
-    actual = determine_target_parent_dir(mock_dict)
+    actual = determine_model_run_target_dir(mock_dict)
     assert actual == expected
 
 
 def test_symlink_pp_files(monkeypatch):
-    # The real function calls this to determine the target dir
-    monkeypatch.setenv(
-        "DATASETS_LIST_DIR",
-        str(Path(__file__).parent.parent.parent / "unittest" / "mock_data")
-    )
-
     # Make a mock source directory
     with tempfile.TemporaryDirectory() as mock_src_dir:
         mock_src_dir = Path(mock_src_dir)
@@ -66,32 +61,49 @@ def test_symlink_pp_files(monkeypatch):
         # Make a mock target parent directory
         with tempfile.TemporaryDirectory() as mock_target_dir:
             mock_target_dir = Path(mock_target_dir)
-            with patch("symlink_raw_data.determine_target_parent_dir") as mock_target:
-                mock_target.return_value = mock_target_dir
 
-                # Run the symlink function:
-                symlink_pp_files(str(mock_src_dir))
+            # Run the symlink function:
+            symlink_pp_files(str(mock_src_dir), str(mock_target_dir))
 
-                # a_1 should copy:
-                with open(mock_target_dir / "subdir_1" / "a_1.pp") as f:
-                    actual = f.read()
-                    expected = "Contents of a_1"
-                    assert actual == expected
+            # a_1 should copy:
+            with open(mock_target_dir / "subdir_1" / "a_1.pp") as f:
+                actual = f.read()
+                expected = "Contents of a_1"
+                assert actual == expected
+
+            # b_1 should copy:
+            with open(mock_target_dir / "subdir_1" / "b_1.pp") as f:
+                actual = f.read()
+                expected = "Contents of b_1"
+                assert actual == expected
+
+            # a_2 should copy:
+            with open(mock_target_dir / "subdir_2" / "a_2.pp") as f:
+                actual = f.read()
+                expected = "Contents of a_2"
+                assert actual == expected
+
+            # b_2 should NOT copy:
+            with pytest.raises(FileNotFoundError):
+                with open(mock_target_dir / "subdir_2" / "b_2.pp") as f:
+                    f.read()
 
 
 class TestMain:
+    # RAW_DATA_DIR is queried if RAW_DATA_ALREADY_EXTRACTED == True
     def test_already_extracted(self, monkeypatch):
         monkeypatch.setenv("RAW_DATA_ALREADY_EXTRACTED", "True")
-        # Should call symlink_pp_dirs if RAW_DATA_ALREADY_EXTRACTED
-        with patch("symlink_raw_data.symlink_pp_files") as mock_symlink:
+        monkeypatch.setenv("RAW_DATA_DIR", "")
+        # Should call symlink_raw_data if RAW_DATA_ALREADY_EXTRACTED
+        with patch("symlink_raw_data.symlink_raw_data") as mock_symlink:
             main()
             mock_symlink.assert_called_once()
         pass
 
     def test_not_extracted(self, monkeypatch):
         monkeypatch.setenv("RAW_DATA_ALREADY_EXTRACTED", "False")
-        # Otherwise should not call symlink_pp_dirs
-        with patch("symlink_raw_data.symlink_pp_files") as mock_symlink:
+        # Otherwise should not call symlink_raw_data
+        with patch("symlink_raw_data.symlink_raw_data") as mock_symlink:
             main()
             mock_symlink.assert_not_called()
         pass
