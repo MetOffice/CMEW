@@ -82,7 +82,9 @@ def symlink_raw_data(raw_data_parent_dir):
 
     """
     # Read the model runs from the model_runs.yml file:
-    model_runs_yml_fp = Path(os.environ["DATASETS_LIST_DIR"]) / "model_runs.yml"
+    model_runs_yml_fp = (
+        Path(os.environ["DATASETS_LIST_DIR"]) / "model_runs.yml"
+    )
     with open(model_runs_yml_fp, "r") as f:
         model_runs = yaml.safe_load(f)
 

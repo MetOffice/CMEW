@@ -8,7 +8,11 @@ from unittest.mock import patch
 import pytest
 import tempfile
 from pathlib import Path
-from symlink_raw_data import determine_model_run_target_dir, symlink_pp_files, main
+from symlink_raw_data import (
+    determine_model_run_target_dir,
+    symlink_pp_files,
+    main,
+)
 
 
 def test_determine_model_run_target_dir(monkeypatch):
