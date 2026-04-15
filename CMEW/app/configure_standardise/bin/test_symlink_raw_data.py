@@ -5,7 +5,9 @@
 Unit tests for symlink_raw_data.py
 """
 from unittest.mock import patch
-from symlink_raw_data import determine_target_parent_dir, main
+import tempfile
+from pathlib import Path
+from symlink_raw_data import determine_target_parent_dir, symlink_pp_files, main
 
 
 def test_determine_target_parent_dir(monkeypatch):
@@ -40,8 +42,41 @@ def test_determine_target_parent_dir(monkeypatch):
     assert actual == expected
 
 
-def test_symlink_pp_files():
-    pass
+def test_symlink_pp_files(monkeypatch):
+    # The real function calls this to determine the target dir
+    monkeypatch.setenv(
+        "DATASETS_LIST_DIR",
+        str(Path(__file__).parent.parent.parent / "unittest" / "mock_data")
+    )
+
+    # Make a mock source directory
+    with tempfile.TemporaryDirectory() as mock_src_dir:
+        mock_src_dir = Path(mock_src_dir)
+        # Containing two subdirectories
+        subdir_1 = mock_src_dir / "subdir_1"
+        subdir_2 = mock_src_dir / "subdir_2"
+        subdir_1.mkdir(parents=True)
+        subdir_2.mkdir(parents=True)
+        # Each containing two files, one both pp and one with one non-pp file
+        (subdir_1 / "a_1.pp").write_text("Contents of a_1")
+        (subdir_1 / "b_1.pp").write_text("Contents of b_1")
+        (subdir_2 / "a_2.pp").write_text("Contents of a_2")
+        (subdir_2 / "b_2.txt").write_text("This shouldn't copy")
+
+        # Make a mock target parent directory
+        with tempfile.TemporaryDirectory() as mock_target_dir:
+            mock_target_dir = Path(mock_target_dir)
+            with patch("symlink_raw_data.determine_target_parent_dir") as mock_target:
+                mock_target.return_value = mock_target_dir
+
+                # Run the symlink function:
+                symlink_pp_files(str(mock_src_dir))
+
+                # a_1 should copy:
+                with open(mock_target_dir / "subdir_1" / "a_1.pp") as f:
+                    actual = f.read()
+                    expected = "Contents of a_1"
+                    assert actual == expected
 
 
 class TestMain:

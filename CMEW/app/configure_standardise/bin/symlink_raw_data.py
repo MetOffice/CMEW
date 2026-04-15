@@ -26,7 +26,7 @@ def determine_target_parent_dir(model_run_dict):
 
     Returns
     -------
-    str
+    Path
          The path to which the raw data (pp file) should be symlinked.
     """
     logger.debug("Model run dictionary: \n%s", model_run_dict)
@@ -44,10 +44,23 @@ def determine_target_parent_dir(model_run_dict):
     )
 
     logger.info("Target path: {}".format(target_path))
-    return target_path
+    return Path(target_path)
 
 
 def symlink_pp_files(raw_data_parent_dir):
+    """
+    Creates symlinks to pp files in the raw_data_parent_dir.
+
+    The symlinks will point to a path in the workflow's share directory,
+    with the structure determined by information in the model_runs.yml file.
+
+    Parameters
+    ----------
+    raw_data_parent_dir: str
+        The path to the directory containing the pp data files.
+
+    """
+
     model_runs_yml_fp = os.path.join(
         os.environ["DATASETS_LIST_DIR"], "model_runs.yml"
     )
