@@ -82,7 +82,7 @@ def symlink_raw_data(raw_data_parent_dir):
 
     """
     # Read the model runs from the model_runs.yml file:
-    model_runs_yml_fp = Path(os.environ["DATASETS_LIST_DIR"] / "model_runs.yml")
+    model_runs_yml_fp = Path(os.environ["DATASETS_LIST_DIR"]) / "model_runs.yml"
     with open(model_runs_yml_fp, "r") as f:
         model_runs = yaml.safe_load(f)
 
@@ -90,7 +90,7 @@ def symlink_raw_data(raw_data_parent_dir):
     for model_run, inner_dict in model_runs.items():
 
         # Find the source model directory
-        src_model_run_dir = raw_data_parent_dir / model_run
+        src_model_run_dir = Path(raw_data_parent_dir) / model_run
         # For now raise an error, one day we could fetch just this data
         if not os.path.exists(src_model_run_dir):
             raise FileNotFoundError(
