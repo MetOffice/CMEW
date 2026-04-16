@@ -40,32 +40,31 @@ def test_create_request(monkeypatch):
     for section in request_defaults.sections():
         expected[section] = dict(request_defaults.items(section))
 
-    expected["metadata"].update(
-        {
-            "calendar": "standard",
-            "institution_id": "MOHC",
-            "model_id": "HadGEM2-GC31-HH",
-            "sub_experiment_id": "uaz513",
-            "variant_label": "r1i1p1f1",
-        }
-    )
-    expected["common"].update(
-        {
-            "mip_table_dir": os.path.expanduser(
-                expected["common"]["mip_table_dir"]
-            ),
-            "root_proc_dir": "/path/to/proc/dir/",
-            "root_data_dir": "/path/to/data/dir/",
-            "workflow_basename": "u-az513",
-        }
-    )
-    expected["data"].update(
-        {
-            "start_date": "1993-01-01T00:00:00",
-            "end_date": "1994-01-01T00:00:00",
-            "model_workflow_id": "u-az513",
-            "variable_list_file": "/path/to/variables.txt",
-        }
-    )
+    expected["metadata"] = {
+        **request_defaults["metadata"],
+        "calendar": "standard",
+        "experiment_id": "amip",
+        "institution_id": "MOHC",
+        "model_id": "HadGEM2-GC31-HH",
+        "sub_experiment_id": "uaz513",
+        "variant_label": "r1i1p1f1",
+    }
+    expected["common"] = {
+        **request_defaults["common"],
+        "mip_table_dir": os.path.expanduser(
+            "~cdds/etc/mip_tables/GCModelDev/0.0.25",
+        ),
+        "root_proc_dir": "/path/to/proc/dir/",
+        "root_data_dir": "/path/to/data/dir/",
+        "workflow_basename": "u-az513",
+    }
+    expected["data"] = {
+        **request_defaults["data"],
+        "end_date": "1994-01-01T00:00:00",
+        "model_workflow_id": "u-az513",
+        "start_date": "1993-01-01T00:00:00",
+        "streams": "apm",
+        "variable_list_file": "/path/to/variables.txt",
+    }
 
     assert actual == expected
