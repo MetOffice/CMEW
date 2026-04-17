@@ -48,20 +48,20 @@ def create_request():
     calendar = os.environ["CALENDAR"]
     variant_label = os.environ["VARIANT_LABEL"]
 
-    run_label = os.environ["CYLC_TASK_PARAM_dataset"].strip()
+    dataset = os.environ["CYLC_TASK_PARAM_dataset"].strip()
 
     ref_experiment_id = (
         os.environ.get("REF_EXPERIMENT_ID", "amip").strip() or "amip"
     )
     experiment_id = os.environ.get("EXPERIMENT_ID", "amip").strip() or "amip"
 
-    if run_label == ref_suite_id:
+    if dataset == ref_suite_id:
         chosen_model_id = ref_model_id
         chosen_suite_id = ref_suite_id
         chosen_calendar = ref_calendar
         chosen_variant_label = ref_variant_label
         chosen_experiment_id = ref_experiment_id
-    elif run_label == suite_id:
+    elif dataset == suite_id:
         chosen_model_id = model_id
         chosen_suite_id = suite_id
         chosen_calendar = calendar
@@ -70,7 +70,7 @@ def create_request():
     else:
         raise KeyError(
             "CYLC_TASK_PARAM_dataset must match REF_SUITE_ID or SUITE_ID. "
-            f"Got CYLC_TASK_PARAM_dataset='{run_label}', "
+            f"Got CYLC_TASK_PARAM_dataset='{dataset}', "
             f"REF_SUITE_ID='{ref_suite_id}', SUITE_ID='{suite_id}'."
         )
 
