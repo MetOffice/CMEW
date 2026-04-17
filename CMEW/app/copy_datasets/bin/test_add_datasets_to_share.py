@@ -1,5 +1,19 @@
 # (C) Crown Copyright 2026, Met Office.
 # The LICENSE.md file contains full licensing details.
+"""
+Unit tests for add_datasets_to_share.py
+
+Test data files:
+/app/unittest/mock_data/model_runs.nl
+    input for test_extract_sections_from_naml
+    input for test_process_naml_file
+/app/unittest/mock_data/model_runs_as_list.yml
+    input for test_use_facet_as_key
+/app/unittest/kgo/model_runs_as_dict.yml
+    kgo for test_use_facet_as_key
+/app/unittest/kgo/basic_dict.yml
+    kgo for test_write_dict_to_yaml
+"""
 from add_datasets_to_share import (
     extract_sections_from_naml,
     convert_str_to_facets,
@@ -7,7 +21,7 @@ from add_datasets_to_share import (
     process_naml_file,
     write_dict_to_yaml,
     write_datasets_to_yaml,
-    dict_namelists_in_work_dir,
+    dict_namelists_in_workflow_dir,
     use_facet_as_key,
 )
 from pathlib import Path
@@ -22,7 +36,7 @@ from unittest.mock import patch
 def mock_env_vars(monkeypatch):
     monkeypatch.setenv("START_YEAR", "1993")
     monkeypatch.setenv("NUMBER_OF_YEARS", "10")
-    monkeypatch.setenv("CYLC_TASK_WORK_DIR", "/a/b/c")
+    monkeypatch.setenv("CYLC_WORKFLOW_RUN_DIR", "/a/b/c")
 
 
 @pytest.fixture
@@ -209,12 +223,14 @@ def test_write_datasets_to_yaml(mock_writing):
         "subdir",
     ],
 )
-def test_dict_namelists_in_work_dir(mock_dirname, mock_listdir, mock_env_vars):
+def test_dict_namelists_in_workflow_dir(
+    mock_dirname, mock_listdir, mock_env_vars
+):
     expected = {
         "this_one": "/a/b/c/this_one.nl",
         "this_two": "/a/b/c/this_two.nl",
     }
-    actual = dict_namelists_in_work_dir()
+    actual = dict_namelists_in_workflow_dir()
     assert expected == actual
 
 
@@ -224,7 +240,7 @@ def test_use_facet_as_key(path_to_mock_yaml_list, path_to_kgo_yaml_dict):
         shutil.copyfile(path_to_mock_yaml_list, tmp.name)
 
         # The filepath is given by .name
-        use_facet_as_key(str(tmp.name))
+        use_facet_as_key(str(tmp.name), "suite_id")
 
         # Read the result
         tmp.seek(0)

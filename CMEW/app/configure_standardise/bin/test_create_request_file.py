@@ -13,7 +13,6 @@ def test_create_request(monkeypatch):
     monkeypatch.setenv("START_YEAR", "1993")
     monkeypatch.setenv("NUMBER_OF_YEARS", "1")
     monkeypatch.setenv("CALENDAR", "360_day")
-    monkeypatch.setenv("EXPERIMENT_ID", "amip")
     monkeypatch.setenv("INSTITUTION_ID", "MOHC")
     monkeypatch.setenv("ROOT_PROC_DIR", "/path/to/proc/dir/")
     monkeypatch.setenv("ROOT_DATA_DIR", "/path/to/data/dir/")
@@ -23,13 +22,19 @@ def test_create_request(monkeypatch):
     monkeypatch.setenv("CALENDAR", "360_day")
     monkeypatch.setenv("MODEL_ID", "UKESM1-0-LL")
     monkeypatch.setenv("SUITE_ID", "u-az513")
+    monkeypatch.setenv("EXPERIMENT_ID", "amip")
     monkeypatch.setenv("VARIANT_LABEL", "r1i1p1f1")
+    monkeypatch.setenv(
+        "MIP_TABLE_DIR",
+        "~cdds/etc/mip_tables/GCModelDev/0.0.25",
+    )
     monkeypatch.setenv("STREAM_ID", "apm")
 
     # Reference run env
     monkeypatch.setenv("REF_CALENDAR", "360_day")
     monkeypatch.setenv("REF_MODEL_ID", "HadGEM3-GC31-LL")
     monkeypatch.setenv("REF_SUITE_ID", "u-bv526")
+    monkeypatch.setenv("REF_EXPERIMENT_ID", "amip")
     monkeypatch.setenv("REF_VARIANT_LABEL", "r5i1p1f3")
 
     # Select EVAL branch explicitly
@@ -47,12 +52,17 @@ def test_create_request(monkeypatch):
             "base_date": "1850-01-01T00:00:00",
             "experiment_id": "amip",
             "institution_id": "MOHC",
-            "license": "GCModelDev model data is licensed under the Open Government License v3 (https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/)",  # noqa: E501
+            "license": (
+                "GCModelDev model data is licensed under "
+                "the Open Government License v3 "
+                "(https://www.nationalarchives.gov.uk/doc"
+                "/open-government-licence/version/3/)"
+            ),
             "mip": "ESMVal",
             "mip_era": "GCModelDev",
             "model_id": "UKESM1-0-LL",
             "model_type": "AGCM AER",
-            "sub_experiment_id": "none",
+            "sub_experiment_id": "uaz513",
             "variant_label": "r1i1p1f1",
         },
         "common": {

@@ -20,30 +20,29 @@ An overview of the workflow
   :Details:
      Runs once at the start of the workflow.
 
-``add_datasets``
+``copy_datasets``
   :Description:
-     Exports the sections listed in the ``app/add_datasets/rose-app.conf`` file
-     to namelist files in the cylc workflow, then copies these details to YAML
-     files in the cylc workflow ``share/etc`` directory.
+     Reads the namelist files in the top level of the cylc workflow,
+     then copies these details to YAML files
+     in the cylc workflow ``share/etc`` directory.
   :Runs on:
      Localhost
   :Executes:
-     The ``add_datasets_to_sahre.py`` script from the |Rose| app.
+     The ``add_datasets_to_share.py`` script from the |Rose| app.
   :Details:
      Runs once.
 
 ``configure_recipe``
   :Description:
-     Creates and modifies the |ESMValTool| user configuration file,
-     and writes it to the cylc workflow ``share/etc`` directory.
+     Creates and modifies the |ESMValTool| user and developer configuration files,
+     and writes them to the cylc workflow ``share/etc`` directory.
   :Runs on:
      Localhost
   :Executes:
      The ``configure_recipe.py`` script from the |Rose| app.
   :Details:
      Runs immediately after the successful completion of the ``install_env_file`` job.
-     Temporarily, the modified ESMValTool developer configuration file is copied from
-     the ``configure_recipe`` app to the ``share/etc`` directory in the installed workflow.
+     Temporarily, creates ESMValTool developer configuration file at ``share/etc`` directory in the installed workflow.
 
 ``configure_for``
   :Description:
@@ -51,12 +50,16 @@ An overview of the workflow
      into the Cylc workflow ``share/etc`` directory
      in the installed workflow and configures it
      to use standardised model data.
+     Also reads the required variables from the recipe
+     and writes these to a folder in the Cylc workflow ``share/etc`` directory
+     for use later in the workflow.
   :Runs on:
      Localhost
   :Executes:
      For the required recipe,
      executes the ``esmvaltool recipes get`` command
-     followed by the ``update_recipe_file.py`` script from the |Rose| app.
+     followed by the ``update_recipe_file.py`` and ``output_variables.py``
+     scripts from the |Rose| app.
   :Details:
      Runs once for each recipe,
      immediately after the successful completion
@@ -83,6 +86,8 @@ An overview of the workflow
      completion of the ``configure_for`` job.
      Generates |CDDS| request metadata for each model run (reference and evaluation):
      ``request_ref.json``, ``request_eval.json``.
+     Generates a list of variables to standardise for each model run
+     based on the lists of variables required for each recipe.
      Reads model-specific values from the workflow environment.
      Creates the required directory structure to support
      multiple |CDDS| standardisation workflows

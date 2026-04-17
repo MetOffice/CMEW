@@ -8,6 +8,8 @@ import configparser
 import os
 from pathlib import Path
 
+class DatasetError(Exception):
+    pass
 
 def create_request():
     """
@@ -40,21 +42,17 @@ def create_request():
     ref_model_id = os.environ["REF_MODEL_ID"]
     ref_suite_id = os.environ["REF_SUITE_ID"]
     ref_calendar = os.environ["REF_CALENDAR"]
+    ref_experiment_id = os.environ["REF_EXPERIMENT_ID"]
     ref_variant_label = os.environ["REF_VARIANT_LABEL"]
 
     # Evaluation run specification
     model_id = os.environ["MODEL_ID"]
     suite_id = os.environ["SUITE_ID"]
     calendar = os.environ["CALENDAR"]
+    experiment_id = os.environ["EXPERIMENT_ID"]
     variant_label = os.environ["VARIANT_LABEL"]
 
     dataset = os.environ["CYLC_TASK_PARAM_dataset"].strip()
-
-    ref_experiment_id = (
-        os.environ.get("REF_EXPERIMENT_ID", "amip").strip() or "amip"
-    )
-    experiment_id = os.environ.get("EXPERIMENT_ID", "amip").strip() or "amip"
-
     if dataset == ref_suite_id:
         chosen_model_id = ref_model_id
         chosen_suite_id = ref_suite_id
@@ -68,7 +66,7 @@ def create_request():
         chosen_variant_label = variant_label
         chosen_experiment_id = experiment_id
     else:
-        raise KeyError(
+        raise DatasetError(
             "CYLC_TASK_PARAM_dataset must match REF_SUITE_ID or SUITE_ID. "
             f"Got CYLC_TASK_PARAM_dataset='{dataset}', "
             f"REF_SUITE_ID='{ref_suite_id}', SUITE_ID='{suite_id}'."
@@ -76,6 +74,8 @@ def create_request():
 
     # Use suite_id for CDDS basename so workflow is named cdds_<suite_id>
     workflow_basename = chosen_suite_id
+
+    mip_table_dir = os.environ["MIP_TABLE_DIR"]
 
     request = configparser.ConfigParser()
 
@@ -90,16 +90,14 @@ def create_request():
         "mip_era": "GCModelDev",
         "model_id": chosen_model_id,
         "model_type": "AGCM AER",
-        "sub_experiment_id": "none",
         "variant_label": chosen_variant_label,
+        "sub_experiment_id": chosen_suite_id.replace("-", ""),
     }
 
     request["common"] = {
         "external_plugin": "",
         "external_plugin_location": "",
-        "mip_table_dir": os.path.expanduser(
-            "~cdds/etc/mip_tables/GCModelDev/0.0.25"
-        ),
+        "mip_table_dir": os.path.expanduser(mip_table_dir),
         "mode": "relaxed",
         "package": "round-1",
         "root_proc_dir": root_proc_dir,
