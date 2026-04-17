@@ -77,8 +77,7 @@ def create_request():
     # Use suite_id for CDDS basename so workflow is named cdds_<suite_id>
     workflow_basename = chosen_suite_id
 
-    # Avoid ConfigParser interpolation issues (e.g. '%' in URLs)
-    request = configparser.RawConfigParser()
+    request = configparser.ConfigParser()
 
     request["metadata"] = {
         "base_date": "1850-01-01T00:00:00",
