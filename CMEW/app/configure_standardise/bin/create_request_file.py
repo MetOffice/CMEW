@@ -2,34 +2,8 @@
 # (C) Crown Copyright 2024-2026, Met Office.
 # The LICENSE.md file contains full licensing details.
 """
-Generate CDDS request configuration for CMEW.
-
-Two-run only:
-
-Reference run (REF_*):
-  - REF_MODEL_ID
-  - REF_SUITE_ID
-  - REF_CALENDAR
-  - REF_VARIANT_LABEL
-
-Evaluation run (non-REF):
-  - MODEL_ID
-  - SUITE_ID
-  - CALENDAR
-  - VARIANT_LABEL
-
-Selection rule:
-- CYLC_TASK_PARAM_dataset must be set and must match either REF_SUITE_ID
-  or SUITE_ID.
-- If CYLC_TASK_PARAM_dataset == REF_SUITE_ID -> use REF_* metadata.
-- If CYLC_TASK_PARAM_dataset == SUITE_ID     -> use non-REF metadata.
-
-Naming requirement:
-- ALWAYS set workflow_basename = suite_id so CDDS paths are cdds_<suite_id>.
-
-Environment variables are accessed directly via os.environ[...].
+Generate CDDS request configuration file
 """
-
 import configparser
 import os
 from pathlib import Path
@@ -40,17 +14,9 @@ def create_request():
     Build a CDDS request configuration for the run identified by
     CYLC_TASK_PARAM_dataset.
 
-    The function expects a two-run CMEW configuration to be present in the
-    environment: one reference run (REF_*) and
-                 one evaluation run (MODEL_ID/SUITE_ID/...).
-
-    Behaviour:
-    - Reads all required metadata directly from environment variables.
-    - Selects the reference or evaluation metadata according to
-      CYLC_TASK_PARAM_dataset.
-    - Raises KeyError if a required environment variable is missing.
-    - Raises KeyError if CYLC_TASK_PARAM_dataset matches neither
-      REF_SUITE_ID nor SUITE_ID.
+    Choice of reference or evaluation is via CYLC_TASK_PARAM_dataset:
+    - If CYLC_TASK_PARAM_dataset == REF_SUITE_ID -> use REF_* variables.
+    - If CYLC_TASK_PARAM_dataset == SUITE_ID     -> use non-REF variables.
 
     Returns
     -------
@@ -70,18 +36,18 @@ def create_request():
     root_proc_dir = os.environ["ROOT_PROC_DIR"]
     root_data_dir = os.environ["ROOT_DATA_DIR"]
 
-    # Enforce two-run config exists (KeyError if missing)
+    # Reference run specification
     ref_model_id = os.environ["REF_MODEL_ID"]
     ref_suite_id = os.environ["REF_SUITE_ID"]
     ref_calendar = os.environ["REF_CALENDAR"]
     ref_variant_label = os.environ["REF_VARIANT_LABEL"]
 
+    # Evaluation run specification
     model_id = os.environ["MODEL_ID"]
     suite_id = os.environ["SUITE_ID"]
     calendar = os.environ["CALENDAR"]
     variant_label = os.environ["VARIANT_LABEL"]
 
-    # Must be set in two-run mode
     run_label = os.environ["CYLC_TASK_PARAM_dataset"].strip()
 
     ref_experiment_id = (
@@ -108,7 +74,7 @@ def create_request():
             f"REF_SUITE_ID='{ref_suite_id}', SUITE_ID='{suite_id}'."
         )
 
-    # Requirement: ALWAYS use suite_id for basename (so cdds_<suite_id>)
+    # Use suite_id for CDDS basename so workflow is named cdds_<suite_id>
     workflow_basename = chosen_suite_id
 
     # Avoid ConfigParser interpolation issues (e.g. '%' in URLs)
