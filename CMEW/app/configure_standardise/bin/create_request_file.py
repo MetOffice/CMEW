@@ -8,8 +8,10 @@ import configparser
 import os
 from pathlib import Path
 
+
 class DatasetError(Exception):
     pass
+
 
 def create_request():
     """
