@@ -9,7 +9,7 @@ def test_create_request(monkeypatch):
     # Two-run only: must set BOTH eval and ref environment variables
     # and must set CYLC_TASK_PARAM_dataset to select which request to generate.
 
-    # Shared / common env
+    # Shared / common environment
     monkeypatch.setenv("START_YEAR", "1993")
     monkeypatch.setenv("NUMBER_OF_YEARS", "1")
     monkeypatch.setenv("CALENDAR", "360_day")
@@ -18,7 +18,7 @@ def test_create_request(monkeypatch):
     monkeypatch.setenv("ROOT_DATA_DIR", "/path/to/data/dir/")
     monkeypatch.setenv("VARIABLES_PATH", "/path/to/variables.txt")
 
-    # Evaluation run env
+    # Evaluation run environment
     monkeypatch.setenv("CALENDAR", "360_day")
     monkeypatch.setenv("MODEL_ID", "UKESM1-0-LL")
     monkeypatch.setenv("SUITE_ID", "u-az513")
@@ -30,14 +30,14 @@ def test_create_request(monkeypatch):
     )
     monkeypatch.setenv("STREAM_ID", "apm")
 
-    # Reference run env
-    monkeypatch.setenv("REF_CALENDAR", "360_day")
-    monkeypatch.setenv("REF_MODEL_ID", "HadGEM3-GC31-LL")
-    monkeypatch.setenv("REF_SUITE_ID", "u-bv526")
-    monkeypatch.setenv("REF_EXPERIMENT_ID", "amip")
-    monkeypatch.setenv("REF_VARIANT_LABEL", "r5i1p1f3")
+    # Reference run environment
+    monkeypatch.setenv("REF_CALENDAR", "unused")
+    monkeypatch.setenv("REF_MODEL_ID", "unused")
+    monkeypatch.setenv("REF_SUITE_ID", "unused")
+    monkeypatch.setenv("REF_EXPERIMENT_ID", "unused")
+    monkeypatch.setenv("REF_VARIANT_LABEL", "unused")
 
-    # Select EVAL branch explicitly
+    # Select evaluation run
     monkeypatch.setenv("CYLC_TASK_PARAM_dataset", "u-az513")
 
     config = create_request()
