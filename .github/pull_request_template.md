@@ -60,6 +60,7 @@ Copyright and IPR:
 
 - [ ] This PR contains **only** the changes needed to meet **all** acceptance criteria.
 - [ ] The change in this PR follows the requirements in the [wiki: Developer Guide](https://github.com/MetOffice/CMEW/wiki/Developer-Guide) (including copyrights).
+- [ ] All developers of this PR have added their names to the Copyright and IPR  statements above.
 - [ ] The GitHub Actions workflow checks pass.
 - [ ] The tests run locally and pass (Note: the tests are not run by the GitHub Actions workflow, see [wiki: Run the tests locally](https://github.com/MetOffice/CMEW/wiki/Detailed-Working-Practices#run-the-tests-locally)).
 - Updating the Rose metadata (select one of the following):
