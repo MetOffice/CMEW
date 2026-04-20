@@ -25,9 +25,9 @@
             install_env_file => configure_recipe & copy_datasets
             copy_datasets => configure_for<recipe>
             configure_for<recipe> => configure_standardise<recipe,dataset>
-            => standardise_model_data<dataset> => restructure_dirs
-            configure_recipe & restructure_dirs
-            => run_recipe<recipe> & housekeeping
+                => standardise_model_data<dataset> => restructure_dirs
+            configure_recipe & restructure_dirs => run_recipe<recipe>
+            restructure_dirs => housekeeping
 
     {%- if TEST %}
             run_recipe<recipe> => compare<recipe>
