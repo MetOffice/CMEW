@@ -15,7 +15,7 @@ then delete this file from the branch BEFORE merging the PR.
 
 ================================================
 Change 1: AI assistance and attribution
- 
+
 Add a bullet point to the Modify the Code section:
 https://github.com/MetOffice/CMEW/wiki/Detailed-Working-Practices#modify-the-code
 
@@ -28,13 +28,13 @@ Every commit in which significant output from generative AI has been
 incorporated must attribute this contribution in the commit message.
 The second line of the commit should be blank, but the third line should be:
 ```
-Some of the content of this commit has been produced with the assistance of 
+Some of the content of this commit has been produced with the assistance of
 <Generative AI tool name>
 ```
 where <Generative AI tool name> should be replaced with the specific name
 of the tool such as Github Copilot Enterprise, Github Copilot Personal,
 ChatGPT GPT-4, etc.
-If you use a tool that is not already listed in 
+If you use a tool that is not already listed in
 https://github.com/MetOffice/CMEW#generative-ai-assistance
 then the PR that contains this commit should also update the `README.md` file
 to add that tool to the list.
@@ -64,7 +64,7 @@ Code contributions must not violate intellectual property rights. For example:
 
  3. Ensure that when using generative AI tools, appropriate guardrails are in
  place and contributions have correct attribution. For Met Office contributors,
- this includes adhering to the 
+ this includes adhering to the
  [Use of Generative AI policy]
  (https://metoffice.sharepoint.com/sites/ScienceInformationAssetsCommsSite/SitePages/Science-code-developer---GenAI-FAQs.aspx)
  Contributors from other institutions should check if their institution has similar policies, and follow the local policy.
