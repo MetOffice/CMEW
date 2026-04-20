@@ -133,23 +133,19 @@ def create_request():
 
 
 def write_request(request, target_path):
-    """
-    Write a CDDS request configuration to disk.
-
-    The parent directory of ``target_path`` is created if it does
-    not already exist.
+    """Write the request configuration to a file at ``target_path``.
 
     Parameters
     ----------
-    request : configparser.ConfigParser
-    The populated request configuration to write.
-    target_path : pathlib.Path
-    Destination file path for the generated request configuration.
-    """
+    request : configparser.ConfigParser()
+        The request configuration.
 
-    target_path.parent.mkdir(parents=True, exist_ok=True)
-    with open(target_path, mode="w", encoding="utf-8") as fh:
-        request.write(fh)
+    target_path: Path
+        The full path to the file
+        where the request configuration will be written.
+    """
+    with open(target_path, mode="w") as file_handle:
+        request.write(file_handle)
 
 
 def main():
