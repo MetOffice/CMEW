@@ -7,7 +7,7 @@ BASH_XTRACEFD=1
 set -xeu
 
 # If RAW_DATA_DIR is configured, copy extracted raw data only when the target
-# directory, ${RAW_DATA_DIR}/${dataset}, is empty. 
+# directory, ${RAW_DATA_DIR}/${dataset}, is empty.
 # If it is not empty, emit a log.err message and do not copy.
 dataset="${CYLC_TASK_PARAM_dataset}"
 if [[ -n "${RAW_DATA_DIR:-}" ]]; then
