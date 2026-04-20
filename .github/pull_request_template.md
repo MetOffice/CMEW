@@ -39,6 +39,11 @@ Closes #<issue_number>.
   - [ ] The API documentation related to the change has been updated appropriately.
   - [ ] The change in this PR does not affect the API documentation.
 
+Copyright and IPR:
+| I confirm that all code is my own and that my contributions are not subject to copyright or license restrictions. | **your name(s)** |
+| I confirm I have not knowingly violated intellectual property rights (IPR) and have taken [sensible measures to prevent doing so](https://metoffice.github.io/ancil-working-practices/working_practices/developer/licence-attribution.html#ai-assistance-and-attribution), including appropriate [attribution for usage of Generative AI](https://metoffice.github.io/ancil-working-practices/working_practices/developer/licence-attribution.html#ai-assistance-and-attribution). I confirm that this work is my own, and I understand that it is my responsibility to ensure I am not violating others’ IPR.  This includes taking reasonable steps to ensure that all tools used while creating this contribution did not infringe IPR. | **your name(s)** |
+
+
 ## PR creation checklist for the _reviewer_
 
 - [ ] The `<issue_number>` above :point_up: has been replaced with the issue number.
