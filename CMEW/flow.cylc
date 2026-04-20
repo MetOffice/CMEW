@@ -141,6 +141,7 @@
         [[[environment]]]
             ROSE_TASK_APP = standardise_model_data
             SITE = {{ SITE }}
+            RAW_DATA_DIR = {{ RAW_DATA_DIR }}
 
     [[restructure_dirs]]
         inherit = STANDARDISE
