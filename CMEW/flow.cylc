@@ -58,9 +58,8 @@
         [[[environment]]]
             CDDS_BIN_DIR = "~cdds/bin"
             CDDS_SOFTWARE_DIR = "~cdds/software"
-            RAW_DATA_DIR = {{ RAW_DATA_DIR }}
-            SAVE_RAW_DATA = {{ SAVE_RAW_DATA }}
-            USE_PREVIOUSLY_SAVED_RAW_DATA = {{ USE_PREVIOUSLY_SAVED_RAW_DATA }}
+            RAW_DATA_DIR = {{ RAW_DATA_DIR | default("") }}
+            RAW_DATA_DIR_FUNCTION = {{ RAW_DATA_DIR_FUNCTION }}
             # Workaround for bug in CDDS: ROOT_SOFTWARE_DIR: unbound variable.
             ROOT_SOFTWARE_DIR = ${CDDS_SOFTWARE_DIR}
             CDDS_VERSION = {{ CDDS_VERSION }}

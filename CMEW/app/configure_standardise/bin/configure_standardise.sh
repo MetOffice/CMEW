@@ -84,6 +84,12 @@ create_for_run() {
         echo "[INFO] Creating CDDS directory structure for ${RUN_LABEL} run"
         cmew-standardise-env create_cdds_directory_structure "${REQUEST_PATH}"
         cmew-standardise-env prepare_generate_variable_list "${REQUEST_PATH}"
+
+        # If using saved data, symlink it to the workflow
+        if [[ "${RAW_DATA_DIR_FUNCTION}" == "Use saved data" ]]; then
+            cmew-standardise-env cdds_arrange_input_data "${REQUEST_PATH}" "${RAW_DATA_DIR}"
+            set -x
+        fi
     )
 }
 
