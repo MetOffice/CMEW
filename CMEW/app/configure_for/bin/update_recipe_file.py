@@ -60,7 +60,7 @@ def add_extra_datasets(recipe, yaml_filepath):
     }
 
     # Some attributes are neither needed nor wanted by ESMValTool
-    unwanted_keys = ["calendar", "suite_id"]
+    unwanted_keys = ["calendar", "suite_id", "sub_experiment"]
 
     # Convert the variable names in the extra datasets
     for dataset, inner_dict in extra_datasets.items():

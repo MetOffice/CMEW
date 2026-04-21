@@ -128,12 +128,13 @@ def add_common_facets(dataset_dict, project):
 
     # Add the institute and other data only for CMEW standardised runs
     if dataset_dict["project"] == "ESMVal":
-        dataset_dict["activity"] = "ESMVal"
+        dataset_dict["activity"] = dataset_dict["suite_id"]
         dataset_dict["grid"] = "gn"
         dataset_dict["institute"] = os.environ["INSTITUTION_ID"]
         dataset_dict["sub_experiment"] = dataset_dict["suite_id"].replace(
             "-", ""
         )
+        dataset_dict["project"] = dataset_dict["suite_id"]
 
     return dataset_dict
 

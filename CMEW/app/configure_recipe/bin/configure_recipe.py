@@ -87,7 +87,41 @@ def create_developer_config(values):
         "custom": {
             "cmor_path": mip_table_dir,
         },
-        "ESMVal": {
+        "u-bv526": {
+            "cmor_strict": True,
+            "input_dir": {
+                "default": "/",
+                "BADC": (
+                    "{activity}/{institute}/{dataset}/{exp}/"
+                    "{ensemble}/{mip}/{short_name}/{grid}/{version}"
+                ),
+                "DKRZ": (
+                    "{activity}/{institute}/{dataset}/{exp}/"
+                    "{ensemble}/{mip}/{short_name}/{grid}/{version}"
+                ),
+                "ESGF": (
+                    "{project}/{activity}/{institute}/{dataset}/{exp}/"
+                    "{ensemble}/{mip}/{short_name}/{grid}/{version}"
+                ),
+                "ETHZ": (
+                    "{exp}/{mip}/{short_name}/{dataset}/" "{ensemble}/{grid}/"
+                ),
+                "SYNDA": (
+                    "{activity}/{institute}/{dataset}/{exp}/"
+                    "{ensemble}/{mip}/{short_name}/{grid}/{version}"
+                ),
+            },
+            "input_file": (
+                "{short_name}_{mip}_{dataset}_{exp}_{ensemble}_{grid}*.nc"
+            ),
+            "output_file": (
+                "{project}_{dataset}_{mip}_{exp}_{ensemble}_"
+                "{short_name}_{grid}"
+            ),
+            "cmor_type": "CMIP6",
+            "cmor_default_table_prefix": "GCModelDev_",
+        },
+        "u-cw673": {
             "cmor_strict": True,
             "input_dir": {
                 "default": "/",
@@ -194,9 +228,16 @@ def create_user_config(values=None):
     """
     values = values or {}
 
-    esmval = None
+    ubv526 = None
     if "CYLC_WORKFLOW_SHARE_DIR" in values:
-        esmval = os.path.join(
+        ubv526 = os.path.join(
+            values["CYLC_WORKFLOW_SHARE_DIR"],
+            "work",
+            "GCModelDev",
+        )
+    ucw673 = None
+    if "CYLC_WORKFLOW_SHARE_DIR" in values:
+        ucw673 = os.path.join(
             values["CYLC_WORKFLOW_SHARE_DIR"],
             "work",
             "GCModelDev",
@@ -230,7 +271,8 @@ def create_user_config(values=None):
             "OBS": values.get("DRS_OBS"),
             "obs4MIPs": values.get("DRS_OBS4MIPS"),
             "OBS6": values.get("DRS_OBS6"),
-            "ESMVal": "BADC",
+            "u-bv526": "BADC",
+            "u-cw673": "BADC",
         },
         "extra_facets_dir": [],
         "max_parallel_tasks": max_parallel_tasks,
@@ -247,7 +289,8 @@ def create_user_config(values=None):
             "obs4MIPs": values.get("ROOTPATH_OBS4MIPS"),
             "OBS6": values.get("ROOTPATH_OBS6"),
             "RAWOBS": values.get("ROOTPATH_RAWOBS"),
-            "ESMVal": esmval,
+            "u-bv526": ubv526,
+            "u-cw673": ucw673,
         },
     }
     return user_config_file_contents
