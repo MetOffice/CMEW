@@ -35,7 +35,7 @@ if [[ -n "${RAW_DATA_DIR:-}" ]]; then
     fi
 
     echo "[INFO] Copying ${dataset} raw data: ${src_dir}"
-    cp -a "${src_dir}" "${RAW_DATA_DIR_SUITE}/"
+    cp -a "${src_dir}"/* "${RAW_DATA_DIR_SUITE}/"
 
     echo "[INFO] Raw suite input directories copied to ${RAW_DATA_DIR_SUITE}"
 else
