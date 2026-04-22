@@ -61,7 +61,7 @@ def create_request():
         "atmos_timestep": "1200",
     }
     request["conversion"] = {
-        "mip_convert_plugin": "UKESM1",
+        "mip_convert_plugin": "HadGEM3",
         "skip_archive": "True",
         "cylc_args": "--no-detach -v",
     }

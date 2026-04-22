@@ -74,7 +74,7 @@ def test_create_request(monkeypatch):
             "atmos_timestep": "1200",
         },
         "conversion": {
-            "mip_convert_plugin": "UKESM1",
+            "mip_convert_plugin": "HadGEM3",
             "skip_archive": "True",
             "cylc_args": "--no-detach -v",
         },
