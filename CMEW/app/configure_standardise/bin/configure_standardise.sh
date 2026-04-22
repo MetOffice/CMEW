@@ -88,7 +88,6 @@ create_for_run() {
         # If using saved data, symlink it to the workflow
         if [[ "${RAW_DATA_DIR_FUNCTION}" == "Use saved data" ]]; then
             cmew-standardise-env cdds_arrange_input_data "${REQUEST_PATH}" "${RAW_DATA_DIR}"
-            set -x
         fi
     )
 }
