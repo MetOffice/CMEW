@@ -46,7 +46,6 @@ def test_create_request(monkeypatch):
             "mip_era": "GCModelDev",
             "model_id": "UKESM1-0-LL",
             "model_type": "AGCM AER",
-            "sub_experiment_id": "uaz513",
             "variant_label": "r1i1p1f1",
         },
         "common": {
@@ -75,7 +74,7 @@ def test_create_request(monkeypatch):
             "atmos_timestep": "1200",
         },
         "conversion": {
-            "mip_convert_plugin": "UKESM1",
+            "mip_convert_plugin": "HadGEM3",
             "skip_archive": "True",
             "cylc_args": "--no-detach -v",
         },

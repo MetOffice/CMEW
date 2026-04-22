@@ -34,7 +34,6 @@ def create_request():
         "mip_era": "GCModelDev",
         "model_id": os.environ["MODEL_ID"],
         "model_type": "AGCM AER",
-        "sub_experiment_id": os.environ["SUITE_ID"].replace("-", ""),
         "variant_label": os.environ["VARIANT_LABEL"],
     }
     request["common"] = {
@@ -62,7 +61,7 @@ def create_request():
         "atmos_timestep": "1200",
     }
     request["conversion"] = {
-        "mip_convert_plugin": "UKESM1",
+        "mip_convert_plugin": "HadGEM3",
         "skip_archive": "True",
         "cylc_args": "--no-detach -v",
     }

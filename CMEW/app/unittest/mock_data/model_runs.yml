@@ -9,7 +9,6 @@ u-bv526:
   model_id: HadGEM3-GC31-LL
   project: ESMVal
   start_year: 1993
-  sub_experiment: ubv526
   suite_id: u-bv526
   variant_label: r5i1p1f3
 u-cw673:
@@ -23,6 +22,5 @@ u-cw673:
   model_id: HadGEM3-GC5E-LL
   project: ESMVal
   start_year: 1993
-  sub_experiment: ucw673
   suite_id: u-cw673
   variant_label: r1i1p1f1
