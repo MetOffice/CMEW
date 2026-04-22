@@ -17,6 +17,11 @@ def create_request():
     configparser.ConfigParser()
         CDDS request configuration.
     """
+    if os.environ["RAW_DATA_DIR_FUNCTION"] == "Use saved data":
+        skip_extract = "True"
+    else:
+        skip_extract = "False"
+
     mip_table_dir = os.environ["MIP_TABLE_DIR"]
 
     end_year = int(os.environ["START_YEAR"]) + int(
@@ -65,6 +70,7 @@ def create_request():
         "mip_convert_plugin": "UKESM1",
         "skip_archive": "True",
         "cylc_args": "--no-detach -v",
+        "skip_extract": skip_extract,
     }
     return request
 
