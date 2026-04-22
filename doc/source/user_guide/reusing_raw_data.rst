@@ -1,18 +1,20 @@
 .. (C) Crown Copyright 2026, Met Office.
 .. The LICENSE.md file contains full licensing details.
 
-Reusing pre-extracted pp files from MASS
-========================================
+Reusing pre-extracted raw data files from MASS
+==============================================
 
 .. include:: ../common.txt
 
 It is possible to save non-standardised model output data (e.g. pp files) with |CMEW|,
 to avoid having to extract them from MASS again in future.
 
-This functionality is controlled by two variables in the `rose-suite.conf` file::
+This functionality is controlled by two variables in the `rose-suite.conf` file:
 
-    RAW_DATA_DIR_FUNCTION
-    RAW_DATA_DIR
+.. image:: images/raw_data_dir.png
+   :alt: An image of the Rose GUI showing the template variables
+         "RAW_DATA_DIR_FUNCTION" and "RAW_DATA_DIR"
+   :width: 600px
 
 To copy the data, the user must run |CMEW| specifying the location to which to save the files,
 e.g.::
@@ -28,13 +30,12 @@ and within these to their stream (e.g. "apm").
    |CMEW| will deliberately fail to copy the data.
 
 In future runs, to avoid extracting the same data,
-specify the same location when skipping the extract from MASS step,
-e.g.::
+specify the same location when skipping the extract from MASS step::
 
     RAW_DATA_DIR_FUNCTION="Use saved data"
     RAW_DATA_DIR="$SCRATCH/raw_data"
 
 .. note::
    If only some of the necessary raw data files have already been extracted,
-   for example one variable but not another, or only some of the time period,
+   for example data for one model run but not for another,
    then it is **not currently possible** to reuse raw data files with |CMEW|.

@@ -12,4 +12,4 @@ User Guide
    quick_start
    workflow
    Adding datasets <adding_datasets>
-   Reusing raw (pp) data  <reusing_raw_data>
+   Reusing raw data  <reusing_raw_data>
