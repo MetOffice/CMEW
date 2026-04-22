@@ -23,7 +23,7 @@ def test_create_request(monkeypatch):
         "~cdds/etc/mip_tables/GCModelDev/0.0.25",
     )
     monkeypatch.setenv("STREAM_ID", "apm")
-    monkeypatch.setenv("RAW_DATA_ALREADY_EXTRACTED", "True")
+    monkeypatch.setenv("RAW_DATA_DIR_FUNCTION", "Use saved data")
 
     config = create_request()
     actual = {
