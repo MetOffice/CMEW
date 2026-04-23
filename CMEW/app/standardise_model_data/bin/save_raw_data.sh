@@ -1,7 +1,7 @@
 #!/bin/bash
 # (C) Crown Copyright 2026, Met Office.
 # The LICENSE.md file contains full licensing details.
-# Copy extracted raw model run data
+# Copy extracted raw model run data.
 
 BASH_XTRACEFD=1
 set -xeu
