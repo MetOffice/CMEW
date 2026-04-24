@@ -1,0 +1,71 @@
+This file contains the changes that will be made to the CMEW project wiki
+https://github.com/MetOffice/CMEW/wiki
+as part of introducing guidance on generative AI:
+https://github.com/MetOffice/CMEW/issues/424
+
+The wiki changes are proposed in this file to facilitate review before making
+changes to the "live" wiki. And to maintain a record of all the changes made to
+introduce GenAI guidance.
+There isn't an easy way to propose wiki changes in a PR.
+
+This file should NOT be merged to main.
+Instead, once the PR is approved, apply these edits to the wiki at
+https://github.com/MetOffice/CMEW/wiki/Detailed-Working-Practices
+then delete this file from the branch BEFORE merging the PR.
+
+================================================
+Change 1: AI assistance and attribution
+
+Add a bullet point to the Modify the Code section:
+https://github.com/MetOffice/CMEW/wiki/Detailed-Working-Practices#modify-the-code
+
+New bullet will the second bullet, so immediately after "Make changes to
+address the issue".
+
+New text:
+---------------------------------------
+Every commit in which significant output from generative AI has been
+incorporated must attribute this contribution in the commit message.
+The second line of the commit should be blank, but the third line should be:
+```
+Some of the content of this commit has been produced with the assistance of
+<Generative AI tool name>
+```
+where <Generative AI tool name> should be replaced with the specific name
+of the tool such as Github Copilot Enterprise, Github Copilot Personal,
+ChatGPT GPT-4, etc.
+If you use a tool that is not already listed in
+https://github.com/MetOffice/CMEW#generative-ai-assistance
+then the PR that contains this commit should also update the `README.md` file
+to add that tool to the list.
+
+It is important that every developer follow this guidance, so that we can
+identify which parts of the code contain significant contributions from
+which generative AI tools, in order for the codebase to adhere to the
+Met Office generative AI policy.
+---------------------------------------
+
+
+=================================================
+Change 2: IPR and copyright
+
+Add a bullet point to the Coding Requirements section
+https://github.com/MetOffice/CMEW/wiki/Detailed-Working-Practices#coding-requirements
+New bullet will be the second bullet, so immediately after the point on
+copyright statements.
+
+New text:
+-----------------------------------------
+Code contributions must not violate intellectual property rights. For example:
+
+ 1. Check permissions before copying code from books, Stack Overflow (or similar sites), etc.
+
+ 2. Check licenses on source materials used, and follow any attribution requirements.
+
+ 3. Ensure that when using generative AI tools, appropriate guardrails are in
+ place and contributions have correct attribution. For Met Office contributors,
+ this includes adhering to the
+ [Use of Generative AI policy]
+ (https://metoffice.sharepoint.com/sites/ScienceInformationAssetsCommsSite/SitePages/Science-code-developer---GenAI-FAQs.aspx)
+ Contributors from other institutions should check if their institution has similar policies, and follow the local policy.
+-----------------------------------------
