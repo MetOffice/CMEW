@@ -39,14 +39,11 @@ def create_request():
 
     Returns
     -------
-    configparser.ConfigParser
-    A populated CDDS request configuration with sections:
-    metadata, common, data, misc, and conversion.
+    configparser.ConfigParser()
+        CDDS request configuration.
     """
-
     defaults = load_request_defaults()
 
-    mip_table_dir = os.environ["MIP_TABLE_DIR"]
     mip_table_dir = os.environ["MIP_TABLE_DIR"]
     end_year = int(os.environ["START_YEAR"]) + int(
         os.environ["NUMBER_OF_YEARS"]
@@ -87,7 +84,6 @@ def create_request():
         )
 
     request = configparser.ConfigParser()
-
     request["metadata"] = {
         **defaults["metadata"],
         "calendar": chosen_calendar,
@@ -97,7 +93,6 @@ def create_request():
         "sub_experiment_id": chosen_suite_id.replace("-", ""),
         "variant_label": chosen_variant_label,
     }
-
     request["common"] = {
         **defaults["common"],
         "mip_table_dir": os.path.expanduser(mip_table_dir),
@@ -105,7 +100,6 @@ def create_request():
         "root_data_dir": os.environ["ROOT_DATA_DIR"],
         "workflow_basename": chosen_suite_id,
     }
-
     request["data"] = {
         **defaults["data"],
         "end_date": f"{end_year}-01-01T00:00:00",
@@ -144,7 +138,6 @@ def main():
     variable. All other required inputs are read from the environment
     by ``create_request()``.
     """
-
     target_path = Path(os.environ["REQUEST_PATH"])
     request = create_request()
     write_request(request, target_path)
