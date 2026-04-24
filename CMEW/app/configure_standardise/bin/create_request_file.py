@@ -9,6 +9,21 @@ import os
 from pathlib import Path
 
 
+def load_request_defaults():
+    """
+    Load default values for request file.
+
+    Returns
+    -------
+    configparser.ConfigParser()
+        CDDS request configuration default settings.
+    """
+    cfg = configparser.ConfigParser()
+    cfg.read(os.environ.get("REQUEST_DEFAULTS_PATH"))
+
+    return cfg
+
+
 def create_request():
     """Retrieve CDDS request information from Rose suite configuration.
 
@@ -17,55 +32,40 @@ def create_request():
     configparser.ConfigParser()
         CDDS request configuration.
     """
-    mip_table_dir = os.environ["MIP_TABLE_DIR"]
+    defaults = load_request_defaults()
 
+    mip_table_dir = os.environ["MIP_TABLE_DIR"]
     end_year = int(os.environ["START_YEAR"]) + int(
         os.environ["NUMBER_OF_YEARS"]
     )
     request = configparser.ConfigParser()
     request["metadata"] = {
-        "base_date": "1850-01-01T00:00:00",
-        "branch_method": "no parent",
+        **defaults["metadata"],
         "calendar": os.environ["CALENDAR"],
         "experiment_id": os.environ["EXPERIMENT_ID"],
         "institution_id": os.environ["INSTITUTION_ID"],
-        "license": "GCModelDev model data is licensed under the Open Government License v3 (https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/)",  # noqa: E501
-        "mip": "ESMVal",
-        "mip_era": "GCModelDev",
         "model_id": os.environ["MODEL_ID"],
-        "model_type": "AGCM AER",
         "sub_experiment_id": os.environ["SUITE_ID"].replace("-", ""),
         "variant_label": os.environ["VARIANT_LABEL"],
     }
     request["common"] = {
-        "external_plugin": "",
-        "external_plugin_location": "",
+        **defaults["common"],
         "mip_table_dir": os.path.expanduser(mip_table_dir),
-        "mode": "relaxed",
-        "package": "round-1",
         "root_proc_dir": os.environ["ROOT_PROC_DIR"],
         "root_data_dir": os.environ["ROOT_DATA_DIR"],
         "workflow_basename": os.environ["SUITE_ID"],
     }
     request["data"] = {
+        **defaults["data"],
         "end_date": f"{end_year}-01-01T00:00:00",
-        "mass_data_class": "crum",
-        "model_workflow_branch": "trunk",
         "model_workflow_id": os.environ["SUITE_ID"],
-        "model_workflow_revision": "not used except with data request",
         "start_date": f"{os.environ['START_YEAR']}-01-01T00:00:00",
         # For now there is only one stream, for Amon and Emon mip.
         "streams": os.environ["STREAM_ID"],
         "variable_list_file": os.environ["VARIABLES_PATH"],
     }
-    request["misc"] = {
-        "atmos_timestep": "1200",
-    }
-    request["conversion"] = {
-        "mip_convert_plugin": "UKESM1",
-        "skip_archive": "True",
-        "cylc_args": "--no-detach -v",
-    }
+    request["misc"] = dict(defaults["misc"])
+    request["conversion"] = dict(defaults["conversion"])
     return request
 
 
