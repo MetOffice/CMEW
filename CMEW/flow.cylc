@@ -65,7 +65,7 @@
             ROOT_SOFTWARE_DIR = ${CDDS_SOFTWARE_DIR}
             CDDS_VERSION = {{ CDDS_VERSION }}
 
-    [[PER_DATASET]]
+    [[DATASET]]
         [[[environment]]]
             REQUEST_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request_${CYLC_TASK_PARAM_dataset}.cfg
             VARIABLES_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/variables_${CYLC_TASK_PARAM_dataset}.txt
@@ -128,7 +128,7 @@
             REF_LABEL_FOR_PLOTS = {{ REF_LABEL_FOR_PLOTS }}
 
     [[configure_standardise<recipe,dataset>]]
-        inherit = STANDARDISE, RECIPE, MODEL_RUNS, PER_DATASET
+        inherit = STANDARDISE, RECIPE, MODEL_RUNS, DATASET
         [[[environment]]]
             ROSE_TASK_APP = configure_standardise
             START_YEAR = {{ START_YEAR }}
@@ -137,7 +137,7 @@
             STREAM_ID = "apm"
 
     [[standardise_model_data<dataset>]]
-        inherit = STANDARDISE, PER_DATASET
+        inherit = STANDARDISE, DATASET
         [[[environment]]]
             ROSE_TASK_APP = standardise_model_data
             RAW_DATA_DIR = {{ RAW_DATA_DIR }}
