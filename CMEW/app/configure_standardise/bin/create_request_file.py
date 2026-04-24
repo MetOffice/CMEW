@@ -2,7 +2,7 @@
 # (C) Crown Copyright 2024-2026, Met Office.
 # The LICENSE.md file contains full licensing details.
 """
-Generate CDDS request configuration file
+Generate CDDS request configuration file.
 """
 import configparser
 import os
