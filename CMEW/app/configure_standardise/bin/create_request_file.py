@@ -13,6 +13,21 @@ class DatasetError(Exception):
     pass
 
 
+def load_request_defaults():
+    """
+    Load default values for request file.
+
+    Returns
+    -------
+    configparser.ConfigParser()
+        CDDS request configuration default settings.
+    """
+    cfg = configparser.ConfigParser()
+    cfg.read(os.environ.get("REQUEST_DEFAULTS_PATH"))
+
+    return cfg
+
+
 def create_request():
     """
     Build a CDDS request configuration for the run identified by
@@ -29,16 +44,13 @@ def create_request():
     metadata, common, data, misc, and conversion.
     """
 
-    # Required time window
-    start_year = int(os.environ["START_YEAR"])
-    number_of_years = int(os.environ["NUMBER_OF_YEARS"])
-    end_year = start_year + number_of_years
+    defaults = load_request_defaults()
 
-    # Required global metadata
-    institution_id = os.environ["INSTITUTION_ID"]
-    variables_path = os.environ["VARIABLES_PATH"]
-    root_proc_dir = os.environ["ROOT_PROC_DIR"]
-    root_data_dir = os.environ["ROOT_DATA_DIR"]
+    mip_table_dir = os.environ["MIP_TABLE_DIR"]
+    mip_table_dir = os.environ["MIP_TABLE_DIR"]
+    end_year = int(os.environ["START_YEAR"]) + int(
+        os.environ["NUMBER_OF_YEARS"]
+    )
 
     # Reference run specification
     ref_model_id = os.environ["REF_MODEL_ID"]
@@ -74,61 +86,37 @@ def create_request():
             f"REF_SUITE_ID='{ref_suite_id}', SUITE_ID='{suite_id}'."
         )
 
-    # Use suite_id for CDDS basename so workflow is named cdds_<suite_id>
-    workflow_basename = chosen_suite_id
-
-    mip_table_dir = os.environ["MIP_TABLE_DIR"]
-
     request = configparser.ConfigParser()
 
     request["metadata"] = {
-        "base_date": "1850-01-01T00:00:00",
-        "branch_method": "no parent",
+        **defaults["metadata"],
         "calendar": chosen_calendar,
         "experiment_id": chosen_experiment_id,
-        "institution_id": institution_id,
-        "license": "GCModelDev model data is licensed under the Open Government License v3 (https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/)",  # noqa: E501
-        "mip": "ESMVal",
-        "mip_era": "GCModelDev",
+        "institution_id": os.environ["INSTITUTION_ID"],
         "model_id": chosen_model_id,
-        "model_type": "AGCM AER",
-        "variant_label": chosen_variant_label,
         "sub_experiment_id": chosen_suite_id.replace("-", ""),
+        "variant_label": chosen_variant_label,
     }
 
     request["common"] = {
-        "external_plugin": "",
-        "external_plugin_location": "",
+        **defaults["common"],
         "mip_table_dir": os.path.expanduser(mip_table_dir),
-        "mode": "relaxed",
-        "package": "round-1",
-        "root_proc_dir": root_proc_dir,
-        "root_data_dir": root_data_dir,
-        "workflow_basename": workflow_basename,
+        "root_proc_dir": os.environ["ROOT_PROC_DIR"],
+        "root_data_dir": os.environ["ROOT_DATA_DIR"],
+        "workflow_basename": chosen_suite_id,
     }
 
     request["data"] = {
+        **defaults["data"],
         "end_date": f"{end_year}-01-01T00:00:00",
-        "mass_data_class": "crum",
-        "model_workflow_branch": "trunk",
         "model_workflow_id": chosen_suite_id,
-        "model_workflow_revision": "not used except with data request",
-        "start_date": f"{start_year}-01-01T00:00:00",
+        "start_date": f"{os.environ['START_YEAR']}-01-01T00:00:00",
         # For now there is only one stream, for Amon and Emon mip.
         "streams": os.environ["STREAM_ID"],
-        "variable_list_file": variables_path,
+        "variable_list_file": os.environ["VARIABLES_PATH"],
     }
-
-    request["misc"] = {
-        "atmos_timestep": "1200",
-    }
-
-    request["conversion"] = {
-        "mip_convert_plugin": "UKESM1",
-        "skip_archive": "True",
-        "cylc_args": "--no-detach -v",
-    }
-
+    request["misc"] = dict(defaults["misc"])
+    request["conversion"] = dict(defaults["conversion"])
     return request
 
 
