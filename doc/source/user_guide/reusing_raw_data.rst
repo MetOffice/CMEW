@@ -13,13 +13,13 @@ This functionality is controlled by two variables in the `rose-suite.conf` file:
 
 .. image:: images/raw_data_dir.png
    :alt: An image of the Rose GUI showing the template variables
-         "RAW_DATA_DIR_FUNCTION" and "RAW_DATA_DIR"
+         "RAW_DATA_DIR_MODE" and "RAW_DATA_DIR"
    :width: 600px
 
 To copy the data, the user must run |CMEW| specifying the location to which to save the files,
 e.g.::
 
-    RAW_DATA_DIR_FUNCTION="Save new data"
+    RAW_DATA_DIR_MODE="Save new data"
     RAW_DATA_DIR="$SCRATCH/raw_data"
 
 The raw data files will be stored in subdirectories named by suite ID.
@@ -31,7 +31,7 @@ The raw data files will be stored in subdirectories named by suite ID.
 In future runs, to avoid extracting the same data,
 specify the same location when skipping the extract from MASS step::
 
-    RAW_DATA_DIR_FUNCTION="Use saved data"
+    RAW_DATA_DIR_MODE="Use saved data"
     RAW_DATA_DIR="$SCRATCH/raw_data"
 
 .. note::

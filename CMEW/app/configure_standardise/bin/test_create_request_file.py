@@ -28,7 +28,7 @@ def test_create_request(monkeypatch):
     mip_table_dir = "~cdds/etc/mip_tables/GCModelDev/0.0.25"
     stream_id = "apm"
 
-    monkeypatch.setenv("RAW_DATA_DIR_FUNCTION", "Use saved data")
+    monkeypatch.setenv("RAW_DATA_DIR_MODE", "use_saved")
     monkeypatch.setenv("REQUEST_DEFAULTS_PATH", str(request_defaults_path))
     monkeypatch.setenv("START_YEAR", str(start_year))
     monkeypatch.setenv("NUMBER_OF_YEARS", str(number_of_years))
