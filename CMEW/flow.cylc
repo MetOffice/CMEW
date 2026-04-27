@@ -4,17 +4,15 @@
 # flow.cylc
 {{ assert(SITE != "", "SITE must be set to something other than an empty string") }}
 {{ assert(ESMVALTOOL_MODULE_NAME != "", "ESMVALTOOL_MODULE_NAME must be set to something other than an empty string") }}
+
 {% from "scrape_ini" import list_datasets %}
 {% set datasets = list_datasets("rose-suite.conf") %}
-
-{{ assert(REF_SUITE_ID != "", "REF_SUITE_ID must be set") }}
-{{ assert(SUITE_ID != "", "SUITE_ID must be set") }}
 
 [scheduler]
     UTC mode = True
 
 [task parameters]
-    dataset = {% for ds in datasets %}{{ ds }}{% if not loop.last %}, {% endif %}{% endfor %}
+    dataset = {{ datasets }}
     recipe = radiation_budget
 
 [scheduling]

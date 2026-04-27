@@ -32,6 +32,6 @@ def path_to_mock_rose_suite():
 
 
 def test_list_datasets(path_to_mock_rose_suite):
-    expected = ["u-cw673", "u-bv526"]
+    expected = "u-cw673, u-bv526"
     actual = scrape_ini.list_datasets(path_to_mock_rose_suite)
     assert actual == expected

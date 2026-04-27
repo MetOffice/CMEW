@@ -32,4 +32,5 @@ def list_datasets(fp):
                     # Break the inner loop
                     break
 
-    return datasets
+    datasets_string = ", ".join(dataset for dataset in datasets)
+    return datasets_string
