@@ -7,6 +7,22 @@ Scrape model_run suite_ids from an ini-style file.
 
 
 def list_datasets(fp):
+    """
+    Obtain a string listing the suite_ids from an ini-style file.
+
+    Uses hardcoded values "namelist:model_runs" to identify a section
+    and then adds the next "suite_id" to the string.
+
+    Parameters
+    ----------
+    fp: str
+        The file path to the ini-style file.
+
+    Returns
+    -------
+    str
+        The list of suite_ids, in a comma separated string.
+    """
     # Read the file
     with open(fp, "r") as f:
         content = f.readlines()
