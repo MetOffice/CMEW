@@ -26,7 +26,7 @@ spec.loader.exec_module(scrape_ini)
 @pytest.fixture
 def path_to_mock_rose_suite():
     path = (
-        Path(__file__).parent.parent / "mock_data" / "mock_rose_suite_conf.ini"
+        Path(__file__).parent.parent / "mock_data" / "rose_suite_conf.ini"
     )
     return str(path)
 
