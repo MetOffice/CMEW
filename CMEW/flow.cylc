@@ -71,7 +71,6 @@
             REQUEST_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request_${CYLC_TASK_PARAM_dataset}.cfg
             VARIABLES_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/variables_${CYLC_TASK_PARAM_dataset}.txt
 
-    # Multi-run metadata family: reference and evaluation runs
     [[MODEL_RUNS]]
         [[[environment]]]
             # Directory containing dataset lists as YAML files
