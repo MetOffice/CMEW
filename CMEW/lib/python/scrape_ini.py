@@ -10,7 +10,7 @@ def list_datasets(fp):
     """
     Obtain a string listing the suite_ids from an ini-style file.
 
-    Uses hardcoded values "namelist:model_runs" to identify a section
+    Uses hardcoded value "[namelist:model_runs" to identify a section
     and then adds the next "suite_id" to the string.
 
     Parameters
