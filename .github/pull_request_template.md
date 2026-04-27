@@ -40,8 +40,10 @@ Closes #<issue_number>.
   - [ ] The change in this PR does not affect the API documentation.
 
 Copyright and IPR:
-| I confirm that all code is my own and that my contributions are not subject to copyright or license restrictions. | **your name(s)** |
-| I confirm I have not knowingly violated intellectual property rights (IPR) and have taken [sensible measures to prevent doing so](https://github.com/MetOffice/CMEW/wiki/Detailed-Working-Practices#coding-requirements), including appropriate [attribution for usage of Generative AI](https://github.com/MetOffice/CMEW/wiki/Detailed-Working-Practices#modify-the-code). I confirm that this work is my own, and I understand that it is my responsibility to ensure I am not violating others’ IPR.  This includes taking reasonable steps to ensure that all tools used while creating this contribution did not infringe IPR. | **your name(s)** |
+| | GitHub handles |
+|---|---|
+| I confirm that all code is my own and that my contributions are not subject to copyright or license restrictions. | **GitHub handle(s) of all developers of this PR** |
+| I confirm I have not knowingly violated intellectual property rights (IPR) and have taken [sensible measures to prevent doing so](https://github.com/MetOffice/CMEW/wiki/Detailed-Working-Practices#coding-requirements), including appropriate [attribution for usage of Generative AI](https://github.com/MetOffice/CMEW/wiki/Detailed-Working-Practices#modify-the-code). I confirm that this work is my own, and I understand that it is my responsibility to ensure I am not violating others’ IPR.  This includes taking reasonable steps to ensure that all tools used while creating this contribution did not infringe IPR. | **GitHub handle(s) of all developers of this PR** |
 
 
 ## PR creation checklist for the _reviewer_
