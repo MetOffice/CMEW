@@ -72,7 +72,7 @@
         [[[environment]]]
             REQUEST_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request_${CYLC_TASK_PARAM_dataset}.cfg
             VARIABLES_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/variables_${CYLC_TASK_PARAM_dataset}.txt
-            RAW_DATA_DIR_SUITE = {{ (RAW_DATA_DIR | default("")) }}"/$CYLC_TASK_PARAM_dataset"
+            RAW_DATA_DIR_SUITE = {{ RAW_DATA_DIR | default("") }}"/$CYLC_TASK_PARAM_dataset"
 
     # Multi-run metadata family: reference and evaluation runs
     [[MODEL_RUNS]]
