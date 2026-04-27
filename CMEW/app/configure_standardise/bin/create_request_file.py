@@ -90,7 +90,6 @@ def create_request():
         "experiment_id": chosen_experiment_id,
         "institution_id": os.environ["INSTITUTION_ID"],
         "model_id": chosen_model_id,
-        "sub_experiment_id": chosen_suite_id.replace("-", ""),
         "variant_label": chosen_variant_label,
     }
     request["common"] = {
