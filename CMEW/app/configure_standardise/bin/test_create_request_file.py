@@ -8,6 +8,9 @@ from create_request_file import create_request, load_request_defaults
 
 
 def test_create_request(monkeypatch):
+    # Two runs only: must set BOTH eval and ref environment variables
+    # and set CYLC_TASK_PARAM_dataset to select which request to generate.
+
     request_defaults_path = (
         Path(__file__).parent.parent / "etc" / "request_defaults.cfg"
     )
@@ -39,6 +42,16 @@ def test_create_request(monkeypatch):
     monkeypatch.setenv("VARIANT_LABEL", variant_label)
     monkeypatch.setenv("MIP_TABLE_DIR", mip_table_dir)
     monkeypatch.setenv("STREAM_ID", stream_id)
+
+    # Reference run environment (values not used in this test)
+    monkeypatch.setenv("REF_CALENDAR", "unused")
+    monkeypatch.setenv("REF_MODEL_ID", "unused")
+    monkeypatch.setenv("REF_SUITE_ID", "unused")
+    monkeypatch.setenv("REF_EXPERIMENT_ID", "unused")
+    monkeypatch.setenv("REF_VARIANT_LABEL", "unused")
+
+    # Select evaluation run
+    monkeypatch.setenv("CYLC_TASK_PARAM_dataset", "u-az513")
 
     config = create_request()
     actual = {
