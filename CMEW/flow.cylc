@@ -16,7 +16,6 @@
 [task parameters]
     dataset = {% for ds in datasets %}{{ ds }}{% if not loop.last %}, {% endif %}{% endfor %}
     recipe = radiation_budget
-    dataset = {{ [REF_SUITE_ID, SUITE_ID] | join(", ") }}
 
 [scheduling]
     [[graph]]
