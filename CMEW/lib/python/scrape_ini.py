@@ -21,9 +21,9 @@ def list_datasets(fp):
         if line.startswith("[namelist:model_runs"):
 
             # Look for next line starting "suite_id"
-            for next_line in content[content.index(line) + 1 :]:
+            for next_line in content[content.index(line) + 1:]:
                 if next_line.strip().startswith("suite_id"):
-                    # Split the line on = and take the second part without quotes
+                    # Split the line and take the second part without quotes
                     dataset = next_line.split("=")[1].strip().replace('"', "")
 
                     # Add to list
