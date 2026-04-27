@@ -32,8 +32,7 @@ Some of the content of this commit has been produced with the assistance of
 <Generative AI tool name>
 ```
 where <Generative AI tool name> should be replaced with the specific name
-of the tool such as Github Copilot Enterprise, Github Copilot Personal,
-ChatGPT GPT-4, etc.
+of the tool.
 If you use a tool that is not already listed in
 https://github.com/MetOffice/CMEW#generative-ai-assistance
 then the PR that contains this commit should also update the `README.md` file
