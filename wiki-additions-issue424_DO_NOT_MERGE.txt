@@ -41,7 +41,9 @@ to add that tool to the list.
 It is important that every developer follow this guidance, so that we can
 identify which parts of the code contain significant contributions from
 which generative AI tools, in order for the codebase to adhere to the
-Met Office generative AI policy.
+Met Office
+[Use of Generative AI policy]
+(https://metoffice.sharepoint.com/sites/ScienceInformationAssetsCommsSite/SitePages/Science-code-developer---GenAI-FAQs.aspx).
 ---------------------------------------
 
 
