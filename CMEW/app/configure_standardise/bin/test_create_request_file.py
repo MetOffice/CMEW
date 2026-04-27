@@ -14,7 +14,10 @@ from create_request_file import create_request, load_request_defaults
 
 
 def test_create_request(monkeypatch):
-    monkeypatch.setenv("DATASETS_LIST_DIR", str(Path(__file__).parent.parent.parent / "unittest" / "mock_data" ))
+    monkeypatch.setenv(
+        "DATASETS_LIST_DIR",
+        str(Path(__file__).parent.parent.parent / "unittest" / "mock_data"),
+    )
 
     request_defaults_path = (
         Path(__file__).parent.parent / "etc" / "request_defaults.cfg"
