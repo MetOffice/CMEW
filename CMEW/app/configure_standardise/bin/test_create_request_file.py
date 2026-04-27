@@ -69,7 +69,6 @@ def test_create_request(monkeypatch):
         "experiment_id": experiment_id,
         "institution_id": institution_id,
         "model_id": model_id,
-        "sub_experiment_id": suite_id.replace("-", ""),
         "variant_label": variant_label,
     }
     expected["common"] = {
