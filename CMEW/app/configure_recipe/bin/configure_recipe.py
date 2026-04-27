@@ -4,30 +4,26 @@
 """
 Generate the required user configuration file for ESMValTool.
 """
-import os
 
+import os
 import yaml
 
 
 def main():
     """
-    Write the required user configuration file for ESMValTool.
-
-    The user configuration file is written to the path defined by
-    the environment variable ``USER_CONFIG_PATH``.
+    Write the required user and developer configuration files for
+    ESMValTool.
     """
-    # Retrieve the values defined in the environment for the
-    # 'configure_recipe' task.
     values = retrieve_values_from_task_env()
+    developer_config_path = values["DEV_CONFIG_PATH"]
+    developer_config_contents = create_developer_config(values)
+    ensure_parent_dir(developer_config_path)
+    write_yaml(developer_config_path, developer_config_contents)
 
-    # Create the contents for the user configuration file using these
-    # values.
-    user_config_file_contents = create_user_config_file(values)
-
-    # Write the updated configuration values to the file defined by
-    # 'USER_CONFIG_PATH'.
     user_config_path = values["USER_CONFIG_PATH"]
-    write_yaml(user_config_path, user_config_file_contents)
+    user_config_contents = create_user_config(values)
+    ensure_parent_dir(user_config_path)
+    write_yaml(user_config_path, user_config_contents)
 
 
 def retrieve_values_from_task_env():
@@ -43,6 +39,7 @@ def retrieve_values_from_task_env():
     """
     values_from_task_env = {
         "CYLC_WORKFLOW_SHARE_DIR": os.environ["CYLC_WORKFLOW_SHARE_DIR"],
+        "DEV_CONFIG_PATH": os.environ["DEV_CONFIG_PATH"],
         "DRS_ANA4MIPS": os.environ["DRS_ANA4MIPS"],
         "DRS_CMIP3": os.environ["DRS_CMIP3"],
         "DRS_CMIP5": os.environ["DRS_CMIP5"],
@@ -53,6 +50,7 @@ def retrieve_values_from_task_env():
         "DRS_OBS4MIPS": os.environ["DRS_OBS4MIPS"],
         "DRS_OBS6": os.environ["DRS_OBS6"],
         "MAX_PARALLEL_TASKS": os.environ["MAX_PARALLEL_TASKS"],
+        "MIP_TABLE_DIR": os.environ["MIP_TABLE_DIR"],
         "OUTPUT_DIR": os.environ["OUTPUT_DIR"],
         "ROOTPATH_ANA4MIPS": os.environ["ROOTPATH_ANA4MIPS"],
         "ROOTPATH_CMIP3": os.environ["ROOTPATH_CMIP3"],
@@ -69,37 +67,140 @@ def retrieve_values_from_task_env():
     return values_from_task_env
 
 
-def create_user_config_file(values=None):
+def create_developer_config(values):
+    """
+    Return the contents of the developer configuration file.
+
+    Parameters
+    ----------
+    values : dict
+        Configuration values.
+
+    Returns
+    -------
+    dict
+        Developer configuration content.
+    """
+    mip_table_dir = values["MIP_TABLE_DIR"]
+
+    developer_config_file_contents = {
+        "custom": {
+            "cmor_path": mip_table_dir,
+        },
+        "ESMVal": {
+            "cmor_strict": True,
+            "input_dir": {
+                "default": "/",
+                "BADC": (
+                    "{activity}/{institute}/{dataset}/{exp}/"
+                    "{ensemble}/{mip}/{short_name}/{grid}/{version}"
+                ),
+                "DKRZ": (
+                    "{activity}/{institute}/{dataset}/{exp}/"
+                    "{ensemble}/{mip}/{short_name}/{grid}/{version}"
+                ),
+                "ESGF": (
+                    "{project}/{activity}/{institute}/{dataset}/{exp}/"
+                    "{ensemble}/{mip}/{short_name}/{grid}/{version}"
+                ),
+                "ETHZ": (
+                    "{exp}/{mip}/{short_name}/{dataset}/" "{ensemble}/{grid}/"
+                ),
+                "SYNDA": (
+                    "{activity}/{institute}/{dataset}/{exp}/"
+                    "{ensemble}/{mip}/{short_name}/{grid}/{version}"
+                ),
+            },
+            "input_file": (
+                "{short_name}_{mip}_{dataset}_{exp}_{ensemble}_{grid}*.nc"
+            ),
+            "output_file": (
+                "{project}_{dataset}_{mip}_{exp}_{ensemble}_"
+                "{short_name}_{grid}"
+            ),
+            "cmor_type": "CMIP6",
+            "cmor_default_table_prefix": "GCModelDev_",
+        },
+        "CMIP6": {
+            "cmor_strict": True,
+            "input_dir": {
+                "default": "/",
+                "BADC": (
+                    "{activity}/{institute}/{dataset}/{exp}/"
+                    "{ensemble}/{mip}/{short_name}/{grid}/{version}"
+                ),
+                "DKRZ": (
+                    "{activity}/{institute}/{dataset}/{exp}/"
+                    "{ensemble}/{mip}/{short_name}/{grid}/{version}"
+                ),
+                "ESGF": (
+                    "{project}/{activity}/{institute}/{dataset}/{exp}/"
+                    "{ensemble}/{mip}/{short_name}/{grid}/{version}"
+                ),
+                "ETHZ": (
+                    "{exp}/{mip}/{short_name}/{dataset}/" "{ensemble}/{grid}/"
+                ),
+                "SYNDA": (
+                    "{activity}/{institute}/{dataset}/{exp}/"
+                    "{ensemble}/{mip}/{short_name}/{grid}/{version}"
+                ),
+            },
+            "input_file": (
+                "{short_name}_{mip}_{dataset}_{exp}_{ensemble}_{grid}*.nc"
+            ),
+            "output_file": (
+                "{project}_{dataset}_{mip}_{exp}_{ensemble}_"
+                "{short_name}_{grid}"
+            ),
+            "cmor_type": "CMIP6",
+        },
+        "obs4MIPs": {
+            "cmor_strict": False,
+            "input_dir": {
+                "default": "Tier{tier}/{dataset}",
+                "ESGF": "{project}/{dataset}/{version}",
+                "RCAST": "/",
+                "IPSL": (
+                    "{realm}/{short_name}/{freq}/{grid}/"
+                    "{institute}/{dataset}/{latest_version}"
+                ),
+            },
+            "input_file": {
+                "default": "{short_name}_*.nc",
+                "ESGF": "{short_name}_*.nc",
+            },
+            "output_file": "{project}_{dataset}_{short_name}",
+            "cmor_type": "CMIP6",
+            "cmor_path": "obs4mips",
+            "cmor_default_table_prefix": "obs4MIPs_",
+        },
+    }
+    return developer_config_file_contents
+
+
+def create_user_config(values=None):
     """
     Return the contents of the user configuration file.
 
     Parameters
     ----------
-    values : dictionary
+    values : dict, optional
         The values to use for the user configuration file.
 
     Returns
     -------
-    : dictionary
+    dict
         The contents of the user configuration file.
     """
-    if values is None:
-        values = {}
+    values = values or {}
 
+    esmval = None
     if "CYLC_WORKFLOW_SHARE_DIR" in values:
-        config_developer_file = os.path.join(
-            values["CYLC_WORKFLOW_SHARE_DIR"],
-            "etc",
-            "config-developer.yml",
-        )
         esmval = os.path.join(
             values["CYLC_WORKFLOW_SHARE_DIR"],
             "work",
             "GCModelDev",
         )
-    else:
-        config_developer_file = None
-        esmval = None
 
     if "MAX_PARALLEL_TASKS" in values:
         max_parallel_tasks = int(values["MAX_PARALLEL_TASKS"])
@@ -114,57 +215,71 @@ def create_user_config_file(values=None):
     # default configuration file provided by ESMValTool v2.6.0.
     # 'auxiliary_data_dir' is used by some recipes to look for
     # additional datasets, so may need to be configured in the future.
+
     user_config_file_contents = {
         "auxiliary_data_dir": "",
-        "config_developer_file": config_developer_file,
+        "config_developer_file": values.get("DEV_CONFIG_PATH"),
         "download_dir": "",
         "drs": {
-            "ana4mips": values.get("DRS_ANA4MIPS", None),
-            "CMIP3": values.get("DRS_CMIP3", None),
-            "CMIP5": values.get("DRS_CMIP5", None),
-            "CMIP6": values.get("DRS_CMIP6", None),
-            "CORDEX": values.get("DRS_CORDEX", None),
-            "native6": values.get("DRS_NATIVE6", None),
-            "OBS": values.get("DRS_OBS", None),
-            "obs4MIPs": values.get("DRS_OBS4MIPS", None),
-            "OBS6": values.get("DRS_OBS6", None),
+            "ana4mips": values.get("DRS_ANA4MIPS"),
+            "CMIP3": values.get("DRS_CMIP3"),
+            "CMIP5": values.get("DRS_CMIP5"),
+            "CMIP6": values.get("DRS_CMIP6"),
+            "CORDEX": values.get("DRS_CORDEX"),
+            "native6": values.get("DRS_NATIVE6"),
+            "OBS": values.get("DRS_OBS"),
+            "obs4MIPs": values.get("DRS_OBS4MIPS"),
+            "OBS6": values.get("DRS_OBS6"),
             "ESMVal": "BADC",
         },
         "extra_facets_dir": [],
         "max_parallel_tasks": max_parallel_tasks,
-        "output_dir": values.get("OUTPUT_DIR", None),
+        "output_dir": values.get("OUTPUT_DIR"),
         "remove_preproc_dir": False,
         "rootpath": {
-            "ana4mips": values.get("ROOTPATH_ANA4MIPS", None),
-            "CMIP3": values.get("ROOTPATH_CMIP3", None),
-            "CMIP5": values.get("ROOTPATH_CMIP5", None),
-            "CMIP6": values.get("ROOTPATH_CMIP6", None),
-            "CORDEX": values.get("ROOTPATH_CORDEX", None),
-            "native6": values.get("ROOTPATH_NATIVE6", None),
-            "OBS": values.get("ROOTPATH_OBS", None),
-            "obs4MIPs": values.get("ROOTPATH_OBS4MIPS", None),
-            "OBS6": values.get("ROOTPATH_OBS6", None),
-            "RAWOBS": values.get("ROOTPATH_RAWOBS", None),
+            "ana4mips": values.get("ROOTPATH_ANA4MIPS"),
+            "CMIP3": values.get("ROOTPATH_CMIP3"),
+            "CMIP5": values.get("ROOTPATH_CMIP5"),
+            "CMIP6": values.get("ROOTPATH_CMIP6"),
+            "CORDEX": values.get("ROOTPATH_CORDEX"),
+            "native6": values.get("ROOTPATH_NATIVE6"),
+            "OBS": values.get("ROOTPATH_OBS"),
+            "obs4MIPs": values.get("ROOTPATH_OBS4MIPS"),
+            "OBS6": values.get("ROOTPATH_OBS6"),
+            "RAWOBS": values.get("ROOTPATH_RAWOBS"),
             "ESMVal": esmval,
         },
     }
     return user_config_file_contents
 
 
+def ensure_parent_dir(file_path):
+    """
+    Create the parent directory for ``file_path`` if needed.
+    """
+    parent_dir = os.path.dirname(file_path)
+    if parent_dir:
+        os.makedirs(parent_dir, exist_ok=True)
+
+
 def write_yaml(file_path, contents):
     """
-    Write the contents specified by ``contents`` to the YAML
-    file specified by ``file_path``.
+    Write ``contents`` to the YAML file at ``file_path``.
 
     Parameters
     ----------
-    file_path : string
-        The full path to the YAML file to write the contents to.
-    contents : dictionary
-        The contents to write to the YAML file.
+    file_path : str
+        The full path to the YAML file.
+    contents : dict
+        The contents to write.
     """
-    with open(file_path, "w") as file_handle:
-        yaml.dump(contents, file_handle, default_flow_style=False)
+    with open(file_path, "w", encoding="utf-8") as file_handle:
+        yaml.safe_dump(
+            contents,
+            file_handle,
+            default_flow_style=False,
+            sort_keys=False,
+        )
 
 
 if __name__ == "__main__":
