@@ -22,8 +22,7 @@ e.g.::
     RAW_DATA_DIR_FUNCTION="Save new data"
     RAW_DATA_DIR="$SCRATCH/raw_data"
 
-The raw data files will be stored in subdirectories according to their suite ID,
-and within these to their stream (e.g. "apm").
+The raw data files will be stored in subdirectories named by suite ID.
 
 .. warning::
    If the suite ID's subdirectory in the specified parent directory is not empty,
