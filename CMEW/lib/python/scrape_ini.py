@@ -31,13 +31,13 @@ def list_datasets(fp):
     datasets = []
 
     # Iterate over the lines
-    for line in content:
+    for index, line in enumerate(content):
 
         # Look for relevant sections
         if line.startswith("[namelist:model_runs"):
 
             # Look for next line starting "suite_id"
-            next_index = content.index(line) + 1
+            next_index = index + 1
             for next_line in content[next_index:]:
                 if next_line.strip().startswith("suite_id"):
                     # Split the line and take the second part without quotes
