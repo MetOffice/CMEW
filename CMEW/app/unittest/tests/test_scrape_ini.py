@@ -25,11 +25,11 @@ spec.loader.exec_module(scrape_ini)
 
 @pytest.fixture
 def path_to_mock_rose_suite():
-    path = Path(__file__).parent.parent / "mock_data" / "rose_suite_conf.ini"
+    path = Path(__file__).parent.parent / "mock_data" / "config.ini"
     return str(path)
 
 
 def test_list_datasets(path_to_mock_rose_suite):
-    expected = "u-cw673, u-bv526, u-ab123, u-yx890"
+    expected = "line_18, line_25, line_30, line_34"
     actual = scrape_ini.list_datasets(path_to_mock_rose_suite)
     assert actual == expected
