@@ -34,7 +34,8 @@ def extract_suite_ids(content):
     Lists the suite IDs of model runs from the content of an ini-style file.
 
     Identifies a relevant section as one starting "[namelist:model_runs".
-    Checks that section for lines starting "suite_id", and makes a list of these values.
+    Checks that section for lines starting "suite_id",
+    and makes a list of these values.
     Ensures there is exactly one suite ID per relevant section.
     Returns a list of the suite IDs from the relevant sections.
 
@@ -61,7 +62,8 @@ def extract_suite_ids(content):
             suites_in_section = []
 
             # Read from the next line onwards
-            for subsequent_line in content[index + 1 :]:
+            next_line_index = index + 1
+            for subsequent_line in content[next_line_index:]:
 
                 # Look for the suite ID
                 if subsequent_line.startswith("suite_id"):
