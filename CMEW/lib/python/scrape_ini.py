@@ -5,7 +5,10 @@
 Scrape model_run suite_ids from an ini-style file.
 """
 import configparser
+import sys
 
+# Using config parser to error on duplicate keys or headings
+config = configparser.ConfigParser()
 
 class ConfigError(Exception):
     pass
@@ -28,9 +31,6 @@ def list_datasets(fp):
     str
         The list of suite_ids, in a comma separated string.
     """
-    # Using config parser to error on duplicate keys or headings
-    config = configparser.ConfigParser()
-
     # Should fail if there's a duplicate heading
     try:
         # Read the file
