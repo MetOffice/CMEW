@@ -77,6 +77,8 @@ An overview of the workflow
      Creates the |CDDS| request metadata
      and variables list required to standardise two model development runs,
      then prepares the |CDDS| directory structure.
+     If previously saved raw data is being used,
+     the raw data will be symlinked to the this task's work directory.
   :Runs on:
      Localhost
   :Executes:
@@ -97,6 +99,7 @@ An overview of the workflow
   :Description:
      Launches the CDDS workflow and converts both model runs into |CMIP|-compliant
      datasets suitable for |ESMValTool| evaluation.
+     Saves new raw data if required.
   :Runs on:
      Localhost
   :Executes:
