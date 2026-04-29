@@ -25,25 +25,45 @@ spec.loader.exec_module(scrape_ini)
 
 @pytest.fixture
 def path_to_correct_ini():
-    path = Path(__file__).parent.parent / "mock_data" / "ini_files" / "correct.ini"
+    path = (
+        Path(__file__).parent.parent
+        / "mock_data"
+        / "ini_files"
+        / "correct.ini"
+    )
     return str(path)
 
 
 @pytest.fixture
 def path_to_duplicate_headers():
-    path = Path(__file__).parent.parent / "mock_data" / "ini_files" / "duplicate_header.ini"
+    path = (
+        Path(__file__).parent.parent
+        / "mock_data"
+        / "ini_files"
+        / "duplicate_header.ini"
+    )
     return str(path)
 
 
 @pytest.fixture
 def path_to_duplicate_suite_id():
-    path = Path(__file__).parent.parent / "mock_data" / "ini_files" / "duplicate_suite_id.ini"
+    path = (
+        Path(__file__).parent.parent
+        / "mock_data"
+        / "ini_files"
+        / "duplicate_suite_id.ini"
+    )
     return str(path)
 
 
 @pytest.fixture
 def path_to_missing_suite_id():
-    path = Path(__file__).parent.parent / "mock_data" / "ini_files" / "missing_suite_id.ini"
+    path = (
+        Path(__file__).parent.parent
+        / "mock_data"
+        / "ini_files"
+        / "missing_suite_id.ini"
+    )
     return str(path)
 
 

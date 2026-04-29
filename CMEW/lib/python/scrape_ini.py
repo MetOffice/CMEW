@@ -61,7 +61,7 @@ def extract_suite_ids(content):
             suites_in_section = []
 
             # Read from the next line onwards
-            for subsequent_line in content[index+1:]:
+            for subsequent_line in content[index + 1 :]:
 
                 # Look for the suite ID
                 if subsequent_line.startswith("suite_id"):
@@ -78,11 +78,15 @@ def extract_suite_ids(content):
 
             # Raise an error if there is not exactly one suite ID
             if not len(suites_in_section) == 1:
-                raise ValueError(f"Section {line} did not contain exactly one suite_id")
+                raise ValueError(
+                    f"Section {line} did not contain exactly one suite_id"
+                )
 
             # Add that section's suite ID to the overall list
             else:
-                suite_ids.append(suites_in_section[0])  # [0] as it is from a list
+                suite_ids.append(
+                    suites_in_section[0]
+                )  # [0] as it is from a list
 
     return suite_ids
 
