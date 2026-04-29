@@ -28,6 +28,7 @@ def test_create_request(monkeypatch):
     mip_table_dir = "~cdds/etc/mip_tables/GCModelDev/0.0.25"
     stream_id = "apm"
 
+    monkeypatch.setenv("RAW_DATA_DIR_MODE", "use_saved")
     monkeypatch.setenv("REQUEST_DEFAULTS_PATH", str(request_defaults_path))
     monkeypatch.setenv("ROOT_PROC_DIR", root_proc_dir)
     monkeypatch.setenv("ROOT_DATA_DIR", root_data_dir)
@@ -67,6 +68,10 @@ def test_create_request(monkeypatch):
         "start_date": "1993-01-01T00:00:00",
         "streams": stream_id,
         "variable_list_file": variables_path,
+    }
+    expected["conversion"] = {
+        **request_defaults["conversion"],
+        "skip_extract": "True",
     }
 
     assert actual == expected

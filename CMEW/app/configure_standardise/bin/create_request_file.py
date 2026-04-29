@@ -73,6 +73,8 @@ def create_request(model_run):
     }
     request["misc"] = dict(defaults["misc"])
     request["conversion"] = dict(defaults["conversion"])
+    if os.environ["RAW_DATA_DIR_MODE"] == "use_saved":
+        request["conversion"]["skip_extract"] = "True"
     return request
 
 
