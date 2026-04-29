@@ -28,12 +28,10 @@ def path_to_mock_rose_suite():
     path = Path(__file__).parent.parent / "mock_data" / "config.ini"
     return str(path)
 
-
 @pytest.fixture
 def path_to_duplicate_header():
     path = Path(__file__).parent.parent / "mock_data" / "duplicate_header.ini"
     return str(path)
-
 
 @pytest.fixture
 def path_to_missing_suite_id():
@@ -46,11 +44,9 @@ def test_list_correct_ini(path_to_mock_rose_suite):
     actual = scrape_ini.list_datasets(path_to_mock_rose_suite)
     assert actual == expected
 
-
 def test_duplicate_header(path_to_duplicate_header):
     with pytest.raises(scrape_ini.ConfigError):
         scrape_ini.list_datasets(path_to_duplicate_header)
-
 
 def test_missing_suite_id(path_to_missing_suite_id):
     with pytest.raises(scrape_ini.ConfigError):
