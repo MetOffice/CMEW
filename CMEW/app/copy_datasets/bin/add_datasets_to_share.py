@@ -281,6 +281,9 @@ if __name__ == "__main__":
 
             # Write the datasets to a YAML file with ESMVal project
             datasets = process_naml_file(nl_fp, "ESMVal")
+            # Update the experiment to encode the suite ID
+            for dataset in datasets:
+                dataset["experiment_id"] = f"{dataset['experiment_id']}-{dataset['suite_id']}"
             write_datasets_to_yaml(datasets, basename, target_dir)
 
         # Check if it's CMIP6:
