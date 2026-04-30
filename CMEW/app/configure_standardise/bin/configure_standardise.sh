@@ -14,3 +14,8 @@ cmew-esmvaltool-env create_variables_file.py
 # Create CDDS directory structure and variables list.
 cmew-standardise-env create_cdds_directory_structure "${REQUEST_PATH}"
 cmew-standardise-env prepare_generate_variable_list "${REQUEST_PATH}"
+
+# If using saved data, symlink it to the workflow
+if [[ "${RAW_DATA_DIR_MODE}" == "use_saved" ]]; then
+    cmew-standardise-env cdds_arrange_input_data "${REQUEST_PATH}" "${RAW_DATA_DIR_SUITE}"
+fi

@@ -62,6 +62,8 @@
         [[[environment]]]
             CDDS_BIN_DIR = "~cdds/bin"
             CDDS_SOFTWARE_DIR = "~cdds/software"
+            RAW_DATA_DIR = {{ RAW_DATA_DIR | default("") }}
+            RAW_DATA_DIR_MODE = {{ RAW_DATA_DIR_MODE }}
             # Workaround for bug in CDDS: ROOT_SOFTWARE_DIR: unbound variable.
             ROOT_SOFTWARE_DIR = ${CDDS_SOFTWARE_DIR}
             CDDS_VERSION = {{ CDDS_VERSION }}
@@ -70,6 +72,7 @@
         [[[environment]]]
             REQUEST_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request_${CYLC_TASK_PARAM_dataset}.cfg
             VARIABLES_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/variables_${CYLC_TASK_PARAM_dataset}.txt
+            RAW_DATA_DIR_SUITE = {{ RAW_DATA_DIR | default("") }}"/$CYLC_TASK_PARAM_dataset"
 
     [[MODEL_RUNS]]
         [[[environment]]]
@@ -124,13 +127,11 @@
         inherit = STANDARDISE, DATASET
         [[[environment]]]
             ROSE_TASK_APP = standardise_model_data
-            RAW_DATA_DIR = {{ RAW_DATA_DIR }}
 
     [[restructure_dirs]]
         inherit = STANDARDISE
         [[[environment]]]
             SITE = {{ SITE }}
-            RAW_DATA_DIR = {{ RAW_DATA_DIR }}
 
     [[run_recipe<recipe>]]
         inherit = None, COMPUTE, RECIPE
