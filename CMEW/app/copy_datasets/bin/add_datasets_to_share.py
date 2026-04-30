@@ -237,7 +237,7 @@ def use_facet_as_key(filepath, key_facet):
     Edit a YAML file in place, from a list to a dictionary.
 
     The keys of the new dictionary are the values of the specified facet,
-    wich must be present in each section of the list and be unique.
+    which must be present in each section of the list and be unique.
 
     Parameters
     ----------
