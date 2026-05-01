@@ -7,10 +7,7 @@ Generate CDDS request configuration file.
 import configparser
 import os
 from pathlib import Path
-
-
-class DatasetError(Exception):
-    pass
+import yaml
 
 
 def load_request_defaults():
@@ -28,14 +25,11 @@ def load_request_defaults():
     return cfg
 
 
-def create_request():
+def create_request(model_run):
     """
-    Build a CDDS request configuration for the run identified by
-    CYLC_TASK_PARAM_dataset.
+    Build a CDDS request configuration for a run identified by a suite_id.
 
-    Choice of reference or evaluation is via CYLC_TASK_PARAM_dataset:
-    - If CYLC_TASK_PARAM_dataset == REF_SUITE_ID -> use REF_* variables.
-    - If CYLC_TASK_PARAM_dataset == SUITE_ID     -> use non-REF variables.
+    Uses information from the model_runs.yml file.
 
     Returns
     -------
@@ -45,65 +39,34 @@ def create_request():
     defaults = load_request_defaults()
 
     mip_table_dir = os.environ["MIP_TABLE_DIR"]
-    end_year = int(os.environ["START_YEAR"]) + int(
-        os.environ["NUMBER_OF_YEARS"]
-    )
 
-    # Reference run specification
-    ref_model_id = os.environ["REF_MODEL_ID"]
-    ref_suite_id = os.environ["REF_SUITE_ID"]
-    ref_calendar = os.environ["REF_CALENDAR"]
-    ref_experiment_id = os.environ["REF_EXPERIMENT_ID"]
-    ref_variant_label = os.environ["REF_VARIANT_LABEL"]
+    # Read the model run information from the model_runs.yml file
+    model_runs_yaml = Path(os.environ["DATASETS_LIST_DIR"]) / "model_runs.yml"
+    with open(model_runs_yaml, "r") as f:
+        dataset_dict = yaml.safe_load(f)[model_run]
 
-    # Evaluation run specification
-    model_id = os.environ["MODEL_ID"]
-    suite_id = os.environ["SUITE_ID"]
-    calendar = os.environ["CALENDAR"]
-    experiment_id = os.environ["EXPERIMENT_ID"]
-    variant_label = os.environ["VARIANT_LABEL"]
-
-    dataset = os.environ["CYLC_TASK_PARAM_dataset"].strip()
-    if dataset == ref_suite_id:
-        chosen_model_id = ref_model_id
-        chosen_suite_id = ref_suite_id
-        chosen_calendar = ref_calendar
-        chosen_variant_label = ref_variant_label
-        chosen_experiment_id = ref_experiment_id
-    elif dataset == suite_id:
-        chosen_model_id = model_id
-        chosen_suite_id = suite_id
-        chosen_calendar = calendar
-        chosen_variant_label = variant_label
-        chosen_experiment_id = experiment_id
-    else:
-        raise DatasetError(
-            "CYLC_TASK_PARAM_dataset must match REF_SUITE_ID or SUITE_ID. "
-            f"Got CYLC_TASK_PARAM_dataset='{dataset}', "
-            f"REF_SUITE_ID='{ref_suite_id}', SUITE_ID='{suite_id}'."
-        )
-
+    # Create the CDDS request
     request = configparser.ConfigParser()
     request["metadata"] = {
         **defaults["metadata"],
-        "calendar": chosen_calendar,
-        "experiment_id": chosen_experiment_id,
-        "institution_id": os.environ["INSTITUTION_ID"],
-        "model_id": chosen_model_id,
-        "variant_label": chosen_variant_label,
+        "calendar": dataset_dict["calendar"],
+        "experiment_id": dataset_dict["experiment_id"],
+        "institution_id": dataset_dict["institute"],
+        "model_id": dataset_dict["model_id"],
+        "variant_label": dataset_dict["variant_label"],
     }
     request["common"] = {
         **defaults["common"],
         "mip_table_dir": os.path.expanduser(mip_table_dir),
         "root_proc_dir": os.environ["ROOT_PROC_DIR"],
         "root_data_dir": os.environ["ROOT_DATA_DIR"],
-        "workflow_basename": chosen_suite_id,
+        "workflow_basename": dataset_dict["suite_id"],
     }
     request["data"] = {
         **defaults["data"],
-        "end_date": f"{end_year}-01-01T00:00:00",
-        "model_workflow_id": chosen_suite_id,
-        "start_date": f"{os.environ['START_YEAR']}-01-01T00:00:00",
+        "start_date": f"{dataset_dict['start_year']}-01-01T00:00:00",
+        "end_date": f"{int(dataset_dict['end_year'])+1}-01-01T00:00:00",
+        "model_workflow_id": dataset_dict["suite_id"],
         # For now there is only one stream, for Amon and Emon mip.
         "streams": os.environ["STREAM_ID"],
         "variable_list_file": os.environ["VARIABLES_PATH"],
@@ -139,8 +102,9 @@ def main():
     variable. All other required inputs are read from the environment
     by ``create_request()``.
     """
+    dataset = os.environ["CYLC_TASK_PARAM_dataset"].strip()
+    request = create_request(dataset)
     target_path = Path(os.environ["REQUEST_PATH"])
-    request = create_request()
     write_request(request, target_path)
 
 
