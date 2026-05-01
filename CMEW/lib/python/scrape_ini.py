@@ -10,8 +10,7 @@ def extract_suite_ids(content):
     """
     Lists the suite IDs of model runs from the content of an ini-style file.
 
-    Checks the whole file for lines starting "suite_id",
-    and returns a list of the suite IDs from the relevant sections.
+    Checks the whole file for lines starting "suite_id".
 
     Parameters
     ----------
