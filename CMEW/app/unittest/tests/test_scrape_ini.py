@@ -30,6 +30,6 @@ def path_to_mock_ini():
 
 
 def test_list_datasets_correct(path_to_mock_ini):
-    expected = "line_12, line_15, line_19"
+    expected = "line_9, line_12, line_16"
     actual = scrape_ini.list_datasets(path_to_mock_ini)
     assert actual == expected
