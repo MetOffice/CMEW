@@ -34,7 +34,7 @@ def extract_suite_ids(content):
             # Take the value of the suite ID
             suite_id = line.split("=")[1]
 
-            # Add to the list for the section, unquoted
+            # Add to the list, unquoted
             suite_ids.append(suite_id.strip().replace('"', ""))
 
     return suite_ids
