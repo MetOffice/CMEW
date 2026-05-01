@@ -25,11 +25,7 @@ spec.loader.exec_module(scrape_ini)
 
 @pytest.fixture
 def path_to_mock_ini():
-    path = (
-        Path(__file__).parent.parent
-        / "mock_data"
-        / "initial_config.ini"
-    )
+    path = Path(__file__).parent.parent / "mock_data" / "initial_config.ini"
     return str(path)
 
 
