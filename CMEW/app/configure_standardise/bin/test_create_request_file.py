@@ -63,9 +63,9 @@ def test_create_request(monkeypatch):
     }
     expected["data"] = {
         **request_defaults["data"],
+        "start_date": "1993-01-01T00:00:00",
         "end_date": "2003-01-01T00:00:00",
         "model_workflow_id": "u-cw673",
-        "start_date": "1993-01-01T00:00:00",
         "streams": stream_id,
         "variable_list_file": variables_path,
     }
