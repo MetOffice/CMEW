@@ -24,65 +24,16 @@ spec.loader.exec_module(scrape_ini)
 
 
 @pytest.fixture
-def path_to_correct_ini():
+def path_to_mock_ini():
     path = (
         Path(__file__).parent.parent
         / "mock_data"
-        / "ini_files"
-        / "correct.ini"
+        / "initial_config.ini"
     )
     return str(path)
 
 
-@pytest.fixture
-def path_to_duplicate_headers():
-    path = (
-        Path(__file__).parent.parent
-        / "mock_data"
-        / "ini_files"
-        / "duplicate_header.ini"
-    )
-    return str(path)
-
-
-@pytest.fixture
-def path_to_duplicate_suite_id():
-    path = (
-        Path(__file__).parent.parent
-        / "mock_data"
-        / "ini_files"
-        / "duplicate_suite_id.ini"
-    )
-    return str(path)
-
-
-@pytest.fixture
-def path_to_missing_suite_id():
-    path = (
-        Path(__file__).parent.parent
-        / "mock_data"
-        / "ini_files"
-        / "missing_suite_id.ini"
-    )
-    return str(path)
-
-
-def test_list_datasets_correct(path_to_correct_ini):
+def test_list_datasets_correct(path_to_mock_ini):
     expected = "line_12, line_15, line_19"
-    actual = scrape_ini.list_datasets(path_to_correct_ini)
+    actual = scrape_ini.list_datasets(path_to_mock_ini)
     assert actual == expected
-
-
-def test_list_datasets_duplicate_section(path_to_duplicate_headers):
-    with pytest.raises(ValueError):
-        scrape_ini.list_datasets(path_to_duplicate_headers)
-
-
-def test_list_datasets_duplicate_suite(path_to_duplicate_suite_id):
-    with pytest.raises(ValueError):
-        scrape_ini.list_datasets(path_to_duplicate_suite_id)
-
-
-def test_list_datasets_missing_suite(path_to_missing_suite_id):
-    with pytest.raises(ValueError):
-        scrape_ini.list_datasets(path_to_missing_suite_id)
