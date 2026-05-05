@@ -5,15 +5,15 @@
 {{ assert(SITE != "", "SITE must be set to something other than an empty string") }}
 {{ assert(ESMVALTOOL_MODULE_NAME != "", "ESMVALTOOL_MODULE_NAME must be set to something other than an empty string") }}
 
-{{ assert(REF_SUITE_ID != "", "REF_SUITE_ID must be set") }}
-{{ assert(SUITE_ID != "", "SUITE_ID must be set") }}
+{% from "scrape_ini" import list_datasets %}
+{% set datasets = list_datasets("rose-suite.conf") %}
 
 [scheduler]
     UTC mode = True
 
 [task parameters]
+    dataset = {{ datasets }}
     recipe = radiation_budget
-    dataset = {{ [REF_SUITE_ID, SUITE_ID] | join(", ") }}
 
 [scheduling]
     [[graph]]
