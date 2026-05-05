@@ -237,7 +237,7 @@ def use_facet_as_key(filepath, key_facet):
     Edit a YAML file in place, from a list to a dictionary.
 
     The keys of the new dictionary are the values of the specified facet,
-    wich must be present in each section of the list and be unique.
+    which must be present in each section of the list and be unique.
 
     Parameters
     ----------
@@ -281,6 +281,11 @@ if __name__ == "__main__":
 
             # Write the datasets to a YAML file with ESMVal project
             datasets = process_naml_file(nl_fp, "ESMVal")
+            # Update the experiment to encode the suite ID
+            for dataset in datasets:
+                dataset["experiment_id"] = (
+                    f"{dataset['experiment_id']}-{dataset['suite_id']}"
+                )
             write_datasets_to_yaml(datasets, basename, target_dir)
 
         # Check if it's CMIP6:
