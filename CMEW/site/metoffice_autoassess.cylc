@@ -1,0 +1,48 @@
+#!jinja2
+# (C) Crown Copyright 2022-2025, Met Office.
+# The LICENSE.md file contains full licensing details.
+# metoffice_autoassess.cylc
+[runtime]
+
+    [[SITE_AUTOASSESS]]
+        [[[environment]]]
+            OBS_CLIM_PATH = /data/users/gc_eval/autoassess/clim
+            ANCIL_PATH = /data/users/gc_eval/autoassess/ancil
+
+    [[SITE_AA_INSTALL]]
+        inherit = COMPUTE
+        execution time limit = PT5M
+        [[[directives]]]
+            --mem=2GB
+            --ntasks=1
+
+    [[SITE_AA_RETRIEVAL]]
+        inherit = COMPUTE
+        execution time limit = PT5H
+        [[[directives]]]
+            --mem=2GB
+            --ntasks=1
+
+    [[SITE_AA_DATA_INDEXING]]
+        inherit = COMPUTE
+        execution time limit = PT2H
+        [[[directives]]]
+            --mem=10GB
+            --ntasks=1
+
+    [[SITE_AA_RUN_AREA]]
+        inherit = COMPUTE
+        execution time limit = PT5H
+        [[[directives]]]
+            --mem=5GB
+            --ntasks=1
+
+    [[SITE_AA_NAC_PLOT]]
+        inherit = COMPUTE
+        execution time limit = PT10M
+        [[[directives]]]
+            --mem=250MB
+            --ntasks=1
+
+    [[SITE_AA_HTML_PAGE]]
+        execution time limit = PT2M
