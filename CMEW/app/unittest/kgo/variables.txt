@@ -1,0 +1,13 @@
+Amon/hfls:apm
+Amon/hfss:apm
+Amon/rlds:apm
+Emon/rls:apm
+Amon/rlut:apm
+Amon/rlutcs:apm
+Amon/rsds:apm
+Amon/rsdt:apm
+Emon/rss:apm
+Amon/rsut:apm
+Amon/rsutcs:apm
+fx/areacello:apm
+OImon/sic:apm

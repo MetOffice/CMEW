@@ -1,0 +1,18 @@
+u-bv526:
+  calendar: 360_day
+  end_year: 2002
+  label_for_plots: HadGEM3-GC3.1 N96ORCA1
+  model_id: HadGEM3-GC31-LL
+  project: CMIP6
+  start_year: 1993
+  suite_id: u-bv526
+  variant_label: r5i1p1f3
+u-cw673:
+  calendar: gregorian
+  end_year: 2002
+  label_for_plots: HadGEM3-GC5E-LL N96ORCA1
+  model_id: HadGEM3-GC5E-LL
+  project: CMIP6
+  start_year: 1993
+  suite_id: u-cw673
+  variant_label: r1i1p1f1

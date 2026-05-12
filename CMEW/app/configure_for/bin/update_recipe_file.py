@@ -11,41 +11,8 @@ import os
 import yaml
 
 
-def update_recipe(recipe_path):
-    """Update the ESMValTool recipe.
-
-    * Read the ESMValTool recipe YAML file from the provided ``recipe_path``
-    * Update the datasets section of the recipe with:
-      - CMEW required key/values
-      - User configurable values from the Rose suite configuration
-        for both the reference and evaluation model runs.
-
-    Recipe file/datasets section snippet (human written YAML)::
-
-    datasets:
-      - {dataset: <dataset>, project: <project>, exp: <exp>,
-         ensemble: <ensemble>, grid: <grid>, start_year: <start_year>,
-         end_year: <end_year>}
-      - {dataset: <dataset>, project: <project>, exp: <exp>,
-         ensemble: <ensemble>, grid: <grid>, start_year: <start_year>,
-         end_year: <end_year>}
-
-    Updated recipe file/datasets section snippet (machine written YAML)::
-
-    datasets:
-    - {activity: <activity>, alias: <ref_alias>, dataset: <ref_model_id>,
-      end_year: <end_year>, ensemble: <ref_variant>, exp: <exp>, grid: <grid>,
-      project: <project>, start_year: <start_year>}
-    - {activity: <activity>, alias: <alias>, dataset: <eval_model_id>,
-      end_year: <end_year>, ensemble: <eval_variant>, exp: <exp>, grid: <grid>,
-      project: <project>, start_year: <start_year>}
-
-    Notes
-    -----
-    The updated recipe includes:
-    * Reference dataset (index 0) using REF_MODEL_ID and REF_VARIANT_LABEL
-    * Evaluation dataset (index 1) using MODEL_ID and VARIANT_LABEL
-    * two additional CMEW required keys: "Activity" and "Alias".
+def return_blank_recipe(recipe_path):
+    """Empty the datasets section of an ESMValTool recipe.
 
     Parameters
     ----------
@@ -55,74 +22,60 @@ def update_recipe(recipe_path):
     Returns
     -------
     recipe: dict
-        The content of the ESMValTool recipe with updated datasets section.
+        The content of the ESMValTool recipe with an empty datasets section.
     """
-    # Time window from environment
-    start_year = int(os.environ["START_YEAR"])
-    end_year = (
-        int(os.environ["START_YEAR"]) + int(os.environ["NUMBER_OF_YEARS"]) - 1
-    )
-
-    # Model metadata from environment
-    ref_model_id = os.environ["REF_MODEL_ID"]
-    ref_variant = os.environ["REF_VARIANT_LABEL"]
-    eval_model_id = os.environ["MODEL_ID"]
-    eval_variant = os.environ["VARIANT_LABEL"]
-
-    # Read given reference alias or use the suite ID
-    if os.environ.get("REF_LABEL_FOR_PLOTS"):
-        ref_alias = os.environ["REF_LABEL_FOR_PLOTS"]
-    else:
-        ref_alias = os.environ["REF_SUITE_ID"]
-
-    # Read given evaluation alias or use the suite ID
-    if os.environ.get("LABEL_FOR_PLOTS"):
-        alias = os.environ["LABEL_FOR_PLOTS"]
-    else:
-        alias = os.environ["SUITE_ID"]
-
     with open(recipe_path, "r") as file_handle:
         recipe = yaml.safe_load(file_handle)
 
-    datasets = recipe.get("datasets", [])
-    if len(datasets) < 2:
-        raise ValueError(
-            "Expected at least two datasets in the recipe, "
-            "one for the reference and one for the evaluation run."
-        )
+    # Empty the datasets section of the recipe
+    recipe["datasets"] = []
 
-    # Reference dataset: treat as a GCModelDev / ESMVal / amip run,
-    # using REF_MODEL_ID & REF_VARIANT_LABEL, with the configured time window.
-    ref_dataset = datasets[0]
-    ref_dataset.update(
-        {
-            "dataset": ref_model_id,
-            "project": "ESMVal",
-            "exp": "amip",
-            "activity": "ESMVal",
-            "institute": "MOHC",
-            "ensemble": ref_variant,
-            "start_year": start_year,
-            "end_year": end_year,
-            "alias": ref_alias,
-        }
-    )
+    return recipe
 
-    # Evaluation dataset: ESMVal / amip run using MODEL_ID and VARIANT_LABEL
-    eval_dataset = datasets[1]
-    eval_dataset.update(
-        {
-            "dataset": eval_model_id,
-            "project": "ESMVal",
-            "exp": "amip",
-            "activity": "ESMVal",
-            "institute": "MOHC",
-            "ensemble": eval_variant,
-            "start_year": start_year,
-            "end_year": end_year,
-            "alias": alias,
-        }
-    )
+
+def add_extra_datasets(recipe, yaml_filepath):
+    """
+    Parameters
+    ----------
+    recipe: dict
+        The content of the ESMValTool recipe to which datasets are to be added.
+    yaml_filepath: str
+        The location of the YAML file containing the extra datasets.
+
+    Returns
+    -------
+    recipe: dict
+        The content of the ESMValTool recipe with an extended datasets section.
+    """
+    # Read the extra datasets from the provided YAML file
+    with open(yaml_filepath, "r") as file_handle:
+        extra_datasets = yaml.safe_load(file_handle)
+
+    # ESMValTool recipes expect keys to be "dataset", "ensemble", "exp" etc.
+    variables_conversion = {
+        "label_for_plots": "alias",
+        "model_id": "dataset",
+        "variant_label": "ensemble",
+        "experiment_id": "exp",
+    }
+
+    # Some attributes are neither needed nor wanted by ESMValTool
+    unwanted_keys = ["calendar", "suite_id"]
+
+    # Convert the variable names in the extra datasets
+    for dataset, inner_dict in extra_datasets.items():
+        for key in unwanted_keys:
+            if key in inner_dict:
+                del inner_dict[key]
+        for old_key, new_key in variables_conversion.items():
+            if old_key in inner_dict:
+                inner_dict[new_key] = inner_dict.pop(old_key)
+
+    # Collect the new inner dicts to append to datasets section of the recipe
+    extra_datasets_list = list(extra_datasets.values())
+
+    # Add the datasets to the datasets section of the recipe
+    recipe["datasets"].extend(extra_datasets_list)
 
     return recipe
 
@@ -153,8 +106,17 @@ def main():
     the updated recipe.
     """
     recipe_path = os.environ["RECIPE_PATH"]
-    updated_recipe = update_recipe(recipe_path)
-    write_recipe(updated_recipe, recipe_path)
+    blank_recipe = return_blank_recipe(recipe_path)
+
+    # Add the model runs into the datasets section of the recipe
+    model_runs_fp = f"{os.environ['DATASETS_LIST_DIR']}/model_runs.yml"
+    updated_recipe = add_extra_datasets(blank_recipe, model_runs_fp)
+
+    # Add the CMIP6 datasets to the recipe
+    cmip6_datasets_fp = f"{os.environ['DATASETS_LIST_DIR']}/cmip6_datasets.yml"
+    extended_recipe = add_extra_datasets(updated_recipe, cmip6_datasets_fp)
+
+    write_recipe(extended_recipe, recipe_path)
 
 
 if __name__ == "__main__":

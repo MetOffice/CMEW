@@ -5,10 +5,14 @@
 {{ assert(SITE != "", "SITE must be set to something other than an empty string") }}
 {{ assert(ESMVALTOOL_MODULE_NAME != "", "ESMVALTOOL_MODULE_NAME must be set to something other than an empty string") }}
 
+{% from "scrape_ini" import list_datasets %}
+{% set datasets = list_datasets("rose-suite.conf") %}
+
 [scheduler]
     UTC mode = True
 
 [task parameters]
+    dataset = {{ datasets }}
     recipe = radiation_budget
 {%- if not UNITTEST and AUTOASSESS %}
     autoassess_area = monsoon
@@ -21,10 +25,13 @@
             install_env_file => unittest
 {%- endif %}
 {%- if not UNITTEST %}
-            install_env_file => configure_recipe & configure_for<recipe>
-            configure_for<recipe> => configure_standardise<recipe>
-            configure_recipe => run_recipe<recipe>
-            configure_standardise<recipe> => standardise_model_data => run_recipe<recipe> & housekeeping
+            install_env_file => configure_recipe & copy_datasets
+            copy_datasets => configure_for<recipe>
+            configure_for<recipe> => configure_standardise<recipe,dataset>
+                => standardise_model_data<dataset> => restructure_dirs
+            configure_recipe & restructure_dirs => run_recipe<recipe>
+            restructure_dirs => housekeeping
+
     {%- if TEST %}
             run_recipe<recipe> => compare<recipe>
     {%- endif %}
@@ -38,43 +45,59 @@
         platform = localhost
         [[[environment]]]
             ESMVALTOOL_MODULE_NAME = {{ ESMVALTOOL_MODULE_NAME }}
-            USER_CONFIG_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/etc
-            USER_CONFIG_PATH = ${USER_CONFIG_DIR}/config-user.yml
+            CONFIG_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/etc/esmvaltool_config
+            USER_CONFIG_PATH = ${CONFIG_DIR}/config-user.yml
+            DEV_CONFIG_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/config-developer.yml
             OUTPUT_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/cycle/${CYLC_TASK_CYCLE_POINT}
             SHARE_DATA_CDDS = ${CYLC_WORKFLOW_SHARE_DIR}/data/cdds
             ROOT_PROC_DIR = ${SHARE_DATA_CDDS}/proc
             ROOT_DATA_DIR = ${SHARE_DATA_CDDS}/cdds_data
-            REQUEST_PATH_REF  = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request_ref.cfg
-            REQUEST_PATH_EVAL = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request_eval.cfg
-            VARIABLES_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/variables.txt
+            REQUEST_DEFAULTS_PATH = ${CYLC_WORKFLOW_RUN_DIR}/app/configure_standardise/etc/request_defaults.cfg
 
     [[RECIPE]]
         [[[environment]]]
             RECIPE_NAME = "recipe_${CYLC_TASK_PARAM_recipe}.yml"
             RECIPE_PATH = "${CYLC_WORKFLOW_SHARE_DIR}/etc/${RECIPE_NAME}"
+            VARIABLES_LIST_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/variables_lists
+            RECIPE_VARIABLES_PATH = ${VARIABLES_LIST_DIR}/${CYLC_TASK_PARAM_recipe}_variables.txt
 
     [[STANDARDISE]]
         [[[environment]]]
             CDDS_BIN_DIR = "~cdds/bin"
             CDDS_SOFTWARE_DIR = "~cdds/software"
+            RAW_DATA_DIR = {{ RAW_DATA_DIR | default("") }}
+            RAW_DATA_DIR_MODE = {{ RAW_DATA_DIR_MODE }}
             # Workaround for bug in CDDS: ROOT_SOFTWARE_DIR: unbound variable.
             ROOT_SOFTWARE_DIR = ${CDDS_SOFTWARE_DIR}
             CDDS_VERSION = {{ CDDS_VERSION }}
 
+    [[DATASET]]
+        [[[environment]]]
+            REQUEST_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request_${CYLC_TASK_PARAM_dataset}.cfg
+            VARIABLES_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/variables_${CYLC_TASK_PARAM_dataset}.txt
+            RAW_DATA_DIR_SUITE = {{ RAW_DATA_DIR | default("") }}"/$CYLC_TASK_PARAM_dataset"
+
     # Multi-run metadata family: reference and evaluation runs
     [[MODEL_RUNS]]
         [[[environment]]]
+            # Directory containing dataset lists as YAML files
+            DATASETS_LIST_DIR = "${CYLC_WORKFLOW_SHARE_DIR}/dataset_lists"
+            START_YEAR = {{ START_YEAR }}
+            NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
+
             # Reference run metadata
             REF_MODEL_ID = {{ REF_MODEL_ID }}
             REF_SUITE_ID = {{ REF_SUITE_ID }}
             REF_CALENDAR = {{ REF_CALENDAR }}
             REF_VARIANT_LABEL = {{ REF_VARIANT_LABEL }}
+            REF_EXPERIMENT_ID = {{ REF_EXPERIMENT_ID }}
 
             # Evaluation run metadata
             MODEL_ID = {{ MODEL_ID }}
             SUITE_ID = {{ SUITE_ID }}
             CALENDAR = {{ CALENDAR }}
             VARIANT_LABEL = {{ VARIANT_LABEL }}
+            EXPERIMENT_ID = {{ EXPERIMENT_ID }}
 
     [[install_env_file]]
         [[[environment]]]
@@ -92,6 +115,7 @@
             DRS_NATIVE6 = {{ DRS_NATIVE6 }}
             DRS_OBS4MIPS = {{ DRS_OBS4MIPS }}
             MAX_PARALLEL_TASKS = {{ MAX_PARALLEL_TASKS }}
+            MIP_TABLE_DIR = {{ MIP_TABLE_DIR }}
             ROOTPATH_CMIP3 = {{ ROOTPATH_CMIP3 }}
             ROOTPATH_CMIP5 = {{ ROOTPATH_CMIP5 }}
             ROOTPATH_CMIP6 = {{ ROOTPATH_CMIP6 }}
@@ -107,22 +131,25 @@
         inherit = None, RECIPE, MODEL_RUNS
         [[[environment]]]
             ROSE_TASK_APP = configure_for
-            START_YEAR = {{ START_YEAR }}
-            NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
             LABEL_FOR_PLOTS = {{ LABEL_FOR_PLOTS }}
-            SUITE_ID = {{ SUITE_ID }}
             REF_LABEL_FOR_PLOTS = {{ REF_LABEL_FOR_PLOTS }}
-            REF_SUITE_ID = {{ REF_SUITE_ID }}
 
-    [[configure_standardise<recipe>]]
-        inherit = STANDARDISE, RECIPE, MODEL_RUNS
+    [[configure_standardise<recipe,dataset>]]
+        inherit = STANDARDISE, RECIPE, MODEL_RUNS, DATASET
         [[[environment]]]
             ROSE_TASK_APP = configure_standardise
             START_YEAR = {{ START_YEAR }}
             NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
+            MIP_TABLE_DIR = {{ MIP_TABLE_DIR }}
+            STREAM_ID = "apm"
 
-    [[standardise_model_data]]
-        inherit = STANDARDISE, MODEL_RUNS
+    [[standardise_model_data<dataset>]]
+        inherit = STANDARDISE, DATASET
+        [[[environment]]]
+            ROSE_TASK_APP = standardise_model_data
+
+    [[restructure_dirs]]
+        inherit = STANDARDISE
         [[[environment]]]
             SITE = {{ SITE }}
 
@@ -130,6 +157,11 @@
         inherit = None, COMPUTE, RECIPE
         [[[environment]]]
             ROSE_TASK_APP = run_recipe
+
+    [[copy_datasets]]
+        inherit = MODEL_RUNS
+        [[[environment]]]
+            ROSE_TASK_APP = copy_datasets
 
     [[housekeeping]]
 
