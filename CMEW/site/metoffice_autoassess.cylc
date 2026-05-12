@@ -9,61 +9,40 @@
             OBS_CLIM_PATH = /data/users/gc_eval/autoassess/clim
             ANCIL_PATH = /data/users/gc_eval/autoassess/ancil
 
-    [[LOCAL]]
-        platform = localhost
-
-    [[SPICE]]
-        platform = spice
-        [[[directives]]]
-            --qos=normal
-            --partition=cpu
-            --export=NONE
-            --ntasks=1
-        [[[environment]]]
-            ROSE_LAUNCHER = mpiexec
-
     [[SITE_AA_INSTALL]]
-        inherit = SPICE
+        inherit = COMPUTE
         execution time limit = PT5M
         [[[directives]]]
-            --job-name=AutoAssess_install
             --mem=2GB
+            --ntasks=1
 
     [[SITE_AA_RETRIEVAL]]
-        inherit = SPICE
+        inherit = COMPUTE
         execution time limit = PT5H
         [[[directives]]]
-            --job-name=AutoAssess_MOOSE_retrieval
             --mem=2GB
+            --ntasks=1
 
     [[SITE_AA_DATA_INDEXING]]
-        inherit = SPICE
+        inherit = COMPUTE
         execution time limit = PT2H
         [[[directives]]]
-            --job-name=AutoAssess_data_indexing
             --mem=10GB
+            --ntasks=1
 
     [[SITE_AA_RUN_AREA]]
-        inherit = SPICE
+        inherit = COMPUTE
         execution time limit = PT5H
         [[[directives]]]
-            --job-name=AutoAssess_run_area
             --mem=5GB
-
-    [[SITE_AA_RUN_AREA_BASE]]
-        inherit = SPICE
-        execution time limit = PT5H
-        [[[directives]]]
-            --job-name=AutoAssess_run_area
-            --mem=10GB
+            --ntasks=1
 
     [[SITE_AA_NAC_PLOT]]
-        inherit = SPICE
+        inherit = COMPUTE
         execution time limit = PT10M
         [[[directives]]]
-            --job-name=AutoAssess_nac_plot
             --mem=250MB
+            --ntasks=1
 
     [[SITE_AA_HTML_PAGE]]
-        inherit = LOCAL
         execution time limit = PT2M

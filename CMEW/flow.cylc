@@ -10,6 +10,9 @@
 
 [task parameters]
     recipe = radiation_budget
+{%- if not UNITTEST and AUTOASSESS %}
+    autoassess_area = monsoon
+{%- endif %}
 
 [scheduling]
     [[graph]]

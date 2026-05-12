@@ -3,18 +3,13 @@
 # The LICENSE.md file contains full licensing details.
 # autoassess.cylc
 
-[task parameters]
-    autoassess_area = {{ AUTOASSESS_AREAS | join(",") }}
-    suite_id = {{ REF_SUITE_ID }},{{ SUITE_ID }}
-
-
 [scheduling]
     [[graph]]
         R1 = """
             install_env_file
                 => install_autoassess
-                => retrieve_data<autoassess_area><suite_id>
-                => index_data<autoassess_area><suite_id>
+                => retrieve_data<autoassess_area><dataset>
+                => index_data<autoassess_area><dataset>
                 => run_area<autoassess_area>
                 => nac_plot<autoassess_area>
                 => html_page<autoassess_area>
@@ -41,21 +36,19 @@
 
     [[install_autoassess]]
         inherit = AUTOASSESS, SITE_AA_INSTALL
-        [[[environment]]]
-            ROSE_APP_OPT_CONF_KEYS = localmirror
 
-    [[retrieve_data<autoassess_area><suite_id>]]
+    [[retrieve_data<autoassess_area><dataset>]]
         inherit = AUTOASSESS, SITE_AA_RETRIEVAL
         [[[environment]]]
             ROSE_TASK_APP = aa_retrieve_data
-            SUITE_ID = $CYLC_TASK_PARAM_suite_id
+            SUITE_ID = $CYLC_TASK_PARAM_dataset
             AREA = $CYLC_TASK_PARAM_autoassess_area
 
-    [[index_data<autoassess_area><suite_id>]]
+    [[index_data<autoassess_area><dataset>]]
         inherit = AUTOASSESS, SITE_AA_DATA_INDEXING
         [[[environment]]]
             ROSE_TASK_APP = aa_index_data
-            SUITE_ID = $CYLC_TASK_PARAM_suite_id
+            SUITE_ID = $CYLC_TASK_PARAM_dataset
             AREA = $CYLC_TASK_PARAM_autoassess_area
 
     [[run_area<autoassess_area>]]
