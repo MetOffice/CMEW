@@ -13,7 +13,7 @@
 
 [task parameters]
     dataset = {{ datasets }}
-    recipe = radiation_budget
+    recipe = radiation_budget, seaice_sensitivity
 
 [scheduling]
     [[graph]]
@@ -27,7 +27,7 @@
             configure_for<recipe> => configure_standardise<recipe,dataset>
                 => standardise_model_data<dataset> => restructure_dirs
             configure_recipe & restructure_dirs => run_recipe<recipe>
-            restructure_dirs => housekeeping
+            restructure_dirs
 
     {%- if TEST %}
             run_recipe<recipe> => compare<recipe>
