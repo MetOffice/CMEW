@@ -64,6 +64,8 @@ def add_stream_to_variables(variables):
             "Amon/rsutcs",
             "Emon/rls",
             "Emon/rss",
+        ],
+        "ap5": [
             "Amon/tas",
         ],
         "inm": [

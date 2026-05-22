@@ -68,7 +68,7 @@ def create_request(model_run):
         "end_date": f"{int(dataset_dict['end_year'])+1}-01-01T00:00:00",
         "model_workflow_id": dataset_dict["suite_id"],
         # For now there is only one stream, for Amon and Emon mip.
-        "streams": f"{os.environ["STREAM_ID"]}, inm",
+        "streams": f"{os.environ["STREAM_ID"]} ap5 inm",
         "variable_list_file": os.environ["VARIABLES_PATH"],
     }
     request["misc"] = dict(defaults["misc"])
