@@ -19,7 +19,7 @@
 
 .. Links
 
-.. _CMIP Documentation: https://www.wcrp-climate.org/wgcm-cmip
+.. _CMIP Documentation: https://wcrp-cmip.org/
 .. _Cylc Documentation: https://cylc.github.io/cylc-doc/stable/html/index.html
 .. _families: https://cylc.github.io/cylc-doc/stable/html/tutorial/runtime/configuration-consolidation/families.html
 .. _Cylc Review: https://cylc.github.io/cylc-doc/7.9.3/html/tutorial.html#viewing-suite-logs-in-a-web-browser-cylc-review
