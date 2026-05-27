@@ -34,8 +34,8 @@ def list_streams():
     str
         Space separated list of all streams.
     """
-    # Set path to stream mappings
-    streams_config = Path(__file__).parent.parent / "etc" / "streams.yml"
+    # Get path to stream mappings
+    streams_config = os.environ["STREAM_CONFIG_PATH"]
 
     # Read the stream mappings
     with open(streams_config, "r") as f:

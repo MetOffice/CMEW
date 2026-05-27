@@ -5,7 +5,6 @@
 Generates the variables.txt file from the ESMValTool recipe.
 """
 import os
-from pathlib import Path
 import yaml
 
 
@@ -45,8 +44,8 @@ def load_stream_dict():
     dict
         A mapping of pre-defined streams to their associated variables
     """
-    # Set path to stream mappings
-    streams_config = Path(__file__).parent.parent / "etc" / "streams.yml"
+    # Get path to stream mappings
+    streams_config = os.environ["STREAM_CONFIG_PATH"]
 
     # Read the stream mappings
     with open(streams_config, "r") as f:
