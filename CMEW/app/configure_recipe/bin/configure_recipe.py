@@ -207,12 +207,11 @@ def create_user_config(values=None):
     else:
         max_parallel_tasks = None
 
-    # Note that 'auxiliary_data_dir', 'download_dir' and
-    # 'extra_facets_dir' are set to empty values and cannot currently be
+    # Note that 'auxiliary_data_dir' and 'download_dir'
+    # are set to empty values and cannot currently be
     # configured. However, 'download_dir' is used only when using the
     # automatic download feature via ESMValTool (which we do not intend
-    # to use here) and 'extra_facets_dir' is not available in the
-    # default configuration file provided by ESMValTool v2.6.0.
+    # to use here).
     # 'auxiliary_data_dir' is used by some recipes to look for
     # additional datasets, so may need to be configured in the future.
 
@@ -232,7 +231,6 @@ def create_user_config(values=None):
             "OBS6": values.get("DRS_OBS6"),
             "ESMVal": "BADC",
         },
-        "extra_facets_dir": [],
         "max_parallel_tasks": max_parallel_tasks,
         "output_dir": values.get("OUTPUT_DIR"),
         "remove_preproc_dir": False,
