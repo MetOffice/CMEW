@@ -26,7 +26,7 @@ def test_create_request(monkeypatch):
     root_data_dir = "/path/to/data/dir/"
     variables_path = "/path/to/variables.txt"
     mip_table_dir = "~cdds/etc/mip_tables/GCModelDev/0.0.25"
-    stream_id = "apm"
+    stream_id = "apm ap5 inm"
 
     monkeypatch.setenv("RAW_DATA_DIR_MODE", "use_saved")
     monkeypatch.setenv("REQUEST_DEFAULTS_PATH", str(request_defaults_path))

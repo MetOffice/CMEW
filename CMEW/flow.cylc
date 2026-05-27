@@ -121,7 +121,6 @@
             START_YEAR = {{ START_YEAR }}
             NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
             MIP_TABLE_DIR = {{ MIP_TABLE_DIR }}
-            STREAM_ID = "apm"
 
     [[standardise_model_data<dataset>]]
         inherit = STANDARDISE, DATASET

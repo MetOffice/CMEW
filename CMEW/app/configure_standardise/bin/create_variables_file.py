@@ -5,6 +5,8 @@
 Generates the variables.txt file from the ESMValTool recipe.
 """
 import os
+from pathlib import Path
+import yaml
 
 
 def combine_variable_lists(directory):
@@ -34,6 +36,26 @@ def combine_variable_lists(directory):
     return variables
 
 
+def load_stream_dict():
+    """
+    Loads stream information from the ../etc/streams.yml file.
+
+    Returns
+    -------
+    dict
+        A mapping of pre-defined streams to their associated variables
+    """
+    # Set path to stream mappings
+    streams_config = Path(__file__).parent.parent / "etc" / "streams.yml"
+
+    # Read the stream mappings
+    with open(streams_config, "r") as f:
+        config = yaml.safe_load(f)
+
+    # Return the whole dictionary
+    return config
+
+
 def add_stream_to_variables(variables):
     """Add stream information to a list of variables.
 
@@ -47,28 +69,7 @@ def add_stream_to_variables(variables):
     list[str]
         List of variables in the format "MIP_table/variable_name:stream"
     """
-    # Adding single prescribed stream to match current approach
-    prescribed_stream = os.environ["STREAM_ID"]
-
-    # But setting up a dictionary to allow for future expansion
-    stream_dict = {
-        prescribed_stream: [
-            "Amon/hfls",
-            "Amon/hfss",
-            "Amon/rlds",
-            "Amon/rlut",
-            "Amon/rlutcs",
-            "Amon/rsds",
-            "Amon/rsdt",
-            "Amon/rsut",
-            "Amon/rsutcs",
-            "Emon/rls",
-            "Emon/rss",
-        ],
-    }
-
-    # Setting a default stream for variables not listed
-    default_stream = os.environ["STREAM_ID"]
+    stream_dict = load_stream_dict()
 
     # Using a second dictionary to avoid looping
     var_to_stream = {
@@ -79,7 +80,7 @@ def add_stream_to_variables(variables):
 
     # Listing the input variables together with their stream
     streamed_variables = [
-        f"{var}:{var_to_stream.get(var, default_stream)}" for var in variables
+        f"{var}:{var_to_stream.get(var)}" for var in variables
     ]
 
     return streamed_variables
