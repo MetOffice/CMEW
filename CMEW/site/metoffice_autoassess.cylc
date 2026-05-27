@@ -1,9 +1,8 @@
 #!jinja2
-# (C) Crown Copyright 2022-2025, Met Office.
+# (C) Crown Copyright 2026, Met Office.
 # The LICENSE.md file contains full licensing details.
 # metoffice_autoassess.cylc
 [runtime]
-
     [[SITE_AUTOASSESS]]
         [[[environment]]]
             OBS_CLIM_PATH = /data/users/gc_eval/autoassess/clim
