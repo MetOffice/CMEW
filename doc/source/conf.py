@@ -54,3 +54,4 @@ html_static_path = ["_static"]
 
 # Ignore the following URLs when running linkcheck.
 linkcheck_ignore = [r"https://github.com/MetOffice/CMEW.*"]
+linkcheck_ignore = [r"https://wcrp-cmip.org/"]
