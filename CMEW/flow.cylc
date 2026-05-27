@@ -14,6 +14,9 @@
 [task parameters]
     dataset = {{ datasets }}
     recipe = radiation_budget
+{%- if not UNITTEST and AUTOASSESS %}
+    autoassess_area = monsoon
+{%- endif %}
 
 [scheduling]
     [[graph]]
@@ -151,4 +154,9 @@
     {%- if TEST %}
         {% include "inc/test.cylc" %}
     {%- endif %}
+{%- endif %}
+
+{%- if not UNITTEST and AUTOASSESS %}
+    {% include "site/" ~ SITE ~ "_autoassess.cylc" %}
+    {% include "inc/autoassess.cylc" %}
 {%- endif %}
