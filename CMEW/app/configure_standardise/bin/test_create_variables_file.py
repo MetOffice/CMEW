@@ -58,9 +58,7 @@ def test_combine_variable_lists():
 
 
 def test_add_stream_to_variables(monkeypatch, path_to_combined_variables):
-    stream_config_path = (
-        Path(__file__).parent.parent / "etc" / "streams.yml"
-    )
+    stream_config_path = Path(__file__).parent.parent / "etc" / "streams.yml"
     monkeypatch.setenv("STREAM_CONFIG_PATH", str(stream_config_path))
     input = [
         "Amon/hfls",

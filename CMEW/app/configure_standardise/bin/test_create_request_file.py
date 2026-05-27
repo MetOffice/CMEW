@@ -22,9 +22,7 @@ def test_create_request(monkeypatch):
     request_defaults_path = (
         Path(__file__).parent.parent / "etc" / "request_defaults.cfg"
     )
-    stream_config_path = (
-        Path(__file__).parent.parent / "etc" / "streams.yml"
-    )
+    stream_config_path = Path(__file__).parent.parent / "etc" / "streams.yml"
     root_proc_dir = "/path/to/proc/dir/"
     root_data_dir = "/path/to/data/dir/"
     variables_path = "/path/to/variables.txt"
