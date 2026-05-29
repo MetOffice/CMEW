@@ -25,6 +25,33 @@ def load_request_defaults():
     return cfg
 
 
+def list_streams():
+    """
+    Lists all streams in the ../etc/streams.yml file.
+
+    Returns
+    -------
+    str
+        Space separated list of all streams.
+    """
+    # Get path to stream mappings
+    streams_config = os.environ["STREAM_CONFIG_PATH"]
+
+    # Read the stream mappings
+    with open(streams_config, "r") as f:
+        config = yaml.safe_load(f)
+
+    # List all streams (keys)
+    all_streams = []
+    for stream in config:
+        all_streams.append(stream)
+
+    # Return as a space separated list
+    stream_str = " ".join(all_streams)
+
+    return stream_str
+
+
 def create_request(model_run):
     """
     Build a CDDS request configuration for a run identified by a suite_id.
@@ -67,8 +94,8 @@ def create_request(model_run):
         "start_date": f"{dataset_dict['start_year']}-01-01T00:00:00",
         "end_date": f"{int(dataset_dict['end_year'])+1}-01-01T00:00:00",
         "model_workflow_id": dataset_dict["suite_id"],
-        # For now there is only one stream, for Amon and Emon mip.
-        "streams": os.environ["STREAM_ID"],
+        # List all possible streams as CDDS just ignores ones without variables
+        "streams": list_streams(),
         "variable_list_file": os.environ["VARIABLES_PATH"],
     }
     request["misc"] = dict(defaults["misc"])

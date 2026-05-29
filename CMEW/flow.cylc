@@ -67,6 +67,7 @@
             CDDS_SOFTWARE_DIR = "~cdds/software"
             RAW_DATA_DIR = {{ RAW_DATA_DIR | default("") }}
             RAW_DATA_DIR_MODE = {{ RAW_DATA_DIR_MODE }}
+            STREAM_CONFIG_PATH = ${CYLC_WORKFLOW_RUN_DIR}/app/configure_standardise/etc/streams.yml
             # Workaround for bug in CDDS: ROOT_SOFTWARE_DIR: unbound variable.
             ROOT_SOFTWARE_DIR = ${CDDS_SOFTWARE_DIR}
             CDDS_VERSION = {{ CDDS_VERSION }}
@@ -124,7 +125,6 @@
             START_YEAR = {{ START_YEAR }}
             NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
             MIP_TABLE_DIR = {{ MIP_TABLE_DIR }}
-            STREAM_ID = "apm"
 
     [[standardise_model_data<dataset>]]
         inherit = STANDARDISE, DATASET
