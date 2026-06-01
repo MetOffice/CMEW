@@ -23,12 +23,6 @@ import tempfile
 
 
 @pytest.fixture
-def mock_env_vars(monkeypatch):
-    # For adding to variables
-    monkeypatch.setenv("STREAM_ID", "apm")
-
-
-@pytest.fixture
 def path_to_combined_variables():
     path = (
         Path(__file__).parent.parent.parent
@@ -56,14 +50,16 @@ def test_combine_variable_lists():
         "Emon/rss",
         "Amon/rsut",
         "Amon/rsutcs",
-        "fx/areacello",
-        "OImon/sic",
+        "Amon/tas",
+        "SImon/siconc",
     ]
 
     assert actual == expected
 
 
-def test_add_stream_to_variables(mock_env_vars, path_to_combined_variables):
+def test_add_stream_to_variables(monkeypatch, path_to_combined_variables):
+    stream_config_path = Path(__file__).parent.parent / "etc" / "streams.yml"
+    monkeypatch.setenv("STREAM_CONFIG_PATH", str(stream_config_path))
     input = [
         "Amon/hfls",
         "Amon/hfss",
@@ -76,8 +72,8 @@ def test_add_stream_to_variables(mock_env_vars, path_to_combined_variables):
         "Emon/rss",
         "Amon/rsut",
         "Amon/rsutcs",
-        "fx/areacello",
-        "OImon/sic",
+        "Amon/tas",
+        "SImon/siconc",
     ]
     actual = add_stream_to_variables(input)
 
@@ -100,8 +96,8 @@ def test_write_variables(path_to_combined_variables):
         "Emon/rss:apm",
         "Amon/rsut:apm",
         "Amon/rsutcs:apm",
-        "fx/areacello:apm",
-        "OImon/sic:apm",
+        "Amon/tas:ap5",
+        "SImon/siconc:inm",
     ]
 
     # Write the test dictionary to a temporary file

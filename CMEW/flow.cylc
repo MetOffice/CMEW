@@ -14,6 +14,9 @@
 [task parameters]
     dataset = {{ datasets }}
     recipe = radiation_budget, seaice_sensitivity
+{%- if not UNITTEST and AUTOASSESS %}
+    autoassess_area = monsoon
+{%- endif %}
 
 [scheduling]
     [[graph]]
@@ -64,6 +67,7 @@
             CDDS_SOFTWARE_DIR = "~cdds/software"
             RAW_DATA_DIR = {{ RAW_DATA_DIR | default("") }}
             RAW_DATA_DIR_MODE = {{ RAW_DATA_DIR_MODE }}
+            STREAM_CONFIG_PATH = ${CYLC_WORKFLOW_RUN_DIR}/app/configure_standardise/etc/streams.yml
             # Workaround for bug in CDDS: ROOT_SOFTWARE_DIR: unbound variable.
             ROOT_SOFTWARE_DIR = ${CDDS_SOFTWARE_DIR}
             CDDS_VERSION = {{ CDDS_VERSION }}
@@ -74,27 +78,12 @@
             VARIABLES_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/variables_${CYLC_TASK_PARAM_dataset}.txt
             RAW_DATA_DIR_SUITE = {{ RAW_DATA_DIR | default("") }}"/$CYLC_TASK_PARAM_dataset"
 
-    # Multi-run metadata family: reference and evaluation runs
     [[MODEL_RUNS]]
         [[[environment]]]
             # Directory containing dataset lists as YAML files
             DATASETS_LIST_DIR = "${CYLC_WORKFLOW_SHARE_DIR}/dataset_lists"
             START_YEAR = {{ START_YEAR }}
             NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
-
-            # Reference run metadata
-            REF_MODEL_ID = {{ REF_MODEL_ID }}
-            REF_SUITE_ID = {{ REF_SUITE_ID }}
-            REF_CALENDAR = {{ REF_CALENDAR }}
-            REF_VARIANT_LABEL = {{ REF_VARIANT_LABEL }}
-            REF_EXPERIMENT_ID = {{ REF_EXPERIMENT_ID }}
-
-            # Evaluation run metadata
-            MODEL_ID = {{ MODEL_ID }}
-            SUITE_ID = {{ SUITE_ID }}
-            CALENDAR = {{ CALENDAR }}
-            VARIANT_LABEL = {{ VARIANT_LABEL }}
-            EXPERIMENT_ID = {{ EXPERIMENT_ID }}
 
     [[install_env_file]]
         [[[environment]]]
@@ -128,8 +117,6 @@
         inherit = None, RECIPE, MODEL_RUNS
         [[[environment]]]
             ROSE_TASK_APP = configure_for
-            LABEL_FOR_PLOTS = {{ LABEL_FOR_PLOTS }}
-            REF_LABEL_FOR_PLOTS = {{ REF_LABEL_FOR_PLOTS }}
 
     [[configure_standardise<recipe,dataset>]]
         inherit = STANDARDISE, RECIPE, MODEL_RUNS, DATASET
@@ -138,7 +125,6 @@
             START_YEAR = {{ START_YEAR }}
             NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
             MIP_TABLE_DIR = {{ MIP_TABLE_DIR }}
-            STREAM_ID = "apm"
 
     [[standardise_model_data<dataset>]]
         inherit = STANDARDISE, DATASET
@@ -170,4 +156,9 @@
     {%- if TEST %}
         {% include "inc/test.cylc" %}
     {%- endif %}
+{%- endif %}
+
+{%- if not UNITTEST and AUTOASSESS %}
+    {% include "site/" ~ SITE ~ "_autoassess.cylc" %}
+    {% include "inc/autoassess.cylc" %}
 {%- endif %}
