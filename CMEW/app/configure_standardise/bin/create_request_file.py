@@ -16,13 +16,17 @@ def load_request_defaults():
 
     Returns
     -------
-    configparser.ConfigParser()
+    dict
         CDDS request configuration default settings.
     """
-    cfg = configparser.ConfigParser()
-    cfg.read(os.environ.get("REQUEST_DEFAULTS_PATH"))
+    # Get path to default settings
+    defaults = os.environ["REQUEST_DEFAULTS_PATH"]
 
-    return cfg
+    # Read the defaults
+    with open(defaults, "r") as f:
+        config = yaml.safe_load(f)
+
+    return config
 
 
 def list_streams():
@@ -60,7 +64,7 @@ def create_request(model_run):
 
     Returns
     -------
-    configparser.ConfigParser()
+    dict
         CDDS request configuration.
     """
     defaults = load_request_defaults()
@@ -73,7 +77,7 @@ def create_request(model_run):
         dataset_dict = yaml.safe_load(f)[model_run]
 
     # Create the CDDS request
-    request = configparser.ConfigParser()
+    request = {}
     request["metadata"] = {
         **defaults["metadata"],
         "calendar": dataset_dict["calendar"],
@@ -110,15 +114,18 @@ def write_request(request, target_path):
 
     Parameters
     ----------
-    request : configparser.ConfigParser()
+    request : dict
         The request configuration.
 
     target_path: Path
         The full path to the file
         where the request configuration will be written.
     """
+    cfg = configparser.ConfigParser()
+    cfg.read_dict(request)
+
     with open(target_path, mode="w") as file_handle:
-        request.write(file_handle)
+        cfg.write(file_handle)
 
 
 def main():
