@@ -8,24 +8,12 @@ Test data files:
     input for test_create_request
 """
 import os
-import pytest
 from pathlib import Path
-import yaml
+import configparser
 from create_request_file import create_request, load_request_defaults
 
 
-@pytest.fixture
-def path_to_kgo_request():
-    path = (
-        Path(__file__).parent.parent.parent
-        / "unittest"
-        / "kgo"
-        / "request_u-cw673.cfg"
-    )
-    return path
-
-
-def test_create_request(monkeypatch, path_to_kgo_request):
+def test_create_request(monkeypatch):
     monkeypatch.setenv(
         "DATASETS_LIST_DIR",
         str(Path(__file__).parent.parent.parent / "unittest" / "mock_data"),
@@ -50,8 +38,21 @@ def test_create_request(monkeypatch, path_to_kgo_request):
     monkeypatch.setenv("MIP_TABLE_DIR", mip_table_dir)
     monkeypatch.setenv("STREAM_ID", stream_id)
 
-    actual = create_request("u-cw673")
-    with open(path_to_kgo_request, "r") as f:
-        expected = yaml.safe_load(f)
+    actual_request = create_request("u-cw673")
+    cfg = configparser.ConfigParser()
+    cfg.read_dict(actual_request)
+    actual = {section: dict(cfg[section]) for section in cfg.sections()}
+
+    expected_request = str(
+        Path(__file__).parent.parent.parent
+        / "unittest"
+        / "kgo"
+        / "request_u-cw673.cfg"
+    )
+    config = configparser.ConfigParser()
+    config.read(expected_request)
+    expected = {
+        section: dict(config[section]) for section in config.sections()
+    }
 
     assert actual == expected

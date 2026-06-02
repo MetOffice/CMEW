@@ -33,7 +33,10 @@ def load_request_defaults():
     with open(defaults, "r") as f:
         config = yaml.safe_load(f)
 
-    logger.debug("Default config:\n%s", config,)
+    logger.debug(
+        "Default config:\n%s",
+        config,
+    )
     return config
 
 
@@ -52,7 +55,10 @@ def list_streams():
     # Read the stream mappings
     with open(streams_config, "r") as f:
         config = yaml.safe_load(f)
-        logger.debug("Stream config:\n%s", config, )
+        logger.debug(
+            "Stream config:\n%s",
+            config,
+        )
 
     # List all streams (keys)
     all_streams = []
@@ -61,7 +67,10 @@ def list_streams():
 
     # Return as a space separated list
     stream_str = " ".join(all_streams)
-    logger.debug("Stream string:\n%s", stream_str, )
+    logger.debug(
+        "Stream string:\n%s",
+        stream_str,
+    )
 
     return stream_str
 
@@ -85,7 +94,11 @@ def create_request(model_run):
     model_runs_yaml = Path(os.environ["DATASETS_LIST_DIR"]) / "model_runs.yml"
     with open(model_runs_yaml, "r") as f:
         dataset_dict = yaml.safe_load(f)[model_run]
-    logger.debug("Dataset % config:\n%s", model_run, dataset_dict, )
+    logger.debug(
+        "Dataset % config:\n%s",
+        model_run,
+        dataset_dict,
+    )
 
     # Create the CDDS request
     request = {}
