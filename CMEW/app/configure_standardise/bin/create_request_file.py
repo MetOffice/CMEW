@@ -6,7 +6,6 @@ Generate CDDS request configuration file.
 """
 import configparser
 import os
-import datetime
 import sys
 from pathlib import Path
 import yaml

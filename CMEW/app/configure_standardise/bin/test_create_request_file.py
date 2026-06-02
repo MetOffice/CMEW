@@ -7,10 +7,9 @@ Test data files:
 /app/unittest/mock_data/model_runs.yml
     input for test_create_request
 """
-import os
 from pathlib import Path
 import configparser
-from create_request_file import create_request, load_request_defaults
+from create_request_file import create_request
 
 
 def test_create_request(monkeypatch):
