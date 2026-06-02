@@ -6,8 +6,15 @@ Generate CDDS request configuration file.
 """
 import configparser
 import os
+import datetime
+import sys
 from pathlib import Path
 import yaml
+import logging
+
+logging.basicConfig(level=logging.DEBUG, stream=sys.stdout)
+filename = os.path.basename(__file__)
+logger = logging.getLogger(filename)
 
 
 def load_request_defaults():
@@ -26,6 +33,7 @@ def load_request_defaults():
     with open(defaults, "r") as f:
         config = yaml.safe_load(f)
 
+    logger.debug("Default config:\n%s", config,)
     return config
 
 
@@ -44,6 +52,7 @@ def list_streams():
     # Read the stream mappings
     with open(streams_config, "r") as f:
         config = yaml.safe_load(f)
+        logger.debug("Stream config:\n%s", config, )
 
     # List all streams (keys)
     all_streams = []
@@ -52,6 +61,7 @@ def list_streams():
 
     # Return as a space separated list
     stream_str = " ".join(all_streams)
+    logger.debug("Stream string:\n%s", stream_str, )
 
     return stream_str
 
@@ -75,11 +85,14 @@ def create_request(model_run):
     model_runs_yaml = Path(os.environ["DATASETS_LIST_DIR"]) / "model_runs.yml"
     with open(model_runs_yaml, "r") as f:
         dataset_dict = yaml.safe_load(f)[model_run]
+    logger.debug("Dataset % config:\n%s", model_run, dataset_dict, )
 
     # Create the CDDS request
     request = {}
     request["metadata"] = {
         **defaults["metadata"],
+        # The internal dictionary replaces the T with a space
+        "base_date": defaults["metadata"]["base_date"].isoformat(),
         "calendar": dataset_dict["calendar"],
         "experiment_id": dataset_dict["experiment_id"],
         "institution_id": dataset_dict["institute"],
@@ -106,6 +119,8 @@ def create_request(model_run):
     request["conversion"] = dict(defaults["conversion"])
     if os.environ["RAW_DATA_DIR_MODE"] == "use_saved":
         request["conversion"]["skip_extract"] = "True"
+
+    logger.debug("Request config:\n%s", request)
     return request
 
 
@@ -124,6 +139,8 @@ def write_request(request, target_path):
     cfg = configparser.ConfigParser()
     cfg.read_dict(request)
 
+    logger.debug("Writing request config:\n%s", cfg)
+
     with open(target_path, mode="w") as file_handle:
         cfg.write(file_handle)
 
@@ -137,6 +154,8 @@ def main():
     by ``create_request()``.
     """
     dataset = os.environ["CYLC_TASK_PARAM_dataset"].strip()
+    logger.info("Creating CDDS request for dataset %s", dataset)
+
     request = create_request(dataset)
     target_path = Path(os.environ["REQUEST_PATH"])
     write_request(request, target_path)
