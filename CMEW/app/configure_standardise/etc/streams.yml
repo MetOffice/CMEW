@@ -14,5 +14,7 @@ apm:
 - Emon/rss
 ap5:
 - Amon/tas
+- Amon/lwcre
+- Amon/swcre
 inm:
 - SImon/siconc
