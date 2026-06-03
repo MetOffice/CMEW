@@ -91,27 +91,12 @@
 
     [[configure_recipe]]
         [[[environment]]]
-            DRS_CMIP3 = {{ DRS_CMIP3 }}
-            DRS_CMIP5 = {{ DRS_CMIP5 }}
             DRS_CMIP6 = {{ DRS_CMIP6 }}
-            DRS_CORDEX = {{ DRS_CORDEX }}
-            DRS_OBS = {{ DRS_OBS }}
-            DRS_OBS6 = {{ DRS_OBS6 }}
-            DRS_ANA4MIPS = {{ DRS_ANA4MIPS }}
-            DRS_NATIVE6 = {{ DRS_NATIVE6 }}
             DRS_OBS4MIPS = {{ DRS_OBS4MIPS }}
             MAX_PARALLEL_TASKS = {{ MAX_PARALLEL_TASKS }}
             MIP_TABLE_DIR = {{ MIP_TABLE_DIR }}
-            ROOTPATH_CMIP3 = {{ ROOTPATH_CMIP3 }}
-            ROOTPATH_CMIP5 = {{ ROOTPATH_CMIP5 }}
             ROOTPATH_CMIP6 = {{ ROOTPATH_CMIP6 }}
-            ROOTPATH_CORDEX = {{ ROOTPATH_CORDEX }}
-            ROOTPATH_OBS = {{ ROOTPATH_OBS }}
-            ROOTPATH_OBS6 = {{ ROOTPATH_OBS6 }}
-            ROOTPATH_ANA4MIPS = {{ ROOTPATH_ANA4MIPS }}
-            ROOTPATH_NATIVE6 = {{ ROOTPATH_NATIVE6 }}
             ROOTPATH_OBS4MIPS = {{ ROOTPATH_OBS4MIPS }}
-            ROOTPATH_RAWOBS = {{ ROOTPATH_RAWOBS }}
 
     [[configure_for<recipe>]]
         inherit = None, RECIPE, MODEL_RUNS
