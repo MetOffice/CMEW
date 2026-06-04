@@ -17,7 +17,7 @@ def main():
     recipe_name = os.environ["RECIPE_NAME"]
     destination_fp = os.environ["RECIPE_PATH"]
 
-    # The example recipe is within a subfolder
+    # Some recipes are within subfolders
     if recipe_name == "recipe_python.yml":
         recipe_fp = f"examples/{recipe_name}"
     elif recipe_name == "recipe_ref_cre.yml":
