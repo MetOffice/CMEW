@@ -7,10 +7,9 @@ Test data files:
 /app/unittest/mock_data/model_runs.yml
     input for test_create_request
 """
-import os
 from pathlib import Path
-
-from create_request_file import create_request, load_request_defaults
+import configparser
+from create_request_file import create_request
 
 
 def test_create_request(monkeypatch):
@@ -20,7 +19,7 @@ def test_create_request(monkeypatch):
     )
 
     request_defaults_path = (
-        Path(__file__).parent.parent / "etc" / "request_defaults.cfg"
+        Path(__file__).parent.parent / "etc" / "request_defaults.yml"
     )
     stream_config_path = Path(__file__).parent.parent / "etc" / "streams.yml"
     root_proc_dir = "/path/to/proc/dir/"
@@ -38,42 +37,21 @@ def test_create_request(monkeypatch):
     monkeypatch.setenv("MIP_TABLE_DIR", mip_table_dir)
     monkeypatch.setenv("STREAM_ID", stream_id)
 
-    config = create_request("u-cw673")
-    actual = {
-        section: dict(config.items(section)) for section in config.sections()
-    }
+    actual_request = create_request("u-cw673")
+    cfg = configparser.ConfigParser()
+    cfg.read_dict(actual_request)
+    actual = {section: dict(cfg[section]) for section in cfg.sections()}
 
-    request_defaults = load_request_defaults()
-    expected = {}
-    for section in request_defaults.sections():
-        expected[section] = dict(request_defaults.items(section))
-
-    expected["metadata"] = {
-        **request_defaults["metadata"],
-        "calendar": "gregorian",
-        "experiment_id": "amip",
-        "institution_id": "MOHC",
-        "model_id": "HadGEM3-GC5E-LL",
-        "variant_label": "r1i1p1f1",
-    }
-    expected["common"] = {
-        **request_defaults["common"],
-        "mip_table_dir": os.path.expanduser(mip_table_dir),
-        "root_proc_dir": root_proc_dir,
-        "root_data_dir": root_data_dir,
-        "workflow_basename": "u-cw673",
-    }
-    expected["data"] = {
-        **request_defaults["data"],
-        "start_date": "1993-01-01T00:00:00",
-        "end_date": "2003-01-01T00:00:00",
-        "model_workflow_id": "u-cw673",
-        "streams": stream_id,
-        "variable_list_file": variables_path,
-    }
-    expected["conversion"] = {
-        **request_defaults["conversion"],
-        "skip_extract": "True",
+    expected_request = str(
+        Path(__file__).parent.parent.parent
+        / "unittest"
+        / "kgo"
+        / "request_u-cw673.cfg"
+    )
+    config = configparser.ConfigParser()
+    config.read(expected_request)
+    expected = {
+        section: dict(config[section]) for section in config.sections()
     }
 
     assert actual == expected
