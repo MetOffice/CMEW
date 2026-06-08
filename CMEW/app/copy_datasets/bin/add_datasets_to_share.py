@@ -91,7 +91,7 @@ def convert_str_to_facets(section):
             key, value = facet.split("=")
 
             # Values are output with quotes around them
-            value = value.replace('"', "")
+            value = value.replace('"', "").replace("'", "")
 
             # Add the key: value pair dictionary
             section_dict[key.strip()] = value.strip()
