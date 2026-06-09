@@ -12,6 +12,8 @@ then writes those dictionaries to YAML files in the share directory.
 """
 import os
 import yaml
+from scrape_ini import find_ref
+from pathlib import Path
 
 
 def extract_sections_from_naml(naml_fp):
@@ -266,7 +268,20 @@ def use_facet_as_key(filepath, key_facet):
         yaml.dump(new_dict, f)
 
 
-if __name__ == "__main__":
+def add_reference_key(filepath):
+    rose_suite_fp = (
+        Path(__file__).parent.parent.parent.parent / "rose-suite.conf"
+    )
+    ref_dataset = find_ref(rose_suite_fp)
+    with open(filepath, "r") as f:
+        dataset_dict = yaml.safe_load(f)
+    dataset_dict[ref_dataset]["benchmark_dataset"] = True
+    with open(filepath, "w") as f:
+        yaml.dump(dataset_dict, f)
+
+
+def main():
+    """Copy dataset information from configuration to the share directory."""
     # Read the target (shared) directory from the environment
     target_dir = os.environ["DATASETS_LIST_DIR"]
 
@@ -296,5 +311,13 @@ if __name__ == "__main__":
             write_datasets_to_yaml(datasets, basename, target_dir)
 
     # Reformat the YAML files to use unique identifiers as keys
-    use_facet_as_key(f"{target_dir}/model_runs.yml", "suite_id")
+    model_runs_yaml = f"{target_dir}/model_runs.yml"
+    use_facet_as_key(model_runs_yaml, "suite_id")
     use_facet_as_key(f"{target_dir}/cmip6_datasets.yml", "model_id")
+
+    # Add the reference identifier
+    add_reference_key(model_runs_yaml)
+
+
+if __name__ == "__main__":
+    main()
