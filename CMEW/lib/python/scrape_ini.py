@@ -68,3 +68,51 @@ def list_datasets(fp):
     datasets_string = ", ".join(datasets)
 
     return datasets_string
+
+
+def retrieve_value(fp, indicator, key):
+    """
+    Return the value of a key from the indicated section of an ini-style file.
+    """
+    # Read the file
+    with open(fp, "r") as f:
+        content = f.readlines()
+
+    # Iterate over the lines
+    for index, line in enumerate(content):
+
+        # Look for relevant sections
+        line_to_find = f"[namelist:model_runs({indicator})]"
+        if line.startswith(line_to_find):
+
+            # Look for next line starting with the key
+            next_index = index + 1
+            for next_line in content[next_index:]:
+                if next_line.strip().startswith(key):
+                    # Split the line and take the second part without quotes
+                    value = next_line.split("=")[1].strip().replace('"', "")
+
+                    # Break the inner loop
+                    break
+
+    return value
+
+
+def find_ref(fp):
+    """Return the reference suite ID"""
+    return retrieve_value(fp, "reference", "suite_id")
+
+
+def find_eval(fp):
+    """Return the evaluation suite ID"""
+    return retrieve_value(fp, "test", "suite_id")
+
+
+def find_ref_label(fp):
+    """Return the reference label for plots"""
+    return retrieve_value(fp, "reference", "label_for_plots")
+
+
+def find_eval_label(fp):
+    """Return the evaluation label for plots"""
+    return retrieve_value(fp, "test", "label_for_plots")
