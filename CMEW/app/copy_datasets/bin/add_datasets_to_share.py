@@ -269,6 +269,14 @@ def use_facet_as_key(filepath, key_facet):
 
 
 def add_reference_key(filepath):
+    """
+    Add a "benchmark_dataset" key with the value "true" to a YAML file.
+
+    Parameters
+    ----------
+    filepath: str
+        The location of the YAML file to be edited.
+    """
     rose_suite_fp = (
         Path(__file__).parent.parent.parent.parent / "rose-suite.conf"
     )
