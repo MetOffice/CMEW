@@ -351,6 +351,7 @@ def main():
     use_facet_as_key(f"{target_dir}/cmip6_datasets.yml", "model_id")
 
     # Add the reference identifier
+    logger.info("Adding benchmarking key to model runs YAML")
     add_reference_key(model_runs_yaml)
 
 
