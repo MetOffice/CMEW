@@ -7,7 +7,7 @@ import pytest
 
 # --- Section to import scrape_ini.py ---
 
-# PYTHONPATH doesn't autmatically pick this up
+# PYTHONPATH doesn't automatically pick this up
 scrape_ini_path = (
     Path(__file__).parent.parent.parent.parent
     / "lib"
