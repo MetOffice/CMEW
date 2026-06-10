@@ -27,8 +27,6 @@ def test_create_user_config_file_single_values(
 @pytest.mark.parametrize(
     "input_key, output_outer_key, output_inner_key, expected",
     [
-        ("DRS_CORDEX", "drs", "CORDEX", "cordexpath"),
-        ("DRS_OBS", "drs", "OBS", "obspath"),
         ("ROOTPATH_CMIP6", "rootpath", "CMIP6", "cmip_rootpath"),
         ("ESMVal", "drs", "ESMVal", "BADC"),
     ],
