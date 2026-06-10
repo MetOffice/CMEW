@@ -16,6 +16,7 @@ logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 filename = os.path.basename(__file__)
 logger = logging.getLogger(filename)
 
+
 def return_blank_recipe(recipe_path):
     """Empty the datasets section of an ESMValTool recipe.
 
