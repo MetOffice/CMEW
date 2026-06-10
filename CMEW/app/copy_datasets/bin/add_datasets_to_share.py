@@ -12,6 +12,8 @@ then writes those dictionaries to YAML files in the share directory.
 """
 import os
 import yaml
+from scrape_ini import find_ref
+from pathlib import Path
 import sys
 import logging
 
@@ -281,7 +283,36 @@ def use_facet_as_key(filepath, key_facet):
         yaml.dump(new_dict, f)
 
 
-if __name__ == "__main__":
+def add_reference_key(filepath):
+    """
+    Add a "benchmark_dataset" key with the value "true" to a YAML file.
+
+    The section to which the key is added is determined by the function
+    `find_ref` in CMEW/lib/python/scrape_ini.py.
+
+    Parameters
+    ----------
+    filepath: str
+        The location of the YAML file to be edited.
+    """
+    # Find the reference suite ID in the `rose-suite.conf` file
+    rose_suite_fp = (
+        Path(__file__).parent.parent.parent.parent / "rose-suite.conf"
+    )
+    ref_dataset = find_ref(rose_suite_fp)
+
+    # Read the yaml as a dictionary without the extra key
+    with open(filepath, "r") as f:
+        dataset_dict = yaml.safe_load(f)
+
+    # Add the extra key and re-save the file
+    dataset_dict[ref_dataset]["benchmark_dataset"] = True
+    with open(filepath, "w") as f:
+        yaml.dump(dataset_dict, f)
+
+
+def main():
+    """Copy dataset information from configuration to the share directory."""
     # Read the target (shared) directory from the environment
     target_dir = os.environ["DATASETS_LIST_DIR"]
 
@@ -315,5 +346,13 @@ if __name__ == "__main__":
 
     # Reformat the YAML files to use unique identifiers as keys
     logger.info("Reformatting YAML files to use suite IDs as keys")
-    use_facet_as_key(f"{target_dir}/model_runs.yml", "suite_id")
+    model_runs_yaml = f"{target_dir}/model_runs.yml"
+    use_facet_as_key(model_runs_yaml, "suite_id")
     use_facet_as_key(f"{target_dir}/cmip6_datasets.yml", "model_id")
+
+    # Add the reference identifier
+    add_reference_key(model_runs_yaml)
+
+
+if __name__ == "__main__":
+    main()
