@@ -100,19 +100,19 @@ def retrieve_value(fp, indicator, key):
 
 def find_ref(fp):
     """Return the reference suite ID"""
-    return retrieve_value(fp, "reference", "suite_id")
+    return retrieve_value(fp, "ref", "suite_id")
 
 
 def find_eval(fp):
     """Return the evaluation suite ID"""
-    return retrieve_value(fp, "test", "suite_id")
+    return retrieve_value(fp, "exp", "suite_id")
 
 
 def find_ref_label(fp):
     """Return the reference label for plots"""
-    return retrieve_value(fp, "reference", "label_for_plots")
+    return retrieve_value(fp, "ref", "label_for_plots")
 
 
 def find_eval_label(fp):
     """Return the evaluation label for plots"""
-    return retrieve_value(fp, "test", "label_for_plots")
+    return retrieve_value(fp, "exp", "label_for_plots")

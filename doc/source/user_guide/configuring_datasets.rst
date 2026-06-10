@@ -46,8 +46,9 @@ Choosing the reference dataset
 
 AutoAssess metrics expect a reference and an evaluation run.
 |CMEW| identifies these by the names of the model run sections in the ``rose-suite.conf`` file;
-the reference run must be named **reference** and the evaluation run named **test**.
-Any additional runs will be ignored by AutoAssess but will be passed to the ESMValTool recipes.
+the reference run must be named **ref** and the evaluation run named **exp**.
+Any additional runs will be ignored by AutoAssess
+but will be passed to the ESMValTool recipes in exactly the same way as the evaluation run "exp".
 These runs may be named as any other string.
 If the clone button is used, the default is "1", "2" and so on.
 
@@ -74,7 +75,7 @@ rather than using the Rose GUI.
 
 .. image:: images/rose_suite_model_sections.png
    :alt: An image of the ``rose-suite.conf`` file in a text editor
-         with an arrow pointing to the section header "namelist:model_runs(reference)".
+         with an arrow pointing to the section header "namelist:model_runs(ref)".
    :width: 300px
 
 
