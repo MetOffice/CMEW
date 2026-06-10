@@ -3,6 +3,12 @@
 # The LICENSE.md file contains full licensing details.
 # autoassess.cylc
 
+{% from "scrape_ini" import find_ref, find_eval, find_ref_label, find_eval_label %}
+{% set ref_dataset = find_ref("rose-suite.conf") %}
+{% set eval_dataset = find_eval("rose-suite.conf") %}
+{% set ref_label = find_ref_label("rose-suite.conf") %}
+{% set eval_label = find_eval_label("rose-suite.conf") %}
+
 [scheduling]
     [[graph]]
         R1 = """
@@ -23,11 +29,17 @@
 
 
 [runtime]
+    [[root]]
+        [[[environment]]]
+            REF_SUITE_ID = {{ ref_dataset }}
+            REF_SUITE_TITLE = {{ ref_label }}
+            SUITE_ID = {{ eval_dataset }}
+            SUITE_TITLE = {{ eval_label }}
 
     [[AUTOASSESS]]
         inherit = SITE_AUTOASSESS
         [[[environment]]]
-            AUTOASSESS_OUTPUT_DIR = $OUTPUT_DIR/{{ SUITE_ID }}_vs_{{ REF_SUITE_ID }}
+            AUTOASSESS_OUTPUT_DIR = $OUTPUT_DIR/{{ eval_dataset }}_vs_{{ ref_dataset }}
             AUTOASSESS_DATA_DIR = $CYLC_WORKFLOW_SHARE_DIR/data/autoassess
             ASSESSMENT_TITLE = {{ AUTOASSESS_TITLE }}
             ESMVALTOOL_MODULE_NAME = {{ ESMVALTOOL_MODULE_NAME }}
@@ -57,25 +69,15 @@
             ROSE_TASK_APP = aa_run_area
             ROSE_APP_OPT_CONF_KEYS = ($CYLC_TASK_PARAM_autoassess_area)
             AREA = $CYLC_TASK_PARAM_autoassess_area
-            REF_SUITE_ID = {{ REF_SUITE_ID }}
-            REF_SUITE_TITLE = {{ REF_LABEL_FOR_PLOTS }}
-            SUITE_ID = {{ SUITE_ID }}
-            SUITE_TITLE = {{ LABEL_FOR_PLOTS }}
 
     [[nac_plot<autoassess_area>]]
         inherit = AUTOASSESS, SITE_AA_NAC_PLOT
         [[[environment]]]
             ROSE_TASK_APP = aa_nac_plot
             AREA = $CYLC_TASK_PARAM_autoassess_area
-            REF_SUITE_ID = {{ REF_SUITE_ID }}
-            REF_SUITE_TITLE = {{ REF_LABEL_FOR_PLOTS }}
-            SUITE_ID = {{ SUITE_ID }}
-            SUITE_TITLE = {{ LABEL_FOR_PLOTS }}
 
     [[html_page<autoassess_area>]]
         inherit = AUTOASSESS, SITE_AA_HTML_PAGE
         [[[environment]]]
             ROSE_TASK_APP = aa_html_page
             AREA = $CYLC_TASK_PARAM_autoassess_area
-            REF_SUITE_ID = {{ REF_SUITE_ID }}
-            SUITE_ID = {{ SUITE_ID }}
