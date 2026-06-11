@@ -1,0 +1,6 @@
+python:
+  recipe_name: recipe_python.yml
+  recipe_fp: examples/recipe_python.yml
+ref_cre:
+  recipe_name: recipe_ref_cre.yml
+  recipe_fp: ref/recipe_ref_cre.yml
