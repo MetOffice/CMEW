@@ -12,14 +12,23 @@ filename = os.path.basename(__file__)
 logger = logging.getLogger(filename)
 
 
-def main():
-    """Fetch a recipe from ESMValTool and copy it to the recipe path."""
-    # Look up the recipe and destination from the environment
-    recipe = os.environ["CYLC_TASK_PARAM_recipe"]
-    logger.info("Fetching recipe %s", recipe)
-    destination_fp = os.environ["RECIPE_PATH"]
-    logger.info("Recipe will be written to %s", destination_fp)
+def retrieve_name_and_fp(recipe):
+    """
+    Looks in recipe_paths.yml for an entry or constructs default values.
 
+    Parameters
+    ----------
+    recipe: str
+        The short recipe identifier used in the workflow parameterisation
+
+    Returns
+    -------
+    recipe_name: str
+        The name of the recipe, usually of the form recipe_thing.yml
+    recipe_fp: str
+        The location of the recipe withing esmvaltool/recipes
+
+    """
     # Load the yaml config file from ../etc
     recipe_dict_fp = os.environ["RECIPE_DICT_PATH"]
     logger.debug("Reading recipe dict from %s", recipe_dict_fp)
@@ -38,6 +47,20 @@ def main():
         logger.debug("Using default name and filepath for recipe %s", recipe)
         recipe_name = f"recipe_{recipe}.yml"
         recipe_fp = recipe_name
+
+    return recipe_name, recipe_fp
+
+
+def main():
+    """Fetch a recipe from ESMValTool and copy it to the recipe path."""
+    # Look up the recipe and destination from the environment
+    recipe = os.environ["CYLC_TASK_PARAM_recipe"]
+    logger.info("Fetching recipe %s", recipe)
+    destination_fp = os.environ["RECIPE_PATH"]
+    logger.info("Recipe will be written to %s", destination_fp)
+
+    # Find the full name and location within ESMValTool
+    recipe_name, recipe_fp = retrieve_name_and_fp(recipe)
 
     # Build the command to fetch and move the recipe
     command = f"""
