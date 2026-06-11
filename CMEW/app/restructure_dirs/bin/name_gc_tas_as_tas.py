@@ -43,7 +43,8 @@ def find_relevant_subdirectories():
         )
         logger.debug("Looking in %s", gc_tas_dir)
 
-        for item in gc_tas_dir.iterdir():
+        # Search in all subdirectories down from here
+        for item in gc_tas_dir.rglob("*"):
             if item.is_file():
                 logger.debug("Found item %s", item)
                 new_fp = str(item).replace("GCAmon6hr", "Amon")
