@@ -36,6 +36,12 @@
             run_recipe<recipe> => compare<recipe>
     {%- endif %}
 {%- endif %}
+{%- if SKIP_CDDS %}
+            install_env_file => configure_recipe & copy_datasets
+            copy_datasets => configure_for<recipe>
+            => symlink_standardised data => run_recipe<recipe>
+            restructure_dirs => housekeeping
+{%- endif %}
         """
 
 [runtime]
@@ -52,6 +58,8 @@
             SHARE_DATA_CDDS = ${CYLC_WORKFLOW_SHARE_DIR}/data/cdds
             ROOT_PROC_DIR = ${SHARE_DATA_CDDS}/proc
             ROOT_DATA_DIR = ${SHARE_DATA_CDDS}/cdds_data
+            STANDARDISED_DATA_DIR = {{ STANDARDISED_DATA_DIR | default("") }}
+            STANDARDISED_DATA_DIR_MODE = {{ STANDARDISED_DATA_DIR_MODE | default("") }}
 
     [[RECIPE]]
         [[[environment]]]
