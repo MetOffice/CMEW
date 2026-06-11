@@ -16,7 +16,7 @@ filename = os.path.basename(__file__)
 logger = logging.getLogger(filename)
 
 
-def find_relevant_subdirectories():
+def move_gc_tas_files_to_amon():
     # Read the model run information from the model_runs.yml file
     model_runs_yaml = Path(os.environ["DATASETS_LIST_DIR"]) / "model_runs.yml"
     with open(model_runs_yaml, "r") as f:
@@ -44,7 +44,7 @@ def find_relevant_subdirectories():
         logger.debug("Looking in %s", gc_tas_dir)
 
         # Search in all subdirectories down from here
-        for item in gc_tas_dir.rglob("*"):
+        for item in gc_tas_dir.rglob("*.nc"):
             if item.is_file():
                 logger.debug("Found item %s", item)
                 new_fp = str(item).replace("GCAmon6hr", "Amon")
@@ -60,7 +60,7 @@ def find_relevant_subdirectories():
 
 
 def main():
-    find_relevant_subdirectories()
+    move_gc_tas_files_to_amon()
 
 
 if __name__ == "__main__":
