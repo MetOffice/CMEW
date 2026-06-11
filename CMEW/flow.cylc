@@ -30,7 +30,7 @@
             configure_for<recipe> => configure_standardise<recipe,dataset>
                 => standardise_model_data<dataset> => restructure_dirs
             configure_recipe & restructure_dirs => run_recipe<recipe>
-            run_recipe<recipe> => overall_index => housekeeping
+            run_recipe<recipe> => housekeeping
 
     {%- if TEST %}
             run_recipe<recipe> => compare<recipe>
@@ -130,8 +130,6 @@
         inherit = MODEL_RUNS
         [[[environment]]]
             ROSE_TASK_APP = copy_datasets
-
-    [[overall_index]]
 
     [[housekeeping]]
 
