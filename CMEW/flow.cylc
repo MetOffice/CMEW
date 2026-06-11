@@ -52,7 +52,6 @@
             SHARE_DATA_CDDS = ${CYLC_WORKFLOW_SHARE_DIR}/data/cdds
             ROOT_PROC_DIR = ${SHARE_DATA_CDDS}/proc
             ROOT_DATA_DIR = ${SHARE_DATA_CDDS}/cdds_data
-            REQUEST_DEFAULTS_PATH = ${CYLC_WORKFLOW_RUN_DIR}/app/configure_standardise/etc/request_defaults.cfg
 
     [[RECIPE]]
         [[[environment]]]
@@ -67,6 +66,7 @@
             CDDS_SOFTWARE_DIR = "~cdds/software"
             RAW_DATA_DIR = {{ RAW_DATA_DIR | default("") }}
             RAW_DATA_DIR_MODE = {{ RAW_DATA_DIR_MODE }}
+            REQUEST_DEFAULTS_PATH = ${CYLC_WORKFLOW_RUN_DIR}/app/configure_standardise/etc/request_defaults.yml
             STREAM_CONFIG_PATH = ${CYLC_WORKFLOW_RUN_DIR}/app/configure_standardise/etc/streams.yml
             # Workaround for bug in CDDS: ROOT_SOFTWARE_DIR: unbound variable.
             ROOT_SOFTWARE_DIR = ${CDDS_SOFTWARE_DIR}
@@ -91,27 +91,12 @@
 
     [[configure_recipe]]
         [[[environment]]]
-            DRS_CMIP3 = {{ DRS_CMIP3 }}
-            DRS_CMIP5 = {{ DRS_CMIP5 }}
             DRS_CMIP6 = {{ DRS_CMIP6 }}
-            DRS_CORDEX = {{ DRS_CORDEX }}
-            DRS_OBS = {{ DRS_OBS }}
-            DRS_OBS6 = {{ DRS_OBS6 }}
-            DRS_ANA4MIPS = {{ DRS_ANA4MIPS }}
-            DRS_NATIVE6 = {{ DRS_NATIVE6 }}
             DRS_OBS4MIPS = {{ DRS_OBS4MIPS }}
             MAX_PARALLEL_TASKS = {{ MAX_PARALLEL_TASKS }}
             MIP_TABLE_DIR = {{ MIP_TABLE_DIR }}
-            ROOTPATH_CMIP3 = {{ ROOTPATH_CMIP3 }}
-            ROOTPATH_CMIP5 = {{ ROOTPATH_CMIP5 }}
             ROOTPATH_CMIP6 = {{ ROOTPATH_CMIP6 }}
-            ROOTPATH_CORDEX = {{ ROOTPATH_CORDEX }}
-            ROOTPATH_OBS = {{ ROOTPATH_OBS }}
-            ROOTPATH_OBS6 = {{ ROOTPATH_OBS6 }}
-            ROOTPATH_ANA4MIPS = {{ ROOTPATH_ANA4MIPS }}
-            ROOTPATH_NATIVE6 = {{ ROOTPATH_NATIVE6 }}
             ROOTPATH_OBS4MIPS = {{ ROOTPATH_OBS4MIPS }}
-            ROOTPATH_RAWOBS = {{ ROOTPATH_RAWOBS }}
 
     [[configure_for<recipe>]]
         inherit = None, RECIPE, MODEL_RUNS
