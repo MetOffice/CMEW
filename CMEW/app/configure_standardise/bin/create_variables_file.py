@@ -6,6 +6,13 @@ Generates the variables.txt file from the ESMValTool recipe.
 """
 import os
 import yaml
+import sys
+import logging
+
+
+logging.basicConfig(level=logging.INFO, stream=sys.stdout)
+filename = os.path.basename(__file__)
+logger = logging.getLogger(filename)
 
 
 def combine_variable_lists(directory):
@@ -27,10 +34,12 @@ def combine_variable_lists(directory):
     variables = []
     for filename in sorted(os.listdir(directory)):  # sorted only to unit test
         if filename.endswith("_variables.txt"):
+            logger.debug("Reading variables from %s", filename)
             with open(os.path.join(directory, filename), "r") as file:
                 recipe_vars = file.read().splitlines()
                 for var in recipe_vars:
                     if var not in variables:
+                        logger.debug("Found variable %s", var)
                         variables.append(var)
     return variables
 
@@ -46,6 +55,7 @@ def load_stream_dict():
     """
     # Get path to stream mappings
     streams_config = os.environ["STREAM_CONFIG_PATH"]
+    logger.debug("Reading streams from %s", streams_config)
 
     # Read the stream mappings
     with open(streams_config, "r") as f:
@@ -81,6 +91,7 @@ def add_stream_to_variables(variables):
     streamed_variables = [
         f"{var}:{var_to_stream.get(var)}" for var in variables
     ]
+    logger.debug("Variables with streams:\n%s", streamed_variables)
 
     return streamed_variables
 
@@ -97,6 +108,8 @@ def write_variables(variables, target_path):
         Location to write the variables file.
     """
     variables_str = "\n".join(variables) + "\n"
+    logger.debug("Writing variables:\n%s", variables_str)
+
     with open(target_path, "w") as target_file:
         target_file.write(variables_str)
 
@@ -104,7 +117,9 @@ def write_variables(variables, target_path):
 def main():
     variables = combine_variable_lists(os.environ["VARIABLES_LIST_DIR"])
     streamed_variables = add_stream_to_variables(variables)
-    write_variables(streamed_variables, os.environ["VARIABLES_PATH"])
+    variables_path = os.environ["VARIABLES_PATH"]
+    logger.info("Writing variables file to %s", variables_path)
+    write_variables(streamed_variables, variables_path)
 
 
 if __name__ == "__main__":
