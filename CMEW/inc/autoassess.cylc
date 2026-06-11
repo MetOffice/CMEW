@@ -9,13 +9,16 @@
 {% set ref_label = find_ref_label("rose-suite.conf") %}
 {% set eval_label = find_eval_label("rose-suite.conf") %}
 
+[task parameters]
+    aa_dataset = {{ [ref_dataset, eval_dataset] | join(", ") }}
+
 [scheduling]
     [[graph]]
         R1 = """
             install_env_file
                 => install_autoassess
-                => retrieve_data<autoassess_area><dataset>
-                => index_data<autoassess_area><dataset>
+                => retrieve_data<autoassess_area><aa_dataset>
+                => index_data<autoassess_area><aa_dataset>
                 => run_area<autoassess_area>
                 => nac_plot<autoassess_area>
                 => html_page<autoassess_area>
@@ -49,18 +52,18 @@
     [[install_autoassess]]
         inherit = AUTOASSESS, SITE_AA_INSTALL
 
-    [[retrieve_data<autoassess_area><dataset>]]
+    [[retrieve_data<autoassess_area><aa_dataset>]]
         inherit = AUTOASSESS, SITE_AA_RETRIEVAL
         [[[environment]]]
             ROSE_TASK_APP = aa_retrieve_data
-            SUITE_ID = $CYLC_TASK_PARAM_dataset
+            SUITE_ID = $CYLC_TASK_PARAM_aa_dataset
             AREA = $CYLC_TASK_PARAM_autoassess_area
 
-    [[index_data<autoassess_area><dataset>]]
+    [[index_data<autoassess_area><aa_dataset>]]
         inherit = AUTOASSESS, SITE_AA_DATA_INDEXING
         [[[environment]]]
             ROSE_TASK_APP = aa_index_data
-            SUITE_ID = $CYLC_TASK_PARAM_dataset
+            SUITE_ID = $CYLC_TASK_PARAM_aa_dataset
             AREA = $CYLC_TASK_PARAM_autoassess_area
 
     [[run_area<autoassess_area>]]
