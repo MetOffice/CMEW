@@ -20,17 +20,20 @@ def main():
     destination_fp = os.environ["RECIPE_PATH"]
     logger.info("Recipe will be written to %s", destination_fp)
 
-    # Some recipes are within subfolders
+    # Load the yaml config file from ../etc
     recipe_dict_fp = os.environ["RECIPE_DICT_PATH"]
     logger.debug("Reading recipe dict from %s", recipe_dict_fp)
     with open(recipe_dict_fp, "r") as f:
         recipe_dict = yaml.safe_load(f)
     logger.debug("Recipe dict:\n%s", recipe_dict)
 
+    # Read specific recipe names and filepaths from the yaml config file
     if recipe in recipe_dict:
         logger.debug("Using info from recipe dictionary for %s", recipe)
         recipe_name = recipe_dict[recipe]["recipe_name"]
         recipe_fp = recipe_dict[recipe]["recipe_fp"]
+
+    # Or use the defaults
     else:
         logger.debug("Using default name and filepath for recipe %s", recipe)
         recipe_name = f"recipe_{recipe}.yml"
