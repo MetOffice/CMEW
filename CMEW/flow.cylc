@@ -13,7 +13,7 @@
 
 [task parameters]
     dataset = {{ datasets }}
-    recipe = radiation_budget, python, ref_cre
+    recipe = radiation_budget
 {%- if not UNITTEST and AUTOASSESS %}
     autoassess_area = monsoon
 {%- endif %}
