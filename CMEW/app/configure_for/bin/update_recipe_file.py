@@ -30,9 +30,6 @@ def return_blank_recipe(recipe_path):
     # Empty the datasets section of the recipe
     recipe["datasets"] = []
 
-    # Remove arctic diagnostic from sea ice sensitivity as areacello seems wrong
-    recipe["diagnostics"].pop("arctic", None)
-
     return recipe
 
 
