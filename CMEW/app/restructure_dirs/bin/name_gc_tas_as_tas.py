@@ -30,15 +30,14 @@ def find_relevant_subdirectories():
     for dataset in dataset_dict:
         inner_dict = dataset_dict[dataset]
         gc_tas_dir = (
-            Path(os.environ["ROOT_DATA_DIR"])
+            Path(os.environ["CYLC_WORKFLOW_SHARE_DIR"])
+            / "work"
             / "GCModelDev"
             / inner_dict["project"]
+            / inner_dict["institute"]
             / inner_dict["model_id"]
             / inner_dict["experiment_id"]
             / inner_dict["variant_label"]
-            / "round-1"
-            / "output"
-            / "apm"
             / "GCAmon6hr"
             / "tas"
         )
