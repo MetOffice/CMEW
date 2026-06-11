@@ -27,17 +27,17 @@ def mock_env_vars(monkeypatch):
     )
 
 
-def test_retrieve_specified(mock_env_vars):
-    key = "mock_entry"
+def test_retrieve_specified(mock_env_vars, monkeypatch):
+    monkeypatch.setenv("CYLC_TASK_PARAM_recipe", "mock_entry")
     expected = "recipe_specified_name.yml", "subdir_1/recipe_second_name.yml"
-    actual = retrieve_name_and_fp(key)
+    actual = retrieve_name_and_fp()
 
     assert actual == expected
 
 
-def test_retrieve_defaults(mock_env_vars):
-    key = "not_here"
+def test_retrieve_defaults(mock_env_vars, monkeypatch):
+    monkeypatch.setenv("CYLC_TASK_PARAM_recipe", "not_here")
     expected = "recipe_not_here.yml", "recipe_not_here.yml"
-    actual = retrieve_name_and_fp(key)
+    actual = retrieve_name_and_fp()
 
     assert actual == expected
