@@ -85,6 +85,13 @@ def add_stream_to_variables(variables):
     return streamed_variables
 
 
+def amend_amon_tas(unstreamed_variables):
+    if "Amon/tas" in unstreamed_variables:
+        unstreamed_variables.remove("Amon/tas")
+        unstreamed_variables.append("GCAmon6hr/tas")
+    return unstreamed_variables
+
+
 def write_variables(variables, target_path):
     """Write a string of variables to a text file in the installed workflow.
 
@@ -103,7 +110,8 @@ def write_variables(variables, target_path):
 
 def main():
     variables = combine_variable_lists(os.environ["VARIABLES_LIST_DIR"])
-    streamed_variables = add_stream_to_variables(variables)
+    unstreamed_variables = amend_amon_tas(variables)
+    streamed_variables = add_stream_to_variables(unstreamed_variables)
     write_variables(streamed_variables, os.environ["VARIABLES_PATH"])
 
 

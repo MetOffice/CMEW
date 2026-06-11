@@ -13,7 +13,7 @@
 
 [task parameters]
     dataset = {{ datasets }}
-    recipe = radiation_budget
+    recipe = radiation_budget, seaice_sensitivity
 {%- if not UNITTEST and AUTOASSESS %}
     autoassess_area = monsoon
 {%- endif %}
@@ -30,7 +30,7 @@
             configure_for<recipe> => configure_standardise<recipe,dataset>
                 => standardise_model_data<dataset> => restructure_dirs
             configure_recipe & restructure_dirs => run_recipe<recipe>
-            restructure_dirs => housekeeping
+            run_recipe<recipe> => housekeeping
 
     {%- if TEST %}
             run_recipe<recipe> => compare<recipe>
@@ -52,6 +52,8 @@
             SHARE_DATA_CDDS = ${CYLC_WORKFLOW_SHARE_DIR}/data/cdds
             ROOT_PROC_DIR = ${SHARE_DATA_CDDS}/proc
             ROOT_DATA_DIR = ${SHARE_DATA_CDDS}/cdds_data
+            # Directory containing dataset lists as YAML files
+            DATASETS_LIST_DIR = "${CYLC_WORKFLOW_SHARE_DIR}/dataset_lists"
 
     [[RECIPE]]
         [[[environment]]]
@@ -80,8 +82,6 @@
 
     [[MODEL_RUNS]]
         [[[environment]]]
-            # Directory containing dataset lists as YAML files
-            DATASETS_LIST_DIR = "${CYLC_WORKFLOW_SHARE_DIR}/dataset_lists"
             START_YEAR = {{ START_YEAR }}
             NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
 

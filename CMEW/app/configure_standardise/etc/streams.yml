@@ -12,7 +12,6 @@ apm:
 - Amon/rsutcs
 - Emon/rls
 - Emon/rss
-ap5:
-- Amon/tas
+- GCAmon6hr/tas
 inm:
 - SImon/siconc
