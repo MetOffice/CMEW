@@ -28,7 +28,7 @@ projects:
         rootpath: /this/is/overwritten
         dirname_template: "{dirname}/{3}"
         filename_template: "{filename}_{3}*.nc"
-  Obs4MIPs:
+  obs4MIPs:
     data:
       local:
         type: edata_type
