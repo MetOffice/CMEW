@@ -22,12 +22,13 @@ def main():
     """
     # Retrieve relevant environment variables
     values = retrieve_values_from_task_env()
+    defaults = retrieve_default_settings()
     logger.info("Retrieving values")
 
     # Create a single configuration file
     user_config_path = values["USER_CONFIG_PATH"]
     logger.info("Creating user config")
-    user_config_contents = create_user_config(values)
+    user_config_contents = create_user_config(defaults, values)
 
     # Write the file out
     ensure_parent_dir(user_config_path)
@@ -48,9 +49,7 @@ def retrieve_values_from_task_env():
     """
     values_from_task_env = {
         "CYLC_WORKFLOW_SHARE_DIR": os.environ["CYLC_WORKFLOW_SHARE_DIR"],
-        "DEV_CONFIG_PATH": os.environ["DEV_CONFIG_PATH"],
         "MAX_PARALLEL_TASKS": os.environ["MAX_PARALLEL_TASKS"],
-        "MIP_TABLE_DIR": os.environ["MIP_TABLE_DIR"],
         "OUTPUT_DIR": os.environ["OUTPUT_DIR"],
         "ROOTPATH_CMIP6": os.environ["ROOTPATH_CMIP6"],
         "ROOTPATH_OBS": os.environ["ROOTPATH_OBS"],
@@ -61,11 +60,22 @@ def retrieve_values_from_task_env():
     return values_from_task_env
 
 
-def retrieve_default_values():
+def retrieve_default_settings():
+    """
+    Return the contents of the default configuration file.
+
+    Returns
+    -------
+    dict
+        The contents of the default configuration file.
+    """
+    with open(os.environ["ESMVAL_CONFIG_DEFAULT_PATH"], "r") as f:
+        defaults = yaml.safe_load(f)
+    logger.debug("Default values:\n%s", defaults)
+    return defaults
 
 
-
-def create_user_config(values=None):
+def create_user_config(defaults, values=None):
     """
     Return the contents of the user configuration file.
 
@@ -81,31 +91,27 @@ def create_user_config(values=None):
     """
     values = values or {}
 
-    esmval = None
-    if "CYLC_WORKFLOW_SHARE_DIR" in values:
-        esmval = os.path.join(
-            values["CYLC_WORKFLOW_SHARE_DIR"],
-            "work",
-            "GCModelDev",
-        )
-    logger.debug("esmval: %s", esmval)
+    # Get filepaths from values and construct CMEW specific filepath
+    fp_dict = {
+        "CMIP6": values.get("ROOTPATH_CMIP6"),
+        "OBS": values.get("ROOTPATH_OBS"),
+        "Obs4MIPS": values.get("ROOTPATH_OBS4MIPS"),
+        "ESMVal": os.path.join(
+                values["CYLC_WORKFLOW_SHARE_DIR"],
+                "work",
+                "GCModelDev",
+            ),
+    }
+    logger.debug("ESMVal: %s", fp_dict["ESMVal"])
 
-    # Note that 'auxiliary_data_dir' and 'download_dir'
-    # are set to empty values and cannot currently be
-    # configured. However, 'download_dir' is used only when using the
-    # automatic download feature via ESMValTool (which we do not intend
-    # to use here).
-    # 'auxiliary_data_dir' is used by some recipes to look for
-    # additional datasets, so may need to be configured in the future.
+    # Set up the dictionary with defaults
+    user_config_file_contents = defaults
 
-    user_config_file_contents = {
-        "max_parallel_tasks": max_parallel_tasks,
-        "output_dir": values.get("OUTPUT_DIR"),
-
-            "CMIP6": values.get("ROOTPATH_CMIP6"),
-            "OBS": values.get("ROOTPATH_OBS"),
-            "OBS4MIPs": values.get("ROOTPATH_OBS4MIPS"),
-            "ESMVal": esmval,
+    # Overwrite values with those from environment
+    user_config_file_contents["output_dir"] = values.get("OUTPUT_DIR")
+    user_config_file_contents["max_parallel_tasks"] = values.get("MAX_PARALLEL_TASKS")
+    for project in fp_dict:
+        user_config_file_contents["projects"][project]["data"]["local"]["rootpath"] = fp_dict[project]
 
     logger.debug("User config file contents:\n%s", user_config_file_contents)
     return user_config_file_contents
