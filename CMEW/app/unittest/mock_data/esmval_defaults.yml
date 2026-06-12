@@ -1,0 +1,43 @@
+# (C) Crown Copyright 2026, Met Office.
+# The LICENSE.md file contains full licensing details.
+
+---
+# Fake destination directory
+output_dir: /this/is/overwritten
+
+# Data filepath structures
+projects:
+  ESMVal:
+    data:
+      local:
+        type: data_type
+        rootpath: /this/is/overwritten
+        dirname_template: "{dirname}/{1}"
+        filename_template: "{filename}_{1}*.nc"
+  CMIP6:
+    data:
+      local:
+        type: data_type
+        rootpath: /this/is/overwritten
+        dirname_template: "{dirname}/{2}"
+        filename_template: "{filename}_{2}*.nc"
+  OBS:
+    data:
+      local:
+        type: data_type
+        rootpath: /this/is/overwritten
+        dirname_template: "{dirname}/{3}"
+        filename_template: "{filename}_{3}*.nc"
+  obs4MIPs:
+    data:
+      local:
+        type: edata_type
+        rootpath: /this/is/overwritten
+        dirname_template: "{dirname}/{3}"
+        filename_template: "{filename}_{3}*.nc"
+
+# This is overwritten by the environment variable
+max_parallel_tasks: null
+
+# Static section
+other_key: some_value
