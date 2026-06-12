@@ -37,7 +37,7 @@ projects:
         filename_template: "{filename}_{3}*.nc"
 
 # This is overwritten by the environment variable
-max_parallel_tasks: '99'
+max_parallel_tasks: 99
 
 # Static section
 other_key: some_value
