@@ -97,10 +97,10 @@ def create_user_config(defaults, values=None):
         "OBS": values.get("ROOTPATH_OBS"),
         "Obs4MIPS": values.get("ROOTPATH_OBS4MIPS"),
         "ESMVal": os.path.join(
-                values["CYLC_WORKFLOW_SHARE_DIR"],
-                "work",
-                "GCModelDev",
-            ),
+            values["CYLC_WORKFLOW_SHARE_DIR"],
+            "work",
+            "GCModelDev",
+        ),
     }
     logger.debug("ESMVal: %s", fp_dict["ESMVal"])
 
@@ -109,9 +109,13 @@ def create_user_config(defaults, values=None):
 
     # Overwrite values with those from environment
     user_config_file_contents["output_dir"] = values.get("OUTPUT_DIR")
-    user_config_file_contents["max_parallel_tasks"] = values.get("MAX_PARALLEL_TASKS")
+    user_config_file_contents["max_parallel_tasks"] = values.get(
+        "MAX_PARALLEL_TASKS"
+    )
     for project in fp_dict:
-        user_config_file_contents["projects"][project]["data"]["local"]["rootpath"] = fp_dict[project]
+        user_config_file_contents["projects"][project]["data"]["local"][
+            "rootpath"
+        ] = fp_dict[project]
 
     logger.debug("User config file contents:\n%s", user_config_file_contents)
     return user_config_file_contents

@@ -4,7 +4,11 @@
 import pytest
 from pathlib import Path
 import yaml
-from configure_recipe import retrieve_values_from_task_env, retrieve_default_settings, create_user_config
+from configure_recipe import (
+    retrieve_values_from_task_env,
+    retrieve_default_settings,
+    create_user_config,
+)
 
 # For inputs and expected outputs
 expected_values = {
@@ -17,15 +21,15 @@ expected_values = {
     "USER_CONFIG_PATH": "/path/to/write/config/to",
 }
 
- # For input and outputs
-path_to_mock_defaults= str(
+# For input and outputs
+path_to_mock_defaults = str(
     Path(__file__).parent.parent.parent
     / "unittest"
     / "mock_data"
     / "esmval_defaults.yml"
 )
 
- # For checking outputs
+# For checking outputs
 path_to_kgo_config = str(
     Path(__file__).parent.parent.parent
     / "unittest"
