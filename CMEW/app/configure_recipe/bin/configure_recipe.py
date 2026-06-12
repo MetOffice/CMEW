@@ -7,6 +7,12 @@ Generate the required user configuration file for ESMValTool.
 
 import os
 import yaml
+import sys
+import logging
+
+logging.basicConfig(level=logging.INFO, stream=sys.stdout)
+filename = os.path.basename(__file__)
+logger = logging.getLogger(filename)
 
 
 def main():
@@ -15,14 +21,19 @@ def main():
     ESMValTool.
     """
     values = retrieve_values_from_task_env()
+    logger.info("Retrieving values")
     developer_config_path = values["DEV_CONFIG_PATH"]
+    logger.info("Creating developer config")
     developer_config_contents = create_developer_config(values)
     ensure_parent_dir(developer_config_path)
+    logger.info("Writing developer config to %s", developer_config_path)
     write_yaml(developer_config_path, developer_config_contents)
 
     user_config_path = values["USER_CONFIG_PATH"]
+    logger.info("Creating user config")
     user_config_contents = create_user_config(values)
     ensure_parent_dir(user_config_path)
+    logger.info("Writing user config to %s", user_config_path)
     write_yaml(user_config_path, user_config_contents)
 
 
@@ -49,6 +60,7 @@ def retrieve_values_from_task_env():
         "ROOTPATH_OBS4MIPS": os.environ["ROOTPATH_OBS4MIPS"],
         "USER_CONFIG_PATH": os.environ["USER_CONFIG_PATH"],
     }
+    logger.debug("Retrieved values:\n%s", values_from_task_env)
     return values_from_task_env
 
 
@@ -186,6 +198,7 @@ def create_user_config(values=None):
             "work",
             "GCModelDev",
         )
+    logger.debug("esmval: %s", esmval)
 
     if "MAX_PARALLEL_TASKS" in values:
         max_parallel_tasks = int(values["MAX_PARALLEL_TASKS"])
@@ -218,6 +231,7 @@ def create_user_config(values=None):
             "ESMVal": esmval,
         },
     }
+    logger.debug("User config file contents:\n%s", user_config_file_contents)
     return user_config_file_contents
 
 
@@ -227,6 +241,7 @@ def ensure_parent_dir(file_path):
     """
     parent_dir = os.path.dirname(file_path)
     if parent_dir:
+        logging.debug("Making directory %s", parent_dir)
         os.makedirs(parent_dir, exist_ok=True)
 
 

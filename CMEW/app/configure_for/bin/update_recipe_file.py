@@ -9,6 +9,12 @@ Overwrite the ESMValTool recipe with an updated version. Include:
 """
 import os
 import yaml
+import sys
+import logging
+
+logging.basicConfig(level=logging.INFO, stream=sys.stdout)
+filename = os.path.basename(__file__)
+logger = logging.getLogger(filename)
 
 
 def return_blank_recipe(recipe_path):
@@ -28,6 +34,7 @@ def return_blank_recipe(recipe_path):
         recipe = yaml.safe_load(file_handle)
 
     # Empty the datasets section of the recipe
+    logger.debug("Emptying datasets from %s", recipe_path)
     recipe["datasets"] = []
 
     return recipe
@@ -50,6 +57,7 @@ def add_extra_datasets(recipe, yaml_filepath):
     # Read the extra datasets from the provided YAML file
     with open(yaml_filepath, "r") as file_handle:
         extra_datasets = yaml.safe_load(file_handle)
+    logger.debug("Processing extra datasets:\n%s", extra_datasets)
 
     # ESMValTool recipes expect keys to be "dataset", "ensemble", "exp" etc.
     variables_conversion = {
@@ -75,6 +83,7 @@ def add_extra_datasets(recipe, yaml_filepath):
     extra_datasets_list = list(extra_datasets.values())
 
     # Add the datasets to the datasets section of the recipe
+    logger.debug("Adding extra datasets:\n%s", extra_datasets_list)
     recipe["datasets"].extend(extra_datasets_list)
 
     return recipe
@@ -107,13 +116,16 @@ def main():
     """
     recipe_path = os.environ["RECIPE_PATH"]
     blank_recipe = return_blank_recipe(recipe_path)
+    logger.info("Amending recipe from %s", recipe_path)
 
     # Add the model runs into the datasets section of the recipe
     model_runs_fp = f"{os.environ['DATASETS_LIST_DIR']}/model_runs.yml"
+    logger.info("Adding model runs to recipe")
     updated_recipe = add_extra_datasets(blank_recipe, model_runs_fp)
 
     # Add the CMIP6 datasets to the recipe
     cmip6_datasets_fp = f"{os.environ['DATASETS_LIST_DIR']}/cmip6_datasets.yml"
+    logger.info("Adding CMIP6 runs to recipe")
     extended_recipe = add_extra_datasets(updated_recipe, cmip6_datasets_fp)
 
     write_recipe(extended_recipe, recipe_path)
