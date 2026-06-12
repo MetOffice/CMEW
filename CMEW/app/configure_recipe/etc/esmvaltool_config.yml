@@ -28,7 +28,7 @@ projects:
         rootpath: /this/is/overwritten
         dirname_template: "Tier{tier}/{dataset}"
         filename_template: "{project}_{dataset}_{type}_{version}_{mip}_{short_name}[_.]*nc"
-  Obs4MIPS:
+  Obs4MIPs:
     data:
       local:
         type: esmvalcore.io.local.LocalDataSource

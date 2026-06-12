@@ -95,7 +95,7 @@ def create_user_config(defaults, values=None):
     fp_dict = {
         "CMIP6": values.get("ROOTPATH_CMIP6"),
         "OBS": values.get("ROOTPATH_OBS"),
-        "Obs4MIPS": values.get("ROOTPATH_OBS4MIPS"),
+        "Obs4MIPs": values.get("ROOTPATH_OBS4MIPS"),
         "ESMVal": os.path.join(
             values["CYLC_WORKFLOW_SHARE_DIR"],
             "work",
