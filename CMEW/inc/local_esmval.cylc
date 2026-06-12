@@ -1,0 +1,26 @@
+#!jinja2
+# (C) Crown Copyright 2026, Met Office.
+# The LICENSE.md file contains full licensing details.
+# metoffice-runtime.cylc
+[runtime]
+    [[root]]
+        [[[environment]]]
+            ESMVALCORE_DIR = ${CYLC_WORKFLOW_RUN_DIR}/share/lib/python/ESMValCore
+            ESMVALTOOL_DIR = ${CYLC_WORKFLOW_RUN_DIR}/share/lib/python/ESMValTool
+            PYTHONPATH_PREPEND = ${ESMVALCORE_DIR}:${ESMVALTOOL_DIR}
+
+    # COMPUTE provides defaults for computation-heavy tasks.
+    [[COMPUTE]]
+        platform = spice
+        [[[directives]]]
+            --wckey = CMEW
+            --ntasks = {{ MAX_PARALLEL_TASKS }}
+
+    [[configure]]
+        platform = localhost
+
+    [[get_esmval]]
+        platform = localhost
+        execution time limit = PT2M
+        [[[directives]]]
+            --mem = 2G

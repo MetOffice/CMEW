@@ -13,7 +13,7 @@
 
 [task parameters]
     dataset = {{ datasets }}
-    recipe = radiation_budget
+    recipe = radiation_budget, seaice_sensitivity_cmip7
 {%- if not UNITTEST and AUTOASSESS %}
     autoassess_area = monsoon
 {%- endif %}
@@ -23,6 +23,9 @@
         R1 = """
 {%- if UNITTEST or TEST %}
             install_env_file => unittest
+{%- endif %}
+{%- if USE_LOCAL_ESMVAL %}
+            install_env_file => install_local_esmvaltool => configure_recipe & configure_for<recipe>
 {%- endif %}
 {%- if not UNITTEST %}
             install_env_file => configure_recipe & copy_datasets
@@ -131,6 +134,8 @@
         [[[environment]]]
             ROSE_TASK_APP = copy_datasets
 
+    [[install_local_esmvaltool]]
+
     [[housekeeping]]
 
 {% include "site/" ~ SITE ~ ".cylc" %}
@@ -144,4 +149,9 @@
 {%- if not UNITTEST and AUTOASSESS %}
     {% include "site/" ~ SITE ~ "_autoassess.cylc" %}
     {% include "inc/autoassess.cylc" %}
+{%- endif %}
+
+{%- if USE_LOCAL_ESMVAL %}
+    {% include "inc/local_esmval.cylc" %}
+    {% include "inc/local_esmval.conf" %}
 {%- endif %}
