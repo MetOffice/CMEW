@@ -109,9 +109,9 @@ def create_user_config(defaults, values=None):
 
     # Overwrite values with those from environment
     user_config_file_contents["output_dir"] = values.get("OUTPUT_DIR")
-    user_config_file_contents["max_parallel_tasks"] = int(values.get(
-        "MAX_PARALLEL_TASKS"
-    ))
+    user_config_file_contents["max_parallel_tasks"] = int(
+        values.get("MAX_PARALLEL_TASKS")
+    )
     for project in fp_dict:
         user_config_file_contents["projects"][project]["data"]["local"][
             "rootpath"
