@@ -1,0 +1,5 @@
+# (C) Crown Copyright 2026, Met Office.
+# The LICENSE.md file contains full licensing details.
+mock_entry:
+  recipe_name: recipe_specified_name.yml
+  recipe_fp: subdir_1/recipe_second_name.yml
