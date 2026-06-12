@@ -1,0 +1,51 @@
+# (C) Crown Copyright 2026, Met Office.
+# The LICENSE.md file contains full licensing details.
+
+---
+# Destination directory where all output will be written
+output_dir: /this/is/overwritten
+
+# Data filepath structures
+projects:
+  ESMVal:
+    data:
+      local:
+        type: esmvalcore.io.local.LocalDataSource
+        rootpath: /this/is/overwritten
+        dirname_template: "{activity}/{institute}/{dataset}/{exp}/{ensemble}/{mip}/{short_name}/{grid}/{version}"
+        filename_template: "{short_name}_{mip}_{dataset}_{exp}_{ensemble}_{grid}*.nc"
+  CMIP6:
+    data:
+      local:
+        type: esmvalcore.io.local.LocalDataSource
+        rootpath: /this/is/overwritten
+        dirname_template: "{activity}/{institute}/{dataset}/{exp}/{ensemble}/{mip}/{short_name}/{grid}/{version}"
+        filename_template: "{short_name}_{mip}_{dataset}_{exp}_{ensemble}_{grid}*.nc"
+  OBS:
+    data:
+      local:
+        type: esmvalcore.io.local.LocalDataSource
+        rootpath: /this/is/overwritten
+        dirname_template: "Tier{tier}/{dataset}"
+        filename_template: "{project}_{dataset}_{type}_{version}_{mip}_{short_name}[_.]*nc"
+  OBS4MIPS:
+    data:
+      local:
+        type: esmvalcore.io.local.LocalDataSource
+        rootpath: /this/is/overwritten
+        dirname_template: "Tier{tier}/{dataset}"
+        filename_template: "{short_name}_*.nc"
+
+# This is overwritten by the environment variable
+max_parallel_tasks: null
+
+# These are other sections provided by default configuration files from ESMValTool
+search_data: quick
+auxiliary_data_dir: ""  # Changed from default as we don't use this
+log_level: info
+exit_on_warning: false  # Only used in NCL diagnostic scripts.
+output_file_type: png
+remove_preproc_dir: false  # Changed from default as use will likely Cylc clean
+compress_netcdf: false
+save_intermediary_cubes: false
+profile_diagnostic: false

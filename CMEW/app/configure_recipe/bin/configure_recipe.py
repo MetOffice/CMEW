@@ -20,18 +20,16 @@ def main():
     Write the required user and developer configuration files for
     ESMValTool.
     """
+    # Retrieve relevant environment variables
     values = retrieve_values_from_task_env()
     logger.info("Retrieving values")
-    developer_config_path = values["DEV_CONFIG_PATH"]
-    logger.info("Creating developer config")
-    developer_config_contents = create_developer_config(values)
-    ensure_parent_dir(developer_config_path)
-    logger.info("Writing developer config to %s", developer_config_path)
-    write_yaml(developer_config_path, developer_config_contents)
 
+    # Create a single configuration file
     user_config_path = values["USER_CONFIG_PATH"]
     logger.info("Creating user config")
     user_config_contents = create_user_config(values)
+
+    # Write the file out
     ensure_parent_dir(user_config_path)
     logger.info("Writing user config to %s", user_config_path)
     write_yaml(user_config_path, user_config_contents)
@@ -51,12 +49,11 @@ def retrieve_values_from_task_env():
     values_from_task_env = {
         "CYLC_WORKFLOW_SHARE_DIR": os.environ["CYLC_WORKFLOW_SHARE_DIR"],
         "DEV_CONFIG_PATH": os.environ["DEV_CONFIG_PATH"],
-        "DRS_CMIP6": os.environ["DRS_CMIP6"],
-        "DRS_OBS4MIPS": os.environ["DRS_OBS4MIPS"],
         "MAX_PARALLEL_TASKS": os.environ["MAX_PARALLEL_TASKS"],
         "MIP_TABLE_DIR": os.environ["MIP_TABLE_DIR"],
         "OUTPUT_DIR": os.environ["OUTPUT_DIR"],
         "ROOTPATH_CMIP6": os.environ["ROOTPATH_CMIP6"],
+        "ROOTPATH_OBS": os.environ["ROOTPATH_OBS"],
         "ROOTPATH_OBS4MIPS": os.environ["ROOTPATH_OBS4MIPS"],
         "USER_CONFIG_PATH": os.environ["USER_CONFIG_PATH"],
     }
@@ -64,115 +61,8 @@ def retrieve_values_from_task_env():
     return values_from_task_env
 
 
-def create_developer_config(values):
-    """
-    Return the contents of the developer configuration file.
+def retrieve_default_values():
 
-    Parameters
-    ----------
-    values : dict
-        Configuration values.
-
-    Returns
-    -------
-    dict
-        Developer configuration content.
-    """
-    mip_table_dir = values["MIP_TABLE_DIR"]
-
-    developer_config_file_contents = {
-        "custom": {
-            "cmor_path": mip_table_dir,
-        },
-        "ESMVal": {
-            "cmor_strict": True,
-            "input_dir": {
-                "default": "/",
-                "BADC": (
-                    "{activity}/{institute}/{dataset}/{exp}/"
-                    "{ensemble}/{mip}/{short_name}/{grid}/{version}"
-                ),
-                "DKRZ": (
-                    "{activity}/{institute}/{dataset}/{exp}/"
-                    "{ensemble}/{mip}/{short_name}/{grid}/{version}"
-                ),
-                "ESGF": (
-                    "{project}/{activity}/{institute}/{dataset}/{exp}/"
-                    "{ensemble}/{mip}/{short_name}/{grid}/{version}"
-                ),
-                "ETHZ": (
-                    "{exp}/{mip}/{short_name}/{dataset}/" "{ensemble}/{grid}/"
-                ),
-                "SYNDA": (
-                    "{activity}/{institute}/{dataset}/{exp}/"
-                    "{ensemble}/{mip}/{short_name}/{grid}/{version}"
-                ),
-            },
-            "input_file": (
-                "{short_name}_{mip}_{dataset}_{exp}_{ensemble}_{grid}*.nc"
-            ),
-            "output_file": (
-                "{project}_{dataset}_{mip}_{exp}_{ensemble}_"
-                "{short_name}_{grid}"
-            ),
-            "cmor_type": "CMIP6",
-            "cmor_default_table_prefix": "GCModelDev_",
-        },
-        "CMIP6": {
-            "cmor_strict": True,
-            "input_dir": {
-                "default": "/",
-                "BADC": (
-                    "{activity}/{institute}/{dataset}/{exp}/"
-                    "{ensemble}/{mip}/{short_name}/{grid}/{version}"
-                ),
-                "DKRZ": (
-                    "{activity}/{institute}/{dataset}/{exp}/"
-                    "{ensemble}/{mip}/{short_name}/{grid}/{version}"
-                ),
-                "ESGF": (
-                    "{project}/{activity}/{institute}/{dataset}/{exp}/"
-                    "{ensemble}/{mip}/{short_name}/{grid}/{version}"
-                ),
-                "ETHZ": (
-                    "{exp}/{mip}/{short_name}/{dataset}/" "{ensemble}/{grid}/"
-                ),
-                "SYNDA": (
-                    "{activity}/{institute}/{dataset}/{exp}/"
-                    "{ensemble}/{mip}/{short_name}/{grid}/{version}"
-                ),
-            },
-            "input_file": (
-                "{short_name}_{mip}_{dataset}_{exp}_{ensemble}_{grid}*.nc"
-            ),
-            "output_file": (
-                "{project}_{dataset}_{mip}_{exp}_{ensemble}_"
-                "{short_name}_{grid}"
-            ),
-            "cmor_type": "CMIP6",
-        },
-        "obs4MIPs": {
-            "cmor_strict": False,
-            "input_dir": {
-                "default": "Tier{tier}/{dataset}",
-                "ESGF": "{project}/{dataset}/{version}",
-                "RCAST": "/",
-                "IPSL": (
-                    "{realm}/{short_name}/{freq}/{grid}/"
-                    "{institute}/{dataset}/{latest_version}"
-                ),
-            },
-            "input_file": {
-                "default": "{short_name}_*.nc",
-                "ESGF": "{short_name}_*.nc",
-            },
-            "output_file": "{project}_{dataset}_{short_name}",
-            "cmor_type": "CMIP6",
-            "cmor_path": "obs4mips",
-            "cmor_default_table_prefix": "obs4MIPs_",
-        },
-    }
-    return developer_config_file_contents
 
 
 def create_user_config(values=None):
@@ -200,11 +90,6 @@ def create_user_config(values=None):
         )
     logger.debug("esmval: %s", esmval)
 
-    if "MAX_PARALLEL_TASKS" in values:
-        max_parallel_tasks = int(values["MAX_PARALLEL_TASKS"])
-    else:
-        max_parallel_tasks = None
-
     # Note that 'auxiliary_data_dir' and 'download_dir'
     # are set to empty values and cannot currently be
     # configured. However, 'download_dir' is used only when using the
@@ -214,23 +99,14 @@ def create_user_config(values=None):
     # additional datasets, so may need to be configured in the future.
 
     user_config_file_contents = {
-        "auxiliary_data_dir": "",
-        "config_developer_file": values.get("DEV_CONFIG_PATH"),
-        "download_dir": "",
-        "drs": {
-            "CMIP6": values.get("DRS_CMIP6"),
-            "obs4MIPs": values.get("DRS_OBS4MIPS"),
-            "ESMVal": "BADC",
-        },
         "max_parallel_tasks": max_parallel_tasks,
         "output_dir": values.get("OUTPUT_DIR"),
-        "remove_preproc_dir": False,
-        "rootpath": {
+
             "CMIP6": values.get("ROOTPATH_CMIP6"),
-            "obs4MIPs": values.get("ROOTPATH_OBS4MIPS"),
+            "OBS": values.get("ROOTPATH_OBS"),
+            "OBS4MIPs": values.get("ROOTPATH_OBS4MIPS"),
             "ESMVal": esmval,
-        },
-    }
+
     logger.debug("User config file contents:\n%s", user_config_file_contents)
     return user_config_file_contents
 
