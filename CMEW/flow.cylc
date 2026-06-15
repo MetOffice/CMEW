@@ -24,23 +24,25 @@
 {%- if UNITTEST or TEST %}
             install_env_file => unittest
 {%- endif %}
-{%- if not UNITTEST %}
+{%- if not UNITTEST and not SKIP_CDDS %}
             install_env_file => configure_recipe & copy_datasets
             copy_datasets => configure_for<recipe>
             configure_for<recipe> => configure_standardise<recipe,dataset>
                 => standardise_model_data<dataset> => restructure_dirs
             configure_recipe & restructure_dirs => run_recipe<recipe>
-            restructure_dirs => housekeeping
+            restructure_dirs
 
     {%- if TEST %}
             run_recipe<recipe> => compare<recipe>
     {%- endif %}
 {%- endif %}
 {%- if SKIP_CDDS %}
-            install_env_file => configure_recipe & copy_datasets
-            copy_datasets => configure_for<recipe>
-            => symlink_standardised data => run_recipe<recipe>
-            restructure_dirs => housekeeping
+            install_env_file
+            => configure_recipe & copy_datasets
+            => configure_for<recipe>
+            => symlink_standardised_data
+            => run_recipe<recipe>
+            => housekeeping
 {%- endif %}
         """
 
@@ -138,6 +140,8 @@
         inherit = MODEL_RUNS
         [[[environment]]]
             ROSE_TASK_APP = copy_datasets
+
+   [[symlink_standardised_data]]
 
     [[housekeeping]]
 
