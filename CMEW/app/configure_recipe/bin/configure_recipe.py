@@ -196,7 +196,7 @@ def create_user_config(values=None):
         esmval = os.path.join(
             values["CYLC_WORKFLOW_SHARE_DIR"],
             "work",
-            "GCModelDev",  # This is repeated in part elsewhere (restructure_dirs and new symlink)
+            "GCModelDev",  # This is repeated in part elsewhere (restructure_dirs and new symlink) and should probably be a variable in the flow.cylc
         )
     logger.debug("esmval: %s", esmval)
 
