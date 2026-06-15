@@ -60,8 +60,6 @@
             SHARE_DATA_CDDS = ${CYLC_WORKFLOW_SHARE_DIR}/data/cdds
             ROOT_PROC_DIR = ${SHARE_DATA_CDDS}/proc
             ROOT_DATA_DIR = ${SHARE_DATA_CDDS}/cdds_data
-            STANDARDISED_DATA_DIR = {{ STANDARDISED_DATA_DIR | default("") }}
-            STANDARDISED_DATA_DIR_MODE = {{ STANDARDISED_DATA_DIR_MODE | default("") }}
 
     [[RECIPE]]
         [[[environment]]]
@@ -77,6 +75,7 @@
             RAW_DATA_DIR = {{ RAW_DATA_DIR | default("") }}
             RAW_DATA_DIR_MODE = {{ RAW_DATA_DIR_MODE }}
             REQUEST_DEFAULTS_PATH = ${CYLC_WORKFLOW_RUN_DIR}/app/configure_standardise/etc/request_defaults.yml
+            ROOT_RESTRUCTURED_DIR=${CYLC_WORKFLOW_SHARE_DIR}/work/
             STREAM_CONFIG_PATH = ${CYLC_WORKFLOW_RUN_DIR}/app/configure_standardise/etc/streams.yml
             # Workaround for bug in CDDS: ROOT_SOFTWARE_DIR: unbound variable.
             ROOT_SOFTWARE_DIR = ${CDDS_SOFTWARE_DIR}
@@ -142,6 +141,9 @@
             ROSE_TASK_APP = copy_datasets
 
    [[symlink_standardised_data]]
+        inherit = STANDARDISE
+        [[[environment]]]
+            STANDARDISED_DATA_DIR = {{ STANDARDISED_DATA_DIR | default("") }}
 
     [[housekeeping]]
 
