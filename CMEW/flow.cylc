@@ -141,7 +141,7 @@
         [[[environment]]]
             ROSE_TASK_APP = copy_datasets
 
-   [[symlink_standardised_data]]
+    [[symlink_standardised_data]]
         inherit = STANDARDISE
         [[[environment]]]
             STANDARDISED_DATA_DIR = {{ STANDARDISED_DATA_DIR | default("") }}
