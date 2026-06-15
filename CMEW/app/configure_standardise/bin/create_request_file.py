@@ -11,7 +11,7 @@ from pathlib import Path
 import yaml
 import logging
 
-logging.basicConfig(level=logging.DEBUG, stream=sys.stdout)
+logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 filename = os.path.basename(__file__)
 logger = logging.getLogger(filename)
 

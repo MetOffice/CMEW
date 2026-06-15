@@ -14,6 +14,12 @@ import os
 import yaml
 from scrape_ini import find_ref
 from pathlib import Path
+import sys
+import logging
+
+logging.basicConfig(level=logging.INFO, stream=sys.stdout)
+filename = os.path.basename(__file__)
+logger = logging.getLogger(filename)
 
 
 def extract_sections_from_naml(naml_fp):
@@ -35,6 +41,7 @@ def extract_sections_from_naml(naml_fp):
     # Read the namelist file
     with open(naml_fp, "r") as file:
         content = file.read()
+    logger.debug("Namelist content:\n", content)
 
     # Namelist files are separated by a line containing only "/"
     datasets = content.split("\n/\n")
@@ -48,6 +55,7 @@ def extract_sections_from_naml(naml_fp):
     extracted_datasets = []
 
     for dataset in datasets:
+        logger.debug("Extracting dataset %s", dataset)
         if dataset:  # There is an empty dataset at the end
             # Replace newlines with just commas
             dataset = dataset.replace(",\n", ",")
@@ -87,6 +95,7 @@ def convert_str_to_facets(section):
     # Separate the facets in the string to loop over
     facets = section.split(",")
     for facet in facets:
+        logger.debug("Reading facet %s", facet)
         if facet:  # There's an empty facet at the end
 
             # The facets are in the string are key=value pairs
@@ -122,6 +131,7 @@ def add_common_facets(dataset_dict, project):
     end_year = (
         int(os.environ["START_YEAR"]) + int(os.environ["NUMBER_OF_YEARS"]) - 1
     )
+    logger.info("Found start year %s and end year %s", start_year, end_year)
 
     # Add the start year, end year and project to the dataset dictionary
     dataset_dict["start_year"] = start_year
@@ -130,6 +140,7 @@ def add_common_facets(dataset_dict, project):
 
     # Add the institute and other data only for CMEW standardised runs
     if dataset_dict["project"] == "ESMVal":
+        logger.debug("Adding CMEW model run facets")
         dataset_dict["activity"] = "ESMVal"
         dataset_dict["grid"] = "gn"
         dataset_dict["institute"] = os.environ["INSTITUTION_ID"]
@@ -153,6 +164,7 @@ def process_naml_file(naml_fp, project=None):
     datasets: list of dict
         A list of dictionaries, each containing the facets of one dataset.
     """
+    logger.info("Processing %s", naml_fp)
     datasets = []
     sections = extract_sections_from_naml(naml_fp)
     for section in sections:
@@ -200,6 +212,7 @@ def write_datasets_to_yaml(datasets, name, target_dir):
         The directory in which the YAML file is to be written.
     """
     target_fp = os.path.join(target_dir, f"{name}.yml")
+    logger.debug("Writing\n%s\nto %s", datasets, target_fp)
     write_dict_to_yaml(datasets, target_fp)
 
 
@@ -221,6 +234,7 @@ def dict_namelists_in_workflow_dir():
     # Grab all the namelist files, in case we add more in future
     for file in os.listdir(workflow_dir):
         if file.endswith(".nl"):
+            logger.debug("Found file %s", file)
 
             # Read the name of the file for the key, minus ".nl"
             basename = os.path.basename(file)[:-3]
@@ -256,6 +270,7 @@ def use_facet_as_key(filepath, key_facet):
     # Create a new dictionary with the same sections as the list
     new_dict = {}
     for section in data:
+        logger.debug("Adding key to %s", section)
 
         # Use the facet as a unique key
         unique = section[key_facet]
@@ -306,6 +321,7 @@ def main():
 
     # Loop over the namelist files in the work directory
     for basename, nl_fp in dict_namelists_in_workflow_dir().items():
+        logger.info("Found file %s", basename)
 
         # Check if it's model runs
         if basename == "model_runs":
@@ -317,6 +333,7 @@ def main():
                 dataset["experiment_id"] = (
                     f"{dataset['experiment_id']}-{dataset['suite_id']}"
                 )
+            logger.info("Writing model runs YAML")
             write_datasets_to_yaml(datasets, basename, target_dir)
 
         # Check if it's CMIP6:
@@ -324,14 +341,17 @@ def main():
 
             # Write the datasets to a YAML file with CMIP6 project
             datasets = process_naml_file(nl_fp, "CMIP6")
+            logger.info("Writing CMIP6 runs YAML")
             write_datasets_to_yaml(datasets, basename, target_dir)
 
     # Reformat the YAML files to use unique identifiers as keys
+    logger.info("Reformatting YAML files to use suite IDs as keys")
     model_runs_yaml = f"{target_dir}/model_runs.yml"
     use_facet_as_key(model_runs_yaml, "suite_id")
     use_facet_as_key(f"{target_dir}/cmip6_datasets.yml", "model_id")
 
     # Add the reference identifier
+    logger.info("Adding benchmarking key to model runs YAML")
     add_reference_key(model_runs_yaml)
 
 
