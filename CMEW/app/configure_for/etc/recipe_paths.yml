@@ -1,5 +1,8 @@
 # (C) Crown Copyright 2026, Met Office.
 # The LICENSE.md file contains full licensing details.
+decadal:
+  recipe_name: recipe_decadal.yml
+  recipe_fp: examples/recipe_decadal.yml
 python:
   recipe_name: recipe_python.yml
   recipe_fp: examples/recipe_python.yml

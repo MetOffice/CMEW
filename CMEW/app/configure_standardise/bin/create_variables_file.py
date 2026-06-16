@@ -96,6 +96,16 @@ def add_stream_to_variables(variables):
     return streamed_variables
 
 
+def amend_amon_tas(unstreamed_variables):
+    """Request model development monthly tas instead of CMIP monthly tas"""
+    if "Amon/tas" in unstreamed_variables:
+        unstreamed_variables.remove("Amon/tas")
+        unstreamed_variables.append("GCAmon6hr/tas")
+
+    logger.debug("Amended stream variables:\n%s", unstreamed_variables)
+    return unstreamed_variables
+
+
 def write_variables(variables, target_path):
     """Write a string of variables to a text file in the installed workflow.
 
@@ -116,7 +126,9 @@ def write_variables(variables, target_path):
 
 def main():
     variables = combine_variable_lists(os.environ["VARIABLES_LIST_DIR"])
-    streamed_variables = add_stream_to_variables(variables)
+    # Amend tas entry in variables from Amon to GCAmon6hr
+    unstreamed_variables = amend_amon_tas(variables)
+    streamed_variables = add_stream_to_variables(unstreamed_variables)
     variables_path = os.environ["VARIABLES_PATH"]
     logger.info("Writing variables file to %s", variables_path)
     write_variables(streamed_variables, variables_path)

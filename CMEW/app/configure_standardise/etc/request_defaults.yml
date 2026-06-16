@@ -19,4 +19,5 @@ misc:
 conversion:
   mip_convert_plugin: HadGEM3
   skip_archive: True
+  skip_qc: True
   cylc_args: --no-detach -v
