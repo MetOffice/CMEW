@@ -42,6 +42,10 @@ def return_blank_recipe(recipe_path):
 
 def add_extra_datasets(recipe, yaml_filepath):
     """
+    Adds all datasets listed in a YAML file to an ESMValTool recipe.
+
+    Changes are made to the names and existence of some keys.
+
     Parameters
     ----------
     recipe: dict
@@ -89,6 +93,59 @@ def add_extra_datasets(recipe, yaml_filepath):
     return recipe
 
 
+def remove_additional_datasets(recipe):
+    """
+    Optionally remove additional_datasets sections from an ESMValTool recipe.
+
+    The option to remove additional datasets is controlled by the key
+    empty_additional_datasets in the YAML file at RECIPE_DICT_PATH.
+
+    Parameters
+    ----------
+    recipe: dict
+        The content of the recipe which may have additional datasets.
+
+    Returns
+    -------
+    recipe: dict
+        The content of the recipe which may be unchanged
+        or may have had additional_datasets removed.
+    """
+    # Look up the recipe and destination from the environment
+    recipe_id = os.environ["CYLC_TASK_PARAM_recipe"]
+
+    # Load the yaml config file from ../etc
+    recipe_dict_fp = os.environ["RECIPE_DICT_PATH"]
+    logger.debug("Reading recipe dict from %s", recipe_dict_fp)
+    with open(recipe_dict_fp, "r") as f:
+        recipe_dict = yaml.safe_load(f)
+    logger.debug("Recipe dict:\n%s", recipe_dict)
+
+    # Don't empty by default
+    empty_additionals = False
+
+    # Read specific recipe names and filepaths from the yaml config file
+    if recipe_id in recipe_dict:
+        logger.debug("Using info from recipe dictionary for %s", recipe_id)
+        if "empty_additional_datasets" in recipe_dict[recipe_id]:
+
+            # Assign True if specified in YAML file (boolean)
+            empty_additionals = recipe_dict[recipe_id][
+                "empty_additional_datasets"
+            ]
+
+    # Empty from recipe if specified
+    if empty_additionals:
+        for diag in recipe["diagnostics"]:
+            for var in recipe["diagnostics"][diag]["variables"]:
+                del recipe["diagnostics"][diag]["variables"][var][
+                    "additional_datasets"
+                ]
+
+    logger.debug("Updated recipe:\n%s", recipe)
+    return recipe
+
+
 def write_recipe(updated_recipe, target_path):
     """Write updated ESMValTool recipe to a YAML file at ``target_path``.
 
@@ -118,10 +175,13 @@ def main():
     blank_recipe = return_blank_recipe(recipe_path)
     logger.info("Amending recipe from %s", recipe_path)
 
+    # Remove additional datasets if specified
+    amended_recipe = remove_additional_datasets(blank_recipe)
+
     # Add the model runs into the datasets section of the recipe
     model_runs_fp = f"{os.environ['DATASETS_LIST_DIR']}/model_runs.yml"
     logger.info("Adding model runs to recipe")
-    updated_recipe = add_extra_datasets(blank_recipe, model_runs_fp)
+    updated_recipe = add_extra_datasets(amended_recipe, model_runs_fp)
 
     # Add the CMIP6 datasets to the recipe
     cmip6_datasets_fp = f"{os.environ['DATASETS_LIST_DIR']}/cmip6_datasets.yml"
