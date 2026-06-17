@@ -6,7 +6,9 @@ Unit tests for output_variables.py
 
 Test data files:
 /app/unittest/mock_data/original_recipe_radiation_budget.yml
-    input for test_parse_variables_from_recipe
+    input for test_parse_variables_from_outer_key
+/app/unittest/mock_data/original_recipe_zec.yml
+    input for test_parse_variables_from_short_name_key
 /app/unittest/kgo/radiation_budget_variables.txt
     kgo for test_write_variables
 """
