@@ -28,6 +28,17 @@ def path_to_radiation_budget_recipe():
 
 
 @pytest.fixture
+def path_to_zec_recipe():
+    path = (
+        Path(__file__).parent.parent.parent
+        / "unittest"
+        / "mock_data"
+        / "original_recipe_zec.yml"
+    )
+    return str(path)
+
+
+@pytest.fixture
 def path_to_radiation_budget_variables():
     path = (
         Path(__file__).parent.parent.parent
@@ -38,7 +49,7 @@ def path_to_radiation_budget_variables():
     return path
 
 
-def test_parse_variables_from_recipe(path_to_radiation_budget_recipe):
+def test_parse_variables_from_outer_key(path_to_radiation_budget_recipe):
 
     actual = parse_variables_from_recipe(path_to_radiation_budget_recipe)
 
@@ -54,6 +65,17 @@ def test_parse_variables_from_recipe(path_to_radiation_budget_recipe):
         "Amon/rlds",
         "Amon/hfss",
         "Amon/hfls",
+    ]
+
+    assert actual == expected
+
+
+def test_parse_variables_from_short_name_key(path_to_zec_recipe):
+
+    actual = parse_variables_from_recipe(path_to_zec_recipe)
+
+    expected = [
+        "Amon/tas"
     ]
 
     assert actual == expected

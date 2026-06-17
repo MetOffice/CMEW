@@ -9,5 +9,5 @@ Amon/rsdt:apm
 Emon/rss:apm
 Amon/rsut:apm
 Amon/rsutcs:apm
-Amon/tas:ap5
+Amon/tas:apm
 SImon/siconc:inm

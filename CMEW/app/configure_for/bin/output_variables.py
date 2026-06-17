@@ -17,35 +17,8 @@ logger = logging.getLogger(filename)
 def parse_variables_from_recipe(recipe_path):
     """Retrieve variables from ESMValTool recipe.
 
-    * Read the ESMValTool recipe YAML file from the provided ``recipe_path``
-    * For each diagnostic defined in the recipe, extract the variables required
-      for that diagnostic
-    * For each variable, extract the mip table name
-    * Output a newline-separated list of variables, with each line formatted
-      as ``<mip>/<variable>``
-
-    Recipe file snippet::
-
-        diagnostics:
-          <diagnostic_1>:
-            variables:
-              <variable_1a>:
-                mip: <mip_1a>
-              <variable_1b>:
-                mip: <mip_1b>
-          <diagnostic_2>:
-            variables:
-              <variable_2a>:
-                mip: <mip_2a>
-              <variable_2b>:
-                mip: <mip_2b>
-
-    Will be formatted as::
-
-        <mip_1a>/<variable_1a>
-        <mip_1b>/<variable_1b>
-        <mip_2a>/<variable_2a>
-        <mip_2b>/<variable_2b>
+    This function will first look to see if the variable's "short_name" key is present,
+    and use it if so or return a higher level of key if not.
 
     Parameters
     ----------
@@ -66,8 +39,21 @@ def parse_variables_from_recipe(recipe_path):
         variables = diagnostics[diagnostic]["variables"]
         logger.debug("Diagnostic % variables:\n%s", diagnostic, variables)
         for variable in variables:
+            # See if the short_name key is present and use it if so
+            if "short_name" in variables[variable]:
+                var = variables[variable]["short_name"]
+                logger.debug("Using short name %s", var)
+            else:
+                var = variable
+                logger.debug("Using key %s", var)
+
+            # Look up the mip key which is always present
             mip = variables[variable]["mip"]
-            formatted_variable = f"{mip}/{variable}"
+
+            # Construct the string expected by CDDS
+            formatted_variable = f"{mip}/{var}"
+
+            # Add only if not already present
             if formatted_variable not in formatted_variables:
                 formatted_variables.append(formatted_variable)
                 logger.debug("Adding variable %s", formatted_variable)

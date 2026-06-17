@@ -96,7 +96,7 @@ def test_write_variables(path_to_combined_variables):
         "Emon/rss:apm",
         "Amon/rsut:apm",
         "Amon/rsutcs:apm",
-        "Amon/tas:ap5",
+        "Amon/tas:apm",
         "SImon/siconc:inm",
     ]
 
