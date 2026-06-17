@@ -17,8 +17,8 @@ logger = logging.getLogger(filename)
 def parse_variables_from_recipe(recipe_path):
     """Retrieve variables from ESMValTool recipe.
 
-    This function will first look to see if the variable's "short_name" key is present,
-    and use it if so or return a higher level of key if not.
+    This function will first look to see if the variable's "short_name"
+    key is present and use it if so or return a higher level of key if not.
 
     Parameters
     ----------
