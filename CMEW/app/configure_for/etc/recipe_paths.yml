@@ -3,6 +3,9 @@
 decadal:
   recipe_name: recipe_decadal.yml
   recipe_fp: examples/recipe_decadal.yml
+model_evaluation_basics:
+  recipe_name: recipe_model_evaluation_basics.yml
+  recipe_fp: model_evaluation/recipe_model_evaluation_basics.yml
 python:
   recipe_name: recipe_python.yml
   recipe_fp: examples/recipe_python.yml

@@ -10,6 +10,7 @@ apm:
 - Amon/rsdt
 - Amon/rsut
 - Amon/rsutcs
+- Amon/pr
 - Emon/rls
 - Emon/rss
 - GCAmon6hr/tas

@@ -116,7 +116,7 @@ def create_request(model_run):
         "mip_table_dir": os.path.expanduser(mip_table_dir),
         "root_proc_dir": os.environ["ROOT_PROC_DIR"],
         "root_data_dir": os.environ["ROOT_DATA_DIR"],
-        "workflow_basename": dataset_dict["suite_id"],
+        "workflow_basename": f"temp_{dataset_dict["suite_id"]}",
     }
     request["data"] = {
         **defaults["data"],

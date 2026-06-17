@@ -106,6 +106,16 @@ def amend_amon_tas(unstreamed_variables):
     return unstreamed_variables
 
 
+def amend_amon_rtnt(unstreamed_variables):
+    """Request rtmt instead of rtnt"""
+    if "Amon/rtnt" in unstreamed_variables:
+        unstreamed_variables.remove("Amon/rtnt")
+        unstreamed_variables.append("Amon/rtmt")
+
+    logger.debug("Amended stream variables:\n%s", unstreamed_variables)
+    return unstreamed_variables
+
+
 def write_variables(variables, target_path):
     """Write a string of variables to a text file in the installed workflow.
 
@@ -126,9 +136,16 @@ def write_variables(variables, target_path):
 
 def main():
     variables = combine_variable_lists(os.environ["VARIABLES_LIST_DIR"])
+
     # Amend tas entry in variables from Amon to GCAmon6hr
     unstreamed_variables = amend_amon_tas(variables)
+    # Amend rtnt entry
+    unstreamed_variables = amend_amon_rtnt(unstreamed_variables)
+
+    # Add streams
     streamed_variables = add_stream_to_variables(unstreamed_variables)
+
+    # Write to file
     variables_path = os.environ["VARIABLES_PATH"]
     logger.info("Writing variables file to %s", variables_path)
     write_variables(streamed_variables, variables_path)
