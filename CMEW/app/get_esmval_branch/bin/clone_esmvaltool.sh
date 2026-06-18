@@ -5,5 +5,6 @@
 BASH_XTRACEFD=1
 set -eux
 
-# Install AutoAssess to cylc share/lib directory
+# Clone the ESMValTool branch.
+# The quiet ('-q') option to prevent the progress status from being reported.
 git clone -q -b "${ESMVALTOOL_BRANCH}" "${ESMVALTOOL_URL}" "${ESMVALTOOL_DIR}"
