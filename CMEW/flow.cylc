@@ -24,6 +24,9 @@
 {%- if UNITTEST or TEST %}
             install_env_file => unittest
 {%- endif %}
+{%- if USE_ESMVALTOOL_BRANCH %}
+            install_env_file => get_esmval_branch => configure_recipe & copy_datasets
+{%- endif %}
 {%- if not UNITTEST %}
             install_env_file => configure_recipe & copy_datasets
             copy_datasets => configure_for<recipe>
@@ -130,6 +133,8 @@
         inherit = MODEL_RUNS
         [[[environment]]]
             ROSE_TASK_APP = copy_datasets
+
+    [[get_esmval_branch]]
 
     [[housekeeping]]
 
