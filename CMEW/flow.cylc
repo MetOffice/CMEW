@@ -138,7 +138,7 @@
 
     [[get_esmval_branch]]
         [[[environment]]]
-            ESMVALTOOL_BRANCH = {{ ESMVALTOOL_BRANCH }}
+            ESMVALTOOL_BRANCH = {{ ESMVALTOOL_BRANCH | default("") }}
 
     [[housekeeping]]
 
