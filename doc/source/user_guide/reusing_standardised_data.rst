@@ -1,8 +1,8 @@
 .. (C) Crown Copyright 2026, Met Office.
 .. The LICENSE.md file contains full licensing details.
 
-Reusing pre-standardised data files fro CMEW
-============================================
+Reusing pre-standardised data files from CMEW
+=============================================
 
 .. include:: ../common.txt
 
