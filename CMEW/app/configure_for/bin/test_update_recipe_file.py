@@ -19,7 +19,12 @@ Test data files:
     kgo for test_add_extra_datasets
     kgo for test_main
 """
-from update_recipe_file import return_blank_recipe, add_extra_datasets, main
+from update_recipe_file import (
+    return_blank_recipe,
+    add_extra_datasets,
+    remove_additional_datasets,
+    main,
+)
 from pathlib import Path
 import pytest
 import shutil
@@ -90,6 +95,28 @@ def path_to_cmip6_datasets_yaml():
     return path
 
 
+@pytest.fixture
+def path_to_recipe_with_additionals():
+    path = (
+        Path(__file__).parent.parent.parent
+        / "unittest"
+        / "mock_data"
+        / "recipe_with_additional_datasets.yml"
+    )
+    return path
+
+
+@pytest.fixture
+def path_to_recipe_additionals_removed():
+    path = (
+        Path(__file__).parent.parent.parent
+        / "unittest"
+        / "kgo"
+        / "recipe_additional_datasets_removed.yml"
+    )
+    return path
+
+
 def test_return_blank_recipe(
     path_to_blank_recipe_kgo, path_to_mock_original_recipe
 ):
@@ -115,6 +142,33 @@ def test_add_extra_datasets(
     assert actual == expected
 
 
+def test_remove_additional_datasets(
+    monkeypatch,
+    path_to_recipe_with_additionals,
+    path_to_recipe_additionals_removed,
+):
+    monkeypatch.setenv("CYLC_TASK_PARAM_recipe", "mock_entry")
+    monkeypatch.setenv(
+        "RECIPE_DICT_PATH",
+        str(
+            Path(__file__).parent.parent.parent
+            / "unittest"
+            / "mock_data"
+            / "recipe_paths.yml"
+        ),
+    )
+
+    with open(path_to_recipe_additionals_removed, "r") as file_handle_1:
+        expected = yaml.safe_load(file_handle_1)
+
+    with open(path_to_recipe_with_additionals, "r") as file_handle_2:
+        pre_recipe = yaml.safe_load(file_handle_2)
+
+    # Using str(filepath) here as update_recipe_file.py uses os, not pathlib
+    actual = remove_additional_datasets(pre_recipe)
+    assert actual == expected
+
+
 def test_main(
     monkeypatch,
     mock_env_vars,
@@ -131,6 +185,18 @@ def test_main(
     # Mock the environmental variable 'RECIPE PATH' to the tmp_path location
     # where the original recipe is stored.
     monkeypatch.setenv("RECIPE_PATH", str(path_to_temp_recipe))
+
+    # These are used to check with additional datasets are removed
+    monkeypatch.setenv("CYLC_TASK_PARAM_recipe", "radiation_budget")
+    monkeypatch.setenv(
+        "RECIPE_DICT_PATH",
+        str(
+            Path(__file__).parent.parent.parent
+            / "unittest"
+            / "mock_data"
+            / "recipe_paths.yml"
+        ),
+    )
 
     main()
 

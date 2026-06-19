@@ -10,9 +10,8 @@ apm:
 - Amon/rsdt
 - Amon/rsut
 - Amon/rsutcs
+- Amon/tas
 - Emon/rls
 - Emon/rss
-ap5:
-- Amon/tas
 inm:
 - SImon/siconc
