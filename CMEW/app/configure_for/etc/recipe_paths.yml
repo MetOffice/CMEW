@@ -1,5 +1,9 @@
 # (C) Crown Copyright 2026, Met Office.
 # The LICENSE.md file contains full licensing details.
+correlation:
+  recipe_name: recipe_correlation.yml
+  recipe_fp: examples/recipe_correlation.yml
+  empty_additional_datasets: true
 python:
   recipe_name: recipe_python.yml
   recipe_fp: examples/recipe_python.yml
