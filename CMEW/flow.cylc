@@ -24,6 +24,9 @@
 {%- if UNITTEST or TEST %}
             install_env_file => unittest
 {%- endif %}
+{%- if USE_ESMVALTOOL_BRANCH %}
+            install_env_file => get_esmval_branch => configure_recipe & copy_datasets
+{%- endif %}
 {%- if not UNITTEST %}
             install_env_file => configure_recipe & copy_datasets
             copy_datasets => configure_for<recipe>
@@ -44,11 +47,13 @@
         env-script = "eval $(rose task-env)"
         platform = localhost
         [[[environment]]]
+            ESMVALTOOL_DIR=${CYLC_WORKFLOW_RUN_DIR}/lib/python/ESMValTool
             ESMVALTOOL_MODULE_NAME = {{ ESMVALTOOL_MODULE_NAME }}
             ESMVALTOOL_CONFIG_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/etc/esmvaltool_config
             USER_CONFIG_PATH = ${ESMVALTOOL_CONFIG_DIR}/config-user.yml
             DEV_CONFIG_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/config-developer.yml
             OUTPUT_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/cycle/${CYLC_TASK_CYCLE_POINT}
+            PYTHONPATH_PREPEND = ${ESMVALTOOL_DIR}
             SHARE_DATA_CDDS = ${CYLC_WORKFLOW_SHARE_DIR}/data/cdds
             ROOT_PROC_DIR = ${SHARE_DATA_CDDS}/proc
             ROOT_DATA_DIR = ${SHARE_DATA_CDDS}/cdds_data
@@ -130,6 +135,10 @@
         inherit = MODEL_RUNS
         [[[environment]]]
             ROSE_TASK_APP = copy_datasets
+
+    [[get_esmval_branch]]
+        [[[environment]]]
+            ESMVALTOOL_BRANCH = {{ ESMVALTOOL_BRANCH | default("") }}
 
     [[housekeeping]]
 

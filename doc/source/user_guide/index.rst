@@ -12,4 +12,5 @@ User Guide
    quick_start
    workflow
    Configuring datasets <configuring_datasets>
-   Reusing raw data  <reusing_raw_data>
+   Reusing raw data <reusing_raw_data>
+   ESMValTool branches <esmvaltool_branches.rst>
