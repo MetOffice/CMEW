@@ -15,8 +15,8 @@ In the case of a failed recipe run, the ``housekeeping`` task will not have run.
 This means the standardised data will still exist in the workflow directory,
 and this may be copied elsewhere for future use.
 
-Steps for reusing standardised data:
-------------------------------------
+Steps for reusing standardised data at the Met Office:
+------------------------------------------------------
 
 First copy the standardised data files and file structure exactly.
 The directory to copy is named ``GCModelDev`` and is found in the ``share/work`` directory
@@ -33,7 +33,7 @@ Next add the following two variables to the ``rose-suite.conf`` file::
     STANDARDISED_DATA_DIR="$SCRATCH/cmew_data"
 
 
-The next |CMEW| run will skip the |CDDS| steps and symlink the pre-standardised data.
+Following |CMEW| runs will skip the |CDDS| steps and symlink the pre-standardised data.
 
 .. note::
    It is possible to save standardised data ahead of a failed run,
