@@ -1,0 +1,35 @@
+# (C) Crown Copyright 2026, Met Office.
+# The LICENSE.md file contains full licensing details.
+# ESMValTool
+# To be used for testing purposes
+---
+documentation:
+  description: |
+    Some description
+
+  title: Recipe title
+
+  authors:
+    - a_person
+
+preprocessors:
+  preprocessor_1:
+    extract_levels:
+      levels: specified
+      scheme: area_weighted
+    regrid:
+      target_grid: specified
+      scheme: linear
+
+diagnostics:
+  diagnostic_1:
+    description: |
+      Description of diagnostic
+    variables:
+      var_description:
+        preprocessor: preprocessor_1
+        short_name: ua
+        mip: Amon
+    scripts:
+      script_1:
+        script: path/to/script.py
