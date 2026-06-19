@@ -3,3 +3,4 @@
 mock_entry:
   recipe_name: recipe_specified_name.yml
   recipe_fp: subdir_1/recipe_second_name.yml
+  empty_additional_datasets: true

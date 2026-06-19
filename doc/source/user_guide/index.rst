@@ -13,3 +13,5 @@ User Guide
    workflow
    Configuring datasets <configuring_datasets>
    Reusing raw data  <reusing_raw_data>
+   Reusing standardised data  <reusing_standardised_data>
+   ESMValTool branches <esmvaltool_branches.rst>
