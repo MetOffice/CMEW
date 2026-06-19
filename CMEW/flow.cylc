@@ -31,7 +31,7 @@
             configure_for<recipe> => configure_standardise<recipe,dataset>
                 => standardise_model_data<dataset> => restructure_dirs
             configure_recipe & restructure_dirs => run_recipe<recipe>
-            restructure_dirs => housekeeping
+                => housekeeping
 
     {%- if TEST %}
             run_recipe<recipe> => compare<recipe>
