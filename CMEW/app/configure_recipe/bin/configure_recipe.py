@@ -49,7 +49,6 @@ def retrieve_values_from_task_env():
         ``configure_recipe`` task.
     """
     values_from_task_env = {
-        "CYLC_WORKFLOW_SHARE_DIR": os.environ["CYLC_WORKFLOW_SHARE_DIR"],
         "CMEW_DATA_FOR_ESMVAL_DIR": os.environ["CMEW_DATA_FOR_ESMVAL_DIR"],
         "DEV_CONFIG_PATH": os.environ["DEV_CONFIG_PATH"],
         "DRS_CMIP6": os.environ["DRS_CMIP6"],
