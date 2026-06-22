@@ -70,7 +70,7 @@ def parse_variables_from_recipe(recipe_path):
               <variable_2b>:
                 mip: <mip_2b>
 
-    Will also be formatted as::
+    Both will be formatted as::
 
         <mip_1a>/<variable_1a>
         <mip_1b>/<variable_1b>
