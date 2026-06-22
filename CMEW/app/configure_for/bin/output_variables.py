@@ -39,7 +39,6 @@ def parse_variables_from_recipe(recipe_path):
         variables = diagnostics[diagnostic]["variables"]
         logger.debug("Diagnostic % variables:\n%s", diagnostic, variables)
         for variable in variables:
-            # See if the short_name key is present and use it if so
             if "short_name" in variables[variable]:
                 var = variables[variable]["short_name"]
                 logger.debug("Using short name %s", var)
@@ -47,7 +46,7 @@ def parse_variables_from_recipe(recipe_path):
                 var = variable
                 logger.debug("Using key %s", var)
 
-            # Look up the mip key which is always present
+            # Look up the mip key which is, so far, always present
             mip = variables[variable]["mip"]
 
             # Construct the string expected by CDDS
