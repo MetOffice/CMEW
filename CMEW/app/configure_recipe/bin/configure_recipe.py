@@ -50,6 +50,7 @@ def retrieve_values_from_task_env():
     """
     values_from_task_env = {
         "CYLC_WORKFLOW_SHARE_DIR": os.environ["CYLC_WORKFLOW_SHARE_DIR"],
+        "CMEW_DATA_FOR_ESMVAL_DIR": os.environ["CMEW_DATA_FOR_ESMVAL_DIR"],
         "DEV_CONFIG_PATH": os.environ["DEV_CONFIG_PATH"],
         "DRS_CMIP6": os.environ["DRS_CMIP6"],
         "DRS_OBS4MIPS": os.environ["DRS_OBS4MIPS"],
@@ -191,15 +192,6 @@ def create_user_config(values=None):
     """
     values = values or {}
 
-    esmval = None
-    if "CYLC_WORKFLOW_SHARE_DIR" in values:
-        esmval = os.path.join(
-            values["CYLC_WORKFLOW_SHARE_DIR"],
-            "work",
-            "GCModelDev",
-        )
-    logger.debug("esmval: %s", esmval)
-
     if "MAX_PARALLEL_TASKS" in values:
         max_parallel_tasks = int(values["MAX_PARALLEL_TASKS"])
     else:
@@ -228,7 +220,7 @@ def create_user_config(values=None):
         "rootpath": {
             "CMIP6": values.get("ROOTPATH_CMIP6"),
             "obs4MIPs": values.get("ROOTPATH_OBS4MIPS"),
-            "ESMVal": esmval,
+            "ESMVal": values.get("CMEW_DATA_FOR_ESMVAL_DIR"),
         },
     }
     logger.debug("User config file contents:\n%s", user_config_file_contents)
