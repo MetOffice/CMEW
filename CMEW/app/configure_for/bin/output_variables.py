@@ -47,13 +47,6 @@ def parse_variables_from_recipe(recipe_path):
                 short_name: <variable_2b>:
                 mip: <mip_2b>
 
-    Will be formatted as::
-
-        <mip_1a>/<variable_1a>
-        <mip_1b>/<variable_1b>
-        <mip_2a>/<variable_2a>
-        <mip_2b>/<variable_2b>
-
     Recipe file snippet, format 2::
 
         diagnostics:
