@@ -59,6 +59,7 @@
         env-script = "eval $(rose task-env)"
         platform = localhost
         [[[environment]]]
+            AEROSOL_TOOLKIT_DIR=${CYLC_WORKFLOW_RUN_DIR}/lib/python/aerosol_evaluation_toolkit
             ESMVALTOOL_DIR=${CYLC_WORKFLOW_RUN_DIR}/lib/python/ESMValTool
             ESMVALTOOL_MODULE_NAME = {{ ESMVALTOOL_MODULE_NAME }}
             ESMVALTOOL_CONFIG_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/etc/esmvaltool_config
@@ -166,6 +167,11 @@
     {%- if TEST %}
         {% include "inc/test.cylc" %}
     {%- endif %}
+{%- endif %}
+
+{%- if not UNITTEST and AEROSOLTOOLKIT %}
+    {% include "site/" ~ SITE ~ "_aerosol_toolkit.cylc" %}
+    {% include "inc/aerosol_toolkit.cylc" %}
 {%- endif %}
 
 {%- if not UNITTEST and AUTOASSESS %}

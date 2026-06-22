@@ -1,0 +1,15 @@
+#!jinja2
+# (C) Crown Copyright 2026, Met Office.
+# The LICENSE.md file contains full licensing details.
+# aerosol_toolkit.cylc
+
+
+[scheduling]
+    [[graph]]
+        R1 = """
+            install_env_file
+                => install_aerosol_toolkit
+        """
+
+[runtime]
+    [[install_aerosol_toolkit]]
