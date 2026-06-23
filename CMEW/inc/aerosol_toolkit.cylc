@@ -9,6 +9,7 @@
         R1 = """
             install_env_file
                 => install_aerosol_toolkit
+                => configure_recipe
         """
 
 [runtime]
