@@ -20,7 +20,7 @@ export PYTHONNOUSERSITE=True
 # If PYTHONPATH_PREPEND has been set, prepend it to PYTHONPATH to extend the
 # Python environment.
 if [[ -n ${PYTHONPATH_PREPEND:-} ]]; then
-    echo "[INFO] Prepending the following to PYTHONPATH: ${PYTHONPATH_PREPEND}"
+    echo "[INFO] Prepending the following to PYTHONPATH: ${PYTHONPATH_PREPEND}" >/dev/stderr
     export PYTHONPATH=${PYTHONPATH_PREPEND}:${PYTHONPATH:-}
 fi
 
