@@ -63,7 +63,6 @@
             ESMVALTOOL_MODULE_NAME = {{ ESMVALTOOL_MODULE_NAME }}
             ESMVALTOOL_CONFIG_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/etc/esmvaltool_config
             USER_CONFIG_PATH = ${ESMVALTOOL_CONFIG_DIR}/config-user.yml
-            DEV_CONFIG_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/config-developer.yml
             OUTPUT_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/cycle/${CYLC_TASK_CYCLE_POINT}
             PYTHONPATH_PREPEND = ${ESMVALTOOL_DIR}
             SHARE_DATA_CDDS = ${CYLC_WORKFLOW_SHARE_DIR}/data/cdds
@@ -109,11 +108,10 @@
 
     [[configure_recipe]]
         [[[environment]]]
-            DRS_CMIP6 = {{ DRS_CMIP6 }}
-            DRS_OBS4MIPS = {{ DRS_OBS4MIPS }}
+            ESMVAL_CONFIG_DEFAULT_PATH = ${CYLC_WORKFLOW_RUN_DIR}/app/configure_recipe/etc/esmvaltool_config.yml
             MAX_PARALLEL_TASKS = {{ MAX_PARALLEL_TASKS }}
-            MIP_TABLE_DIR = {{ MIP_TABLE_DIR }}
             ROOTPATH_CMIP6 = {{ ROOTPATH_CMIP6 }}
+            ROOTPATH_OBS = {{ ROOTPATH_OBS }}
             ROOTPATH_OBS4MIPS = {{ ROOTPATH_OBS4MIPS }}
 
     [[configure_for<recipe>]]
