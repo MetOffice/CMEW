@@ -13,5 +13,8 @@ apm:
 - Amon/tas
 - Emon/rls
 - Emon/rss
+ap6:
+- day/ua
+- day/pr
 inm:
 - SImon/siconc
