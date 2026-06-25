@@ -48,8 +48,19 @@ def list_streams():
     str
         Space separated list of all streams.
     """
+    # Check whether a custom stream map is set to be used
+    dataset = os.environ["CYLC_TASK_PARAM_dataset"].strip()
+    with open(f"{os.environ['DATASETS_LIST_DIR']}/model_runs.yml") as f:
+        content = yaml.safe_load(f)
+    dataset_dict = content[dataset]
+    logger.debug("Dataset information:\n%s", dataset_dict)
+
     # Get path to stream mappings
-    streams_config = os.environ["STREAM_CONFIG_PATH"]
+    if dataset_dict["use_custom_data_streams"] == "true":
+        streams_config = dataset_dict["path_to_custom_streams_config"]
+    else:
+        streams_config = os.environ["STREAM_CONFIG_PATH"]
+    logger.debug("Reading streams from %s", streams_config)
 
     # Read the stream mappings
     with open(streams_config, "r") as f:
