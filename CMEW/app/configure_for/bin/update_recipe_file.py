@@ -72,7 +72,12 @@ def add_extra_datasets(recipe, yaml_filepath):
     }
 
     # Some attributes are neither needed nor wanted by ESMValTool
-    unwanted_keys = ["calendar", "suite_id"]
+    unwanted_keys = [
+        "calendar",
+        "path_to_custom_streams_config",
+        "suite_id",
+        "use_custom_data_streams",
+    ]
 
     # Convert the variable names in the extra datasets
     for dataset, inner_dict in extra_datasets.items():
