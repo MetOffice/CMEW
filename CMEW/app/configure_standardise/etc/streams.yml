@@ -1,17 +1,21 @@
 # (C) Crown Copyright 2026, Met Office.
 # The LICENSE.md file contains full licensing details.
+apa:
+  - day/pr
+ape:
+  - day/ua
 apm:
-- Amon/hfls
-- Amon/hfss
-- Amon/rlds
-- Amon/rlut
-- Amon/rlutcs
-- Amon/rsds
-- Amon/rsdt
-- Amon/rsut
-- Amon/rsutcs
-- Amon/tas
-- Emon/rls
-- Emon/rss
+  - Amon/hfls
+  - Amon/hfss
+  - Amon/rlds
+  - Amon/rlut
+  - Amon/rlutcs
+  - Amon/rsds
+  - Amon/rsdt
+  - Amon/rsut
+  - Amon/rsutcs
+  - Amon/tas
+  - Emon/rls
+  - Emon/rss
 inm:
-- SImon/siconc
+  - SImon/siconc
