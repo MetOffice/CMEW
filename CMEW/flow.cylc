@@ -69,6 +69,7 @@
             SHARE_DATA_CDDS = ${CYLC_WORKFLOW_SHARE_DIR}/data/cdds
             ROOT_PROC_DIR = ${SHARE_DATA_CDDS}/proc
             ROOT_DATA_DIR = ${SHARE_DATA_CDDS}/cdds_data
+            ROOT_RESTRUCTURED_DIR=${CYLC_WORKFLOW_SHARE_DIR}/work/
 
     [[RECIPE]]
         [[[environment]]]
@@ -111,6 +112,7 @@
 
     [[configure_recipe]]
         [[[environment]]]
+            CMEW_DATA_FOR_ESMVAL_DIR=${ROOT_RESTRUCTURED_DIR}/GCModelDev
             DRS_CMIP6 = {{ DRS_CMIP6 }}
             DRS_OBS4MIPS = {{ DRS_OBS4MIPS }}
             MAX_PARALLEL_TASKS = {{ MAX_PARALLEL_TASKS }}
