@@ -23,7 +23,7 @@ def mock_env_vars(monkeypatch):
             / "model_run_stream_config.yml"
         )
     )
-    monkeypatch.setenv("STREAM_CONFIG_PATH", "/path/to/default_streams.yml")
+    monkeypatch.setenv("DEFAULT_STREAM_CONFIG_PATH", "/path/to/default_streams.yml")
 
 
 def test_determine_stream_config_fp_custom(mock_env_vars, monkeypatch):

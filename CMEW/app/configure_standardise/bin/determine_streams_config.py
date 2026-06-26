@@ -38,7 +38,7 @@ def determine_stream_config_fp():
     if dataset_dict.get("use_custom_data_streams") == True:
         streams_config = dataset_dict["path_to_custom_streams_config"]
     else:
-        streams_config = os.environ["STREAM_CONFIG_PATH"]
+        streams_config = os.environ["DEFAULT_STREAM_CONFIG_PATH"]
     logger.info(
         "Stream info for dataset % will use: %s", dataset, streams_config
     )
