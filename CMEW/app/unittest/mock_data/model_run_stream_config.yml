@@ -1,0 +1,7 @@
+run-1:
+  path_to_custom_streams_config: /path/to/custom_streams.yml
+  use_custom_data_streams: true
+  other_key: something
+run-2:
+  use_custom_data_streams: false
+  other_key: something else

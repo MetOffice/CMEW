@@ -35,7 +35,7 @@ def determine_stream_config_fp():
     logger.debug("Dataset information:\n%s", dataset_dict)
 
     # Check whether a custom stream map is set to be used
-    if dataset_dict.get("use_custom_data_streams") == "true":
+    if dataset_dict.get("use_custom_data_streams") == True:
         streams_config = dataset_dict["path_to_custom_streams_config"]
     else:
         streams_config = os.environ["STREAM_CONFIG_PATH"]
