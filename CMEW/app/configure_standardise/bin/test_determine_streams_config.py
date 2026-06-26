@@ -4,7 +4,7 @@
 Unit tests for determine_streams_config.py
 
 Test data files:
-/app/unittest/mock_data/model_run_stream_test.yml
+/app/unittest/mock_data/model_run_stream_config.yml
     input for test_create_request
 """
 import pytest
