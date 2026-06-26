@@ -16,7 +16,7 @@
     dataset = {{ datasets }}
     recipe = radiation_budget
 {%- if not UNITTEST and AUTOASSESS %}
-    autoassess_area = monsoon
+    autoassess_area = monsoon, africa
 {%- endif %}
 
 [scheduling]
