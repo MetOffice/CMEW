@@ -56,7 +56,7 @@ def load_stream_dict():
     dict
         A mapping of pre-defined streams to their associated variables
     """
-    # Check whether a custom stream map is set to be used
+    # Get path to stream mappings
     streams_config = determine_stream_config_fp()
     logger.debug("Reading streams from %s", streams_config)
 

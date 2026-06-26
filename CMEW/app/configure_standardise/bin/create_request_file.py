@@ -49,7 +49,7 @@ def list_streams():
     str
         Space separated list of all streams.
     """
-    # Check whether a custom stream map is set to be used
+    # Get path to stream mappings
     streams_config = determine_stream_config_fp()
 
     # Read the stream mappings
