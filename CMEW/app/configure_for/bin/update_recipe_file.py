@@ -184,7 +184,7 @@ def main():
     amended_recipe = remove_additional_datasets(blank_recipe)
 
     # Add the model runs into the datasets section of the recipe
-    model_runs_fp = f"{os.environ['DATASETS_LIST_DIR']}/model_runs.yml"
+    model_runs_fp = os.environ["MODEL_RUNS_CONFIG"]
     logger.info("Adding model runs to recipe")
     updated_recipe = add_extra_datasets(amended_recipe, model_runs_fp)
 

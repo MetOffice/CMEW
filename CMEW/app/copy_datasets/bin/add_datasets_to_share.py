@@ -346,7 +346,7 @@ def main():
 
     # Reformat the YAML files to use unique identifiers as keys
     logger.info("Reformatting YAML files to use suite IDs as keys")
-    model_runs_yaml = f"{target_dir}/model_runs.yml"
+    model_runs_yaml = os.environ["MODEL_RUNS_CONFIG"]
     use_facet_as_key(model_runs_yaml, "suite_id")
     use_facet_as_key(f"{target_dir}/cmip6_datasets.yml", "model_id")
 

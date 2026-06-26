@@ -99,7 +99,8 @@
     [[MODEL_RUNS]]
         [[[environment]]]
             # Directory containing dataset lists as YAML files
-            DATASETS_LIST_DIR = "${CYLC_WORKFLOW_SHARE_DIR}/dataset_lists"
+            DATASETS_LIST_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/dataset_lists
+            MODEL_RUNS_CONFIG = ${DATASETS_LIST_DIR}/model_runs.yml
             START_YEAR = {{ START_YEAR }}
             NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
 
