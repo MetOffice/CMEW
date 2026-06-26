@@ -1,3 +1,5 @@
+# (C) Crown Copyright 2026, Met Office.
+# The LICENSE.md file contains full licensing details.
 run-1:
   path_to_custom_streams_config: /path/to/custom_streams.yml
   use_custom_data_streams: true
