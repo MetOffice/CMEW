@@ -8,6 +8,7 @@ import os
 import yaml
 import sys
 import logging
+from determine_streams_config import determine_stream_config_fp
 
 
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
@@ -46,7 +47,9 @@ def combine_variable_lists(directory):
 
 def load_stream_dict():
     """
-    Loads stream information from the ../etc/streams.yml file.
+    Loads stream information for the dataset.
+
+    This will either be a custom filepath or the ../etc/streams.yml file.
 
     Returns
     -------
@@ -54,17 +57,7 @@ def load_stream_dict():
         A mapping of pre-defined streams to their associated variables
     """
     # Check whether a custom stream map is set to be used
-    dataset = os.environ["CYLC_TASK_PARAM_dataset"].strip()
-    with open(f"{os.environ['DATASETS_LIST_DIR']}/model_runs.yml") as f:
-        content = yaml.safe_load(f)
-    dataset_dict = content[dataset]
-    logger.debug("Dataset information:\n%s", dataset_dict)
-
-    # Get path to stream mappings
-    if dataset_dict["use_custom_data_streams"] == "true":
-        streams_config = dataset_dict["path_to_custom_streams_config"]
-    else:
-        streams_config = os.environ["STREAM_CONFIG_PATH"]
+    streams_config = determine_stream_config_fp()
     logger.debug("Reading streams from %s", streams_config)
 
     # Read the stream mappings

@@ -10,6 +10,7 @@ import sys
 from pathlib import Path
 import yaml
 import logging
+from determine_streams_config import determine_stream_config_fp
 
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 filename = os.path.basename(__file__)
@@ -49,18 +50,7 @@ def list_streams():
         Space separated list of all streams.
     """
     # Check whether a custom stream map is set to be used
-    dataset = os.environ["CYLC_TASK_PARAM_dataset"].strip()
-    with open(f"{os.environ['DATASETS_LIST_DIR']}/model_runs.yml") as f:
-        content = yaml.safe_load(f)
-    dataset_dict = content[dataset]
-    logger.debug("Dataset information:\n%s", dataset_dict)
-
-    # Get path to stream mappings
-    if dataset_dict["use_custom_data_streams"] == "true":
-        streams_config = dataset_dict["path_to_custom_streams_config"]
-    else:
-        streams_config = os.environ["STREAM_CONFIG_PATH"]
-    logger.debug("Reading streams from %s", streams_config)
+    streams_config = determine_stream_config_fp()
 
     # Read the stream mappings
     with open(streams_config, "r") as f:
@@ -101,7 +91,7 @@ def create_request(model_run):
     mip_table_dir = os.environ["MIP_TABLE_DIR"]
 
     # Read the model run information from the model_runs.yml file
-    model_runs_yaml = Path(os.environ["DATASETS_LIST_DIR"]) / "model_runs.yml"
+    model_runs_yaml = os.environ["MODEL_RUNS_CONFIG"]
     with open(model_runs_yaml, "r") as f:
         dataset_dict = yaml.safe_load(f)[model_run]
     logger.debug(
