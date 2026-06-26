@@ -40,7 +40,12 @@ def mock_env_vars(monkeypatch):
     )
     monkeypatch.setenv(
         "MODEL_RUNS_CONFIG",
-        str(Path(__file__).parent.parent.parent / "unittest" / "mock_data" / "model_runs.yml"),
+        str(
+            Path(__file__).parent.parent.parent
+            / "unittest"
+            / "mock_data"
+            / "model_runs.yml"
+        ),
     )
 
 

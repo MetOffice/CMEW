@@ -66,10 +66,17 @@ def test_add_stream_to_variables(monkeypatch, path_to_combined_variables):
     )
     monkeypatch.setenv(
         "MODEL_RUNS_CONFIG",
-        str(Path(__file__).parent.parent.parent / "unittest" / "mock_data" / "model_runs.yml"),
+        str(
+            Path(__file__).parent.parent.parent
+            / "unittest"
+            / "mock_data"
+            / "model_runs.yml"
+        ),
     )
     monkeypatch.setenv("CYLC_TASK_PARAM_dataset", "u-bv526")
-    monkeypatch.setenv("DEFAULT_STREAM_CONFIG_PATH", str(default_stream_config_path))
+    monkeypatch.setenv(
+        "DEFAULT_STREAM_CONFIG_PATH", str(default_stream_config_path)
+    )
     input = [
         "Amon/hfls",
         "Amon/hfss",

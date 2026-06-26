@@ -21,9 +21,11 @@ def mock_env_vars(monkeypatch):
             / "unittest"
             / "mock_data"
             / "model_run_stream_config.yml"
-        )
+        ),
     )
-    monkeypatch.setenv("DEFAULT_STREAM_CONFIG_PATH", "/path/to/default_streams.yml")
+    monkeypatch.setenv(
+        "DEFAULT_STREAM_CONFIG_PATH", "/path/to/default_streams.yml"
+    )
 
 
 def test_determine_stream_config_fp_custom(mock_env_vars, monkeypatch):
@@ -31,6 +33,7 @@ def test_determine_stream_config_fp_custom(mock_env_vars, monkeypatch):
     expected = "/path/to/custom_streams.yml"
     actual = determine_stream_config_fp()
     assert actual == expected
+
 
 def test_determine_stream_config_fp_default(mock_env_vars, monkeypatch):
     monkeypatch.setenv("CYLC_TASK_PARAM_dataset", "run-2")
