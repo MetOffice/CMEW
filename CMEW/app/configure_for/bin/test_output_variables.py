@@ -52,9 +52,7 @@ def path_to_radiation_budget_variables():
 
 
 def test_parse_variables_from_outer_key(path_to_radiation_budget_recipe):
-
     actual = parse_variables_from_recipe(path_to_radiation_budget_recipe)
-
     expected = [
         "Emon/rss",
         "Amon/rsdt",
@@ -68,16 +66,12 @@ def test_parse_variables_from_outer_key(path_to_radiation_budget_recipe):
         "Amon/hfss",
         "Amon/hfls",
     ]
-
     assert actual == expected
 
 
 def test_parse_variables_from_short_name_key(path_to_zec_recipe):
-
     actual = parse_variables_from_recipe(path_to_zec_recipe)
-
     expected = ["Amon/tas"]
-
     assert actual == expected
 
 

@@ -1,5 +1,8 @@
+# (C) Crown Copyright 2026, Met Office.
+# The LICENSE.md file contains full licensing details.
 # ESMValTool
-# recipe_zec.yml
+# To be used for testing purposes
+# based on recipe_zec.yml
 ---
 documentation:
   title: >
