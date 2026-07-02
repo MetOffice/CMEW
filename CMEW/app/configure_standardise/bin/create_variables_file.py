@@ -8,6 +8,7 @@ import os
 import yaml
 import sys
 import logging
+from determine_streams_config import determine_stream_config_fp
 
 
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
@@ -46,7 +47,9 @@ def combine_variable_lists(directory):
 
 def load_stream_dict():
     """
-    Loads stream information from the ../etc/streams.yml file.
+    Loads stream information for the dataset.
+
+    This will either be a custom filepath or the ../etc/streams.yml file.
 
     Returns
     -------
@@ -54,7 +57,7 @@ def load_stream_dict():
         A mapping of pre-defined streams to their associated variables
     """
     # Get path to stream mappings
-    streams_config = os.environ["STREAM_CONFIG_PATH"]
+    streams_config = determine_stream_config_fp()
     logger.debug("Reading streams from %s", streams_config)
 
     # Read the stream mappings

@@ -85,7 +85,8 @@
             RAW_DATA_DIR = {{ RAW_DATA_DIR | default("") }}
             RAW_DATA_DIR_MODE = {{ RAW_DATA_DIR_MODE }}
             REQUEST_DEFAULTS_PATH = ${CYLC_WORKFLOW_RUN_DIR}/app/configure_standardise/etc/request_defaults.yml
-            STREAM_CONFIG_PATH = ${CYLC_WORKFLOW_RUN_DIR}/app/configure_standardise/etc/streams.yml
+            ROOT_RESTRUCTURED_DIR=${CYLC_WORKFLOW_SHARE_DIR}/work/
+            DEFAULT_STREAM_CONFIG_PATH = ${CYLC_WORKFLOW_RUN_DIR}/app/configure_standardise/etc/streams.yml
             # Workaround for bug in CDDS: ROOT_SOFTWARE_DIR: unbound variable.
             ROOT_SOFTWARE_DIR = ${CDDS_SOFTWARE_DIR}
             CDDS_VERSION = {{ CDDS_VERSION }}
@@ -99,7 +100,9 @@
     [[MODEL_RUNS]]
         [[[environment]]]
             # Directory containing dataset lists as YAML files
-            DATASETS_LIST_DIR = "${CYLC_WORKFLOW_SHARE_DIR}/dataset_lists"
+            DATASETS_LIST_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/dataset_lists
+            # This particular file controls behaviours throughout the workflow
+            MODEL_RUNS_CONFIG = ${DATASETS_LIST_DIR}/model_runs.yml
             START_YEAR = {{ START_YEAR }}
             NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
 

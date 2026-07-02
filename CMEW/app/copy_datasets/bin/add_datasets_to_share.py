@@ -311,6 +311,32 @@ def add_reference_key(filepath):
         yaml.dump(dataset_dict, f)
 
 
+def format_as_bools(filepath):
+    """
+    Format second level key true or false strings as booleans.
+
+    Parameters
+    ----------
+    filepath: str
+        The location of the YAML file to be edited.
+    """
+    # Read the yaml as a dictionary without the extra key
+    with open(filepath, "r") as f:
+        dataset_dict = yaml.safe_load(f)
+
+    # Reformat true and false keys
+    for dataset in dataset_dict:
+        for key in dataset_dict[dataset]:
+            if str(dataset_dict[dataset][key]).lower() == "true":
+                dataset_dict[dataset][key] = True
+            elif str(dataset_dict[dataset][key]).lower() == "false":
+                dataset_dict[dataset][key] = False
+
+    # Re-save the file
+    with open(filepath, "w") as f:
+        yaml.dump(dataset_dict, f)
+
+
 def main():
     """Copy dataset information from configuration to the share directory."""
     # Read the target (shared) directory from the environment
@@ -346,13 +372,16 @@ def main():
 
     # Reformat the YAML files to use unique identifiers as keys
     logger.info("Reformatting YAML files to use suite IDs as keys")
-    model_runs_yaml = f"{target_dir}/model_runs.yml"
+    model_runs_yaml = os.environ["MODEL_RUNS_CONFIG"]
     use_facet_as_key(model_runs_yaml, "suite_id")
     use_facet_as_key(f"{target_dir}/cmip6_datasets.yml", "model_id")
 
     # Add the reference identifier
     logger.info("Adding benchmarking key to model runs YAML")
     add_reference_key(model_runs_yaml)
+
+    # Reformat Cylc or Rose booleans as python booleans
+    format_as_bools(model_runs_yaml)
 
 
 if __name__ == "__main__":
