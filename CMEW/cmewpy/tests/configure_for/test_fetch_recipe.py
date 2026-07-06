@@ -8,23 +8,14 @@ Test data files:
 /app/unittest/mock_data/recipe_paths.yml
     input for test_retrieve_specified, test_retrieve_defaults
 """
-from fetch_recipe import retrieve_name_and_fp
-from pathlib import Path
+from cmewpy.configure_for.fetch_recipe import retrieve_name_and_fp
 import pytest
 
 
 @pytest.fixture
-def mock_env_vars(monkeypatch):
+def mock_env_vars(monkeypatch, path_to_mock_recipe_paths):
     # For adding extra datasets
-    monkeypatch.setenv(
-        "RECIPE_DICT_PATH",
-        str(
-            Path(__file__).parent.parent.parent
-            / "unittest"
-            / "mock_data"
-            / "recipe_paths.yml"
-        ),
-    )
+    monkeypatch.setenv("RECIPE_DICT_PATH", path_to_mock_recipe_paths)
 
 
 def test_retrieve_specified(mock_env_vars, monkeypatch):

@@ -12,7 +12,7 @@ then writes those dictionaries to YAML files in the share directory.
 """
 import os
 import yaml
-from scrape_ini import find_ref
+from cmewpy.common.scrape_ini import find_ref
 from pathlib import Path
 import sys
 import logging

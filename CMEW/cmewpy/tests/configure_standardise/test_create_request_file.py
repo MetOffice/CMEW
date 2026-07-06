@@ -7,21 +7,23 @@ Test data files:
 /app/unittest/mock_data/model_runs.yml
     input for test_create_request
 """
+from cmewpy.configure_standardise.create_request_file import create_request
 from pathlib import Path
 import configparser
-from create_request_file import create_request
 
 
 def test_create_request(monkeypatch):
     monkeypatch.setenv(
         "DATASETS_LIST_DIR",
-        str(Path(__file__).parent.parent.parent / "unittest" / "mock_data"),
+        str(Path(__file__).parent.parent / "mock_data"),
     )
 
     request_defaults_path = (
-        Path(__file__).parent.parent / "etc" / "request_defaults.yml"
+        Path(__file__).parent.parent.parent / "etc" / "request_defaults.yml"
     )
-    stream_config_path = Path(__file__).parent.parent / "etc" / "streams.yml"
+    stream_config_path = (
+        Path(__file__).parent.parent.parent / "etc" / "streams.yml"
+    )
     root_proc_dir = "/path/to/proc/dir/"
     root_data_dir = "/path/to/data/dir/"
     variables_path = "/path/to/variables.txt"
@@ -43,10 +45,7 @@ def test_create_request(monkeypatch):
     actual = {section: dict(cfg[section]) for section in cfg.sections()}
 
     expected_request = str(
-        Path(__file__).parent.parent.parent
-        / "unittest"
-        / "kgo"
-        / "request_u-cw673.cfg"
+        Path(__file__).parent.parent / "kgo" / "request_u-cw673.cfg"
     )
     config = configparser.ConfigParser()
     config.read(expected_request)

@@ -19,7 +19,7 @@ Test data files:
     kgo for test_add_extra_datasets
     kgo for test_main
 """
-from update_recipe_file import (
+from cmewpy.configure_for.update_recipe_file import (
     return_blank_recipe,
     add_extra_datasets,
     remove_additional_datasets,
@@ -36,93 +36,16 @@ def mock_env_vars(monkeypatch):
     # For adding extra datasets
     monkeypatch.setenv(
         "DATASETS_LIST_DIR",
-        str(Path(__file__).parent.parent.parent / "unittest" / "mock_data"),
+        str(Path(__file__).parent.parent / "mock_data"),
     )
-
-
-@pytest.fixture
-def path_to_mock_original_recipe():
-    path = (
-        Path(__file__).parent.parent.parent
-        / "unittest"
-        / "mock_data"
-        / "original_recipe_radiation_budget.yml"
-    )
-    return path
-
-
-@pytest.fixture
-def path_to_blank_recipe_kgo():
-    path = (
-        Path(__file__).parent.parent.parent
-        / "unittest"
-        / "kgo"
-        / "blank_recipe_radiation_budget.yml"
-    )
-    return path
-
-
-@pytest.fixture
-def path_to_updated_recipe_kgo():
-    path = (
-        Path(__file__).parent.parent.parent
-        / "unittest"
-        / "mock_data"
-        / "updated_recipe_radiation_budget.yml"
-    )
-    return path
-
-
-@pytest.fixture
-def path_to_kgo_extended_recipe():
-    path = (
-        Path(__file__).parent.parent.parent
-        / "unittest"
-        / "kgo"
-        / "extended_radiation_budget_recipe.yml"
-    )
-    return path
-
-
-@pytest.fixture
-def path_to_cmip6_datasets_yaml():
-    path = (
-        Path(__file__).parent.parent.parent
-        / "unittest"
-        / "mock_data"
-        / "cmip6_datasets.yml"
-    )
-    return path
-
-
-@pytest.fixture
-def path_to_recipe_with_additionals():
-    path = (
-        Path(__file__).parent.parent.parent
-        / "unittest"
-        / "mock_data"
-        / "recipe_with_additional_datasets.yml"
-    )
-    return path
-
-
-@pytest.fixture
-def path_to_recipe_additionals_removed():
-    path = (
-        Path(__file__).parent.parent.parent
-        / "unittest"
-        / "kgo"
-        / "recipe_additional_datasets_removed.yml"
-    )
-    return path
 
 
 def test_return_blank_recipe(
-    path_to_blank_recipe_kgo, path_to_mock_original_recipe
+    path_to_blank_recipe_kgo, path_to_original_radiation_budget_recipe
 ):
     with open(path_to_blank_recipe_kgo, "r") as file_handle:
         expected = yaml.safe_load(file_handle)
-    actual = return_blank_recipe(path_to_mock_original_recipe)
+    actual = return_blank_recipe(path_to_original_radiation_budget_recipe)
     assert actual == expected
 
 
@@ -150,12 +73,7 @@ def test_remove_additional_datasets(
     monkeypatch.setenv("CYLC_TASK_PARAM_recipe", "mock_entry")
     monkeypatch.setenv(
         "RECIPE_DICT_PATH",
-        str(
-            Path(__file__).parent.parent.parent
-            / "unittest"
-            / "mock_data"
-            / "recipe_paths.yml"
-        ),
+        str(Path(__file__).parent.parent / "mock_data" / "recipe_paths.yml"),
     )
 
     with open(path_to_recipe_additionals_removed, "r") as file_handle_1:
@@ -173,14 +91,14 @@ def test_main(
     monkeypatch,
     mock_env_vars,
     path_to_kgo_extended_recipe,
-    path_to_mock_original_recipe,
+    path_to_original_radiation_budget_recipe,
     tmp_path,
 ):
     """main() should overwrite the recipe in-place with the updated content."""
     # Copy the original recipe to a tmp_path location to allow it to be
     # overwritten.
     path_to_temp_recipe = tmp_path / "tmp_recipe.yml"
-    shutil.copy(path_to_mock_original_recipe, path_to_temp_recipe)
+    shutil.copy(path_to_original_radiation_budget_recipe, path_to_temp_recipe)
 
     # Mock the environmental variable 'RECIPE PATH' to the tmp_path location
     # where the original recipe is stored.
@@ -190,12 +108,7 @@ def test_main(
     monkeypatch.setenv("CYLC_TASK_PARAM_recipe", "radiation_budget")
     monkeypatch.setenv(
         "RECIPE_DICT_PATH",
-        str(
-            Path(__file__).parent.parent.parent
-            / "unittest"
-            / "mock_data"
-            / "recipe_paths.yml"
-        ),
+        str(Path(__file__).parent.parent / "mock_data" / "recipe_paths.yml"),
     )
 
     main()
