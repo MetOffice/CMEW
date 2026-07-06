@@ -297,8 +297,9 @@ def add_reference_key(filepath):
     """
     # Find the reference suite ID in the `rose-suite.conf` file
     rose_suite_fp = (
-        Path(__file__).parent.parent.parent.parent / "rose-suite.conf"
+        Path(os.environ["CYLC_WORKFLOW_RUN_DIR"]) / "rose-suite.conf"
     )
+
     ref_dataset = find_ref(rose_suite_fp)
 
     # Read the yaml as a dictionary without the extra key
