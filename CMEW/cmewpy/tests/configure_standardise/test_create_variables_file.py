@@ -12,30 +12,18 @@ Test data files:
 /app/unittest/kgo/variables.txt
     kgo for add_stream_to_variables
 """
-from create_variables_file import (
+from cmewpy.configure_standardise.create_variables_file import (
     combine_variable_lists,
     add_stream_to_variables,
     write_variables,
 )
 from pathlib import Path
-import pytest
 import tempfile
-
-
-@pytest.fixture
-def path_to_combined_variables():
-    path = (
-        Path(__file__).parent.parent.parent
-        / "unittest"
-        / "kgo"
-        / "variables.txt"
-    )
-    return str(path)
 
 
 def test_combine_variable_lists():
     actual = combine_variable_lists(
-        str(Path(__file__).parent.parent.parent / "unittest" / "mock_data")
+        str(Path(__file__).parent.parent / "mock_data")
     )
 
     expected = [
@@ -58,7 +46,9 @@ def test_combine_variable_lists():
 
 
 def test_add_stream_to_variables(monkeypatch, path_to_combined_variables):
-    stream_config_path = Path(__file__).parent.parent / "etc" / "streams.yml"
+    stream_config_path = (
+        Path(__file__).parent.parent.parent / "etc" / "streams.yml"
+    )
     monkeypatch.setenv("STREAM_CONFIG_PATH", str(stream_config_path))
     input = [
         "Amon/hfls",

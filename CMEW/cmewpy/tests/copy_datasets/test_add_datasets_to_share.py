@@ -14,7 +14,7 @@ Test data files:
 /app/unittest/kgo/basic_dict.yml
     kgo for test_write_dict_to_yaml
 """
-from add_datasets_to_share import (
+from cmewpy.copy_datasets.add_datasets_to_share import (
     extract_sections_from_naml,
     convert_str_to_facets,
     add_common_facets,
@@ -24,7 +24,6 @@ from add_datasets_to_share import (
     dict_namelists_in_workflow_dir,
     use_facet_as_key,
 )
-from pathlib import Path
 import pytest
 import yaml
 import shutil
@@ -37,50 +36,6 @@ def mock_env_vars(monkeypatch):
     monkeypatch.setenv("START_YEAR", "1993")
     monkeypatch.setenv("NUMBER_OF_YEARS", "10")
     monkeypatch.setenv("CYLC_WORKFLOW_RUN_DIR", "/a/b/c")
-
-
-@pytest.fixture
-def path_to_mock_nl():
-    path = (
-        Path(__file__).parent.parent.parent
-        / "unittest"
-        / "mock_data"
-        / "model_runs.nl"
-    )
-    return str(path)
-
-
-@pytest.fixture
-def path_to_kgo_dict():
-    path = (
-        Path(__file__).parent.parent.parent
-        / "unittest"
-        / "kgo"
-        / "basic_dict.yml"
-    )
-    return path
-
-
-@pytest.fixture
-def path_to_mock_yaml_list():
-    path = (
-        Path(__file__).parent.parent.parent
-        / "unittest"
-        / "mock_data"
-        / "model_runs_as_list.yml"
-    )
-    return str(path)
-
-
-@pytest.fixture
-def path_to_kgo_yaml_dict():
-    path = (
-        Path(__file__).parent.parent.parent
-        / "unittest"
-        / "kgo"
-        / "model_runs_as_dict.yml"
-    )
-    return str(path)
 
 
 def test_extract_sections_from_naml(path_to_mock_nl):
@@ -204,7 +159,10 @@ def test_write_dict_to_yaml(path_to_kgo_dict):
 
 
 # I tested most of the functionality above, so this just checks the filename
-@patch("add_datasets_to_share.write_dict_to_yaml", return_value=None)
+@patch(
+    "cmewpy.copy_datasets.add_datasets_to_share.write_dict_to_yaml",
+    return_value=None,
+)
 def test_write_datasets_to_yaml(mock_writing):
 
     write_datasets_to_yaml({"key": "value"}, "test_name", "/a/b")

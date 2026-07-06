@@ -23,18 +23,19 @@
     [[graph]]
         R1 = """
 {%- if UNITTEST or TEST %}
-            install_env_file => unittest
+            install_env_file => install_cmewpy => unittest
 {%- endif %}
 {%- if USE_ESMVALTOOL_BRANCH %}
-            install_env_file => get_esmval_branch => configure_recipe & copy_datasets
+            install_env_file => install_cmewpy => get_esmval_branch
+            => configure_recipe & copy_datasets
 {%- endif %}
 {%- if not UNITTEST and not SKIP_CDDS %}
-            install_env_file => configure_recipe & copy_datasets
+            install_cmewpy => configure_recipe & copy_datasets
             copy_datasets => configure_for<recipe>
             configure_for<recipe> => configure_standardise<recipe,dataset>
-                => standardise_model_data<dataset> => restructure_dirs
+            => standardise_model_data<dataset> => restructure_dirs
             configure_recipe & restructure_dirs => run_recipe<recipe>
-                => housekeeping
+            => housekeeping
 
     {%- if TEST %}
             run_recipe<recipe> => compare<recipe>
@@ -42,9 +43,10 @@
 {%- endif %}
 {%- if SKIP_CDDS %}
     {%- if USE_ESMVALTOOL_BRANCH %}
-            install_env_file => get_esmval_branch => configure_recipe & copy_datasets
+            install_env_file => install_cmewpy => get_esmval_branch
+            => configure_recipe & copy_datasets
     {%- endif %}
-            install_env_file
+            install_env_file => install_cmewpy
             => configure_recipe & copy_datasets
             => configure_for<recipe>
             => symlink_standardised_data
@@ -74,7 +76,8 @@
     [[RECIPE]]
         [[[environment]]]
             RECIPE_DICT_PATH = ${CYLC_WORKFLOW_RUN_DIR}/app/configure_for/etc/recipe_paths.yml
-            RECIPE_PATH = "${CYLC_WORKFLOW_SHARE_DIR}/etc/recipe_${CYLC_TASK_PARAM_recipe}.yml"
+            RECIPE_NAME = recipe_${CYLC_TASK_PARAM_recipe}.yml
+            RECIPE_PATH = "${CYLC_WORKFLOW_SHARE_DIR}/etc/${RECIPE_NAME}"
             VARIABLES_LIST_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/variables_lists
             RECIPE_VARIABLES_PATH = ${VARIABLES_LIST_DIR}/${CYLC_TASK_PARAM_recipe}_variables.txt
 
@@ -84,8 +87,8 @@
             CDDS_SOFTWARE_DIR = "~cdds/software"
             RAW_DATA_DIR = {{ RAW_DATA_DIR | default("") }}
             RAW_DATA_DIR_MODE = {{ RAW_DATA_DIR_MODE }}
-            REQUEST_DEFAULTS_PATH = ${CYLC_WORKFLOW_RUN_DIR}/app/configure_standardise/etc/request_defaults.yml
-            STREAM_CONFIG_PATH = ${CYLC_WORKFLOW_RUN_DIR}/app/configure_standardise/etc/streams.yml
+            REQUEST_DEFAULTS_PATH = ${CYLC_WORKFLOW_RUN_DIR}/cmewpy/etc/request_defaults.yml
+            STREAM_CONFIG_PATH = ${CYLC_WORKFLOW_RUN_DIR}/cmewpy/etc/streams.yml
             # Workaround for bug in CDDS: ROOT_SOFTWARE_DIR: unbound variable.
             ROOT_SOFTWARE_DIR = ${CDDS_SOFTWARE_DIR}
             CDDS_VERSION = {{ CDDS_VERSION }}
@@ -106,6 +109,8 @@
     [[install_env_file]]
         [[[environment]]]
             SITE = {{ SITE }}
+
+    [[install_cmewpy]]
 
     [[configure_recipe]]
         [[[environment]]]
