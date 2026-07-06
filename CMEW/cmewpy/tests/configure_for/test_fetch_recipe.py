@@ -15,7 +15,7 @@ import pytest
 @pytest.fixture
 def mock_env_vars(monkeypatch, path_to_mock_recipe_paths):
     # For adding extra datasets
-    monkeypatch.setenv("RECIPE_DICT_PATH", path_to_mock_recipe_paths)
+    monkeypatch.setenv("RECIPE_DICT_PATH", str(path_to_mock_recipe_paths))
 
 
 def test_retrieve_specified(mock_env_vars, monkeypatch):

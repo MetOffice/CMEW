@@ -23,18 +23,19 @@
     [[graph]]
         R1 = """
 {%- if UNITTEST or TEST %}
-            install_env_file => unittest
+            install_env_file => install_cmewpy => unittest
 {%- endif %}
 {%- if USE_ESMVALTOOL_BRANCH %}
-            install_env_file => get_esmval_branch => configure_recipe & copy_datasets
+            install_env_file => install_cmewpy => get_esmval_branch
+            => configure_recipe & copy_datasets
 {%- endif %}
 {%- if not UNITTEST and not SKIP_CDDS %}
             install_env_file => configure_recipe & copy_datasets
             copy_datasets => configure_for<recipe>
             configure_for<recipe> => configure_standardise<recipe,dataset>
-                => standardise_model_data<dataset> => restructure_dirs
+            => standardise_model_data<dataset> => restructure_dirs
             configure_recipe & restructure_dirs => run_recipe<recipe>
-                => housekeeping
+            => housekeeping
 
     {%- if TEST %}
             run_recipe<recipe> => compare<recipe>
@@ -106,6 +107,10 @@
     [[install_env_file]]
         [[[environment]]]
             SITE = {{ SITE }}
+
+    [[install_cmewpy]]
+        [[[environment]]]
+            CMEW_INSTALL_DIR = $CYLC_WORKFLOW_SHARE_DIR/lib/python
 
     [[configure_recipe]]
         [[[environment]]]
