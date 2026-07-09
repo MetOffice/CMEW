@@ -12,7 +12,10 @@ Test data files:
 /app/unittest/kgo/radiation_budget_variables.txt
     kgo for test_write_variables
 """
-from output_variables import parse_variables_from_recipe, write_variables
+from get_variables_from_recipe import (
+    parse_variables_from_recipe,
+    write_variables,
+)
 from pathlib import Path
 import pytest
 import tempfile
