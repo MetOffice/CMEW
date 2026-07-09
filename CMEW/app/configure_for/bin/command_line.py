@@ -4,7 +4,7 @@ import argparse
 from get_variables_from_recipe import get_variables_from_recipe
 
 
-def parse_args(arguments):
+def parse_args_for_get_variables_from_recipe(arguments):
     """
     Return the names and values of the command line arguments for :func:`main`.
 
@@ -38,6 +38,6 @@ def parse_args(arguments):
     return parser.parse_args(arguments)
 
 
-def main(arguments=None):
-    args = parse_args(arguments)
+def main_for_get_variables_from_recipe(arguments=None):
+    args = parse_args_for_get_variables_from_recipe(arguments)
     get_variables_from_recipe(args.recipe_path, args.output_filepath)
