@@ -125,6 +125,6 @@ def write_variables(variables, target_path):
         target_file.write(variables_str)
 
 
-def get_variables_from_recipe(recipe_path, variables_path):
+def get_variables_from_recipe(recipe_path, output_filepath):
     variables = parse_variables_from_recipe(recipe_path)
-    write_variables(variables, variables_path)
+    write_variables(variables, output_filepath)
