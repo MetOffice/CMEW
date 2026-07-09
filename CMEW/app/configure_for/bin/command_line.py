@@ -6,8 +6,7 @@ from get_variables_from_recipe import get_variables_from_recipe
 
 def parse_args(arguments):
     """
-    Return the names of the command line arguments for
-    :func:`main` and their validated values.
+    Return the names and values of the command line arguments for :func:`main`.
 
     Parameters
     ----------
