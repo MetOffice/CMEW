@@ -3,6 +3,7 @@
 import argparse
 from get_variables_from_recipe import get_variables_from_recipe
 
+
 def parse_args(arguments):
     """
     Return the names of the command line arguments for
