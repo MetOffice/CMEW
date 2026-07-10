@@ -25,7 +25,7 @@ def parse_args_for_get_variables_from_recipe(arguments):
     )
     parser.add_argument(
         "--recipe_path",
-        help="The name of the variable to download.",
+        help="The full path to the ESMValTool recipe.",
     )
     parser.add_argument(
         "--output_filepath",
