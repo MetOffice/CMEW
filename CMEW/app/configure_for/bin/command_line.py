@@ -17,8 +17,7 @@ def parse_args_for_get_variables_from_recipe(arguments):
     Returns
     -------
     :class:`argparse.Namespace`
-        The names of the command line arguments and their validated
-        values.
+        The names and values of the command line arguments.
     """
     parser = argparse.ArgumentParser(
         description="Retrieve variables from an ESMValTool recipe.",
