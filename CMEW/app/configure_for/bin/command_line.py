@@ -38,5 +38,16 @@ def parse_args_for_get_variables_from_recipe(arguments):
 
 
 def main_for_get_variables_from_recipe(arguments=None):
+    """
+    Retrieve variables from an ESMValTool recipe.
+
+    Parameters
+    ----------
+    arguments : :obj:`list` of :obj:`str`
+        The command line arguments to be parsed.
+    """
+    # Parse the arguments.
     args = parse_args_for_get_variables_from_recipe(arguments)
+
+    # Run the code.
     get_variables_from_recipe(args.recipe_path, args.output_filepath)
