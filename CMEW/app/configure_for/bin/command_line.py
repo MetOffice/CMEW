@@ -31,7 +31,7 @@ def parse_args_for_get_variables_from_recipe(arguments):
         "--output_filepath",
         help=(
             "The full path to the file where the "
-            "variables data will be written."
+            "variables from the ESMValTool recipe will be written."
         ),
     )
 
