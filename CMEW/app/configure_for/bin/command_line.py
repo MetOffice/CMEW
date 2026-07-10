@@ -34,7 +34,6 @@ def parse_args_for_get_variables_from_recipe(arguments):
             "variables from the ESMValTool recipe will be written."
         ),
     )
-
     return parser.parse_args(arguments)
 
 
