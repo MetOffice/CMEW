@@ -125,14 +125,6 @@ def write_variables(variables, target_path):
         target_file.write(variables_str)
 
 
-def main():
-    recipe_path = os.environ["RECIPE_PATH"]
-    logger.info("Reading variables from %s", recipe_path)
+def get_variables_from_recipe(recipe_path, output_filepath):
     variables = parse_variables_from_recipe(recipe_path)
-    variables_path = os.environ["RECIPE_VARIABLES_PATH"]
-    logger.info("Writing variables to %s", variables_path)
-    write_variables(variables, variables_path)
-
-
-if __name__ == "__main__":
-    main()
+    write_variables(variables, output_filepath)
