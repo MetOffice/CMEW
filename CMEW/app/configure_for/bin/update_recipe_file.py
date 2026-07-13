@@ -171,7 +171,7 @@ def update_recipe_file(
     recipe_path, datasets_list_dir, recipe_id, recipe_dict_fp
 ):
     """
-    Load and update the ESMValTool recipe.
+    Update the datasets in an ESMValTool recipe.
 
     Overwrite the original recipe content with the updated recipe content.
 
