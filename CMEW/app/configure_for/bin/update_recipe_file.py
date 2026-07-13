@@ -56,7 +56,8 @@ def add_extra_datasets(recipe_content, yaml_filepath):
     Returns
     -------
     recipe_content: dict
-        The content of the recipe with an extended datasets section.
+        The content of the ESMValTool recipe
+        with an extended datasets section.
     """
     # Read the extra datasets from the provided YAML file
     with open(yaml_filepath, "r") as file_handle:
