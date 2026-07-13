@@ -15,71 +15,22 @@ filename = os.path.basename(__file__)
 logger = logging.getLogger(filename)
 
 
-def main():
-    """
-    Write the required user and developer configuration files for
-    ESMValTool.
-    """
-    values = retrieve_values_from_task_env()
-    logger.info("Retrieving values")
-    developer_config_path = values["DEV_CONFIG_PATH"]
-    logger.info("Creating developer config")
-    developer_config_contents = create_developer_config(values)
-    ensure_parent_dir(developer_config_path)
-    logger.info("Writing developer config to %s", developer_config_path)
-    write_yaml(developer_config_path, developer_config_contents)
-
-    user_config_path = values["USER_CONFIG_PATH"]
-    logger.info("Creating user config")
-    user_config_contents = create_user_config(values)
-    ensure_parent_dir(user_config_path)
-    logger.info("Writing user config to %s", user_config_path)
-    write_yaml(user_config_path, user_config_contents)
-
-
-def retrieve_values_from_task_env():
-    """
-    Return the values defined in the environment for the
-    ``configure_recipe`` task.
-
-    Returns
-    -------
-    : dictionary
-        The values defined in the environment for the
-        ``configure_recipe`` task.
-    """
-    values_from_task_env = {
-        "CMEW_DATA_FOR_ESMVAL_DIR": os.environ["CMEW_DATA_FOR_ESMVAL_DIR"],
-        "DEV_CONFIG_PATH": os.environ["DEV_CONFIG_PATH"],
-        "DRS_CMIP6": os.environ["DRS_CMIP6"],
-        "DRS_OBS4MIPS": os.environ["DRS_OBS4MIPS"],
-        "MAX_PARALLEL_TASKS": os.environ["MAX_PARALLEL_TASKS"],
-        "MIP_TABLE_DIR": os.environ["MIP_TABLE_DIR"],
-        "OUTPUT_DIR": os.environ["OUTPUT_DIR"],
-        "ROOTPATH_CMIP6": os.environ["ROOTPATH_CMIP6"],
-        "ROOTPATH_OBS4MIPS": os.environ["ROOTPATH_OBS4MIPS"],
-        "USER_CONFIG_PATH": os.environ["USER_CONFIG_PATH"],
-    }
-    logger.debug("Retrieved values:\n%s", values_from_task_env)
-    return values_from_task_env
-
-
-def create_developer_config(values):
+def create_developer_config(
+    mip_table_dir,
+):
     """
     Return the contents of the developer configuration file.
 
     Parameters
     ----------
-    values : dict
-        Configuration values.
+    mip_table_dir:
+        The MIP table to use from CDDS.
 
     Returns
     -------
     dict
         Developer configuration content.
     """
-    mip_table_dir = values["MIP_TABLE_DIR"]
-
     developer_config_file_contents = {
         "custom": {
             "cmor_path": mip_table_dir,
@@ -175,26 +126,46 @@ def create_developer_config(values):
     return developer_config_file_contents
 
 
-def create_user_config(values=None):
+def create_user_config(
+    cmew_data_for_esmval_dir,
+    dev_config_path,
+    drs_cmip6,
+    drs_obs4mips,
+    max_parallel_tasks,
+    output_dir,
+    rootpath_cmip6,
+    rootpath_obs4mips,
+):
     """
     Return the contents of the user configuration file.
 
     Parameters
     ----------
-    values : dict, optional
-        The values to use for the user configuration file.
+    cmew_data_for_esmval_dir:
+        The full path to the directory where data
+        processed with CMEW will be stored.
+    dev_config_path:
+        The full path to the file where the
+        developer config file for ESMValTool will be written.
+    drs_cmip6:
+        The DRS for CMIP6.
+    drs_obs4mips:
+        The DRS for obs4MIPS.
+    max_parallel_tasks:
+        A parallelisation option to feed to ESMValTool.
+    output_dir:
+        The path to the directory where ESMValTool should write its output.
+    rootpath_cmip6:
+        The rootpath for CMIP6.
+    rootpath_obs4mips:
+        The rootpath for obs4MIPS.
 
     Returns
     -------
     dict
         The contents of the user configuration file.
     """
-    values = values or {}
-
-    if "MAX_PARALLEL_TASKS" in values:
-        max_parallel_tasks = int(values["MAX_PARALLEL_TASKS"])
-    else:
-        max_parallel_tasks = None
+    max_parallel_tasks = int(max_parallel_tasks)
 
     # Note that 'auxiliary_data_dir' and 'download_dir'
     # are set to empty values and cannot currently be
@@ -206,20 +177,20 @@ def create_user_config(values=None):
 
     user_config_file_contents = {
         "auxiliary_data_dir": "",
-        "config_developer_file": values.get("DEV_CONFIG_PATH"),
+        "config_developer_file": dev_config_path,
         "download_dir": "",
         "drs": {
-            "CMIP6": values.get("DRS_CMIP6"),
-            "obs4MIPs": values.get("DRS_OBS4MIPS"),
+            "CMIP6": drs_cmip6,
+            "obs4MIPs": drs_obs4mips,
             "ESMVal": "BADC",
         },
         "max_parallel_tasks": max_parallel_tasks,
-        "output_dir": values.get("OUTPUT_DIR"),
+        "output_dir": output_dir,
         "remove_preproc_dir": False,
         "rootpath": {
-            "CMIP6": values.get("ROOTPATH_CMIP6"),
-            "obs4MIPs": values.get("ROOTPATH_OBS4MIPS"),
-            "ESMVal": values.get("CMEW_DATA_FOR_ESMVAL_DIR"),
+            "CMIP6": rootpath_cmip6,
+            "obs4MIPs": rootpath_obs4mips,
+            "ESMVal": cmew_data_for_esmval_dir,
         },
     }
     logger.debug("User config file contents:\n%s", user_config_file_contents)
@@ -256,5 +227,39 @@ def write_yaml(file_path, contents):
         )
 
 
-if __name__ == "__main__":
-    main()
+def configure_recipe(
+    cmew_data_for_esmval_dir,
+    dev_config_path,
+    drs_cmip6,
+    drs_obs4mips,
+    max_parallel_tasks,
+    mip_table_dir,
+    output_dir,
+    rootpath_cmip6,
+    rootpath_obs4mips,
+    user_config_path,
+):
+    """
+    Write the required user and developer configuration files for
+    ESMValTool.
+    """
+    logger.info("Creating developer config")
+    developer_config_contents = create_developer_config(mip_table_dir)
+    ensure_parent_dir(dev_config_path)
+    logger.info("Writing developer config to %s", dev_config_path)
+    write_yaml(dev_config_path, developer_config_contents)
+
+    logger.info("Creating user config")
+    user_config_contents = create_user_config(
+        cmew_data_for_esmval_dir,
+        dev_config_path,
+        drs_cmip6,
+        drs_obs4mips,
+        max_parallel_tasks,
+        output_dir,
+        rootpath_cmip6,
+        rootpath_obs4mips,
+    )
+    ensure_parent_dir(user_config_path)
+    logger.info("Writing user config to %s", user_config_path)
+    write_yaml(user_config_path, user_config_contents)
