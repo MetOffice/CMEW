@@ -184,8 +184,11 @@ def update_recipe_file(
     ----------
     recipe_path:
         The filepath of the ESMValTool recipe to be updates.
-    datasets_list_dir:
-        The directory containing the YAML files listing datasets.
+    model_runs_yml_fp:
+        The full path to the YAML file containing details of the model runs.
+    cmip6_datasets_yml_fp:
+        The full path to the YAML file containing details of the CMIP6
+        datasets to include.
     recipe_id:
         The id that acts as a key in the recipe_dict_fp.
     recipe_dict_fp:
