@@ -73,7 +73,7 @@ def parse_args_for_update_recipe_file(arguments):
         The names and values of the command line arguments.
     """
     parser = argparse.ArgumentParser(
-        description="Retrieve variables from an ESMValTool recipe.",
+        description="Update the datasets in an ESMValTool recipe.",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     parser.add_argument(
@@ -104,7 +104,7 @@ def parse_args_for_update_recipe_file(arguments):
 
 def main_for_update_recipe_file(arguments=None):
     """
-    Load and update the ESMValTool recipe.
+    Update the datasets in an ESMValTool recipe.
 
     Parameters
     ----------
