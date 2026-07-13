@@ -81,10 +81,17 @@ def parse_args_for_update_recipe_file(arguments):
         help="The full path to the ESMValTool recipe.",
     )
     parser.add_argument(
-        "--datasets_list_dir",
+        "--model_runs_yml_fp",
         help=(
-            "The directory containing the YAML files "
-            "model_runs.yml and cmip6_datasets.yml."
+            "The full path to the YAML file "
+            "containing details of the model runs."
+        ),
+    )
+    parser.add_argument(
+        "--cmip6_datasets_yml_fp",
+        help=(
+            "The full path to the YAML file "
+            "containing details of the CMIP6 datasets to include."
         ),
     )
     parser.add_argument(
@@ -117,12 +124,14 @@ def main_for_update_recipe_file(arguments=None):
     # Run the code.
     print("Updating recipe file.")
     print(f"Recipe path: {args.recipe_path}")
-    print(f"Datasets list dir: {args.datasets_list_dir}")
+    print(f"Model runs YAML path: {args.model_runs_yml_fp}")
+    print(f"CMIP6 datasets YAML path: {args.cmip6_datasets_yml_fp}")
     print(f"Recipe ID: {args.recipe_id}")
     print(f"Recipe dict filepath: {args.recipe_dict_fp}")
     update_recipe_file(
         args.recipe_path,
-        args.datasets_list_dir,
+        args.model_runs_yml_fp,
+        args.cmip6_datasets_yml_fp,
         args.recipe_id,
         args.recipe_dict_fp,
     )

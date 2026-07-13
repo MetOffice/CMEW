@@ -169,7 +169,11 @@ def write_recipe(updated_recipe, target_path):
 
 
 def update_recipe_file(
-    recipe_path, datasets_list_dir, recipe_id, recipe_dict_fp
+    recipe_path,
+    model_runs_yml_fp,
+    cmip6_datasets_yml_fp,
+    recipe_id,
+    recipe_dict_fp,
 ):
     """
     Update the datasets in an ESMValTool recipe.
@@ -197,13 +201,11 @@ def update_recipe_file(
     )
 
     # Add the model runs into the datasets section of the recipe
-    model_runs_fp = f"{datasets_list_dir}/model_runs.yml"
     logger.info("Adding model runs to recipe")
-    updated_recipe = add_extra_datasets(amended_recipe, model_runs_fp)
+    updated_recipe = add_extra_datasets(amended_recipe, model_runs_yml_fp)
 
     # Add the CMIP6 datasets to the recipe
-    cmip6_datasets_fp = f"{datasets_list_dir}/cmip6_datasets.yml"
     logger.info("Adding CMIP6 runs to recipe")
-    extended_recipe = add_extra_datasets(updated_recipe, cmip6_datasets_fp)
+    extended_recipe = add_extra_datasets(updated_recipe, cmip6_datasets_yml_fp)
 
     write_recipe(extended_recipe, recipe_path)
