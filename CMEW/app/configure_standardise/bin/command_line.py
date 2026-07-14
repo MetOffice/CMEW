@@ -80,6 +80,10 @@ def parse_args_for_create_request_file(arguments):
             "variables to be retrieved by CDDS are written."
         ),
     )
+    parser.add_argument(
+        "--raw_data_dir_mode",
+        help=("Whether to save or reuse raw CDDS data files."),
+    )
     return parser.parse_args(arguments)
 
 
@@ -105,6 +109,7 @@ def main_for_create_request_file(arguments=None):
     print(f"root_data_dir: {args.root_data_dir}"),
     print(f"stream_config_fp: {args.stream_config_fp}"),
     print(f"variable_list_file: {args.variable_list_file}"),
+    print(f"raw_data_dir_mode: {args.raw_data_dir_mode}"),
     create_request_file(
         args.dataset,
         args.output_filepath,
@@ -115,4 +120,5 @@ def main_for_create_request_file(arguments=None):
         args.root_data_dir,
         args.stream_config_fp,
         args.variable_list_file,
+        args.raw_data_dir_mode,
     )
