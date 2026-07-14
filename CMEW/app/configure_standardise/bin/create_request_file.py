@@ -7,7 +7,6 @@ Generate CDDS request configuration file.
 import configparser
 import os
 import sys
-from pathlib import Path
 import yaml
 import logging
 
@@ -16,20 +15,22 @@ filename = os.path.basename(__file__)
 logger = logging.getLogger(filename)
 
 
-def load_request_defaults():
+def load_request_defaults(defaults_path):
     """
     Load default values for request file.
+
+    Parameters
+    ----------
+    defaults_path : str
+        Path to the default configuration file.
 
     Returns
     -------
     dict
         CDDS request configuration default settings.
     """
-    # Get path to default settings
-    defaults = os.environ["REQUEST_DEFAULTS_PATH"]
-
     # Read the defaults
-    with open(defaults, "r") as f:
+    with open(defaults_path, "r") as f:
         config = yaml.safe_load(f)
 
     logger.debug(
@@ -39,20 +40,22 @@ def load_request_defaults():
     return config
 
 
-def list_streams():
+def list_streams(stream_config_fp):
     """
     Lists all streams in the ../etc/streams.yml file.
+
+    Parameters
+    ----------
+    stream_config_fp : str
+        Path to the streams configuration file.
 
     Returns
     -------
     str
         Space separated list of all streams.
     """
-    # Get path to stream mappings
-    streams_config = os.environ["STREAM_CONFIG_PATH"]
-
     # Read the stream mappings
-    with open(streams_config, "r") as f:
+    with open(stream_config_fp, "r") as f:
         config = yaml.safe_load(f)
         logger.debug(
             "Stream config:\n%s",
@@ -74,28 +77,55 @@ def list_streams():
     return stream_str
 
 
-def create_request(model_run):
+def create_request(
+    defaults_path,
+    dataset,
+    mip_table_dir,
+    model_runs_yml_fp,
+    root_proc_dir,
+    root_data_dir,
+    stream_config_fp,
+    variable_list_file,
+):
     """
     Build a CDDS request configuration for a run identified by a suite_id.
 
     Uses information from the model_runs.yml file.
+
+    Parameters
+    ----------
+    defaults_path : str
+        The full path to the file containing default values for a CDDS request.
+    dataset : str
+        The model run to be extracted from MASS and processed.
+    mip_table_dir : str
+        The path to the MIP table directory to use from CDDS.
+    model_runs_yml_fp : str
+        The full path to the YAML file containing details of the model runs.
+    root_proc_dir : str
+        The directory for use when processing data with CDDS.
+    root_data_dir : str
+        The root directory for CDDS to store data.
+    stream_config_fp : str
+        The full path to the file where the data streams
+        containing each variable are written.
+    variable_list_file : str
+        The full path to the file containing
+        the list of variables to be processed.
 
     Returns
     -------
     dict
         CDDS request configuration.
     """
-    defaults = load_request_defaults()
-
-    mip_table_dir = os.environ["MIP_TABLE_DIR"]
+    defaults = load_request_defaults(defaults_path)
 
     # Read the model run information from the model_runs.yml file
-    model_runs_yaml = Path(os.environ["DATASETS_LIST_DIR"]) / "model_runs.yml"
-    with open(model_runs_yaml, "r") as f:
-        dataset_dict = yaml.safe_load(f)[model_run]
+    with open(model_runs_yml_fp, "r") as f:
+        dataset_dict = yaml.safe_load(f)[dataset]
     logger.debug(
         "Dataset % config:\n%s",
-        model_run,
+        dataset,
         dataset_dict,
     )
 
@@ -114,8 +144,8 @@ def create_request(model_run):
     request["common"] = {
         **defaults["common"],
         "mip_table_dir": os.path.expanduser(mip_table_dir),
-        "root_proc_dir": os.environ["ROOT_PROC_DIR"],
-        "root_data_dir": os.environ["ROOT_DATA_DIR"],
+        "root_proc_dir": root_proc_dir,
+        "root_data_dir": root_data_dir,
         "workflow_basename": dataset_dict["suite_id"],
     }
     request["data"] = {
@@ -124,8 +154,8 @@ def create_request(model_run):
         "end_date": f"{int(dataset_dict['end_year'])+1}-01-01T00:00:00",
         "model_workflow_id": dataset_dict["suite_id"],
         # List all possible streams as CDDS just ignores ones without variables
-        "streams": list_streams(),
-        "variable_list_file": os.environ["VARIABLES_PATH"],
+        "streams": list_streams(stream_config_fp),
+        "variable_list_file": variable_list_file,
     }
     request["misc"] = dict(defaults["misc"])
     request["conversion"] = dict(defaults["conversion"])
@@ -136,15 +166,15 @@ def create_request(model_run):
     return request
 
 
-def write_request(request, target_path):
-    """Write the request configuration to a file at ``target_path``.
+def write_request(request, output_filepath):
+    """Write the request configuration to a file at ``output_filepath``.
 
     Parameters
     ----------
     request : dict
         The request configuration.
 
-    target_path: Path
+    output_filepath: Path
         The full path to the file
         where the request configuration will be written.
     """
@@ -153,25 +183,58 @@ def write_request(request, target_path):
 
     logger.debug("Writing request config:\n%s", cfg)
 
-    with open(target_path, mode="w") as file_handle:
+    with open(output_filepath, mode="w") as file_handle:
         cfg.write(file_handle)
 
 
-def main():
+def create_request_file(
+    dataset,
+    output_filepath,
+    defaults_path,
+    mip_table_dir,
+    model_runs_yml_fp,
+    root_proc_dir,
+    root_data_dir,
+    stream_config_fp,
+    variable_list_file,
+):
     """
     Generate and write the request file for the current task environment.
 
-    The output file location is taken from the REQUEST_PATH environment
-    variable. All other required inputs are read from the environment
-    by ``create_request()``.
+    Parameters
+    ----------
+    dataset : str
+        The model run to be extracted from MASS and processed.
+    output_filepath : str
+        The full path to the file where the
+        request configuration will be written.
+    defaults_path : str
+        The full path to the file containing default values for a CDDS request.
+    mip_table_dir : str
+        The path to the MIP table directory to use from CDDS.
+    model_runs_yml_fp : str
+        The full path to the YAML file containing details of the model runs.
+    root_proc_dir : str
+        The directory for use when processing data with CDDS.
+    root_data_dir : str
+        The root directory for CDDS to store data.
+    stream_config_fp : str
+        The full path to the file where the data streams
+        containing each variable are written.
+    variable_list_file : str
+        The full path to the file containing
+        the list of variables to be processed.
     """
-    dataset = os.environ["CYLC_TASK_PARAM_dataset"].strip()
     logger.info("Creating CDDS request for dataset %s", dataset)
 
-    request = create_request(dataset)
-    target_path = Path(os.environ["REQUEST_PATH"])
-    write_request(request, target_path)
-
-
-if __name__ == "__main__":
-    main()
+    request = create_request(
+        defaults_path,
+        dataset,
+        mip_table_dir,
+        model_runs_yml_fp,
+        root_proc_dir,
+        root_data_dir,
+        stream_config_fp,
+        variable_list_file,
+    )
+    write_request(request, output_filepath)
