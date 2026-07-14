@@ -18,25 +18,18 @@ from create_variables_file import (
     write_variables,
 )
 from pathlib import Path
-import pytest
 import tempfile
 
-
-@pytest.fixture
-def path_to_combined_variables():
-    path = (
-        Path(__file__).parent.parent.parent
-        / "unittest"
-        / "kgo"
-        / "variables.txt"
-    )
-    return str(path)
+etc_dir = Path(__file__).parent.parent / "etc"
+mock_data_dir = Path(__file__).parent.parent.parent / "unittest" / "mock_data"
+kgo_dir = Path(__file__).parent.parent.parent / "unittest" / "kgo"
+mock_vars_lists_dir = mock_data_dir
+combined_variables_file = kgo_dir / "variables.txt"
+stream_config_path = etc_dir / "streams.yml"
 
 
 def test_combine_variable_lists():
-    actual = combine_variable_lists(
-        str(Path(__file__).parent.parent.parent / "unittest" / "mock_data")
-    )
+    actual = combine_variable_lists(str(mock_vars_lists_dir))
 
     expected = [
         "Amon/hfls",
@@ -57,9 +50,7 @@ def test_combine_variable_lists():
     assert actual == expected
 
 
-def test_add_stream_to_variables(monkeypatch, path_to_combined_variables):
-    stream_config_path = Path(__file__).parent.parent / "etc" / "streams.yml"
-    monkeypatch.setenv("STREAM_CONFIG_PATH", str(stream_config_path))
+def test_add_stream_to_variables():
     input = [
         "Amon/hfls",
         "Amon/hfss",
@@ -75,15 +66,15 @@ def test_add_stream_to_variables(monkeypatch, path_to_combined_variables):
         "Amon/tas",
         "SImon/siconc",
     ]
-    actual = add_stream_to_variables(input)
+    actual = add_stream_to_variables(str(stream_config_path), input)
 
-    with open(path_to_combined_variables, "r") as file:
+    with open(combined_variables_file, "r") as file:
         expected = file.read().splitlines()
 
     assert actual == expected
 
 
-def test_write_variables(path_to_combined_variables):
+def test_write_variables():
     input = [
         "Amon/hfls:apm",
         "Amon/hfss:apm",
@@ -107,7 +98,7 @@ def test_write_variables(path_to_combined_variables):
         actual = tmp.read().decode("utf-8")  # decode bytes to string
 
     # Load the expected list
-    with open(path_to_combined_variables, "r") as file_handle:
+    with open(combined_variables_file, "r") as file_handle:
         expected = file_handle.read()
 
     assert expected == actual
