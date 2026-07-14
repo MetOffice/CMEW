@@ -12,42 +12,39 @@ import configparser
 from create_request_file import create_request
 
 
-def test_create_request(monkeypatch):
-    monkeypatch.setenv(
-        "DATASETS_LIST_DIR",
-        str(Path(__file__).parent.parent.parent / "unittest" / "mock_data"),
+etc_dir = Path(__file__).parent.parent / "etc"
+mock_data_dir = Path(__file__).parent.parent.parent / "unittest" / "mock_data"
+test_defaults_path = etc_dir / "request_defaults.yml"
+dataset = "u-cw673"
+mip_table_dir = "~cdds/etc/mip_tables/GCModelDev/0.0.25"
+model_runs_yml_fp = mock_data_dir / "model_runs.yml"
+root_proc_dir = "/path/to/proc/dir/"
+root_data_dir = "/path/to/data/dir/"
+stream_config_path = etc_dir / "streams.yml"
+variables_path = "/path/to/variables.txt"
+raw_data_dir_mode = "use_saved"
+
+kgo_dir = Path(__file__).parent.parent.parent / "unittest" / "kgo"
+kgo_request_fp = kgo_dir / "request_u-cw673.cfg"
+
+
+def test_create_request():
+    actual_request = create_request(
+        str(test_defaults_path),
+        dataset,
+        mip_table_dir,
+        str(model_runs_yml_fp),
+        root_proc_dir,
+        root_data_dir,
+        str(stream_config_path),
+        variables_path,
+        raw_data_dir_mode,
     )
-
-    request_defaults_path = (
-        Path(__file__).parent.parent / "etc" / "request_defaults.yml"
-    )
-    stream_config_path = Path(__file__).parent.parent / "etc" / "streams.yml"
-    root_proc_dir = "/path/to/proc/dir/"
-    root_data_dir = "/path/to/data/dir/"
-    variables_path = "/path/to/variables.txt"
-    mip_table_dir = "~cdds/etc/mip_tables/GCModelDev/0.0.25"
-    stream_id = "apm inm"
-
-    monkeypatch.setenv("RAW_DATA_DIR_MODE", "use_saved")
-    monkeypatch.setenv("REQUEST_DEFAULTS_PATH", str(request_defaults_path))
-    monkeypatch.setenv("STREAM_CONFIG_PATH", str(stream_config_path))
-    monkeypatch.setenv("ROOT_PROC_DIR", root_proc_dir)
-    monkeypatch.setenv("ROOT_DATA_DIR", root_data_dir)
-    monkeypatch.setenv("VARIABLES_PATH", variables_path)
-    monkeypatch.setenv("MIP_TABLE_DIR", mip_table_dir)
-    monkeypatch.setenv("STREAM_ID", stream_id)
-
-    actual_request = create_request("u-cw673")
     cfg = configparser.ConfigParser()
     cfg.read_dict(actual_request)
     actual = {section: dict(cfg[section]) for section in cfg.sections()}
 
-    expected_request = str(
-        Path(__file__).parent.parent.parent
-        / "unittest"
-        / "kgo"
-        / "request_u-cw673.cfg"
-    )
+    expected_request = str(kgo_request_fp)
     config = configparser.ConfigParser()
     config.read(expected_request)
     expected = {
