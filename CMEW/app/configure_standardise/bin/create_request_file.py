@@ -86,6 +86,7 @@ def create_request(
     root_data_dir,
     stream_config_fp,
     variable_list_file,
+    raw_data_dir_mode,
 ):
     """
     Build a CDDS request configuration for a run identified by a suite_id.
@@ -112,6 +113,8 @@ def create_request(
     variable_list_file : str
         The full path to the file containing
         the list of variables to be processed.
+    raw_data_dir_mode : str
+        Whether to save or reuse raw CDDS data files.
 
     Returns
     -------
@@ -159,7 +162,7 @@ def create_request(
     }
     request["misc"] = dict(defaults["misc"])
     request["conversion"] = dict(defaults["conversion"])
-    if os.environ["RAW_DATA_DIR_MODE"] == "use_saved":
+    if raw_data_dir_mode == "use_saved":
         request["conversion"]["skip_extract"] = "True"
 
     logger.debug("Request config:\n%s", request)
@@ -197,6 +200,7 @@ def create_request_file(
     root_data_dir,
     stream_config_fp,
     variable_list_file,
+    raw_data_dir_mode,
 ):
     """
     Generate and write the request file for the current task environment.
@@ -224,6 +228,8 @@ def create_request_file(
     variable_list_file : str
         The full path to the file containing
         the list of variables to be processed.
+    raw_data_dir_mode : str
+        Whether to save or reuse raw CDDS data files.
     """
     logger.info("Creating CDDS request for dataset %s", dataset)
 
@@ -236,5 +242,6 @@ def create_request_file(
         root_data_dir,
         stream_config_fp,
         variable_list_file,
+        raw_data_dir_mode,
     )
     write_request(request, output_filepath)
