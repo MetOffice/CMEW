@@ -35,7 +35,7 @@ def parse_args_for_add_datasets_to_share(arguments):
         help="The number of years to extract for each dataset.",
     )
     parser.add_argument(
-        "--institution", help="The institution ID to add to the datasets."
+        "--institute", help="The institution ID to add to the datasets."
     )
     return parser.parse_args(arguments)
 
@@ -57,10 +57,10 @@ def main_for_add_datasets_to_share(arguments=None):
     print(f"Directory for dataset lists: {args.target_dir}")
     print(f"Start year: {args.start_year}")
     print(f"Number of years: {args.number_of_years}")
-    print(f"Institution ID: {args.institution}")
+    print(f"Institution ID: {args.institute}")
     add_datasets_to_share(
         args.target_dir,
         args.start_year,
         args.number_of_years,
-        args.institution,
+        args.institute,
     )
