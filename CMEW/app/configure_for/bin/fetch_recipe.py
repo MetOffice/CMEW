@@ -46,7 +46,7 @@ def retrieve_name_and_fp(recipe_id, recipe_dict_fp):
     if recipe_id in recipe_dict:
         logger.debug("Using info from recipe dictionary for %s", recipe_id)
         recipe_name = recipe_dict[recipe_id]["recipe_name"]
-        recipe_internal_loc = recipe_dict[recipe_id]["recipe_internal_loc"]
+        recipe_internal_loc = recipe_dict[recipe_id]["recipe_fp"]
 
     # Or use the defaults
     else:
