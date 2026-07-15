@@ -132,8 +132,10 @@ def add_common_facets(
     dataset_dict: dict
         The input dataset dictionary with the common facets added.
     """
+    # Convert start year to int
+    start_year = int(start_year)
     # Calculate the end year
-    end_year = int(start_year) + int(number_of_years) - 1
+    end_year = start_year + int(number_of_years) - 1
     logger.info("Found start year %s and end year %s", start_year, end_year)
 
     # Add the start year, end year and project to the dataset dictionary
