@@ -110,12 +110,18 @@ def convert_str_to_facets(section):
     return section_dict
 
 
-def add_common_facets(dataset_dict, project):
+def add_common_facets(
+    start_year, number_of_years, dataset_dict, institute, project
+):
     """
     Add start year, end year and project to a dataset dictionary.
 
     Parameters
     ----------
+    start_year: str
+        The first year to extract for each dataset.
+    number_of_years: str
+        The number of years to extract for each dataset.
     dataset_dict: dict
         A dictionary containing the facets of a dataset.
     project: str
@@ -126,11 +132,8 @@ def add_common_facets(dataset_dict, project):
     dataset_dict: dict
         The input dataset dictionary with the common facets added.
     """
-    # Read the time window from environment
-    start_year = int(os.environ["START_YEAR"])
-    end_year = (
-        int(os.environ["START_YEAR"]) + int(os.environ["NUMBER_OF_YEARS"]) - 1
-    )
+    # Calculate the end year
+    end_year = int(start_year) + int(number_of_years) - 1
     logger.info("Found start year %s and end year %s", start_year, end_year)
 
     # Add the start year, end year and project to the dataset dictionary
@@ -143,12 +146,14 @@ def add_common_facets(dataset_dict, project):
         logger.debug("Adding CMEW model run facets")
         dataset_dict["activity"] = "ESMVal"
         dataset_dict["grid"] = "gn"
-        dataset_dict["institute"] = os.environ["INSTITUTION_ID"]
+        dataset_dict["institute"] = institute
 
     return dataset_dict
 
 
-def process_naml_file(naml_fp, project=None):
+def process_naml_file(
+    naml_fp, start_year, number_of_years, institute, project=None
+):
     """
     Extract the datasets and their facets from a namelist file.
 
@@ -156,6 +161,10 @@ def process_naml_file(naml_fp, project=None):
     ----------
     naml_fp: str
         The file path to the namelist file containing the datasets.
+    start_year: str
+        The first year to extract for each dataset.
+    number_of_years: str
+        The number of years to extract for each dataset.
     project: str, optional
         A string indicating the project to which the dataset belongs.
 
@@ -169,7 +178,9 @@ def process_naml_file(naml_fp, project=None):
     sections = extract_sections_from_naml(naml_fp)
     for section in sections:
         dataset_dict = convert_str_to_facets(section)
-        dataset_dict = add_common_facets(dataset_dict, project)
+        dataset_dict = add_common_facets(
+            start_year, number_of_years, dataset_dict, institute, project
+        )
         datasets.append(dataset_dict)
     return datasets
 
@@ -311,11 +322,8 @@ def add_reference_key(filepath):
         yaml.dump(dataset_dict, f)
 
 
-def main():
+def add_datasets_to_share(target_dir, start_year, number_of_years, institute):
     """Copy dataset information from configuration to the share directory."""
-    # Read the target (shared) directory from the environment
-    target_dir = os.environ["DATASETS_LIST_DIR"]
-
     # Create the target directory if it doesn't exist
     os.makedirs(target_dir, exist_ok=True)
 
@@ -327,7 +335,9 @@ def main():
         if basename == "model_runs":
 
             # Write the datasets to a YAML file with ESMVal project
-            datasets = process_naml_file(nl_fp, "ESMVal")
+            datasets = process_naml_file(
+                nl_fp, start_year, number_of_years, institute, "ESMVal"
+            )
             # Update the experiment to encode the suite ID
             for dataset in datasets:
                 dataset["experiment_id"] = (
@@ -340,7 +350,9 @@ def main():
         if basename == "cmip6_datasets":
 
             # Write the datasets to a YAML file with CMIP6 project
-            datasets = process_naml_file(nl_fp, "CMIP6")
+            datasets = process_naml_file(
+                nl_fp, start_year, number_of_years, institute, "CMIP6"
+            )
             logger.info("Writing CMIP6 runs YAML")
             write_datasets_to_yaml(datasets, basename, target_dir)
 
@@ -353,7 +365,3 @@ def main():
     # Add the reference identifier
     logger.info("Adding benchmarking key to model runs YAML")
     add_reference_key(model_runs_yaml)
-
-
-if __name__ == "__main__":
-    main()
