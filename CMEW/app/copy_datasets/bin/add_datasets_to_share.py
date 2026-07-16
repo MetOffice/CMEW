@@ -124,6 +124,8 @@ def add_common_facets(
         The number of years to extract for each dataset.
     dataset_dict: dict
         A dictionary containing the facets of a dataset.
+    institute: str
+        The institution ID to add to the datasets.
     project: str
         A string indicating the project to which the dataset belongs.
 
@@ -167,6 +169,8 @@ def process_naml_file(
         The first year to extract for each dataset.
     number_of_years: str
         The number of years to extract for each dataset.
+    institute: str
+        The institution ID to add to the datasets.
     project: str, optional
         A string indicating the project to which the dataset belongs.
 
@@ -325,7 +329,20 @@ def add_reference_key(filepath):
 
 
 def add_datasets_to_share(target_dir, start_year, number_of_years, institute):
-    """Copy dataset information from configuration to the share directory."""
+    """
+    Copy dataset information from configuration to the share directory.
+
+    Parameters
+    ----------
+    target_dir: str
+        The directory into which to write dataset lists.
+    start_year: str
+        The first year to extract for each dataset.
+    number_of_years: str
+        The number of years to extract for each dataset.
+    institute: str
+        The institution ID to add to the datasets.
+    """
     # Create the target directory if it doesn't exist
     os.makedirs(target_dir, exist_ok=True)
 
