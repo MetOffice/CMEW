@@ -233,9 +233,14 @@ def write_datasets_to_yaml(datasets, name, target_dir):
     write_dict_to_yaml(datasets, target_fp)
 
 
-def dict_namelists_in_workflow_dir():
+def dict_namelists_in_workflow_dir(workflow_dir):
     """
     Looks for namelist files in the main workflow directory.
+
+    Parameters
+    ----------
+    workflow_dir: str
+        The directory containing the namelist files of datasets.
 
     Returns
     -------
@@ -244,9 +249,6 @@ def dict_namelists_in_workflow_dir():
         based on the filenames ending ".nl".
     """
     filepaths = {}
-
-    # Namelist files are written to the main workflow directory
-    workflow_dir = os.getenv("CYLC_WORKFLOW_RUN_DIR")
 
     # Grab all the namelist files, in case we add more in future
     for file in os.listdir(workflow_dir):
@@ -328,7 +330,9 @@ def add_reference_key(filepath):
         yaml.dump(dataset_dict, f)
 
 
-def add_datasets_to_share(target_dir, start_year, number_of_years, institute):
+def add_datasets_to_share(
+    target_dir, workflow_dir, start_year, number_of_years, institute
+):
     """
     Copy dataset information from configuration to the share directory.
 
@@ -336,6 +340,8 @@ def add_datasets_to_share(target_dir, start_year, number_of_years, institute):
     ----------
     target_dir: str
         The directory into which to write dataset lists.
+    workflow_dir: str
+        The directory containing the namelist files of datasets.
     start_year: str
         The first year to extract for each dataset.
     number_of_years: str
@@ -347,7 +353,9 @@ def add_datasets_to_share(target_dir, start_year, number_of_years, institute):
     os.makedirs(target_dir, exist_ok=True)
 
     # Loop over the namelist files in the work directory
-    for basename, nl_fp in dict_namelists_in_workflow_dir().items():
+    for basename, nl_fp in dict_namelists_in_workflow_dir(
+        workflow_dir
+    ).items():
         logger.info("Found file %s", basename)
 
         # Check if it's model runs
