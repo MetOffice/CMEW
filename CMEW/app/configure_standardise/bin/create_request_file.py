@@ -62,6 +62,7 @@ def list_streams():
     # List all streams (keys)
     all_streams = []
     for stream in config:
+        stream = stream.split("/")[0]
         all_streams.append(stream)
 
     # Return as a space separated list
