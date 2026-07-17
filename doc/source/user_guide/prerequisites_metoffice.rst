@@ -67,7 +67,7 @@ In addition to the software listed above, user accounts must be correctly config
      - Request account
    * - GitHub
      - https://github.com/login
-     - https://github.com
+     - https://github.com/signup
    * - MOOSE
      - ``moo --help``
      - ServiceNow
