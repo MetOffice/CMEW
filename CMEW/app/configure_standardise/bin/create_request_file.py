@@ -19,7 +19,7 @@ logger = logging.getLogger(filename)
 
 def list_streams(stream_dict=streams_dict):
     """
-    Lists all streams in the streams_config.py file.
+    Lists only the streams in the stream_dict.
 
     Parameters
     ----------
