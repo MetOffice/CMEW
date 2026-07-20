@@ -9,35 +9,28 @@ Test data files:
     input for test_retrieve_specified, test_retrieve_defaults
 """
 from fetch_recipe import retrieve_name_and_fp
-from pathlib import Path
-import pytest
 
 
-@pytest.fixture
-def mock_env_vars(monkeypatch):
-    # For adding extra datasets
-    monkeypatch.setenv(
-        "RECIPE_DICT_PATH",
-        str(
-            Path(__file__).parent.parent.parent
-            / "unittest"
-            / "mock_data"
-            / "recipe_paths.yml"
-        ),
-    )
+mock_recipe_dict = {
+    "mock_entry": {
+        "recipe_name": "recipe_specified_name.yml",
+        "recipe_fp": "subdir_1/recipe_second_name.yml",
+        "empty_additional_datasets": True,
+    },
+}
 
 
-def test_retrieve_specified(mock_env_vars, monkeypatch):
+def test_retrieve_specified(monkeypatch):
     monkeypatch.setenv("CYLC_TASK_PARAM_recipe", "mock_entry")
     expected = "recipe_specified_name.yml", "subdir_1/recipe_second_name.yml"
-    actual = retrieve_name_and_fp()
+    actual = retrieve_name_and_fp(mock_recipe_dict)
 
     assert actual == expected
 
 
-def test_retrieve_defaults(mock_env_vars, monkeypatch):
+def test_retrieve_defaults(monkeypatch):
     monkeypatch.setenv("CYLC_TASK_PARAM_recipe", "not_here")
     expected = "recipe_not_here.yml", "recipe_not_here.yml"
-    actual = retrieve_name_and_fp()
+    actual = retrieve_name_and_fp(mock_recipe_dict)
 
     assert actual == expected

@@ -11,6 +11,7 @@ import os
 import yaml
 import sys
 import logging
+from config_configure_for import recipes_dict
 
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 filename = os.path.basename(__file__)
@@ -93,17 +94,21 @@ def add_extra_datasets(recipe, yaml_filepath):
     return recipe
 
 
-def remove_additional_datasets(recipe):
+def remove_additional_datasets(recipe, recipe_dict=recipes_dict):
     """
     Optionally remove additional_datasets sections from an ESMValTool recipe.
 
     The option to remove additional datasets is controlled by the key
-    empty_additional_datasets in the YAML file at RECIPE_DICT_PATH.
+    empty_additional_datasets in the recipe_dict.
 
     Parameters
     ----------
     recipe: dict
         The content of the recipe which may have additional datasets.
+    recipe_dict : dict
+        A dictionary with keys for a recipe identifier and the value
+        True assigned to an inner key of empty_additional_datasets
+        if additional datasets are to be emptied from a recipe.
 
     Returns
     -------
@@ -114,17 +119,12 @@ def remove_additional_datasets(recipe):
     # Look up the recipe and destination from the environment
     recipe_id = os.environ["CYLC_TASK_PARAM_recipe"]
 
-    # Load the yaml config file from ../etc
-    recipe_dict_fp = os.environ["RECIPE_DICT_PATH"]
-    logger.debug("Reading recipe dict from %s", recipe_dict_fp)
-    with open(recipe_dict_fp, "r") as f:
-        recipe_dict = yaml.safe_load(f)
-    logger.debug("Recipe dict:\n%s", recipe_dict)
-
     # Don't empty by default
     empty_additionals = False
 
-    # Read specific recipe names and filepaths from the yaml config file
+    # Read specific recipe names and filepaths from the config file
+    logger.debug("Recipe dict:\n%s", recipe_dict)
+
     if recipe_id in recipe_dict:
         logger.debug("Using info from recipe dictionary for %s", recipe_id)
         if "empty_additional_datasets" in recipe_dict[recipe_id]:

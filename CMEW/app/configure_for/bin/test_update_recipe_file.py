@@ -148,15 +148,13 @@ def test_remove_additional_datasets(
     path_to_recipe_additionals_removed,
 ):
     monkeypatch.setenv("CYLC_TASK_PARAM_recipe", "mock_entry")
-    monkeypatch.setenv(
-        "RECIPE_DICT_PATH",
-        str(
-            Path(__file__).parent.parent.parent
-            / "unittest"
-            / "mock_data"
-            / "recipe_paths.yml"
-        ),
-    )
+    mock_recipe_dict = {
+        "mock_entry": {
+            "recipe_name": "recipe_specified_name.yml",
+            "recipe_fp": "subdir_1/recipe_second_name.yml",
+            "empty_additional_datasets": True,
+        },
+    }
 
     with open(path_to_recipe_additionals_removed, "r") as file_handle_1:
         expected = yaml.safe_load(file_handle_1)
@@ -165,7 +163,7 @@ def test_remove_additional_datasets(
         pre_recipe = yaml.safe_load(file_handle_2)
 
     # Using str(filepath) here as update_recipe_file.py uses os, not pathlib
-    actual = remove_additional_datasets(pre_recipe)
+    actual = remove_additional_datasets(pre_recipe, mock_recipe_dict)
     assert actual == expected
 
 

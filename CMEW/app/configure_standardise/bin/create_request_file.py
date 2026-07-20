@@ -10,58 +10,35 @@ import sys
 from pathlib import Path
 import yaml
 import logging
+from config_configure_standardise import requests_defaults, streams_dict
 
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 filename = os.path.basename(__file__)
 logger = logging.getLogger(filename)
 
 
-def load_request_defaults():
+def list_streams(stream_dict=streams_dict):
     """
-    Load default values for request file.
+    Lists only the streams in the stream_dict.
 
-    Returns
-    -------
-    dict
-        CDDS request configuration default settings.
-    """
-    # Get path to default settings
-    defaults = os.environ["REQUEST_DEFAULTS_PATH"]
-
-    # Read the defaults
-    with open(defaults, "r") as f:
-        config = yaml.safe_load(f)
-
-    logger.debug(
-        "Default config:\n%s",
-        config,
-    )
-    return config
-
-
-def list_streams():
-    """
-    Lists all streams in the ../etc/streams.yml file.
+    Parameters
+    ----------
+    stream_dict : dict
+        A dictionary containing information about data streams.
 
     Returns
     -------
     str
         Space separated list of all streams.
     """
-    # Get path to stream mappings
-    streams_config = os.environ["STREAM_CONFIG_PATH"]
-
-    # Read the stream mappings
-    with open(streams_config, "r") as f:
-        config = yaml.safe_load(f)
-        logger.debug(
-            "Stream config:\n%s",
-            config,
-        )
+    # Load the stream information dictionary
+    logger.debug("Stream information:\n%s", stream_dict)
 
     # List all streams (keys)
     all_streams = []
-    for stream in config:
+    for stream in stream_dict:
+        # For substreams we only want the first part
+        stream = stream.split("/")[0]
         all_streams.append(stream)
 
     # Return as a space separated list
@@ -74,18 +51,25 @@ def list_streams():
     return stream_str
 
 
-def create_request(model_run):
+def create_request(model_run, request_defaults=requests_defaults):
     """
     Build a CDDS request configuration for a run identified by a suite_id.
 
     Uses information from the model_runs.yml file.
+
+    Parameters
+    ----------
+    model_run : str
+        The suite ID as a model run identifier.
+    request_defaults : dict
+        A dictionary containing the CDDS request default values.
 
     Returns
     -------
     dict
         CDDS request configuration.
     """
-    defaults = load_request_defaults()
+    defaults = request_defaults
 
     mip_table_dir = os.environ["MIP_TABLE_DIR"]
 
@@ -103,8 +87,7 @@ def create_request(model_run):
     request = {}
     request["metadata"] = {
         **defaults["metadata"],
-        # The internal dictionary replaces the T with a space
-        "base_date": defaults["metadata"]["base_date"].isoformat(),
+        "base_date": defaults["metadata"]["base_date"],
         "calendar": dataset_dict["calendar"],
         "experiment_id": dataset_dict["experiment_id"],
         "institution_id": dataset_dict["institute"],

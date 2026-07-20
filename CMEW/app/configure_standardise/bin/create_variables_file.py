@@ -5,9 +5,9 @@
 Generates the variables.txt file from the ESMValTool recipe.
 """
 import os
-import yaml
 import sys
 import logging
+from config_configure_standardise import streams_dict
 
 
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
@@ -44,42 +44,21 @@ def combine_variable_lists(directory):
     return variables
 
 
-def load_stream_dict():
-    """
-    Loads stream information from the ../etc/streams.yml file.
-
-    Returns
-    -------
-    dict
-        A mapping of pre-defined streams to their associated variables
-    """
-    # Get path to stream mappings
-    streams_config = os.environ["STREAM_CONFIG_PATH"]
-    logger.debug("Reading streams from %s", streams_config)
-
-    # Read the stream mappings
-    with open(streams_config, "r") as f:
-        config = yaml.safe_load(f)
-
-    # Return the whole dictionary
-    return config
-
-
-def add_stream_to_variables(variables):
+def add_stream_to_variables(variables, stream_dict=streams_dict):
     """Add stream information to a list of variables.
 
     Parameters
     ----------
     variables : list[str]
         List of variables in the format "MIP_table/variable_name"
+    stream_dict : dict
+        A dictionary containing information about data streams.
 
     Returns
     -------
     list[str]
         List of variables in the format "MIP_table/variable_name:stream"
     """
-    stream_dict = load_stream_dict()
-
     # Using a second dictionary to avoid looping
     var_to_stream = {
         var: stream

@@ -3,20 +3,28 @@
 # The LICENSE.md file contains full licensing details.
 import os
 import subprocess
-import yaml
 import sys
 import logging
+from config_configure_for import recipes_dict
+
 
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 filename = os.path.basename(__file__)
 logger = logging.getLogger(filename)
 
 
-def retrieve_name_and_fp():
+def retrieve_name_and_fp(recipe_dict=recipes_dict):
     """
-    Looks in recipe_paths.yml for an entry or constructs default values.
+    Looks in the `recipe_dict` for an entry or constructs default values.
 
     Uses the environment variable CYLC_TASK_PARAM_recipe as a dict key.
+
+    Parameters
+    ----------
+    recipe_dict : dict
+        A dictionary with keys for recipe identifiers
+        for recipes which do not follow the default pattern
+        of names and locations within ESMValTool.
 
     Returns
     -------
@@ -30,14 +38,8 @@ def retrieve_name_and_fp():
     recipe = os.environ["CYLC_TASK_PARAM_recipe"]
     logger.info("Fetching recipe %s", recipe)
 
-    # Load the yaml config file from ../etc
-    recipe_dict_fp = os.environ["RECIPE_DICT_PATH"]
-    logger.debug("Reading recipe dict from %s", recipe_dict_fp)
-    with open(recipe_dict_fp, "r") as f:
-        recipe_dict = yaml.safe_load(f)
+    # Read specific recipe names and filepaths from the config dict
     logger.debug("Recipe dict:\n%s", recipe_dict)
-
-    # Read specific recipe names and filepaths from the yaml config file
     if recipe in recipe_dict:
         logger.debug("Using info from recipe dictionary for %s", recipe)
         recipe_name = recipe_dict[recipe]["recipe_name"]
