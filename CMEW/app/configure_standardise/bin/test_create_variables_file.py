@@ -57,9 +57,7 @@ def test_combine_variable_lists():
     assert actual == expected
 
 
-def test_add_stream_to_variables(monkeypatch, path_to_combined_variables):
-    stream_config_path = Path(__file__).parent.parent / "etc" / "streams.yml"
-    monkeypatch.setenv("STREAM_CONFIG_PATH", str(stream_config_path))
+def test_add_stream_to_variables(path_to_combined_variables):
     input = [
         "Amon/hfls",
         "Amon/hfss",
@@ -75,7 +73,27 @@ def test_add_stream_to_variables(monkeypatch, path_to_combined_variables):
         "Amon/tas",
         "SImon/siconc",
     ]
-    actual = add_stream_to_variables(input)
+    mock_stream_dict = {
+        "apm": [
+            "Amon/hfls",
+            "Amon/hfss",
+            "Amon/rlds",
+            "Amon/rlut",
+            "Amon/rlutcs",
+            "Amon/rsds",
+            "Amon/rsdt",
+            "Amon/rsut",
+            "Amon/rsutcs",
+            "Amon/tas",
+            "Emon/rls",
+            "Emon/rss",
+        ],
+        "inm": [
+            "SImon/siconc",
+        ],
+    }
+
+    actual = add_stream_to_variables(input, mock_stream_dict)
 
     with open(path_to_combined_variables, "r") as file:
         expected = file.read().splitlines()
