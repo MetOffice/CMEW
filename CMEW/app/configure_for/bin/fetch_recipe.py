@@ -38,7 +38,7 @@ def retrieve_name_and_fp(recipe_dict=recipes_dict):
     recipe = os.environ["CYLC_TASK_PARAM_recipe"]
     logger.info("Fetching recipe %s", recipe)
 
-    # Read specific recipe names and filepaths from the config file
+    # Read specific recipe names and filepaths from the config dict
     logger.debug("Recipe dict:\n%s", recipe_dict)
     if recipe in recipe_dict:
         logger.debug("Using info from recipe dictionary for %s", recipe)
