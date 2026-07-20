@@ -5,7 +5,6 @@
 Generates the variables.txt file from the ESMValTool recipe.
 """
 import os
-import yaml
 import sys
 import logging
 
@@ -46,20 +45,18 @@ def combine_variable_lists(directory):
 
 def load_stream_dict():
     """
-    Loads stream information from the ../etc/streams.yml file.
+    Loads stream information from the streams_config.py file.
 
     Returns
     -------
     dict
         A mapping of pre-defined streams to their associated variables
     """
-    # Get path to stream mappings
-    streams_config = os.environ["STREAM_CONFIG_PATH"]
-    logger.debug("Reading streams from %s", streams_config)
+    # Stream mappings are in the same directory
+    import streams_config
 
-    # Read the stream mappings
-    with open(streams_config, "r") as f:
-        config = yaml.safe_load(f)
+    config = streams_config.streams_dict
+    logger.debug("Stream information:\n%s", config)
 
     # Return the whole dictionary
     return config

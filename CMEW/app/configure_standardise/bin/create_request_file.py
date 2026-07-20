@@ -25,12 +25,10 @@ def load_request_defaults():
     dict
         CDDS request configuration default settings.
     """
-    # Get path to default settings
-    defaults = os.environ["REQUEST_DEFAULTS_PATH"]
+    # CDDS default values are in a file in the same directory
+    import request_defaults_config
 
-    # Read the defaults
-    with open(defaults, "r") as f:
-        config = yaml.safe_load(f)
+    config = request_defaults_config.request_defaults
 
     logger.debug(
         "Default config:\n%s",
@@ -41,27 +39,24 @@ def load_request_defaults():
 
 def list_streams():
     """
-    Lists all streams in the ../etc/streams.yml file.
+    Lists all streams in the streams_config.py file.
 
     Returns
     -------
     str
         Space separated list of all streams.
     """
-    # Get path to stream mappings
-    streams_config = os.environ["STREAM_CONFIG_PATH"]
+    # Stream mappings are in the same directory
+    import streams_config
 
-    # Read the stream mappings
-    with open(streams_config, "r") as f:
-        config = yaml.safe_load(f)
-        logger.debug(
-            "Stream config:\n%s",
-            config,
-        )
+    config = streams_config.streams_dict
+    logger.debug("Stream information:\n%s", config)
 
     # List all streams (keys)
     all_streams = []
     for stream in config:
+        # For substreams we only want the first part
+        stream = stream.split("/")[0]
         all_streams.append(stream)
 
     # Return as a space separated list
@@ -103,8 +98,7 @@ def create_request(model_run):
     request = {}
     request["metadata"] = {
         **defaults["metadata"],
-        # The internal dictionary replaces the T with a space
-        "base_date": defaults["metadata"]["base_date"].isoformat(),
+        "base_date": defaults["metadata"]["base_date"],
         "calendar": dataset_dict["calendar"],
         "experiment_id": dataset_dict["experiment_id"],
         "institution_id": dataset_dict["institute"],
