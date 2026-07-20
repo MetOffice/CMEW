@@ -98,7 +98,7 @@ def remove_additional_datasets(recipe):
     Optionally remove additional_datasets sections from an ESMValTool recipe.
 
     The option to remove additional datasets is controlled by the key
-    empty_additional_datasets in the YAML file at RECIPE_DICT_PATH.
+    empty_additional_datasets in the recipe_paths_config.py file.
 
     Parameters
     ----------
@@ -114,11 +114,10 @@ def remove_additional_datasets(recipe):
     # Look up the recipe and destination from the environment
     recipe_id = os.environ["CYLC_TASK_PARAM_recipe"]
 
-    # Load the yaml config file from ../etc
-    recipe_dict_fp = os.environ["RECIPE_DICT_PATH"]
-    logger.debug("Reading recipe dict from %s", recipe_dict_fp)
-    with open(recipe_dict_fp, "r") as f:
-        recipe_dict = yaml.safe_load(f)
+    # Load the yaml config file from recipe_paths_config.py
+    from recipe_paths_config import recipes_dict
+
+    recipe_dict = recipes_dict
     logger.debug("Recipe dict:\n%s", recipe_dict)
 
     # Don't empty by default

@@ -3,7 +3,6 @@
 # The LICENSE.md file contains full licensing details.
 import os
 import subprocess
-import yaml
 import sys
 import logging
 
@@ -30,11 +29,10 @@ def retrieve_name_and_fp():
     recipe = os.environ["CYLC_TASK_PARAM_recipe"]
     logger.info("Fetching recipe %s", recipe)
 
-    # Load the yaml config file from ../etc
-    recipe_dict_fp = os.environ["RECIPE_DICT_PATH"]
-    logger.debug("Reading recipe dict from %s", recipe_dict_fp)
-    with open(recipe_dict_fp, "r") as f:
-        recipe_dict = yaml.safe_load(f)
+    # Load the yaml config file from recipe_paths_config.py
+    from recipe_paths_config import recipes_dict
+
+    recipe_dict = recipes_dict
     logger.debug("Recipe dict:\n%s", recipe_dict)
 
     # Read specific recipe names and filepaths from the yaml config file
