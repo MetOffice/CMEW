@@ -8,6 +8,7 @@ Overwrite the ESMValTool recipe with an updated version. Include:
 * User configurable variables from the Rose suite configuration
 """
 import os
+import importlib
 import yaml
 import sys
 import logging
@@ -93,7 +94,7 @@ def add_extra_datasets(recipe, yaml_filepath):
     return recipe
 
 
-def remove_additional_datasets(recipe):
+def remove_additional_datasets(recipe, recipe_paths_file):
     """
     Optionally remove additional_datasets sections from an ESMValTool recipe.
 
@@ -114,10 +115,9 @@ def remove_additional_datasets(recipe):
     # Look up the recipe and destination from the environment
     recipe_id = os.environ["CYLC_TASK_PARAM_recipe"]
 
-    # Load the yaml config file from recipe_paths_config.py
-    from recipe_paths_config import recipes_dict
-
-    recipe_dict = recipes_dict
+    # Load the recipes config file
+    module = importlib.import_module(recipe_paths_file)
+    recipe_dict = module.recipes_dict
     logger.debug("Recipe dict:\n%s", recipe_dict)
 
     # Don't empty by default
@@ -175,7 +175,9 @@ def main():
     logger.info("Amending recipe from %s", recipe_path)
 
     # Remove additional datasets if specified
-    amended_recipe = remove_additional_datasets(blank_recipe)
+    amended_recipe = remove_additional_datasets(
+        blank_recipe, "recipe_paths_config"
+    )
 
     # Add the model runs into the datasets section of the recipe
     model_runs_fp = f"{os.environ['DATASETS_LIST_DIR']}/model_runs.yml"

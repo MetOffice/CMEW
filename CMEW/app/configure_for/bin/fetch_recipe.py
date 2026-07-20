@@ -2,6 +2,7 @@
 # (C) Crown Copyright 2026, Met Office.
 # The LICENSE.md file contains full licensing details.
 import os
+import importlib
 import subprocess
 import sys
 import logging
@@ -11,9 +12,9 @@ filename = os.path.basename(__file__)
 logger = logging.getLogger(filename)
 
 
-def retrieve_name_and_fp():
+def retrieve_name_and_fp(recipe_paths_file):
     """
-    Looks in recipe_paths.yml for an entry or constructs default values.
+    Looks in the `recipe_paths_file` for an entry or constructs default values.
 
     Uses the environment variable CYLC_TASK_PARAM_recipe as a dict key.
 
@@ -29,10 +30,9 @@ def retrieve_name_and_fp():
     recipe = os.environ["CYLC_TASK_PARAM_recipe"]
     logger.info("Fetching recipe %s", recipe)
 
-    # Load the yaml config file from recipe_paths_config.py
-    from recipe_paths_config import recipes_dict
-
-    recipe_dict = recipes_dict
+    # Load the recipes config file
+    module = importlib.import_module(recipe_paths_file)
+    recipe_dict = module.recipes_dict
     logger.debug("Recipe dict:\n%s", recipe_dict)
 
     # Read specific recipe names and filepaths from the yaml config file
@@ -53,7 +53,7 @@ def retrieve_name_and_fp():
 def main():
     """Fetch a recipe from ESMValTool and copy it to the recipe path."""
     # Find the full name and location within ESMValTool
-    recipe_name, recipe_fp = retrieve_name_and_fp()
+    recipe_name, recipe_fp = retrieve_name_and_fp("recipe_paths_config")
 
     # Look up final destination
     destination_fp = os.environ["RECIPE_PATH"]
