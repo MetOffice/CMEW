@@ -99,7 +99,7 @@ def remove_additional_datasets(recipe, recipe_dict=recipes_dict):
     Optionally remove additional_datasets sections from an ESMValTool recipe.
 
     The option to remove additional datasets is controlled by the key
-    empty_additional_datasets in the recipe_paths_config.py file.
+    empty_additional_datasets in the recipe_dict.
 
     Parameters
     ----------
