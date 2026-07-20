@@ -105,6 +105,9 @@ def remove_additional_datasets(recipe, recipe_paths_file):
     ----------
     recipe: dict
         The content of the recipe which may have additional datasets.
+    recipe_paths_file : str
+        The name of a python file in the same directory
+        containing information ESMValTool recipe locations.
 
     Returns
     -------

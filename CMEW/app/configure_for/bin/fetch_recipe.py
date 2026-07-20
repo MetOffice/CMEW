@@ -18,6 +18,12 @@ def retrieve_name_and_fp(recipe_paths_file):
 
     Uses the environment variable CYLC_TASK_PARAM_recipe as a dict key.
 
+    Parameters
+    ----------
+    recipe_paths_file : str
+        The name of a python file in the same directory
+        containing information ESMValTool recipe locations.
+
     Returns
     -------
     recipe_name: str
