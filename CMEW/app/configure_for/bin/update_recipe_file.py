@@ -11,7 +11,7 @@ import os
 import yaml
 import sys
 import logging
-from config import recipes_dict
+from config_configure_for import recipes_dict
 
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 filename = os.path.basename(__file__)

@@ -7,7 +7,7 @@ Generates the variables.txt file from the ESMValTool recipe.
 import os
 import sys
 import logging
-from config import streams_dict
+from config_configure_standardise import streams_dict
 
 
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)

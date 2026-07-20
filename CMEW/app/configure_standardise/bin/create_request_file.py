@@ -10,7 +10,7 @@ import sys
 from pathlib import Path
 import yaml
 import logging
-from config import requests_defaults, streams_dict
+from config_configure_standardise import requests_defaults, streams_dict
 
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 filename = os.path.basename(__file__)
