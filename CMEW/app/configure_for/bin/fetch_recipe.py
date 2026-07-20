@@ -15,7 +15,7 @@ logger = logging.getLogger(filename)
 
 def retrieve_name_and_fp(recipe_dict=recipes_dict):
     """
-    Looks in the `recipe_paths_file` for an entry or constructs default values.
+    Looks in the `recipe_dict` for an entry or constructs default values.
 
     Uses the environment variable CYLC_TASK_PARAM_recipe as a dict key.
 
