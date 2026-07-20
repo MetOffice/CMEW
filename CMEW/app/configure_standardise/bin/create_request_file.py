@@ -5,52 +5,26 @@
 Generate CDDS request configuration file.
 """
 import configparser
-import importlib
 import os
 import sys
 from pathlib import Path
 import yaml
 import logging
+from config import requests_defaults, streams_dict
 
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 filename = os.path.basename(__file__)
 logger = logging.getLogger(filename)
 
 
-def load_request_defaults(request_defaults_file):
-    """
-    Load default values for request file.
-
-    Parameters
-    ----------
-    request_defaults_file : str
-        The name of a python file in the same directory
-        containing the CDDS request default values.
-
-    Returns
-    -------
-    dict
-        CDDS request configuration default settings.
-    """
-    # Load the CDDS default values
-    module = importlib.import_module(request_defaults_file)
-    config = module.request_defaults
-    logger.debug(
-        "Default config:\n%s",
-        config,
-    )
-    return config
-
-
-def list_streams(stream_info_file):
+def list_streams(stream_dict=streams_dict):
     """
     Lists all streams in the streams_config.py file.
 
     Parameters
     ----------
-    stream_info_file : str
-        The name of a python file in the same directory
-        containing information about data streams.
+    stream_dict : dict
+        A dictionary containing information about data streams.
 
     Returns
     -------
@@ -58,13 +32,11 @@ def list_streams(stream_info_file):
         Space separated list of all streams.
     """
     # Load the stream information dictionary
-    module = importlib.import_module(stream_info_file)
-    config = module.streams_dict
-    logger.debug("Stream information:\n%s", config)
+    logger.debug("Stream information:\n%s", stream_dict)
 
     # List all streams (keys)
     all_streams = []
-    for stream in config:
+    for stream in stream_dict:
         # For substreams we only want the first part
         stream = stream.split("/")[0]
         all_streams.append(stream)
@@ -79,7 +51,7 @@ def list_streams(stream_info_file):
     return stream_str
 
 
-def create_request(model_run, request_defaults_file, stream_info_file):
+def create_request(model_run, request_defaults=requests_defaults):
     """
     Build a CDDS request configuration for a run identified by a suite_id.
 
@@ -89,19 +61,15 @@ def create_request(model_run, request_defaults_file, stream_info_file):
     ----------
     model_run : str
         The suite ID as a model run identifier.
-    request_defaults_file : str
-        The name of a python file in the same directory
-        containing the CDDS request default values.
-    stream_info_file : str
-        The name of a python file in the same directory
-        containing information about data streams.
+    request_defaults : dict
+        A dictionary containing the CDDS request default values.
 
     Returns
     -------
     dict
         CDDS request configuration.
     """
-    defaults = load_request_defaults(request_defaults_file)
+    defaults = request_defaults
 
     mip_table_dir = os.environ["MIP_TABLE_DIR"]
 
@@ -139,7 +107,7 @@ def create_request(model_run, request_defaults_file, stream_info_file):
         "end_date": f"{int(dataset_dict['end_year'])+1}-01-01T00:00:00",
         "model_workflow_id": dataset_dict["suite_id"],
         # List all possible streams as CDDS just ignores ones without variables
-        "streams": list_streams(stream_info_file),
+        "streams": list_streams(),
         "variable_list_file": os.environ["VARIABLES_PATH"],
     }
     request["misc"] = dict(defaults["misc"])
@@ -183,9 +151,7 @@ def main():
     dataset = os.environ["CYLC_TASK_PARAM_dataset"].strip()
     logger.info("Creating CDDS request for dataset %s", dataset)
 
-    request = create_request(
-        dataset, "request_defaults_config", "streams_config"
-    )
+    request = create_request(dataset)
     target_path = Path(os.environ["REQUEST_PATH"])
     write_request(request, target_path)
 

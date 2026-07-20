@@ -2,17 +2,18 @@
 # (C) Crown Copyright 2026, Met Office.
 # The LICENSE.md file contains full licensing details.
 import os
-import importlib
 import subprocess
 import sys
 import logging
+from config import recipes_dict
+
 
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 filename = os.path.basename(__file__)
 logger = logging.getLogger(filename)
 
 
-def retrieve_name_and_fp(recipe_paths_file):
+def retrieve_name_and_fp(recipe_dict=recipes_dict):
     """
     Looks in the `recipe_paths_file` for an entry or constructs default values.
 
@@ -20,9 +21,10 @@ def retrieve_name_and_fp(recipe_paths_file):
 
     Parameters
     ----------
-    recipe_paths_file : str
-        The name of a python file in the same directory
-        containing information ESMValTool recipe locations.
+    recipe_dict : dict
+        A dictionary with keys for recipe identifiers
+        for recipes which do not follow the default pattern
+        of names and locations within ESMValTool.
 
     Returns
     -------
@@ -37,8 +39,6 @@ def retrieve_name_and_fp(recipe_paths_file):
     logger.info("Fetching recipe %s", recipe)
 
     # Load the recipes config file
-    module = importlib.import_module(recipe_paths_file)
-    recipe_dict = module.recipes_dict
     logger.debug("Recipe dict:\n%s", recipe_dict)
 
     # Read specific recipe names and filepaths from the yaml config file
@@ -59,7 +59,7 @@ def retrieve_name_and_fp(recipe_paths_file):
 def main():
     """Fetch a recipe from ESMValTool and copy it to the recipe path."""
     # Find the full name and location within ESMValTool
-    recipe_name, recipe_fp = retrieve_name_and_fp("recipe_paths_config")
+    recipe_name, recipe_fp = retrieve_name_and_fp()
 
     # Look up final destination
     destination_fp = os.environ["RECIPE_PATH"]

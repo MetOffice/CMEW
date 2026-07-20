@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 # (C) Crown Copyright 2026, Met Office.
 # The LICENSE.md file contains full licensing details.
-"""
-Information about the locations of specific ESMValTool recipes.
-"""
+
+# Information about the locations of specific ESMValTool recipes.
 recipes_dict = {
     "correlation": {
         "recipe_name": "recipe_correlation.yml",

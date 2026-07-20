@@ -5,9 +5,9 @@
 Generates the variables.txt file from the ESMValTool recipe.
 """
 import os
-import importlib
 import sys
 import logging
+from config import streams_dict
 
 
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
@@ -44,48 +44,21 @@ def combine_variable_lists(directory):
     return variables
 
 
-def load_stream_dict(stream_info_file):
-    """
-    Loads stream information from the streams_config.py file.
-
-    Parameters
-    ----------
-    stream_info_file : str
-        The name of a python file in the same directory
-        containing information about data streams.
-
-    Returns
-    -------
-    dict
-        A mapping of pre-defined streams to their associated variables
-    """
-    # Load the stream information dictionary
-    module = importlib.import_module(stream_info_file)
-    config = module.streams_dict
-    logger.debug("Stream information:\n%s", config)
-
-    # Return the whole dictionary
-    return config
-
-
-def add_stream_to_variables(variables, stream_info_file):
+def add_stream_to_variables(variables, stream_dict=streams_dict):
     """Add stream information to a list of variables.
 
     Parameters
     ----------
     variables : list[str]
         List of variables in the format "MIP_table/variable_name"
-    stream_info_file : str
-        The name of a python file in the same directory
-        containing information about data streams.
+    stream_dict : dict
+        A dictionary containing information about data streams.
 
     Returns
     -------
     list[str]
         List of variables in the format "MIP_table/variable_name:stream"
     """
-    stream_dict = load_stream_dict(stream_info_file)
-
     # Using a second dictionary to avoid looping
     var_to_stream = {
         var: stream
@@ -122,7 +95,7 @@ def write_variables(variables, target_path):
 
 def main():
     variables = combine_variable_lists(os.environ["VARIABLES_LIST_DIR"])
-    streamed_variables = add_stream_to_variables(variables, "streams_config")
+    streamed_variables = add_stream_to_variables(variables)
     variables_path = os.environ["VARIABLES_PATH"]
     logger.info("Writing variables file to %s", variables_path)
     write_variables(streamed_variables, variables_path)
