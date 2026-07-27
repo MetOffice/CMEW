@@ -15,3 +15,4 @@ User Guide
    Reusing raw data  <reusing_raw_data>
    Reusing standardised data  <reusing_standardised_data>
    ESMValTool branches <esmvaltool_branches.rst>
+   Custom data streams <using_custom_streams.rst>
