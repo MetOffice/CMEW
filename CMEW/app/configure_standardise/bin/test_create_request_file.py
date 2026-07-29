@@ -9,7 +9,14 @@ Test data files:
 """
 from pathlib import Path
 import configparser
+import create_request_file
 from create_request_file import create_request
+
+mock_streams = "apm inm"
+
+
+def fake_list_streams(*args, **kwargs):
+    return mock_streams
 
 
 def test_create_request(monkeypatch):
@@ -26,7 +33,7 @@ def test_create_request(monkeypatch):
     root_data_dir = "/path/to/data/dir/"
     variables_path = "/path/to/variables.txt"
     mip_table_dir = "~cdds/etc/mip_tables/GCModelDev/0.0.25"
-    stream_id = "apm inm"
+    monkeypatch.setattr(create_request_file, "list_streams", fake_list_streams)
 
     monkeypatch.setenv("RAW_DATA_DIR_MODE", "use_saved")
     monkeypatch.setenv("REQUEST_DEFAULTS_PATH", str(request_defaults_path))
@@ -35,7 +42,6 @@ def test_create_request(monkeypatch):
     monkeypatch.setenv("ROOT_DATA_DIR", root_data_dir)
     monkeypatch.setenv("VARIABLES_PATH", variables_path)
     monkeypatch.setenv("MIP_TABLE_DIR", mip_table_dir)
-    monkeypatch.setenv("STREAM_ID", stream_id)
 
     actual_request = create_request("u-cw673")
     cfg = configparser.ConfigParser()
