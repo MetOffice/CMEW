@@ -12,11 +12,9 @@ import configparser
 import create_request_file
 from create_request_file import create_request
 
-mock_streams = "apm inm"
-
 
 def fake_list_streams(*args, **kwargs):
-    return mock_streams
+    return "apm inm"
 
 
 def test_create_request(monkeypatch):
