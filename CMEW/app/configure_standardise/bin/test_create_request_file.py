@@ -10,7 +10,6 @@ Test data files:
 from pathlib import Path
 import configparser
 import create_request_file
-from create_request_file import create_request
 
 
 def fake_list_streams(*args, **kwargs):
@@ -41,7 +40,7 @@ def test_create_request(monkeypatch):
     monkeypatch.setenv("VARIABLES_PATH", variables_path)
     monkeypatch.setenv("MIP_TABLE_DIR", mip_table_dir)
 
-    actual_request = create_request("u-cw673")
+    actual_request = create_request_file.create_request("u-cw673")
     cfg = configparser.ConfigParser()
     cfg.read_dict(actual_request)
     actual = {section: dict(cfg[section]) for section in cfg.sections()}
