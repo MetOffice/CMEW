@@ -25,55 +25,60 @@ from update_recipe_file import (
     remove_additional_datasets,
     update_recipe_file,
 )
-from pathlib import Path
 import shutil
 import yaml
 
-
-mock_data_dir = Path(__file__).parent.parent.parent / "unittest" / "mock_data"
-recipe_format_file = mock_data_dir / "recipe_paths.yml"
-model_runs_yml_fp = mock_data_dir / "model_runs.yml"
-cmip6_datasets_yml_fp = mock_data_dir / "cmip6_datasets.yml"
-original_recipe_fp = mock_data_dir / "original_recipe_radiation_budget.yml"
-extra_ds_in_recipe_fp = mock_data_dir / "recipe_with_additional_datasets.yml"
-updated_recipe_fp = mock_data_dir / "updated_recipe_radiation_budget.yml"
-
-kgo_dir = Path(__file__).parent.parent.parent / "unittest" / "kgo"
-no_ds_in_recipe_fp = kgo_dir / "blank_recipe_radiation_budget.yml"
-no_extras_in_recipe_fp = kgo_dir / "recipe_additional_datasets_removed.yml"
-extended_recipe_fp = kgo_dir / "extended_radiation_budget_recipe.yml"
+from configure_for_conftest import (
+    recipe_paths_yml_fp,
+    model_runs_yml_fp,
+    cmip6_datasets_yml_fp,
+    original_recipe_radiation_budget_fp,
+    recipe_with_additional_datasets_yml_fp,
+    updated_recipe_radiation_budget_yml_fp,
+    no_ds_in_recipe_fp,
+    recipe_additional_datasets_removed_yml_fp,
+    extended_radiation_budget_recipe_yml_fp,
+)
 
 
 def test_return_blank_recipe():
-    with open(no_ds_in_recipe_fp, "r") as file_handle:
+    with open(str(no_ds_in_recipe_fp()), "r") as file_handle:
         expected = yaml.safe_load(file_handle)
-    actual = return_blank_recipe(str(original_recipe_fp))
+    actual = return_blank_recipe(str(original_recipe_radiation_budget_fp()))
     assert actual == expected
 
 
 def test_add_extra_datasets():
-    with open(extended_recipe_fp, "r") as file_handle_1:
+    with open(
+        str(extended_radiation_budget_recipe_yml_fp()), "r"
+    ) as file_handle_1:
         expected = yaml.safe_load(file_handle_1)
 
-    with open(updated_recipe_fp, "r") as file_handle_2:
+    with open(
+        str(updated_recipe_radiation_budget_yml_fp()), "r"
+    ) as file_handle_2:
         pre_recipe = yaml.safe_load(file_handle_2)
 
     # Using str(filepath) here as update_recipe_file.py uses os, not pathlib
-    actual = add_extra_datasets(pre_recipe, str(cmip6_datasets_yml_fp))
+    actual = add_extra_datasets(pre_recipe, str(cmip6_datasets_yml_fp()))
     assert actual == expected
 
 
 def test_remove_additional_datasets():
     recipe_id = "mock_entry"
-    with open(no_extras_in_recipe_fp, "r") as file_handle_1:
+    with open(
+        str(recipe_additional_datasets_removed_yml_fp()), "r"
+    ) as file_handle_1:
         expected = yaml.safe_load(file_handle_1)
 
-    with open(extra_ds_in_recipe_fp, "r") as file_handle_2:
+    with open(
+        str(recipe_with_additional_datasets_yml_fp()), "r"
+    ) as file_handle_2:
         pre_recipe = yaml.safe_load(file_handle_2)
 
     # Using str(filepath) here as update_recipe_file.py uses os, not pathlib
     actual = remove_additional_datasets(
-        pre_recipe, recipe_id, str(recipe_format_file)
+        pre_recipe, recipe_id, str(recipe_paths_yml_fp())
     )
     assert actual == expected
 
@@ -83,7 +88,9 @@ def test_update_recipe_file(tmp_path):
     # Copy the original recipe to a tmp_path location to allow it to be
     # overwritten.
     path_to_temp_recipe = tmp_path / "tmp_recipe.yml"
-    shutil.copy(original_recipe_fp, path_to_temp_recipe)
+    shutil.copy(
+        str(original_recipe_radiation_budget_fp()), path_to_temp_recipe
+    )
 
     # Mock the environmental variable 'RECIPE PATH' to the tmp_path location
     # where the original recipe is stored.
@@ -94,16 +101,18 @@ def test_update_recipe_file(tmp_path):
 
     update_recipe_file(
         recipe_path,
-        model_runs_yml_fp,
-        cmip6_datasets_yml_fp,
+        str(model_runs_yml_fp()),
+        str(cmip6_datasets_yml_fp()),
         recipe_id,
-        recipe_format_file,
+        str(recipe_paths_yml_fp()),
     )
 
     with open(path_to_temp_recipe, "r") as file_handle_1:
         actual_lines = file_handle_1.readlines()
 
-    with open(extended_recipe_fp, "r") as file_handle_2:
+    with open(
+        str(extended_radiation_budget_recipe_yml_fp()), "r"
+    ) as file_handle_2:
         kgo_with_comment = file_handle_2.readlines()
 
     # Remove the five comment lines at the top of
