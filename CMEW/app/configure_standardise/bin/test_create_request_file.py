@@ -12,10 +12,6 @@ import configparser
 import create_request_file
 
 
-def fake_list_streams(*args, **kwargs):
-    return "apm inm"
-
-
 def test_create_request(monkeypatch):
     monkeypatch.setenv(
         "DATASETS_LIST_DIR",
@@ -30,7 +26,7 @@ def test_create_request(monkeypatch):
     root_data_dir = "/path/to/data/dir/"
     variables_path = "/path/to/variables.txt"
     mip_table_dir = "~cdds/etc/mip_tables/GCModelDev/0.0.25"
-    monkeypatch.setattr(create_request_file, "list_streams", fake_list_streams)
+    monkeypatch.setattr(create_request_file, "list_streams", "apm inm")
 
     monkeypatch.setenv("RAW_DATA_DIR_MODE", "use_saved")
     monkeypatch.setenv("REQUEST_DEFAULTS_PATH", str(request_defaults_path))
