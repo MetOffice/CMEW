@@ -41,12 +41,12 @@ def load_request_defaults():
 
 def list_streams(variables_file):
     """
-    Lists all streams from a single variables.txt file.
+    Lists all streams from a single variables file.
 
     Parameters
     ----------
     variables_file: str
-        Path to the variables.txt file.
+        The full path to the variables file.
 
     Returns
     -------
@@ -54,8 +54,8 @@ def list_streams(variables_file):
         Space separated list of all streams.
     """
     # Read the stream mappings
-    with open(variables_file, "r") as f:
-        variables = f.readlines()
+    with open(variables_file, "r") as file_handle:
+        variables = file_handle.readlines()
         logger.debug(
             "All variables:\n%s",
             variables,
