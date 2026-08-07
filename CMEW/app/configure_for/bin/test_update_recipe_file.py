@@ -91,9 +91,6 @@ def test_update_recipe_file(tmp_path):
     shutil.copy(
         str(original_recipe_radiation_budget_fp()), path_to_temp_recipe
     )
-
-    # Mock the environmental variable 'RECIPE PATH' to the tmp_path location
-    # where the original recipe is stored.
     recipe_path = str(path_to_temp_recipe)
 
     # These are used to check with additional datasets are removed
