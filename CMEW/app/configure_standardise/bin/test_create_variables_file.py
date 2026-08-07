@@ -17,19 +17,17 @@ from create_variables_file import (
     add_stream_to_variables,
     write_variables,
 )
-from pathlib import Path
 import tempfile
-
-etc_dir = Path(__file__).parent.parent / "etc"
-mock_data_dir = Path(__file__).parent.parent.parent / "unittest" / "mock_data"
-kgo_dir = Path(__file__).parent.parent.parent / "unittest" / "kgo"
-mock_vars_lists_dir = mock_data_dir
-combined_variables_file = kgo_dir / "variables.txt"
-stream_config_path = etc_dir / "streams.yml"
+from configure_standardise_conftest import (
+    mock_data_dir,
+    variables_txt_fp,
+    streams_yml_fp,
+)
 
 
 def test_combine_variable_lists():
-    actual = combine_variable_lists(str(mock_vars_lists_dir))
+    mock_vars_lists_dir = str(mock_data_dir())
+    actual = combine_variable_lists(mock_vars_lists_dir)
 
     expected = [
         "Amon/hfls",
@@ -66,9 +64,9 @@ def test_add_stream_to_variables():
         "Amon/tas",
         "SImon/siconc",
     ]
-    actual = add_stream_to_variables(str(stream_config_path), input)
+    actual = add_stream_to_variables(str(streams_yml_fp()), input)
 
-    with open(combined_variables_file, "r") as file:
+    with open(str(variables_txt_fp()), "r") as file:
         expected = file.read().splitlines()
 
     assert actual == expected
@@ -98,7 +96,7 @@ def test_write_variables():
         actual = tmp.read().decode("utf-8")  # decode bytes to string
 
     # Load the expected list
-    with open(combined_variables_file, "r") as file_handle:
+    with open(str(variables_txt_fp()), "r") as file_handle:
         expected = file_handle.read()
 
     assert expected == actual
