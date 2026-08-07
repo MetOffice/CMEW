@@ -24,7 +24,7 @@ def create_developer_config(
     Parameters
     ----------
     mip_table_dir:
-        The MIP table to use from CDDS.
+        The full path to the MIP tables root directory.
 
     Returns
     -------

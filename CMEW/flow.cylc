@@ -69,7 +69,7 @@
             SHARE_DATA_CDDS = ${CYLC_WORKFLOW_SHARE_DIR}/data/cdds
             ROOT_PROC_DIR = ${SHARE_DATA_CDDS}/proc
             ROOT_DATA_DIR = ${SHARE_DATA_CDDS}/cdds_data
-            ROOT_RESTRUCTURED_DIR=${CYLC_WORKFLOW_SHARE_DIR}/work
+            ROOT_RESTRUCTURED_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/work
 
     [[RECIPE]]
         [[[environment]]]

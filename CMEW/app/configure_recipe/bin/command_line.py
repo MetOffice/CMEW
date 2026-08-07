@@ -21,7 +21,7 @@ def parse_args_for_configure_recipe(arguments):
         The names and values of the command line arguments.
     """
     parser = argparse.ArgumentParser(
-        description="Retrieve environment variables for ESMValTool config.",
+        description="Setup the configuration for ESMValTool.",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     parser.add_argument(
@@ -50,7 +50,7 @@ def parse_args_for_configure_recipe(arguments):
     )
     parser.add_argument(
         "--mip_table_dir",
-        help=("The MIP table to use from CDDS."),
+        help=("The full path to the MIP tables root directory"),
     )
     parser.add_argument(
         "--output_dir",
@@ -77,7 +77,7 @@ def parse_args_for_configure_recipe(arguments):
 
 def main_for_configure_recipe(arguments=None):
     """
-    Retrieve variables from an ESMValTool recipe.
+    Setup the configuration for ESMValTool.
 
     Parameters
     ----------
