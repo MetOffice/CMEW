@@ -183,7 +183,7 @@ def update_recipe_file(
     Parameters
     ----------
     recipe_path:
-        The filepath of the ESMValTool recipe to be updates.
+        The full path to the ESMValTool recipe.
     model_runs_yml_fp:
         The full path to the YAML file containing details of the model runs.
     cmip6_datasets_yml_fp:
@@ -192,7 +192,7 @@ def update_recipe_file(
     recipe_id:
         The id that acts as a key in the recipe_dict_fp.
     recipe_dict_fp:
-        The location of the YAML file containing information
+        The full path to the YAML file containing information
         about whether to remove additional datasets.
     """
     blank_recipe = return_blank_recipe(recipe_path)

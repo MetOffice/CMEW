@@ -101,7 +101,7 @@ def parse_args_for_update_recipe_file(arguments):
     parser.add_argument(
         "--recipe_dict_fp",
         help=(
-            "The filepath of the YAML file containing the "
+            "The full path to the YAML file containing the "
             "name and location within esmvaltool.recipes "
             "of the recipe to be amended"
         ),
