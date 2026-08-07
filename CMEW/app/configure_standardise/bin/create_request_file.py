@@ -114,9 +114,6 @@ def create_request(
         The directory for use when processing data with CDDS.
     root_data_dir : str
         The root directory for CDDS to store data.
-    stream_config_fp : str
-        The full path to the file where the data streams
-        containing each variable are written.
     variable_list_file : str
         The full path to the file containing
         the list of variables to be processed.
@@ -249,7 +246,6 @@ def create_request_file(
         model_runs_yml_fp,
         root_proc_dir,
         root_data_dir,
-        stream_config_fp,
         variable_list_file,
         raw_data_dir_mode,
     )
