@@ -24,23 +24,21 @@ from add_datasets_to_share import (
     dict_namelists_in_workflow_dir,
     use_facet_as_key,
 )
-from pathlib import Path
 import yaml
 import shutil
 import tempfile
 from unittest.mock import patch
-
+from copy_datasets_conftest import (
+    model_runs_nl_fp,
+    model_runs_as_list_yml_fp,
+    basic_dict_yml_fp,
+    model_runs_as_dict_yml_fp,
+)
 
 start_year = "1993"
 number_of_years = "10"
 institute = "mock_institute"
 workflow_dir = "/a/b/c"
-mock_data_dir = Path(__file__).parent.parent.parent / "unittest" / "mock_data"
-mock_naml_fp = mock_data_dir / "model_runs.nl"
-mock_yaml_fp = mock_data_dir / "model_runs_as_list.yml"
-kgo_dir = Path(__file__).parent.parent.parent / "unittest" / "kgo"
-kgo_dict_fp = kgo_dir / "basic_dict.yml"
-kgo_yaml_dict_fp = kgo_dir / "model_runs_as_dict.yml"
 
 
 def test_extract_sections_from_naml():
@@ -63,7 +61,7 @@ def test_extract_sections_from_naml():
         ),
     ]
 
-    actual = extract_sections_from_naml(str(mock_naml_fp))
+    actual = extract_sections_from_naml(str(model_runs_nl_fp()))
     assert actual == expected
 
 
@@ -138,7 +136,11 @@ def test_process_naml_file():
     ]
 
     actual = process_naml_file(
-        str(mock_naml_fp), start_year, number_of_years, institute, "CMIP6"
+        str(model_runs_nl_fp()),
+        start_year,
+        number_of_years,
+        institute,
+        "CMIP6",
     )
     assert actual == expected
 
@@ -161,7 +163,7 @@ def test_write_dict_to_yaml():
         actual = yaml.safe_load(tmp)
 
     # Load the expected dictionary
-    with open(kgo_dict_fp, "r") as file_handle:
+    with open(str(basic_dict_yml_fp()), "r") as file_handle:
         expected = yaml.safe_load(file_handle)
 
     assert expected == actual
@@ -199,7 +201,7 @@ def test_dict_namelists_in_workflow_dir(mock_listdir, mock_dirname):
 def test_use_facet_as_key():
     # Copy known input to a temp file
     with tempfile.NamedTemporaryFile() as tmp:
-        shutil.copyfile(mock_yaml_fp, tmp.name)
+        shutil.copyfile(str(model_runs_as_list_yml_fp()), tmp.name)
 
         # The filepath is given by .name
         use_facet_as_key(str(tmp.name), "suite_id")
@@ -209,7 +211,7 @@ def test_use_facet_as_key():
         actual = yaml.safe_load(tmp)
 
     # Load the expected output
-    with open(kgo_yaml_dict_fp, "r") as file_handle:
+    with open(str(model_runs_as_dict_yml_fp()), "r") as file_handle:
         expected = yaml.safe_load(file_handle)
 
     assert actual == expected
