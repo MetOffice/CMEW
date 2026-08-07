@@ -16,20 +16,20 @@ def test_create_user_config():
 
     expected = {
         "auxiliary_data_dir": "",
-        "config_developer_file": "/test/dev/config.yml",
+        "config_developer_file": test_dev_config_path,
         "download_dir": "",
         "drs": {
-            "CMIP6": "test_cmip6_drs",
-            "obs4MIPs": "test_obs4mips_drs",
+            "CMIP6": test_drs_cmip6,
+            "obs4MIPs": test_drs_obs4mips,
             "ESMVal": "BADC",
         },
-        "max_parallel_tasks": 99,
-        "output_dir": "/test/output/dir",
+        "max_parallel_tasks": int(test_max_parallel_tasks),
+        "output_dir": test_output_dir,
         "remove_preproc_dir": False,
         "rootpath": {
-            "CMIP6": "test_cmip6_rootpath",
-            "obs4MIPs": "test_obs4mips_rootpath",
-            "ESMVal": "test/cmew/esmval/dir",
+            "CMIP6": test_rootpath_cmip6,
+            "obs4MIPs": test_rootpath_obs4mips,
+            "ESMVal": test_cmew_data_for_esmval_dir,
         },
     }
 
@@ -52,7 +52,7 @@ def test_create_developer_config():
 
     expected = {
         "custom": {
-            "cmor_path": "/test/mip/table/dir",
+            "cmor_path": test_mip_table_dir,
         },
         "ESMVal": {
             "cmor_strict": True,
