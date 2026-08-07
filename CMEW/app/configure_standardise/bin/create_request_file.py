@@ -40,14 +40,14 @@ def load_request_defaults(defaults_path):
     return config
 
 
-def list_streams(stream_config_fp):
+def list_streams(variables_file):
     """
-    Lists all streams in the ../etc/streams.yml file.
+    Lists all streams from a single variables file.
 
     Parameters
     ----------
-    stream_config_fp : str
-        Path to the streams configuration file.
+    variables_file: str
+        The full path to the variables file.
 
     Returns
     -------
@@ -55,17 +55,25 @@ def list_streams(stream_config_fp):
         Space separated list of all streams.
     """
     # Read the stream mappings
-    with open(stream_config_fp, "r") as f:
-        config = yaml.safe_load(f)
+    with open(variables_file, "r") as file_handle:
+        variables = file_handle.readlines()
         logger.debug(
-            "Stream config:\n%s",
-            config,
+            "All variables:\n%s",
+            variables,
         )
 
     # List all streams (keys)
     all_streams = []
-    for stream in config:
-        all_streams.append(stream)
+    for line in variables:
+        # Get the whole stream including substream
+        whole_stream = line.strip().split(":")[-1]
+
+        # But don't list the substream
+        stream = whole_stream.split("/")[0]
+
+        # Only add unique streams
+        if stream not in all_streams:
+            all_streams.append(stream)
 
     # Return as a space separated list
     stream_str = " ".join(all_streams)
@@ -84,7 +92,6 @@ def create_request(
     model_runs_yml_fp,
     root_proc_dir,
     root_data_dir,
-    stream_config_fp,
     variable_list_file,
     raw_data_dir_mode,
 ):
@@ -156,14 +163,16 @@ def create_request(
         "start_date": f"{dataset_dict['start_year']}-01-01T00:00:00",
         "end_date": f"{int(dataset_dict['end_year'])+1}-01-01T00:00:00",
         "model_workflow_id": dataset_dict["suite_id"],
-        # List all possible streams as CDDS just ignores ones without variables
-        "streams": list_streams(stream_config_fp),
+        "streams": list_streams(variable_list_file),
         "variable_list_file": variable_list_file,
     }
     request["misc"] = dict(defaults["misc"])
     request["conversion"] = dict(defaults["conversion"])
     if raw_data_dir_mode == "use_saved":
         request["conversion"]["skip_extract"] = "True"
+    request["netcdf_global_attributes"] = dict(
+        defaults["netcdf_global_attributes"]
+    )
 
     logger.debug("Request config:\n%s", request)
     return request

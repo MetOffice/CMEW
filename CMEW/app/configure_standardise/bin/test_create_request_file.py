@@ -9,8 +9,14 @@ Test data files:
 """
 from pathlib import Path
 import configparser
-from create_request_file import create_request
+import create_request_file
 
+
+def fake_list_streams(*args):
+    return "apm inm"
+
+
+# monkeypatch.setattr(create_request_file, "list_streams", fake_list_streams)
 
 etc_dir = Path(__file__).parent.parent / "etc"
 mock_data_dir = Path(__file__).parent.parent.parent / "unittest" / "mock_data"
@@ -29,7 +35,7 @@ kgo_request_fp = kgo_dir / "request_u-cw673.cfg"
 
 
 def test_create_request():
-    actual_request = create_request(
+    actual_request = create_request_file.create_request(
         str(test_defaults_path),
         dataset,
         mip_table_dir,
