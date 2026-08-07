@@ -35,10 +35,9 @@ from copy_datasets_conftest import (
     model_runs_as_dict_yml_fp,
 )
 
-start_year = "1993"
-number_of_years = "10"
-institute = "mock_institute"
-workflow_dir = "/a/b/c"
+START_YEAR = "1993"
+NUMBER_OF_YEARS = "10"
+INSTITUTE = "mock_institute"
 
 
 def test_extract_sections_from_naml():
@@ -106,7 +105,7 @@ def test_add_common_facets():
     }
 
     actual = add_common_facets(
-        start_year, number_of_years, dataset_dict, institute, "CMIP6"
+        START_YEAR, NUMBER_OF_YEARS, dataset_dict, INSTITUTE, "CMIP6"
     )
     assert actual == expected
 
@@ -137,9 +136,9 @@ def test_process_naml_file():
 
     actual = process_naml_file(
         str(model_runs_nl_fp()),
-        start_year,
-        number_of_years,
-        institute,
+        START_YEAR,
+        NUMBER_OF_YEARS,
+        INSTITUTE,
         "CMIP6",
     )
     assert actual == expected
@@ -189,12 +188,13 @@ def test_write_datasets_to_yaml(mock_writing):
         "subdir",
     ],
 )
-def test_dict_namelists_in_workflow_dir(mock_listdir, mock_dirname):
+def test_list_files_of_type_in_dir(mock_listdir, mock_dirname):
     expected = {
         "this_one": "/a/b/c/this_one.nl",
         "this_two": "/a/b/c/this_two.nl",
     }
-    actual = list_files_of_type_in_dir(workflow_dir, ".nl")
+    mock_src_dir = "/a/b/c"
+    actual = list_files_of_type_in_dir(mock_src_dir, ".nl")
     assert expected == actual
 
 
