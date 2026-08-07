@@ -332,17 +332,17 @@ def add_reference_key(filepath):
 
 
 def add_datasets_to_share(
-    target_dir, workflow_dir, start_year, number_of_years, institute
+    source_dir, target_dir, start_year, number_of_years, institute
 ):
     """
     Copy dataset information from configuration to the share directory.
 
     Parameters
     ----------
+    source_dir, : str
+        The directory containing the namelist files of datasets.
     target_dir: str
         The directory into which to write dataset lists.
-    directory: str
-        The directory containing the namelist files of datasets.
     start_year: str
         The first year to extract for each dataset.
     number_of_years: str
@@ -355,7 +355,7 @@ def add_datasets_to_share(
 
     # Loop over the namelist files in the work directory
     for basename, nl_fp in list_files_of_type_in_dir(
-        workflow_dir,
+        source_dir,
         ".nl",
     ).items():
         logger.info("Found file %s", basename)

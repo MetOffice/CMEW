@@ -20,16 +20,17 @@ def parse_args_for_add_datasets_to_share(arguments):
         The names and values of the command line arguments.
     """
     parser = argparse.ArgumentParser(
-        description="Retrieve variables from an ESMValTool recipe.",
+        description="Copy dataset lists from the workflow configuration "
+        "to files in a shared directory.",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+    parser.add_argument(
+        "--source_dir",
+        help="The directory containing the namelist files of datasets.",
     )
     parser.add_argument(
         "--target_dir",
         help="The directory into which to write dataset lists.",
-    )
-    parser.add_argument(
-        "--workflow_dir",
-        help="The directory containing the namelist files of datasets.",
     )
     parser.add_argument(
         "--start_year", help="The first year to extract for each dataset."
@@ -58,14 +59,14 @@ def main_for_add_datasets_to_share(arguments=None):
 
     # Run the code.
     print("Retrieving variables from recipe.")
+    print(f"Directory containing nl files: {args.source_dir}")
     print(f"Directory to output dataset lists: {args.target_dir}")
-    print(f"Directory containing nl files: {args.workflow_dir}")
     print(f"Start year: {args.start_year}")
     print(f"Number of years: {args.number_of_years}")
     print(f"Institution ID: {args.institute}")
     add_datasets_to_share(
+        args.source_dir,
         args.target_dir,
-        args.workflow_dir,
         args.start_year,
         args.number_of_years,
         args.institute,
