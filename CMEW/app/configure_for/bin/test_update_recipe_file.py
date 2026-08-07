@@ -23,187 +23,93 @@ from update_recipe_file import (
     return_blank_recipe,
     add_extra_datasets,
     remove_additional_datasets,
-    main,
+    update_recipe_file,
 )
-from pathlib import Path
-import pytest
 import shutil
 import yaml
 
-
-@pytest.fixture
-def mock_env_vars(monkeypatch):
-    # For adding extra datasets
-    monkeypatch.setenv(
-        "DATASETS_LIST_DIR",
-        str(Path(__file__).parent.parent.parent / "unittest" / "mock_data"),
-    )
-
-
-@pytest.fixture
-def path_to_mock_original_recipe():
-    path = (
-        Path(__file__).parent.parent.parent
-        / "unittest"
-        / "mock_data"
-        / "original_recipe_radiation_budget.yml"
-    )
-    return path
+from configure_for_conftest import (
+    recipe_paths_yml_fp,
+    model_runs_yml_fp,
+    cmip6_datasets_yml_fp,
+    original_recipe_radiation_budget_fp,
+    recipe_with_additional_datasets_yml_fp,
+    updated_recipe_radiation_budget_yml_fp,
+    no_ds_in_recipe_fp,
+    recipe_additional_datasets_removed_yml_fp,
+    extended_radiation_budget_recipe_yml_fp,
+)
 
 
-@pytest.fixture
-def path_to_blank_recipe_kgo():
-    path = (
-        Path(__file__).parent.parent.parent
-        / "unittest"
-        / "kgo"
-        / "blank_recipe_radiation_budget.yml"
-    )
-    return path
-
-
-@pytest.fixture
-def path_to_updated_recipe_kgo():
-    path = (
-        Path(__file__).parent.parent.parent
-        / "unittest"
-        / "mock_data"
-        / "updated_recipe_radiation_budget.yml"
-    )
-    return path
-
-
-@pytest.fixture
-def path_to_kgo_extended_recipe():
-    path = (
-        Path(__file__).parent.parent.parent
-        / "unittest"
-        / "kgo"
-        / "extended_radiation_budget_recipe.yml"
-    )
-    return path
-
-
-@pytest.fixture
-def path_to_cmip6_datasets_yaml():
-    path = (
-        Path(__file__).parent.parent.parent
-        / "unittest"
-        / "mock_data"
-        / "cmip6_datasets.yml"
-    )
-    return path
-
-
-@pytest.fixture
-def path_to_recipe_with_additionals():
-    path = (
-        Path(__file__).parent.parent.parent
-        / "unittest"
-        / "mock_data"
-        / "recipe_with_additional_datasets.yml"
-    )
-    return path
-
-
-@pytest.fixture
-def path_to_recipe_additionals_removed():
-    path = (
-        Path(__file__).parent.parent.parent
-        / "unittest"
-        / "kgo"
-        / "recipe_additional_datasets_removed.yml"
-    )
-    return path
-
-
-def test_return_blank_recipe(
-    path_to_blank_recipe_kgo, path_to_mock_original_recipe
-):
-    with open(path_to_blank_recipe_kgo, "r") as file_handle:
+def test_return_blank_recipe():
+    with open(str(no_ds_in_recipe_fp()), "r") as file_handle:
         expected = yaml.safe_load(file_handle)
-    actual = return_blank_recipe(path_to_mock_original_recipe)
+    actual = return_blank_recipe(str(original_recipe_radiation_budget_fp()))
     assert actual == expected
 
 
-def test_add_extra_datasets(
-    path_to_updated_recipe_kgo,
-    path_to_cmip6_datasets_yaml,
-    path_to_kgo_extended_recipe,
-):
-    with open(path_to_kgo_extended_recipe, "r") as file_handle_1:
+def test_add_extra_datasets():
+    with open(
+        str(extended_radiation_budget_recipe_yml_fp()), "r"
+    ) as file_handle_1:
         expected = yaml.safe_load(file_handle_1)
 
-    with open(path_to_updated_recipe_kgo, "r") as file_handle_2:
+    with open(
+        str(updated_recipe_radiation_budget_yml_fp()), "r"
+    ) as file_handle_2:
         pre_recipe = yaml.safe_load(file_handle_2)
 
     # Using str(filepath) here as update_recipe_file.py uses os, not pathlib
-    actual = add_extra_datasets(pre_recipe, str(path_to_cmip6_datasets_yaml))
+    actual = add_extra_datasets(pre_recipe, str(cmip6_datasets_yml_fp()))
     assert actual == expected
 
 
-def test_remove_additional_datasets(
-    monkeypatch,
-    path_to_recipe_with_additionals,
-    path_to_recipe_additionals_removed,
-):
-    monkeypatch.setenv("CYLC_TASK_PARAM_recipe", "mock_entry")
-    monkeypatch.setenv(
-        "RECIPE_DICT_PATH",
-        str(
-            Path(__file__).parent.parent.parent
-            / "unittest"
-            / "mock_data"
-            / "recipe_paths.yml"
-        ),
+def test_remove_additional_datasets():
+    recipe_id = "mock_entry"
+    with open(
+        str(recipe_additional_datasets_removed_yml_fp()), "r"
+    ) as file_handle_1:
+        expected = yaml.safe_load(file_handle_1)
+
+    with open(
+        str(recipe_with_additional_datasets_yml_fp()), "r"
+    ) as file_handle_2:
+        pre_recipe = yaml.safe_load(file_handle_2)
+
+    # Using str(filepath) here as update_recipe_file.py uses os, not pathlib
+    actual = remove_additional_datasets(
+        pre_recipe, recipe_id, str(recipe_paths_yml_fp())
     )
-
-    with open(path_to_recipe_additionals_removed, "r") as file_handle_1:
-        expected = yaml.safe_load(file_handle_1)
-
-    with open(path_to_recipe_with_additionals, "r") as file_handle_2:
-        pre_recipe = yaml.safe_load(file_handle_2)
-
-    # Using str(filepath) here as update_recipe_file.py uses os, not pathlib
-    actual = remove_additional_datasets(pre_recipe)
     assert actual == expected
 
 
-def test_main(
-    monkeypatch,
-    mock_env_vars,
-    path_to_kgo_extended_recipe,
-    path_to_mock_original_recipe,
-    tmp_path,
-):
-    """main() should overwrite the recipe in-place with the updated content."""
+def test_update_recipe_file(tmp_path):
+    """update_recipe_file() should overwrite the recipe in place."""
     # Copy the original recipe to a tmp_path location to allow it to be
     # overwritten.
     path_to_temp_recipe = tmp_path / "tmp_recipe.yml"
-    shutil.copy(path_to_mock_original_recipe, path_to_temp_recipe)
-
-    # Mock the environmental variable 'RECIPE PATH' to the tmp_path location
-    # where the original recipe is stored.
-    monkeypatch.setenv("RECIPE_PATH", str(path_to_temp_recipe))
+    shutil.copy(
+        str(original_recipe_radiation_budget_fp()), path_to_temp_recipe
+    )
+    recipe_path = str(path_to_temp_recipe)
 
     # These are used to check with additional datasets are removed
-    monkeypatch.setenv("CYLC_TASK_PARAM_recipe", "radiation_budget")
-    monkeypatch.setenv(
-        "RECIPE_DICT_PATH",
-        str(
-            Path(__file__).parent.parent.parent
-            / "unittest"
-            / "mock_data"
-            / "recipe_paths.yml"
-        ),
-    )
+    recipe_id = "radiation_budget"
 
-    main()
+    update_recipe_file(
+        recipe_path,
+        str(model_runs_yml_fp()),
+        str(cmip6_datasets_yml_fp()),
+        recipe_id,
+        str(recipe_paths_yml_fp()),
+    )
 
     with open(path_to_temp_recipe, "r") as file_handle_1:
         actual_lines = file_handle_1.readlines()
 
-    with open(path_to_kgo_extended_recipe, "r") as file_handle_2:
+    with open(
+        str(extended_radiation_budget_recipe_yml_fp()), "r"
+    ) as file_handle_2:
         kgo_with_comment = file_handle_2.readlines()
 
     # Remove the five comment lines at the top of
