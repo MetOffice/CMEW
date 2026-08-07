@@ -20,3 +20,5 @@ conversion:
   mip_convert_plugin: HadGEM3
   skip_archive: True
   cylc_args: --no-detach -v
+netcdf_global_attributes:
+  further_info_url: dummy_url
