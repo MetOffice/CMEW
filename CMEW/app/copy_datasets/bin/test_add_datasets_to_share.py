@@ -21,7 +21,7 @@ from add_datasets_to_share import (
     process_naml_file,
     write_dict_to_yaml,
     write_datasets_to_yaml,
-    dict_namelists_in_workflow_dir,
+    list_files_of_type_in_dir,
     use_facet_as_key,
 )
 import yaml
@@ -194,7 +194,7 @@ def test_dict_namelists_in_workflow_dir(mock_listdir, mock_dirname):
         "this_one": "/a/b/c/this_one.nl",
         "this_two": "/a/b/c/this_two.nl",
     }
-    actual = dict_namelists_in_workflow_dir(workflow_dir)
+    actual = list_files_of_type_in_dir(workflow_dir, ".nl")
     assert expected == actual
 
 

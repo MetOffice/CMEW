@@ -233,33 +233,34 @@ def write_datasets_to_yaml(datasets, name, target_dir):
     write_dict_to_yaml(datasets, target_fp)
 
 
-def dict_namelists_in_workflow_dir(workflow_dir):
+def list_files_of_type_in_dir(directory, ending):
     """
-    Looks for namelist files in the main workflow directory.
+    Looks for files in a directory based on the file suffix.
 
     Parameters
     ----------
-    workflow_dir: str
-        The directory containing the namelist files of datasets.
+    directory: str
+        The directory containing the files to return.
+    ending: str
+        A full stop followed by the file suffix to match.
 
     Returns
     -------
-    filepaths: dict
-        A dictionary of namelist file basenames and their file paths
-        based on the filenames ending ".nl".
+    dict
+        A dictionary of file base names and their file paths.
     """
     filepaths = {}
 
     # Grab all the namelist files, in case we add more in future
-    for file in os.listdir(workflow_dir):
-        if file.endswith(".nl"):
+    for file in os.listdir(directory):
+        if file.endswith(ending):
             logger.debug("Found file %s", file)
 
             # Read the name of the file for the key, minus ".nl"
             basename = os.path.basename(file)[:-3]
 
             # Use the filepath for the value
-            namelist_fp = os.path.join(workflow_dir, file)
+            namelist_fp = os.path.join(directory, file)
 
             # Add to the dictionary
             filepaths[basename] = namelist_fp
@@ -340,7 +341,7 @@ def add_datasets_to_share(
     ----------
     target_dir: str
         The directory into which to write dataset lists.
-    workflow_dir: str
+    directory: str
         The directory containing the namelist files of datasets.
     start_year: str
         The first year to extract for each dataset.
@@ -353,8 +354,9 @@ def add_datasets_to_share(
     os.makedirs(target_dir, exist_ok=True)
 
     # Loop over the namelist files in the work directory
-    for basename, nl_fp in dict_namelists_in_workflow_dir(
-        workflow_dir
+    for basename, nl_fp in list_files_of_type_in_dir(
+        workflow_dir,
+        ".nl",
     ).items():
         logger.info("Found file %s", basename)
 
