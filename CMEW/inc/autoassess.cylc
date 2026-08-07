@@ -22,6 +22,7 @@
                 => run_area<autoassess_area>
                 => nac_plot<autoassess_area>
                 => html_page<autoassess_area>
+                => html_page_overview
         """
 
     [[queues]]
@@ -84,3 +85,11 @@
         [[[environment]]]
             ROSE_TASK_APP = aa_html_page
             AREA = $CYLC_TASK_PARAM_autoassess_area
+
+    [[html_page_overview]]
+        inherit = AUTOASSESS, SITE_AA_HTML_PAGE
+        [[[environment]]]
+            ROSE_TASK_APP = aa_html_page
+            ROSE_APP_OPT_CONF_KEYS = template
+            J2_TEMPLATE_FILE = top_level_template.html
+            OUTPUT_FILE = ${AUTOASSESS_OUTPUT_DIR}/index.html
