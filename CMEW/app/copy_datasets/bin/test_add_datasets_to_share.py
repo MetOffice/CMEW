@@ -21,7 +21,7 @@ from add_datasets_to_share import (
     process_naml_file,
     write_dict_to_yaml,
     write_datasets_to_yaml,
-    list_files_of_type_in_dir,
+    list_files,
     use_facet_as_key,
 )
 import yaml
@@ -188,13 +188,13 @@ def test_write_datasets_to_yaml(mock_writing):
         "subdir",
     ],
 )
-def test_list_files_of_type_in_dir(mock_listdir, mock_dirname):
+def test_list_files(mock_listdir, mock_dirname):
     expected = {
         "this_one": "/a/b/c/this_one.nl",
         "this_two": "/a/b/c/this_two.nl",
     }
     mock_src_dir = "/a/b/c"
-    actual = list_files_of_type_in_dir(mock_src_dir, ".nl")
+    actual = list_files(mock_src_dir, ".nl")
     assert expected == actual
 
 

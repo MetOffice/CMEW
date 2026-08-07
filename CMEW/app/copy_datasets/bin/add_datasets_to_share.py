@@ -233,7 +233,7 @@ def write_datasets_to_yaml(datasets, name, target_dir):
     write_dict_to_yaml(datasets, target_fp)
 
 
-def list_files_of_type_in_dir(directory, ending):
+def list_files(directory, extension):
     """
     Looks for files in a directory based on the file suffix.
 
@@ -241,8 +241,8 @@ def list_files_of_type_in_dir(directory, ending):
     ----------
     directory: str
         The directory containing the files to return.
-    ending: str
-        A full stop followed by the file suffix to match.
+    extension: str
+        The file suffix to match.
 
     Returns
     -------
@@ -253,7 +253,7 @@ def list_files_of_type_in_dir(directory, ending):
 
     # Grab all the namelist files, in case we add more in future
     for file in os.listdir(directory):
-        if file.endswith(ending):
+        if file.endswith(extension):
             logger.debug("Found file %s", file)
 
             # Read the name of the file for the key, minus ".nl"
@@ -354,7 +354,7 @@ def add_datasets_to_share(
     os.makedirs(target_dir, exist_ok=True)
 
     # Loop over the namelist files in the work directory
-    for basename, nl_fp in list_files_of_type_in_dir(
+    for basename, nl_fp in list_files(
         source_dir,
         ".nl",
     ).items():
