@@ -16,8 +16,6 @@ def fake_list_streams(*args):
     return "apm inm"
 
 
-# monkeypatch.setattr(create_request_file, "list_streams", fake_list_streams)
-
 etc_dir = Path(__file__).parent.parent / "etc"
 mock_data_dir = Path(__file__).parent.parent.parent / "unittest" / "mock_data"
 test_defaults_path = etc_dir / "request_defaults.yml"
@@ -26,7 +24,6 @@ mip_table_dir = "~cdds/etc/mip_tables/GCModelDev/0.0.25"
 model_runs_yml_fp = mock_data_dir / "model_runs.yml"
 root_proc_dir = "/path/to/proc/dir/"
 root_data_dir = "/path/to/data/dir/"
-stream_config_path = etc_dir / "streams.yml"
 variables_path = "/path/to/variables.txt"
 raw_data_dir_mode = "use_saved"
 
@@ -34,7 +31,8 @@ kgo_dir = Path(__file__).parent.parent.parent / "unittest" / "kgo"
 kgo_request_fp = kgo_dir / "request_u-cw673.cfg"
 
 
-def test_create_request():
+def test_create_request(monkeypatch):
+    monkeypatch.setattr(create_request_file, "list_streams", fake_list_streams)
     actual_request = create_request_file.create_request(
         str(test_defaults_path),
         dataset,
@@ -42,7 +40,6 @@ def test_create_request():
         str(model_runs_yml_fp),
         root_proc_dir,
         root_data_dir,
-        str(stream_config_path),
         variables_path,
         raw_data_dir_mode,
     )
