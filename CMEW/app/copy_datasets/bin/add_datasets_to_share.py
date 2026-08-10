@@ -335,7 +335,7 @@ def add_datasets_to_share(
     source_dir, target_dir, start_year, number_of_years, institute
 ):
     """
-    Copy dataset information from configuration to the share directory.
+    Copy the datasets defined in namelist files into YAML files.
 
     Parameters
     ----------

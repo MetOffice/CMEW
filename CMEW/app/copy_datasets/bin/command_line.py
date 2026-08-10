@@ -21,7 +21,7 @@ def parse_args_for_add_datasets_to_share(arguments):
     """
     parser = argparse.ArgumentParser(
         description=(
-            "Copy the datasets defined in namelist files " "into YAML files."
+            "Copy the datasets defined in namelist files into YAML files."
         ),
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
@@ -48,7 +48,7 @@ def parse_args_for_add_datasets_to_share(arguments):
 
 def main_for_add_datasets_to_share(arguments=None):
     """
-    Copy dataset information from configuration to the share directory.
+    Copy the datasets defined in namelist files into YAML files.
 
     Parameters
     ----------
@@ -59,7 +59,7 @@ def main_for_add_datasets_to_share(arguments=None):
     args = parse_args_for_add_datasets_to_share(arguments)
 
     # Run the code.
-    print("Copying dataset information to the share directory.")
+    print("Copying the datasets defined in namelist files into YAML files.")
     print(f"Directory containing nl files: {args.source_dir}")
     print(f"Directory to output dataset lists: {args.target_dir}")
     print(f"Start year: {args.start_year}")
