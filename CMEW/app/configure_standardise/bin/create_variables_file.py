@@ -2,7 +2,7 @@
 # (C) Crown Copyright 2024-2026, Met Office.
 # The LICENSE.md file contains full licensing details.
 """
-Generates the variables.txt file from the ESMValTool recipes.
+Create a variables file to standardise model data with CDDS.
 """
 import os
 import yaml
@@ -116,7 +116,7 @@ def write_variables(variables, output_filepath):
 def create_variables_file(
     vars_files_list_dir, stream_config_fp, output_filepath
 ):
-    """Generates the variables.txt file from the ESMValTool recipes."""
+    """Create a variables file to standardise model data with CDDS."""
     variables = combine_variable_lists(vars_files_list_dir)
     streamed_variables = add_stream_to_variables(stream_config_fp, variables)
     logger.info("Writing variables file to %s", output_filepath)
