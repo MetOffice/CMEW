@@ -190,7 +190,7 @@ def test_write_datasets_to_yaml(mock_writing):
         "subdir",
     ],
 )
-def test_list_files_without_full_stop(mock_listdir, mock_dirname, extension):
+def test_list_files(mock_listdir, mock_dirname, extension):
     expected = {
         "this_one": "/a/b/c/this_one.nl",
         "this_two": "/a/b/c/this_two.nl",
