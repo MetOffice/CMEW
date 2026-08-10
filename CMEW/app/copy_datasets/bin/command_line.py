@@ -21,8 +21,7 @@ def parse_args_for_add_datasets_to_share(arguments):
     """
     parser = argparse.ArgumentParser(
         description=(
-            "Copy the datasets defined in namelist files
-            into YAML files."
+            "Copy the datasets defined in namelist files " "into YAML files."
         ),
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
