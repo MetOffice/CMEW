@@ -47,7 +47,7 @@ def parse_args_for_add_datasets_to_share(arguments):
 
 def main_for_add_datasets_to_share(arguments=None):
     """
-    Add details of datasets to a shared directory.
+    Copy dataset information from configuration to the share directory.
 
     Parameters
     ----------
