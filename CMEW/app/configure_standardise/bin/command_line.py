@@ -20,21 +20,21 @@ def parse_args_for_create_variables_file(arguments):
         The names and values of the command line arguments.
     """
     parser = argparse.ArgumentParser(
-        description="Create a request to standardise model data with CDDS.",
+        description="Create a variables file to standardise model data with CDDS.",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     parser.add_argument(
         "--vars_files_list_dir",
         help=(
-            "The path to the directory containing "
+            "The full path to the directory containing "
             "the lists of variables from each recipe."
         ),
     )
     parser.add_argument(
         "--stream_config_fp",
         help=(
-            "The full path to the file where the "
-            "data streams containing each variable are written."
+            "The full path to the file containing "
+            "the data streams for each variable."
         ),
     )
     parser.add_argument(
