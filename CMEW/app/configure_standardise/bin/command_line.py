@@ -21,7 +21,7 @@ def parse_args_for_create_variables_file(arguments):
     """
     parser = argparse.ArgumentParser(
         description=(
-            "Create a variables file to standardise model data with CDDS."
+            "Generates the variables.txt file from the ESMValTool recipes."
         ),
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
