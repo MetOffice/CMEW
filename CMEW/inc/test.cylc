@@ -7,3 +7,8 @@
         [[[environment]]]
             ROSE_TASK_APP = compare
             ROSE_APP_OPT_CONF_KEYS=${CYLC_TASK_PARAM_recipe}
+
+    [[compare<autoassess_area>]]
+        [[[environment]]]
+            ROSE_TASK_APP = compare
+            ROSE_APP_OPT_CONF_KEYS=${CYLC_TASK_PARAM_autoassess_area}
