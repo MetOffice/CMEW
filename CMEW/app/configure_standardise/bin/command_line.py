@@ -74,7 +74,7 @@ def parse_args_for_create_request_file(arguments):
         ),
     )
     parser.add_argument(
-        "--variable_list_file",
+        "--variables_file",
         help=(
             "The full path to the file where the "
             "variables to be retrieved by CDDS are written."
@@ -108,7 +108,7 @@ def main_for_create_request_file(arguments=None):
     print(f"root_proc_dir: {args.root_proc_dir}"),
     print(f"root_data_dir: {args.root_data_dir}"),
     print(f"stream_config_fp: {args.stream_config_fp}"),
-    print(f"variable_list_file: {args.variable_list_file}"),
+    print(f"variables_file: {args.variables_file}"),
     print(f"raw_data_dir_mode: {args.raw_data_dir_mode}"),
     create_request_file(
         args.dataset,
@@ -118,7 +118,6 @@ def main_for_create_request_file(arguments=None):
         args.model_runs_yml_fp,
         args.root_proc_dir,
         args.root_data_dir,
-        args.stream_config_fp,
-        args.variable_list_file,
+        args.variables_file,
         args.raw_data_dir_mode,
     )

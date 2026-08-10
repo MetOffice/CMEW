@@ -92,7 +92,7 @@ def create_request(
     model_runs_yml_fp,
     root_proc_dir,
     root_data_dir,
-    variable_list_file,
+    variables_file,
     raw_data_dir_mode,
 ):
     """
@@ -114,7 +114,7 @@ def create_request(
         The directory for use when processing data with CDDS.
     root_data_dir : str
         The root directory for CDDS to store data.
-    variable_list_file : str
+    variables_file : str
         The full path to the file containing
         the list of variables to be processed.
     raw_data_dir_mode : str
@@ -160,8 +160,8 @@ def create_request(
         "start_date": f"{dataset_dict['start_year']}-01-01T00:00:00",
         "end_date": f"{int(dataset_dict['end_year'])+1}-01-01T00:00:00",
         "model_workflow_id": dataset_dict["suite_id"],
-        "streams": list_streams(variable_list_file),
-        "variable_list_file": variable_list_file,
+        "streams": list_streams(variables_file),
+        "variable_list_file": variables_file,
     }
     request["misc"] = dict(defaults["misc"])
     request["conversion"] = dict(defaults["conversion"])
@@ -204,7 +204,7 @@ def create_request_file(
     model_runs_yml_fp,
     root_proc_dir,
     root_data_dir,
-    variable_list_file,
+    variables_file,
     raw_data_dir_mode,
 ):
     """
@@ -227,7 +227,7 @@ def create_request_file(
         The directory for use when processing data with CDDS.
     root_data_dir : str
         The root directory for CDDS to store data.
-    variable_list_file : str
+    variables_file : str
         The full path to the file containing
         the list of variables to be processed.
     raw_data_dir_mode : str
@@ -242,7 +242,7 @@ def create_request_file(
         model_runs_yml_fp,
         root_proc_dir,
         root_data_dir,
-        variable_list_file,
+        variables_file,
         raw_data_dir_mode,
     )
     write_request(request, output_filepath)
