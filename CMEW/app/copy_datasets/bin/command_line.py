@@ -20,8 +20,10 @@ def parse_args_for_add_datasets_to_share(arguments):
         The names and values of the command line arguments.
     """
     parser = argparse.ArgumentParser(
-        description="Copy dataset lists from the workflow configuration "
-        "to files in a shared directory.",
+        description=(
+            "Copy the datasets defined in namelist files
+            into YAML files."
+        ),
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     parser.add_argument(
@@ -30,7 +32,7 @@ def parse_args_for_add_datasets_to_share(arguments):
     )
     parser.add_argument(
         "--target_dir",
-        help="The directory into which to write dataset lists.",
+        help="The directory into which to write the YAML files.",
     )
     parser.add_argument(
         "--start_year", help="The first year to extract for each dataset."
