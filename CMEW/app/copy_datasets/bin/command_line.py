@@ -58,7 +58,7 @@ def main_for_add_datasets_to_share(arguments=None):
     args = parse_args_for_add_datasets_to_share(arguments)
 
     # Run the code.
-    print("Retrieving variables from recipe.")
+    print("Copying dataset information to the share directory.")
     print(f"Directory containing nl files: {args.source_dir}")
     print(f"Directory to output dataset lists: {args.target_dir}")
     print(f"Start year: {args.start_year}")
