@@ -67,8 +67,8 @@ def add_stream_to_variables(stream_config_fp, variables):
     Parameters
     ----------
     stream_config_fp : str
-        The full path to the file where the
-        data streams containing each variable are written.
+        The full path to the file containing
+        the data streams for each variable.
     variables : list[str]
         List of variables in the format "MIP_table/variable_name"
 
