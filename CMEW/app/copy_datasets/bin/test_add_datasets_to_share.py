@@ -25,6 +25,7 @@ from add_datasets_to_share import (
     use_facet_as_key,
 )
 import yaml
+import pytest
 import shutil
 import tempfile
 from unittest.mock import patch
@@ -178,6 +179,7 @@ def test_write_datasets_to_yaml(mock_writing):
     assert mock_writing.call_args.args[1] == "/a/b/test_name.yml"
 
 
+@pytest.mark.parametrize("extension", ["nl", ".nl"])
 @patch("os.path.dirname", return_value="/a/b/c")
 @patch(
     "os.listdir",
@@ -188,33 +190,13 @@ def test_write_datasets_to_yaml(mock_writing):
         "subdir",
     ],
 )
-def test_list_files_with_full_stop(mock_listdir, mock_dirname):
+def test_list_files_without_full_stop(mock_listdir, mock_dirname, extension):
     expected = {
         "this_one": "/a/b/c/this_one.nl",
         "this_two": "/a/b/c/this_two.nl",
     }
     mock_src_dir = "/a/b/c"
-    actual = list_files(mock_src_dir, ".nl")
-    assert expected == actual
-
-
-@patch("os.path.dirname", return_value="/a/b/c")
-@patch(
-    "os.listdir",
-    return_value=[
-        "this_one.nl",
-        "this_two.nl",
-        "not_this_one.txt",
-        "subdir",
-    ],
-)
-def test_list_files_without_full_stop(mock_listdir, mock_dirname):
-    expected = {
-        "this_one": "/a/b/c/this_one.nl",
-        "this_two": "/a/b/c/this_two.nl",
-    }
-    mock_src_dir = "/a/b/c"
-    actual = list_files(mock_src_dir, "nl")
+    actual = list_files(mock_src_dir, extension)
     assert expected == actual
 
 
