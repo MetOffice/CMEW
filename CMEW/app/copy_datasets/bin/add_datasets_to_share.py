@@ -110,14 +110,22 @@ def convert_str_to_facets(section):
     return section_dict
 
 
-def add_common_facets(dataset_dict, project):
+def add_common_facets(
+    start_year, number_of_years, dataset_dict, institute, project
+):
     """
     Add start year, end year and project to a dataset dictionary.
 
     Parameters
     ----------
+    start_year: str
+        The first year to extract for each dataset.
+    number_of_years: str
+        The number of years to extract for each dataset.
     dataset_dict: dict
         A dictionary containing the facets of a dataset.
+    institute: str
+        The institution ID to add to the datasets.
     project: str
         A string indicating the project to which the dataset belongs.
 
@@ -126,11 +134,10 @@ def add_common_facets(dataset_dict, project):
     dataset_dict: dict
         The input dataset dictionary with the common facets added.
     """
-    # Read the time window from environment
-    start_year = int(os.environ["START_YEAR"])
-    end_year = (
-        int(os.environ["START_YEAR"]) + int(os.environ["NUMBER_OF_YEARS"]) - 1
-    )
+    # Convert start year to int
+    start_year = int(start_year)
+    # Calculate the end year
+    end_year = start_year + int(number_of_years) - 1
     logger.info("Found start year %s and end year %s", start_year, end_year)
 
     # Add the start year, end year and project to the dataset dictionary
@@ -143,12 +150,14 @@ def add_common_facets(dataset_dict, project):
         logger.debug("Adding CMEW model run facets")
         dataset_dict["activity"] = "ESMVal"
         dataset_dict["grid"] = "gn"
-        dataset_dict["institute"] = os.environ["INSTITUTION_ID"]
+        dataset_dict["institute"] = institute
 
     return dataset_dict
 
 
-def process_naml_file(naml_fp, project=None):
+def process_naml_file(
+    naml_fp, start_year, number_of_years, institute, project=None
+):
     """
     Extract the datasets and their facets from a namelist file.
 
@@ -156,6 +165,12 @@ def process_naml_file(naml_fp, project=None):
     ----------
     naml_fp: str
         The file path to the namelist file containing the datasets.
+    start_year: str
+        The first year to extract for each dataset.
+    number_of_years: str
+        The number of years to extract for each dataset.
+    institute: str
+        The institution ID to add to the datasets.
     project: str, optional
         A string indicating the project to which the dataset belongs.
 
@@ -169,7 +184,9 @@ def process_naml_file(naml_fp, project=None):
     sections = extract_sections_from_naml(naml_fp)
     for section in sections:
         dataset_dict = convert_str_to_facets(section)
-        dataset_dict = add_common_facets(dataset_dict, project)
+        dataset_dict = add_common_facets(
+            start_year, number_of_years, dataset_dict, institute, project
+        )
         datasets.append(dataset_dict)
     return datasets
 
@@ -216,31 +233,34 @@ def write_datasets_to_yaml(datasets, name, target_dir):
     write_dict_to_yaml(datasets, target_fp)
 
 
-def dict_namelists_in_workflow_dir():
+def list_files(directory, extension):
     """
-    Looks for namelist files in the main workflow directory.
+    Looks for files in a directory based on the file suffix.
+
+    Parameters
+    ----------
+    directory: str
+        The directory containing the files to return.
+    extension: str
+        The file suffix to match.
 
     Returns
     -------
-    filepaths: dict
-        A dictionary of namelist file basenames and their file paths
-        based on the filenames ending ".nl".
+    dict
+        A dictionary of file base names and their file paths.
     """
     filepaths = {}
 
-    # Namelist files are written to the main workflow directory
-    workflow_dir = os.getenv("CYLC_WORKFLOW_RUN_DIR")
-
     # Grab all the namelist files, in case we add more in future
-    for file in os.listdir(workflow_dir):
-        if file.endswith(".nl"):
+    for file in os.listdir(directory):
+        if file.endswith(extension):
             logger.debug("Found file %s", file)
 
             # Read the name of the file for the key, minus ".nl"
             basename = os.path.basename(file)[:-3]
 
             # Use the filepath for the value
-            namelist_fp = os.path.join(workflow_dir, file)
+            namelist_fp = os.path.join(directory, file)
 
             # Add to the dictionary
             filepaths[basename] = namelist_fp
@@ -311,23 +331,42 @@ def add_reference_key(filepath):
         yaml.dump(dataset_dict, f)
 
 
-def main():
-    """Copy dataset information from configuration to the share directory."""
-    # Read the target (shared) directory from the environment
-    target_dir = os.environ["DATASETS_LIST_DIR"]
+def add_datasets_to_share(
+    source_dir, target_dir, start_year, number_of_years, institute
+):
+    """
+    Copy the datasets defined in namelist files into YAML files.
 
+    Parameters
+    ----------
+    source_dir, : str
+        The directory containing the namelist files of datasets.
+    target_dir: str
+        The directory into which to write dataset lists.
+    start_year: str
+        The first year to extract for each dataset.
+    number_of_years: str
+        The number of years to extract for each dataset.
+    institute: str
+        The institution ID to add to the datasets.
+    """
     # Create the target directory if it doesn't exist
     os.makedirs(target_dir, exist_ok=True)
 
     # Loop over the namelist files in the work directory
-    for basename, nl_fp in dict_namelists_in_workflow_dir().items():
+    for basename, nl_fp in list_files(
+        source_dir,
+        ".nl",
+    ).items():
         logger.info("Found file %s", basename)
 
         # Check if it's model runs
         if basename == "model_runs":
 
             # Write the datasets to a YAML file with ESMVal project
-            datasets = process_naml_file(nl_fp, "ESMVal")
+            datasets = process_naml_file(
+                nl_fp, start_year, number_of_years, institute, "ESMVal"
+            )
             # Update the experiment to encode the suite ID
             for dataset in datasets:
                 dataset["experiment_id"] = (
@@ -340,7 +379,9 @@ def main():
         if basename == "cmip6_datasets":
 
             # Write the datasets to a YAML file with CMIP6 project
-            datasets = process_naml_file(nl_fp, "CMIP6")
+            datasets = process_naml_file(
+                nl_fp, start_year, number_of_years, institute, "CMIP6"
+            )
             logger.info("Writing CMIP6 runs YAML")
             write_datasets_to_yaml(datasets, basename, target_dir)
 
@@ -353,7 +394,3 @@ def main():
     # Add the reference identifier
     logger.info("Adding benchmarking key to model runs YAML")
     add_reference_key(model_runs_yaml)
-
-
-if __name__ == "__main__":
-    main()
