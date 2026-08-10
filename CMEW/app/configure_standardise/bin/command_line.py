@@ -20,7 +20,9 @@ def parse_args_for_create_variables_file(arguments):
         The names and values of the command line arguments.
     """
     parser = argparse.ArgumentParser(
-        description="Create a variables file to standardise model data with CDDS.",
+        description=(
+            "Create a variables file to standardise model data with CDDS."
+        ),
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     parser.add_argument(
