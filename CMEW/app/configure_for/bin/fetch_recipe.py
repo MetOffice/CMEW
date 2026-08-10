@@ -14,9 +14,8 @@ logger = logging.getLogger(filename)
 
 def retrieve_name_and_fp(recipe_id, recipe_dict_fp):
     """
-    Looks in recipe_paths.yml for an entry or constructs default values.
-
-    Uses the environment variable CYLC_TASK_PARAM_recipe as a dict key.
+    Return the name of a recipe and its location within
+    ``esmvaltool/recipes``.
 
     Parameters
     ----------
