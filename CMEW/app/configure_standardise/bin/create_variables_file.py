@@ -1,70 +1,99 @@
 #!/usr/bin/env python
-# (C) Crown Copyright 2024-2025, Met Office.
+# (C) Crown Copyright 2024-2026, Met Office.
 # The LICENSE.md file contains full licensing details.
 """
 Generates the variables.txt file from the ESMValTool recipe.
 """
 import os
-from esmvalcore.experimental.recipe import Recipe
+import yaml
+import sys
+import logging
 
 
-def parse_variables_from_recipe(recipe_path):
-    """Retrieve variables from ESMValTool recipe.
+logging.basicConfig(level=logging.INFO, stream=sys.stdout)
+filename = os.path.basename(__file__)
+logger = logging.getLogger(filename)
 
-    * Read the ESMValTool recipe YAML file from the provided ``recipe_path``
-    * For each diagnostic defined in the recipe, extract the variables required
-      for that diagnostic
-    * For each variable, extract the mip table name
-    * Output a newline-separated list of variables, with each line formatted
-      as ``<mip>/<variable>:<stream>``
 
-    Recipe file snippet::
+def combine_variable_lists(directory):
+    """Combine all variables list files from a directory.
 
-        diagnostics:
-          <diagnostic_1>:
-            variables:
-              <variable_1a>:
-                mip: <mip_1a>
-              <variable_1b>:
-                mip: <mip_1b>
-          <diagnostic_2>:
-            variables:
-              <variable_2a>:
-                mip: <mip_2a>
-              <variable_2b>:
-                mip: <mip_2b>
-
-    Will be formatted as::
-
-        <mip_1a>/<variable_1a>:<stream>
-        <mip_1b>/<variable_1b>:<stream>
-        <mip_2a>/<variable_2a>:<stream>
-        <mip_2b>/<variable_2b>:<stream>
+    Looks for files ending with "_variables.txt" in the specified directory,
+    reads the lines of each file, deletes any duplicates and
+    then returns a single list of unique lines.
 
     Parameters
     ----------
-    recipe_path : str
-        Location of the ESMValTool recipe file.
+    directory : str
+        Path to the directory containing variables list files.
+    Returns
+    -------
+    list[str]
+        A combined list of unique variables from all files in the directory.
+    """
+    variables = []
+    for filename in sorted(os.listdir(directory)):  # sorted only to unit test
+        if filename.endswith("_variables.txt"):
+            logger.debug("Reading variables from %s", filename)
+            with open(os.path.join(directory, filename), "r") as file:
+                recipe_vars = file.read().splitlines()
+                for var in recipe_vars:
+                    if var not in variables:
+                        logger.debug("Found variable %s", var)
+                        variables.append(var)
+    return variables
+
+
+def load_stream_dict():
+    """
+    Loads stream information from the ../etc/streams.yml file.
+
+    Returns
+    -------
+    dict
+        A mapping of pre-defined streams to their associated variables
+    """
+    # Get path to stream mappings
+    streams_config = os.environ["STREAM_CONFIG_PATH"]
+    logger.debug("Reading streams from %s", streams_config)
+
+    # Read the stream mappings
+    with open(streams_config, "r") as f:
+        config = yaml.safe_load(f)
+
+    # Return the whole dictionary
+    return config
+
+
+def add_stream_to_variables(variables):
+    """Add stream information to a list of variables.
+
+    Parameters
+    ----------
+    variables : list[str]
+        List of variables in the format "MIP_table/variable_name"
 
     Returns
     -------
     list[str]
-        List of variables from the ESMValTool recipe,
-        formatted as ``<mip>/<variable>:<stream>``.
+        List of variables in the format "MIP_table/variable_name:stream"
     """
-    # For now, hard-code stream to apm, this is correct for Amon and Emon mip.
-    stream = "apm"
-    recipe = Recipe(recipe_path)
-    diagnostics = recipe.data["diagnostics"]
-    formatted_variables = []
-    for diagnostic in diagnostics:
-        variables = diagnostics[diagnostic]["variables"]
-        for variable in variables:
-            mip = variables[variable]["mip"]
-            formatted_variable = f"{mip}/{variable}:{stream}"
-            if formatted_variable not in formatted_variables:
-                formatted_variables.append(formatted_variable)
-    return formatted_variables
+    stream_dict = load_stream_dict()
+
+    # Using a second dictionary to avoid looping
+    var_to_stream = {
+        var: stream
+        for stream, var_list in stream_dict.items()
+        for var in var_list
+    }
+
+    # Listing the input variables together with their stream
+    streamed_variables = [
+        f"{var}:{var_to_stream.get(var)}" for var in variables
+    ]
+    logger.debug("Variables with streams:\n%s", streamed_variables)
+
+    return streamed_variables
 
 
 def write_variables(variables, target_path):
@@ -79,14 +108,18 @@ def write_variables(variables, target_path):
         Location to write the variables file.
     """
     variables_str = "\n".join(variables) + "\n"
+    logger.debug("Writing variables:\n%s", variables_str)
+
     with open(target_path, "w") as target_file:
         target_file.write(variables_str)
 
 
 def main():
-    recipe_path = os.environ["RECIPE_PATH"]
-    variables = parse_variables_from_recipe(recipe_path)
-    write_variables(variables, os.environ["VARIABLES_PATH"])
+    variables = combine_variable_lists(os.environ["VARIABLES_LIST_DIR"])
+    streamed_variables = add_stream_to_variables(variables)
+    variables_path = os.environ["VARIABLES_PATH"]
+    logger.info("Writing variables file to %s", variables_path)
+    write_variables(streamed_variables, variables_path)
 
 
 if __name__ == "__main__":

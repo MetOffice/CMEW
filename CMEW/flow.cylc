@@ -4,12 +4,20 @@
 # flow.cylc
 {{ assert(SITE != "", "SITE must be set to something other than an empty string") }}
 {{ assert(ESMVALTOOL_MODULE_NAME != "", "ESMVALTOOL_MODULE_NAME must be set to something other than an empty string") }}
+{% set SKIP_CDDS = SKIP_CDDS | default(false) %}
+
+{% from "scrape_ini" import list_datasets %}
+{% set datasets = list_datasets("rose-suite.conf") %}
 
 [scheduler]
     UTC mode = True
 
 [task parameters]
+    dataset = {{ datasets }}
     recipe = radiation_budget
+{%- if not UNITTEST and AUTOASSESS %}
+    autoassess_area = monsoon, africa
+{%- endif %}
 
 [scheduling]
     [[graph]]
@@ -17,14 +25,31 @@
 {%- if UNITTEST or TEST %}
             install_env_file => unittest
 {%- endif %}
-{%- if not UNITTEST %}
-            install_env_file => configure_recipe & configure_for<recipe>
-            configure_for<recipe> => configure_standardise<recipe>
-            configure_recipe => run_recipe<recipe>
-            configure_standardise<recipe> => standardise_model_data => run_recipe<recipe> & housekeeping
+{%- if USE_ESMVALTOOL_BRANCH %}
+            install_env_file => get_esmval_branch => configure_recipe & copy_datasets
+{%- endif %}
+{%- if not UNITTEST and not SKIP_CDDS %}
+            install_env_file => configure_recipe & copy_datasets
+            copy_datasets => configure_for<recipe>
+            configure_for<recipe> => configure_standardise<recipe,dataset>
+                => standardise_model_data<dataset> => restructure_dirs
+            configure_recipe & restructure_dirs => run_recipe<recipe>
+                => housekeeping
+
     {%- if TEST %}
             run_recipe<recipe> => compare<recipe>
     {%- endif %}
+{%- endif %}
+{%- if SKIP_CDDS %}
+    {%- if USE_ESMVALTOOL_BRANCH %}
+            install_env_file => get_esmval_branch => configure_recipe & copy_datasets
+    {%- endif %}
+            install_env_file
+            => configure_recipe & copy_datasets
+            => configure_for<recipe>
+            => symlink_standardised_data
+            => run_recipe<recipe>
+            => housekeeping
 {%- endif %}
         """
 
@@ -34,44 +59,49 @@
         env-script = "eval $(rose task-env)"
         platform = localhost
         [[[environment]]]
+            ESMVALTOOL_DIR=${CYLC_WORKFLOW_RUN_DIR}/lib/python/ESMValTool
             ESMVALTOOL_MODULE_NAME = {{ ESMVALTOOL_MODULE_NAME }}
-            USER_CONFIG_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/etc
-            USER_CONFIG_PATH = ${USER_CONFIG_DIR}/config-user.yml
+            ESMVALTOOL_CONFIG_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/etc/esmvaltool_config
+            USER_CONFIG_PATH = ${ESMVALTOOL_CONFIG_DIR}/config-user.yml
+            DEV_CONFIG_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/config-developer.yml
             OUTPUT_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/cycle/${CYLC_TASK_CYCLE_POINT}
+            PYTHONPATH_PREPEND = ${ESMVALTOOL_DIR}
             SHARE_DATA_CDDS = ${CYLC_WORKFLOW_SHARE_DIR}/data/cdds
             ROOT_PROC_DIR = ${SHARE_DATA_CDDS}/proc
             ROOT_DATA_DIR = ${SHARE_DATA_CDDS}/cdds_data
-            REQUEST_PATH_REF  = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request_ref.cfg
-            REQUEST_PATH_EVAL = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request_eval.cfg
-            VARIABLES_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/variables.txt
+            ROOT_RESTRUCTURED_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/work
 
     [[RECIPE]]
         [[[environment]]]
-            RECIPE_NAME = "recipe_${CYLC_TASK_PARAM_recipe}.yml"
-            RECIPE_PATH = "${CYLC_WORKFLOW_SHARE_DIR}/etc/${RECIPE_NAME}"
+            RECIPE_DICT_PATH = ${CYLC_WORKFLOW_RUN_DIR}/app/configure_for/etc/recipe_paths.yml
+            RECIPE_PATH = "${CYLC_WORKFLOW_SHARE_DIR}/etc/recipe_${CYLC_TASK_PARAM_recipe}.yml"
+            VARIABLES_LIST_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/variables_lists
+            RECIPE_VARIABLES_PATH = ${VARIABLES_LIST_DIR}/${CYLC_TASK_PARAM_recipe}_variables.txt
 
     [[STANDARDISE]]
         [[[environment]]]
             CDDS_BIN_DIR = "~cdds/bin"
             CDDS_SOFTWARE_DIR = "~cdds/software"
+            RAW_DATA_DIR = {{ RAW_DATA_DIR | default("") }}
+            RAW_DATA_DIR_MODE = {{ RAW_DATA_DIR_MODE }}
+            REQUEST_DEFAULTS_PATH = ${CYLC_WORKFLOW_RUN_DIR}/app/configure_standardise/etc/request_defaults.yml
+            STREAM_CONFIG_PATH = ${CYLC_WORKFLOW_RUN_DIR}/app/configure_standardise/etc/streams.yml
             # Workaround for bug in CDDS: ROOT_SOFTWARE_DIR: unbound variable.
             ROOT_SOFTWARE_DIR = ${CDDS_SOFTWARE_DIR}
             CDDS_VERSION = {{ CDDS_VERSION }}
 
-    # Multi-run metadata family: reference and evaluation runs
+    [[DATASET]]
+        [[[environment]]]
+            REQUEST_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request_${CYLC_TASK_PARAM_dataset}.cfg
+            VARIABLES_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/variables_${CYLC_TASK_PARAM_dataset}.txt
+            RAW_DATA_DIR_SUITE = {{ RAW_DATA_DIR | default("") }}"/$CYLC_TASK_PARAM_dataset"
+
     [[MODEL_RUNS]]
         [[[environment]]]
-            # Reference run metadata
-            REF_MODEL_ID = {{ REF_MODEL_ID }}
-            REF_SUITE_ID = {{ REF_SUITE_ID }}
-            REF_CALENDAR = {{ REF_CALENDAR }}
-            REF_VARIANT_LABEL = {{ REF_VARIANT_LABEL }}
-
-            # Evaluation run metadata
-            MODEL_ID = {{ MODEL_ID }}
-            SUITE_ID = {{ SUITE_ID }}
-            CALENDAR = {{ CALENDAR }}
-            VARIANT_LABEL = {{ VARIANT_LABEL }}
+            # Directory containing dataset lists as YAML files
+            DATASETS_LIST_DIR = "${CYLC_WORKFLOW_SHARE_DIR}/dataset_lists"
+            START_YEAR = {{ START_YEAR }}
+            NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
 
     [[install_env_file]]
         [[[environment]]]
@@ -79,47 +109,34 @@
 
     [[configure_recipe]]
         [[[environment]]]
-            DRS_CMIP3 = {{ DRS_CMIP3 }}
-            DRS_CMIP5 = {{ DRS_CMIP5 }}
+            CMEW_DATA_FOR_ESMVAL_DIR = ${ROOT_RESTRUCTURED_DIR}/GCModelDev
             DRS_CMIP6 = {{ DRS_CMIP6 }}
-            DRS_CORDEX = {{ DRS_CORDEX }}
-            DRS_OBS = {{ DRS_OBS }}
-            DRS_OBS6 = {{ DRS_OBS6 }}
-            DRS_ANA4MIPS = {{ DRS_ANA4MIPS }}
-            DRS_NATIVE6 = {{ DRS_NATIVE6 }}
             DRS_OBS4MIPS = {{ DRS_OBS4MIPS }}
             MAX_PARALLEL_TASKS = {{ MAX_PARALLEL_TASKS }}
-            ROOTPATH_CMIP3 = {{ ROOTPATH_CMIP3 }}
-            ROOTPATH_CMIP5 = {{ ROOTPATH_CMIP5 }}
+            MIP_TABLE_DIR = {{ MIP_TABLE_DIR }}
             ROOTPATH_CMIP6 = {{ ROOTPATH_CMIP6 }}
-            ROOTPATH_CORDEX = {{ ROOTPATH_CORDEX }}
-            ROOTPATH_OBS = {{ ROOTPATH_OBS }}
-            ROOTPATH_OBS6 = {{ ROOTPATH_OBS6 }}
-            ROOTPATH_ANA4MIPS = {{ ROOTPATH_ANA4MIPS }}
-            ROOTPATH_NATIVE6 = {{ ROOTPATH_NATIVE6 }}
             ROOTPATH_OBS4MIPS = {{ ROOTPATH_OBS4MIPS }}
-            ROOTPATH_RAWOBS = {{ ROOTPATH_RAWOBS }}
 
     [[configure_for<recipe>]]
         inherit = None, RECIPE, MODEL_RUNS
         [[[environment]]]
             ROSE_TASK_APP = configure_for
-            START_YEAR = {{ START_YEAR }}
-            NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
-            LABEL_FOR_PLOTS = {{ LABEL_FOR_PLOTS }}
-            SUITE_ID = {{ SUITE_ID }}
-            REF_LABEL_FOR_PLOTS = {{ REF_LABEL_FOR_PLOTS }}
-            REF_SUITE_ID = {{ REF_SUITE_ID }}
 
-    [[configure_standardise<recipe>]]
-        inherit = STANDARDISE, RECIPE, MODEL_RUNS
+    [[configure_standardise<recipe,dataset>]]
+        inherit = STANDARDISE, RECIPE, MODEL_RUNS, DATASET
         [[[environment]]]
             ROSE_TASK_APP = configure_standardise
             START_YEAR = {{ START_YEAR }}
             NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
+            MIP_TABLE_DIR = {{ MIP_TABLE_DIR }}
 
-    [[standardise_model_data]]
-        inherit = STANDARDISE, MODEL_RUNS
+    [[standardise_model_data<dataset>]]
+        inherit = STANDARDISE, DATASET
+        [[[environment]]]
+            ROSE_TASK_APP = standardise_model_data
+
+    [[restructure_dirs]]
+        inherit = STANDARDISE
         [[[environment]]]
             SITE = {{ SITE }}
 
@@ -127,6 +144,20 @@
         inherit = None, COMPUTE, RECIPE
         [[[environment]]]
             ROSE_TASK_APP = run_recipe
+
+    [[copy_datasets]]
+        inherit = MODEL_RUNS
+        [[[environment]]]
+            ROSE_TASK_APP = copy_datasets
+
+    [[get_esmval_branch]]
+        [[[environment]]]
+            ESMVALTOOL_BRANCH = {{ ESMVALTOOL_BRANCH | default("") }}
+
+    [[symlink_standardised_data]]
+        inherit = STANDARDISE
+        [[[environment]]]
+            STANDARDISED_DATA_DIR = {{ STANDARDISED_DATA_DIR | default("") }}
 
     [[housekeeping]]
 
@@ -136,4 +167,9 @@
     {%- if TEST %}
         {% include "inc/test.cylc" %}
     {%- endif %}
+{%- endif %}
+
+{%- if not UNITTEST and AUTOASSESS %}
+    {% include "site/" ~ SITE ~ "_autoassess.cylc" %}
+    {% include "inc/autoassess.cylc" %}
 {%- endif %}

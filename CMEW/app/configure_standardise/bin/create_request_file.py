@@ -2,69 +2,149 @@
 # (C) Crown Copyright 2024-2026, Met Office.
 # The LICENSE.md file contains full licensing details.
 """
-Generates the request configuration file from the ESMValTool recipe.
+Generate CDDS request configuration file.
 """
 import configparser
 import os
+import sys
 from pathlib import Path
+import yaml
+import logging
+
+logging.basicConfig(level=logging.INFO, stream=sys.stdout)
+filename = os.path.basename(__file__)
+logger = logging.getLogger(filename)
 
 
-def create_request():
-    """Retrieve CDDS request information from Rose suite configuration.
+def load_request_defaults():
+    """
+    Load default values for request file.
 
     Returns
     -------
-    configparser.ConfigParser()
+    dict
+        CDDS request configuration default settings.
+    """
+    # Get path to default settings
+    defaults = os.environ["REQUEST_DEFAULTS_PATH"]
+
+    # Read the defaults
+    with open(defaults, "r") as f:
+        config = yaml.safe_load(f)
+
+    logger.debug(
+        "Default config:\n%s",
+        config,
+    )
+    return config
+
+
+def list_streams(variables_file):
+    """
+    Lists all streams from a single variables file.
+
+    Parameters
+    ----------
+    variables_file: str
+        The full path to the variables file.
+
+    Returns
+    -------
+    str
+        Space separated list of all streams.
+    """
+    # Read the stream mappings
+    with open(variables_file, "r") as file_handle:
+        variables = file_handle.readlines()
+        logger.debug(
+            "All variables:\n%s",
+            variables,
+        )
+
+    # List all streams (keys)
+    all_streams = []
+    for line in variables:
+        # Get the whole stream including substream
+        whole_stream = line.strip().split(":")[-1]
+
+        # But don't list the substream
+        stream = whole_stream.split("/")[0]
+
+        # Only add unique streams
+        if stream not in all_streams:
+            all_streams.append(stream)
+
+    # Return as a space separated list
+    stream_str = " ".join(all_streams)
+    logger.debug(
+        "Stream string:\n%s",
+        stream_str,
+    )
+
+    return stream_str
+
+
+def create_request(model_run):
+    """
+    Build a CDDS request configuration for a run identified by a suite_id.
+
+    Uses information from the model_runs.yml file.
+
+    Returns
+    -------
+    dict
         CDDS request configuration.
     """
-    end_year = int(os.environ["START_YEAR"]) + int(
-        os.environ["NUMBER_OF_YEARS"]
+    defaults = load_request_defaults()
+
+    mip_table_dir = os.environ["MIP_TABLE_DIR"]
+
+    # Read the model run information from the model_runs.yml file
+    model_runs_yaml = Path(os.environ["DATASETS_LIST_DIR"]) / "model_runs.yml"
+    with open(model_runs_yaml, "r") as f:
+        dataset_dict = yaml.safe_load(f)[model_run]
+    logger.debug(
+        "Dataset % config:\n%s",
+        model_run,
+        dataset_dict,
     )
-    request = configparser.ConfigParser()
+
+    # Create the CDDS request
+    request = {}
     request["metadata"] = {
-        "base_date": "1850-01-01T00:00:00",
-        "branch_method": "no parent",
-        "calendar": os.environ["CALENDAR"],
-        "experiment_id": "amip",
-        "institution_id": os.environ["INSTITUTION_ID"],
-        "license": "GCModelDev model data is licensed under the Open Government License v3 (https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/)",  # noqa: E501
-        "mip": "ESMVal",
-        "mip_era": "GCModelDev",
-        "model_id": os.environ["MODEL_ID"],
-        "model_type": "AGCM AER",
-        "sub_experiment_id": "none",
-        "variant_label": os.environ["VARIANT_LABEL"],
+        **defaults["metadata"],
+        # The internal dictionary replaces the T with a space
+        "base_date": defaults["metadata"]["base_date"].isoformat(),
+        "calendar": dataset_dict["calendar"],
+        "experiment_id": dataset_dict["experiment_id"],
+        "institution_id": dataset_dict["institute"],
+        "model_id": dataset_dict["model_id"],
+        "variant_label": dataset_dict["variant_label"],
     }
     request["common"] = {
-        "external_plugin": "",
-        "external_plugin_location": "",
-        "mip_table_dir": os.path.expanduser(
-            "~cdds/etc/mip_tables/GCModelDev/0.0.25"
-        ),
-        "mode": "relaxed",
-        "package": "round-1",
+        **defaults["common"],
+        "mip_table_dir": os.path.expanduser(mip_table_dir),
         "root_proc_dir": os.environ["ROOT_PROC_DIR"],
         "root_data_dir": os.environ["ROOT_DATA_DIR"],
-        "workflow_basename": os.environ["SUITE_ID"],
+        "workflow_basename": dataset_dict["suite_id"],
     }
     request["data"] = {
-        "end_date": f"{end_year}-01-01T00:00:00",
-        "mass_data_class": "crum",
-        "model_workflow_branch": "trunk",
-        "model_workflow_id": os.environ["SUITE_ID"],
-        "model_workflow_revision": "not used except with data request",
-        "start_date": f"{os.environ['START_YEAR']}-01-01T00:00:00",
-        "streams": "apm",
+        **defaults["data"],
+        "start_date": f"{dataset_dict['start_year']}-01-01T00:00:00",
+        "end_date": f"{int(dataset_dict['end_year'])+1}-01-01T00:00:00",
+        "model_workflow_id": dataset_dict["suite_id"],
+        "streams": list_streams(os.environ["VARIABLES_PATH"]),
         "variable_list_file": os.environ["VARIABLES_PATH"],
     }
-    request["misc"] = {
-        "atmos_timestep": "1200",
-    }
-    request["conversion"] = {
-        "mip_convert_plugin": "UKESM1",
-        "skip_archive": "True",
-        "cylc_args": "--no-detach -v",
-    }
+    request["misc"] = dict(defaults["misc"])
+    request["conversion"] = dict(defaults["conversion"])
+    if os.environ["RAW_DATA_DIR_MODE"] == "use_saved":
+        request["conversion"]["skip_extract"] = "True"
+    request["netcdf_global_attributes"] = dict(
+        defaults["netcdf_global_attributes"]
+    )
+
+    logger.debug("Request config:\n%s", request)
     return request
 
 
@@ -73,20 +153,35 @@ def write_request(request, target_path):
 
     Parameters
     ----------
-    request : configparser.ConfigParser()
+    request : dict
         The request configuration.
 
     target_path: Path
         The full path to the file
         where the request configuration will be written.
     """
+    cfg = configparser.ConfigParser()
+    cfg.read_dict(request)
+
+    logger.debug("Writing request config:\n%s", cfg)
+
     with open(target_path, mode="w") as file_handle:
-        request.write(file_handle)
+        cfg.write(file_handle)
 
 
 def main():
+    """
+    Generate and write the request file for the current task environment.
+
+    The output file location is taken from the REQUEST_PATH environment
+    variable. All other required inputs are read from the environment
+    by ``create_request()``.
+    """
+    dataset = os.environ["CYLC_TASK_PARAM_dataset"].strip()
+    logger.info("Creating CDDS request for dataset %s", dataset)
+
+    request = create_request(dataset)
     target_path = Path(os.environ["REQUEST_PATH"])
-    request = create_request()
     write_request(request, target_path)
 
 
