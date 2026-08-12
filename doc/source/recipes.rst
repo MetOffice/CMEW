@@ -7,6 +7,16 @@ Available recipes
 
 .. include:: common.txt
 
-The following recipes are currently available in |CMEW|:
+The following recipes are currently available in |CMEW|.
 
-* `Radiation budget`_ (implemented in |ESMValTool|)
+Implemented in |ESMValTool|:
+
+* `Radiation budget`_
+
+Implemented in |AutoAssess|:
+
+.. toctree::
+   :maxdepth: 1
+
+   areas/monsoon.rst
+   areas/africa.rst
