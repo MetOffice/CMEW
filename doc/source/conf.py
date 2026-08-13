@@ -53,5 +53,8 @@ html_theme = "sphinx_rtd_theme"
 html_static_path = ["_static"]
 
 # Ignore the following URLs when running linkcheck.
-linkcheck_ignore = [r"https://github.com/MetOffice/CMEW.*"]
-linkcheck_ignore = [r"https://wcrp-cmip.org/"]
+linkcheck_ignore = [
+    r"https://github.com/MetOffice/AutoAssess",
+    r"https://github.com/MetOffice/CMEW.*",
+    r"https://wcrp-cmip.org/",
+]
