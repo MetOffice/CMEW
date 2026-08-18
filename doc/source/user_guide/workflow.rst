@@ -202,8 +202,7 @@ The |AutoAssess| assessments use the following steps:
   :Executes:
      The |AutoAssess| ``aa_run_area`` script from the ``aa_run_area`` |Rose| app
   :Details:
-     This task runs on a per area basis. The areas ``australia`` and ``mjo``
-     have bespoke scripts triggered via an optional optional configuration.
+     This task runs on a per area basis.
 
 ``nac_plot<area>``
   :Description:
