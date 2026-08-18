@@ -159,6 +159,89 @@ An overview of the workflow
      Runs on its own when ``-O unittest`` command is invoked, or runs alongside the
      full workflow when running with ``-O test``.
 
+The |AutoAssess| assessments use the following steps:
+
+``install_autoassess``
+  :Description:
+     Installs the |AutoAssess| code base locally so the workflow can make use of it
+  :Runs on:
+     Localhost
+  :Executes:
+     The ``install_autoassess.sh`` script from the |Rose| app
+  :Details:
+     Makes use of the |Rose| install capabilities to copy a specified commit of
+     the |AutoAssess| repository to the workflow share directory. The script
+     then runs a pip install command to create the required executables in the
+     required location.
+
+``retrieve_data<area><dataset>``
+  :Description:
+     Retrieves UM model data from MASS in PP format
+  :Runs on:
+     Localhost
+  :Executes:
+     The |AutoAssess| ``aa_retriever`` script from the ``aa_retrieve_data`` |Rose| app
+  :Details:
+     This task runs on a per area and per dataset basis
+
+``index_data<area><dataset>``
+  :Description:
+     Prepares the retrieved model data in a form that can be more quickly read by Iris
+  :Runs on:
+     Localhost
+  :Executes:
+     The |AutoAssess| ``aa_data_indexer`` script from the ``aa_index_data`` |Rose| app
+  :Details:
+     This task runs on a per area and per dataset basis
+
+``run_area<area>``
+  :Description:
+     Runs the |AutoAssess| area assessment
+  :Runs on:
+     Localhost
+  :Executes:
+     The |AutoAssess| ``aa_run_area`` script from the ``aa_run_area`` |Rose| app
+  :Details:
+     This task runs on a per area basis.
+
+``nac_plot<area>``
+  :Description:
+     Produces a Normalised Assessment Criteria (NAC) plot based on the calculated
+     metrics in the ``run_area<area>`` task
+  :Runs on:
+     Localhost
+  :Executes:
+     The |AutoAssess| ``aa_create_nac_plots`` script from the ``aa_nac_plot`` |Rose| app
+  :Details:
+     This task runs after the ``run_area<area>`` task on a per area basis. The
+     inputs are csv files containing metric values generated from the
+     ``run_area<area>`` task.
+
+``html_page<area>``
+  :Description:
+     Produces an HTML page containing the results of the area assessment
+  :Runs on:
+     Localhost
+  :Executes:
+     The |AutoAssess| ``aa_create_page`` script from the ``aa_html_page`` |Rose| app
+  :Details:
+     This task runs on a per area basis, and runs after the ``nac_plot<area>``
+     task. It uses a jinja2 template from the |AutoAssess| code base along with
+     information on the assessment period and the datasets being assessed.
+
+``html_page_overview``
+  :Description:
+     Produces an HTML page containing an overview of the area assessments that
+     have been run
+  :Runs on:
+     Localhost
+  :Executes:
+     The |AutoAssess| ``aa_create_page`` script from the ``aa_html_page`` |Rose| app
+  :Details:
+     This task runs the ``template`` optional configuration for the app in order
+     to use the specified jinja2 template file rather than the centrally held
+     |AutoAssess| template files.
+
 Design considerations
 ---------------------
 
@@ -170,6 +253,9 @@ Portability
 
 ``site/<site>.cylc``
   Contains task definitions specific to the ``SITE``, for example, ``COMPUTE``
+
+``site/<site>_autoassess.cylc``
+  Contains task definitions specific for AutoAssess at the ``SITE``
 
 ``site/<site>-standardise-env``
   Contains details on how to set up the environment for CDDS at the ``SITE``

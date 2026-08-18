@@ -2,6 +2,7 @@
 # The LICENSE.md file contains full licensing details.
 import argparse
 from get_variables_from_recipe import get_variables_from_recipe
+from fetch_recipe import fetch_recipe
 from update_recipe_file import update_recipe_file
 
 
@@ -55,6 +56,70 @@ def main_for_get_variables_from_recipe(arguments=None):
     print(f"Recipe path: {args.recipe_path}")
     print(f"Output filepath: {args.output_filepath}")
     get_variables_from_recipe(args.recipe_path, args.output_filepath)
+
+
+def parse_args_for_fetch_recipe(arguments):
+    """
+    Return the names and values of the command line arguments for
+    :func:`main_for_fetch_recipe`.
+
+    Parameters
+    ----------
+    arguments : :obj:`list` of :obj:`str`
+        The command line arguments to be parsed.
+
+    Returns
+    -------
+    :class:`argparse.Namespace`
+        The names and values of the command line arguments.
+    """
+    parser = argparse.ArgumentParser(
+        description="Retrieve an ESMValTool recipe.",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+    parser.add_argument(
+        "--recipe_id",
+        help=(
+            "The short identifier of the recipe to retrieve, "
+            "as written in the `flow.cylc` file."
+        ),
+    )
+    parser.add_argument(
+        "--recipe_dict_fp",
+        help=(
+            "The filepath of the YAML file containing the "
+            "name and location within esmvaltool.recipes "
+            "of the recipe to be fetched."
+        ),
+    )
+    parser.add_argument(
+        "--output_filepath",
+        help=(
+            "The full path to the where the "
+            "ESMValTool recipe will be written."
+        ),
+    )
+    return parser.parse_args(arguments)
+
+
+def main_for_fetch_recipe(arguments=None):
+    """
+    Retrieve an ESMValTool recipe.
+
+    Parameters
+    ----------
+    arguments : :obj:`list` of :obj:`str`
+        The command line arguments to be parsed.
+    """
+    # Parse the arguments.
+    args = parse_args_for_fetch_recipe(arguments)
+
+    # Run the code.
+    print("Fetching recipe.")
+    print(f"Recipe ID: {args.recipe_id}")
+    print(f"Recipe dict filepath: {args.recipe_dict_fp}")
+    print(f"Output filepath: {args.output_filepath}")
+    fetch_recipe(args.recipe_id, args.recipe_dict_fp, args.output_filepath)
 
 
 def parse_args_for_update_recipe_file(arguments):
