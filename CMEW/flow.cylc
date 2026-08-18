@@ -38,6 +38,9 @@
 
     {%- if TEST %}
             run_recipe<recipe> => compare<recipe>
+        {%- if AUTOASSESS %}
+            html_page<autoassess_area> => compare<autoassess_area>
+        {%- endif %}
     {%- endif %}
 {%- endif %}
 {%- if SKIP_CDDS %}

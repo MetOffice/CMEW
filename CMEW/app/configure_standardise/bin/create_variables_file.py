@@ -2,7 +2,7 @@
 # (C) Crown Copyright 2024-2026, Met Office.
 # The LICENSE.md file contains full licensing details.
 """
-Generates the variables.txt file from the ESMValTool recipe.
+Create a variables file to standardise model data with CDDS.
 """
 import os
 import yaml
@@ -44,7 +44,7 @@ def combine_variable_lists(directory):
     return variables
 
 
-def load_stream_dict():
+def load_stream_dict(stream_config_fp):
     """
     Loads stream information from the ../etc/streams.yml file.
 
@@ -53,23 +53,22 @@ def load_stream_dict():
     dict
         A mapping of pre-defined streams to their associated variables
     """
-    # Get path to stream mappings
-    streams_config = os.environ["STREAM_CONFIG_PATH"]
-    logger.debug("Reading streams from %s", streams_config)
-
     # Read the stream mappings
-    with open(streams_config, "r") as f:
+    with open(stream_config_fp, "r") as f:
         config = yaml.safe_load(f)
 
     # Return the whole dictionary
     return config
 
 
-def add_stream_to_variables(variables):
+def add_stream_to_variables(stream_config_fp, variables):
     """Add stream information to a list of variables.
 
     Parameters
     ----------
+    stream_config_fp : str
+        The full path to the file containing
+        the data streams for each variable.
     variables : list[str]
         List of variables in the format "MIP_table/variable_name"
 
@@ -78,7 +77,7 @@ def add_stream_to_variables(variables):
     list[str]
         List of variables in the format "MIP_table/variable_name:stream"
     """
-    stream_dict = load_stream_dict()
+    stream_dict = load_stream_dict(stream_config_fp)
 
     # Using a second dictionary to avoid looping
     var_to_stream = {
@@ -96,7 +95,7 @@ def add_stream_to_variables(variables):
     return streamed_variables
 
 
-def write_variables(variables, target_path):
+def write_variables(variables, output_filepath):
     """Write a string of variables to a text file in the installed workflow.
 
     Parameters
@@ -104,23 +103,21 @@ def write_variables(variables, target_path):
     variables : list[str]
         List of variables to be written to file.
 
-    target_path : str
+    output_filepath : str
         Location to write the variables file.
     """
     variables_str = "\n".join(variables) + "\n"
     logger.debug("Writing variables:\n%s", variables_str)
 
-    with open(target_path, "w") as target_file:
+    with open(output_filepath, "w") as target_file:
         target_file.write(variables_str)
 
 
-def main():
-    variables = combine_variable_lists(os.environ["VARIABLES_LIST_DIR"])
-    streamed_variables = add_stream_to_variables(variables)
-    variables_path = os.environ["VARIABLES_PATH"]
-    logger.info("Writing variables file to %s", variables_path)
-    write_variables(streamed_variables, variables_path)
-
-
-if __name__ == "__main__":
-    main()
+def create_variables_file(
+    vars_files_list_dir, stream_config_fp, output_filepath
+):
+    """Create a variables file to standardise model data with CDDS."""
+    variables = combine_variable_lists(vars_files_list_dir)
+    streamed_variables = add_stream_to_variables(stream_config_fp, variables)
+    logger.info("Writing variables file to %s", output_filepath)
+    write_variables(streamed_variables, output_filepath)
