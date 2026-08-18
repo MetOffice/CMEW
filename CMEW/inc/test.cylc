@@ -1,9 +1,19 @@
 #!jinja2
-# (C) Crown Copyright 2022-2025, Met Office.
+# (C) Crown Copyright 2022-2026, Met Office.
 # The LICENSE.md file contains full licensing details.
 # test.cylc
+
+[task parameters]
+    recipe = radiation_budget
+    autoassess_area = monsoon
+
 [runtime]
     [[compare<recipe>]]
         [[[environment]]]
             ROSE_TASK_APP = compare
             ROSE_APP_OPT_CONF_KEYS=${CYLC_TASK_PARAM_recipe}
+
+    [[compare<autoassess_area>]]
+        [[[environment]]]
+            ROSE_TASK_APP = compare
+            ROSE_APP_OPT_CONF_KEYS=${CYLC_TASK_PARAM_autoassess_area}
