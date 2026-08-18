@@ -5,6 +5,7 @@
 
 .. Add in alphabetical order.
 
+.. |AutoAssess| replace:: :term:`AutoAssess`
 .. |CDDS| replace:: :term:`CDDS`
 .. |CMEW| replace:: :term:`CMEW`
 .. |CMIP| replace:: :term:`CMIP`
@@ -19,6 +20,7 @@
 
 .. Links
 
+.. _AutoAssess: https://github.com/MetOffice/AutoAssess
 .. _CMIP Documentation: https://wcrp-cmip.org/
 .. _Cylc Documentation: https://cylc.github.io/cylc-doc/stable/html/index.html
 .. _families: https://cylc.github.io/cylc-doc/stable/html/tutorial/runtime/configuration-consolidation/families.html

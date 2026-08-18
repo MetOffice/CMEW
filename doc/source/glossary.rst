@@ -9,6 +9,11 @@ Glossary
 
 .. glossary::
 
+   AutoAssess
+     `AutoAssess`_ is the internal Met Office tool for evaluating climate model
+     simulations. It is being phased out in preference to |CMEW| and
+     |ESMValTool| recipes.
+
    CDDS
      CDDS is a package that |CMEW| uses to standardise data for use in
      |ESMValTool| recipes.
