@@ -7,10 +7,7 @@ set -eux
 
 echo "Running configure_standardise"
 
-# Create request configuration file and variables file.
-# The request file depends on information in the variables file,
-# so is created second.
-cmew-esmvaltool-env create_variables_file.py
+# Create request configuration file.
 cmew-esmvaltool-env create_request_file.py
 
 # Create CDDS directory structure and variables list.

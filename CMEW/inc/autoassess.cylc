@@ -91,5 +91,5 @@
         [[[environment]]]
             ROSE_TASK_APP = aa_html_page
             ROSE_APP_OPT_CONF_KEYS = template
-            J2_TEMPLATE_FILE = top_level_template.html
+            J2_TEMPLATE_FILE = top_level_template.jinja
             OUTPUT_FILE = ${AUTOASSESS_OUTPUT_DIR}/index.html

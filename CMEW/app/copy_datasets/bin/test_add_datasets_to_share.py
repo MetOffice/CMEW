@@ -21,69 +21,27 @@ from add_datasets_to_share import (
     process_naml_file,
     write_dict_to_yaml,
     write_datasets_to_yaml,
-    dict_namelists_in_workflow_dir,
+    list_files,
     use_facet_as_key,
 )
-from pathlib import Path
-import pytest
 import yaml
+import pytest
 import shutil
 import tempfile
 from unittest.mock import patch
+from copy_datasets_conftest import (
+    model_runs_nl_fp,
+    model_runs_as_list_yml_fp,
+    basic_dict_yml_fp,
+    model_runs_as_dict_yml_fp,
+)
+
+START_YEAR = "1993"
+NUMBER_OF_YEARS = "10"
+INSTITUTE = "mock_institute"
 
 
-@pytest.fixture
-def mock_env_vars(monkeypatch):
-    monkeypatch.setenv("START_YEAR", "1993")
-    monkeypatch.setenv("NUMBER_OF_YEARS", "10")
-    monkeypatch.setenv("CYLC_WORKFLOW_RUN_DIR", "/a/b/c")
-
-
-@pytest.fixture
-def path_to_mock_nl():
-    path = (
-        Path(__file__).parent.parent.parent
-        / "unittest"
-        / "mock_data"
-        / "model_runs.nl"
-    )
-    return str(path)
-
-
-@pytest.fixture
-def path_to_kgo_dict():
-    path = (
-        Path(__file__).parent.parent.parent
-        / "unittest"
-        / "kgo"
-        / "basic_dict.yml"
-    )
-    return path
-
-
-@pytest.fixture
-def path_to_mock_yaml_list():
-    path = (
-        Path(__file__).parent.parent.parent
-        / "unittest"
-        / "mock_data"
-        / "model_runs_as_list.yml"
-    )
-    return str(path)
-
-
-@pytest.fixture
-def path_to_kgo_yaml_dict():
-    path = (
-        Path(__file__).parent.parent.parent
-        / "unittest"
-        / "kgo"
-        / "model_runs_as_dict.yml"
-    )
-    return str(path)
-
-
-def test_extract_sections_from_naml(path_to_mock_nl):
+def test_extract_sections_from_naml():
     # Note that I actually expect one long string for each section,
     # not a concatenated string, but this fails the flake8 tests.
     expected = [
@@ -103,7 +61,7 @@ def test_extract_sections_from_naml(path_to_mock_nl):
         ),
     ]
 
-    actual = extract_sections_from_naml(path_to_mock_nl)
+    actual = extract_sections_from_naml(str(model_runs_nl_fp()))
     assert actual == expected
 
 
@@ -127,7 +85,7 @@ def test_convert_str_to_facets():
     assert actual == expected
 
 
-def test_add_common_facets(mock_env_vars):
+def test_add_common_facets():
     dataset_dict = {
         "calendar": "gregorian",
         "label_for_plots": "HadGEM3-GC5E-LL N96ORCA1",
@@ -147,11 +105,13 @@ def test_add_common_facets(mock_env_vars):
         "project": "CMIP6",
     }
 
-    actual = add_common_facets(dataset_dict, "CMIP6")
+    actual = add_common_facets(
+        START_YEAR, NUMBER_OF_YEARS, dataset_dict, INSTITUTE, "CMIP6"
+    )
     assert actual == expected
 
 
-def test_process_naml_file(path_to_mock_nl, mock_env_vars):
+def test_process_naml_file():
     expected = [
         {
             "calendar": "gregorian",
@@ -175,11 +135,17 @@ def test_process_naml_file(path_to_mock_nl, mock_env_vars):
         },
     ]
 
-    actual = process_naml_file(path_to_mock_nl, "CMIP6")
+    actual = process_naml_file(
+        str(model_runs_nl_fp()),
+        START_YEAR,
+        NUMBER_OF_YEARS,
+        INSTITUTE,
+        "CMIP6",
+    )
     assert actual == expected
 
 
-def test_write_dict_to_yaml(path_to_kgo_dict):
+def test_write_dict_to_yaml():
     # Note the keys are not alphabetical here but are in the output
     test_dict = {
         "key_1": "value_1",
@@ -197,7 +163,7 @@ def test_write_dict_to_yaml(path_to_kgo_dict):
         actual = yaml.safe_load(tmp)
 
     # Load the expected dictionary
-    with open(path_to_kgo_dict, "r") as file_handle:
+    with open(str(basic_dict_yml_fp()), "r") as file_handle:
         expected = yaml.safe_load(file_handle)
 
     assert expected == actual
@@ -213,6 +179,7 @@ def test_write_datasets_to_yaml(mock_writing):
     assert mock_writing.call_args.args[1] == "/a/b/test_name.yml"
 
 
+@pytest.mark.parametrize("extension", ["nl", ".nl"])
 @patch("os.path.dirname", return_value="/a/b/c")
 @patch(
     "os.listdir",
@@ -223,21 +190,20 @@ def test_write_datasets_to_yaml(mock_writing):
         "subdir",
     ],
 )
-def test_dict_namelists_in_workflow_dir(
-    mock_dirname, mock_listdir, mock_env_vars
-):
+def test_list_files(mock_listdir, mock_dirname, extension):
     expected = {
         "this_one": "/a/b/c/this_one.nl",
         "this_two": "/a/b/c/this_two.nl",
     }
-    actual = dict_namelists_in_workflow_dir()
+    mock_src_dir = "/a/b/c"
+    actual = list_files(mock_src_dir, extension)
     assert expected == actual
 
 
-def test_use_facet_as_key(path_to_mock_yaml_list, path_to_kgo_yaml_dict):
+def test_use_facet_as_key():
     # Copy known input to a temp file
     with tempfile.NamedTemporaryFile() as tmp:
-        shutil.copyfile(path_to_mock_yaml_list, tmp.name)
+        shutil.copyfile(str(model_runs_as_list_yml_fp()), tmp.name)
 
         # The filepath is given by .name
         use_facet_as_key(str(tmp.name), "suite_id")
@@ -247,7 +213,7 @@ def test_use_facet_as_key(path_to_mock_yaml_list, path_to_kgo_yaml_dict):
         actual = yaml.safe_load(tmp)
 
     # Load the expected output
-    with open(path_to_kgo_yaml_dict, "r") as file_handle:
+    with open(str(model_runs_as_dict_yml_fp()), "r") as file_handle:
         expected = yaml.safe_load(file_handle)
 
     assert actual == expected
