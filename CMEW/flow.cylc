@@ -16,7 +16,7 @@
     dataset = {{ datasets }}
     recipe = radiation_budget
 {%- if not UNITTEST and AUTOASSESS %}
-    autoassess_area = monsoon, africa
+    autoassess_area = aerosols, africa, australia, conservation, enso, globaltrop, hydrocycle, land_surface, mjo, monsoon, stratosphere
 {%- endif %}
 
 [scheduling]
