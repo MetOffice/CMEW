@@ -106,7 +106,7 @@ def construct_datasets_contents(datasets):
     """
     logger.debug("Constructing the contents of the ``datasets`` section")
 
-    # ESMValTool recipes expect keys to be "dataset", "ensemble", "exp", etc.
+    # ESMValTool recipes expect keys to have the values on the right.
     cmew_to_esmvaltool_key_mapping = {
         "label_for_plots": "alias",
         "model_id": "dataset",
@@ -182,27 +182,26 @@ def update_recipe_file(
     model_runs_yml_fp,
     cmip6_datasets_yml_fp,
     recipe_id,
-    recipe_dict_fp,
 ):
     """
     Update the datasets in an ESMValTool recipe.
 
-    Overwrite the original recipe content with the updated recipe content.
+    Overwrite the original recipe content
+    with the updated recipe content.
 
     Parameters
     ----------
     recipe_path:
         The full path to the ESMValTool recipe.
     model_runs_yml_fp:
-        The full path to the YAML file containing details of the model runs.
+        The full path to the YAML file containing details of the model
+        datasets to include.
     cmip6_datasets_yml_fp:
         The full path to the YAML file containing details of the CMIP6
         datasets to include.
     recipe_id:
-        The id that acts as a key in the recipe_dict_fp.
-    recipe_dict_fp:
-        The full path to the YAML file containing information
-        about whether to remove additional datasets.
+        The id that determines whether additional datasets
+        should be removed.
     """
     recipe = load_yaml(recipe_path)
     model_runs = load_yaml(model_runs_yml_fp)
