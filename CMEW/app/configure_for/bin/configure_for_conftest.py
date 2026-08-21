@@ -123,13 +123,13 @@ def cmip6_datasets():
 
 def recipe_with_datasets():
     return {
-        "documentation": {"key1": "value2", "key2": "value2"},
+        "documentation": {"key1": "value1", "key2": "value2"},
         "datasets": datasets(),
-        "preprocessors": {"key5": "value5"},
+        "preprocessors": {"key3": "value3"},
         "diagnostics": {
             "my_diagnostic_name": {
                 "variables": {
-                    "my_variable": {"additional_datasets": ["value6"]},
+                    "my_variable": {"additional_datasets": ["value4"]},
                 },
             },
         },
@@ -138,13 +138,13 @@ def recipe_with_datasets():
 
 def recipe_without_datasets():
     return {
-        "documentation": {"key1": "value2", "key2": "value2"},
+        "documentation": {"key1": "value1", "key2": "value2"},
         "datasets": [],
-        "preprocessors": {"key5": "value5"},
+        "preprocessors": {"key3": "value3"},
         "diagnostics": {
             "my_diagnostic_name": {
                 "variables": {
-                    "my_variable": {"additional_datasets": ["value6"]},
+                    "my_variable": {"additional_datasets": ["value4"]},
                 },
             },
         },
@@ -153,9 +153,9 @@ def recipe_without_datasets():
 
 def recipe_without_additional_datasets():
     return {
-        "documentation": {"key1": "value2", "key2": "value2"},
+        "documentation": {"key1": "value1", "key2": "value2"},
         "datasets": datasets(),
-        "preprocessors": {"key5": "value5"},
+        "preprocessors": {"key3": "value3"},
         "diagnostics": {
             "my_diagnostic_name": {
                 "variables": {
