@@ -120,7 +120,7 @@ def construct_datasets_contents(datasets):
     # Update the keys in the datasets, as appropriate.
     datasets_for_recipe = []
     for dataset in datasets:
-        for identifier, dataset_items in dataset.items():
+        for dataset_items in dataset.values():
             for key in unwanted_keys:
                 if key in dataset_items:
                     del dataset_items[key]

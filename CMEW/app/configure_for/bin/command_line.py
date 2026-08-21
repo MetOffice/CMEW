@@ -192,11 +192,9 @@ def main_for_update_recipe_file(arguments=None):
     print(f"Model runs YAML path: {args.model_runs_yml_fp}")
     print(f"CMIP6 datasets YAML path: {args.cmip6_datasets_yml_fp}")
     print(f"Recipe ID: {args.recipe_id}")
-    print(f"Recipe dict filepath: {args.recipe_dict_fp}")
     update_recipe_file(
         args.recipe_path,
         args.model_runs_yml_fp,
         args.cmip6_datasets_yml_fp,
         args.recipe_id,
-        args.recipe_dict_fp,
     )
