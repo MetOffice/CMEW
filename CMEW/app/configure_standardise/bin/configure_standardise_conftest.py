@@ -20,9 +20,17 @@ def request_u_cw673_cfg_fp():
     return kgo_dir() / "request_u-cw673.cfg"
 
 
+def variables_txt_fp():
+    return kgo_dir() / "variables.txt"
+
+
 def etc_dir():
     return Path(__file__).parent.parent / "etc"
 
 
 def request_defaults_yml_fp():
     return etc_dir() / "request_defaults.yml"
+
+
+def streams_yml_fp():
+    return etc_dir() / "streams.yml"
