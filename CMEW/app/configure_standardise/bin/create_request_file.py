@@ -128,8 +128,8 @@ def create_request(
     defaults = load_request_defaults(defaults_path)
 
     # Read the model run information from the model_runs.yml file
-    with open(model_runs_yml_fp, "r") as f:
-        dataset_dict = yaml.safe_load(f)[dataset]
+    with open(model_runs_yml_fp, "r") as file_handle:
+        dataset_dict = yaml.safe_load(file_handle)[dataset]
     logger.debug(
         "Dataset % config:\n%s",
         dataset,
@@ -208,7 +208,7 @@ def create_request_file(
     raw_data_dir_mode,
 ):
     """
-    Generate and write the request file for the current task environment.
+    Create a request file to standardise model data with CDDS.
 
     Parameters
     ----------

@@ -89,7 +89,7 @@ def parse_args_for_create_request_file(arguments):
         The names and values of the command line arguments.
     """
     parser = argparse.ArgumentParser(
-        description="Create a request to standardise model data with CDDS.",
+        description="Create a request file to standardise model data with CDDS.",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     parser.add_argument(
@@ -100,7 +100,7 @@ def parse_args_for_create_request_file(arguments):
         "--output_filepath",
         help=(
             "The full path to the file where the "
-            "variables from the ESMValTool recipe will be written."
+            "request file will be written."
         ),
     )
     parser.add_argument(
@@ -151,7 +151,7 @@ def parse_args_for_create_request_file(arguments):
 
 def main_for_create_request_file(arguments=None):
     """
-    Generate and write the request file for the current task environment.
+    Create a request file to standardise model data with CDDS.
 
     Parameters
     ----------
