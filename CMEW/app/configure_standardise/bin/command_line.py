@@ -89,7 +89,9 @@ def parse_args_for_create_request_file(arguments):
         The names and values of the command line arguments.
     """
     parser = argparse.ArgumentParser(
-        description="Create a request file to standardise model data with CDDS.",
+        description=(
+            "Create a request file to standardise model data with CDDS."
+        ),
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     parser.add_argument(
@@ -112,7 +114,10 @@ def parse_args_for_create_request_file(arguments):
     )
     parser.add_argument(
         "--mip_table_dir",
-        help="The MIP table to use from CDDS.",
+        help=(
+            "The full path to the directory containing the "
+            "MIP tables for CDDS to use."
+        ),
     )
     parser.add_argument(
         "--model_runs_yml_fp",
