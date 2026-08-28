@@ -84,7 +84,7 @@ def parse_args_for_update_recipe_file(arguments):
         "--model_runs_yml_fp",
         help=(
             "The full path to the YAML file "
-            "containing details of the model runs."
+            "containing details of the model datasets to include."
         ),
     )
     parser.add_argument(
@@ -96,7 +96,10 @@ def parse_args_for_update_recipe_file(arguments):
     )
     parser.add_argument(
         "--recipe_id",
-        help=("The parameter CYLC_TASK_PARAM_recipe"),
+        help=(
+            "The identifier that determines "
+            "whether additional datasets should be removed."
+        ),
     )
     parser.add_argument(
         "--recipe_dict_fp",

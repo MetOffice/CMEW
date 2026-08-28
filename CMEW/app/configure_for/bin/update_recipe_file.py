@@ -194,14 +194,14 @@ def update_recipe_file(
     recipe_path:
         The full path to the ESMValTool recipe.
     model_runs_yml_fp:
-        The full path to the YAML file containing details of the model
-        datasets to include.
+        The full path to the YAML file
+        containing details of the model datasets to include.
     cmip6_datasets_yml_fp:
-        The full path to the YAML file containing details of the CMIP6
-        datasets to include.
+        The full path to the YAML file
+        containing details of the CMIP6 datasets to include.
     recipe_id:
-        The id that determines whether additional datasets
-        should be removed.
+        The identifier that determines
+        whether additional datasets should be removed.
     """
     recipe = load_yaml(recipe_path)
     model_runs = load_yaml(model_runs_yml_fp)
