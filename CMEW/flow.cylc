@@ -14,7 +14,7 @@
 
 [task parameters]
     dataset = {{ datasets }}
-    recipe = radiation_budget
+    recipe = cmm
 {%- if not UNITTEST and AUTOASSESS %}
     autoassess_area = monsoon, africa
 {%- endif %}
@@ -26,15 +26,16 @@
             install_env_file => unittest
 {%- endif %}
 {%- if USE_ESMVALTOOL_BRANCH %}
-            install_env_file => get_esmval_branch => configure_recipe & copy_datasets
+            install_env_file => get_esmval_branch => copy_datasets
 {%- endif %}
 {%- if not UNITTEST and not SKIP_CDDS %}
-            install_env_file => configure_recipe & copy_datasets
+            install_env_file => copy_datasets
             copy_datasets => configure_for<recipe>
             configure_for<recipe> => configure_standardise<recipe,dataset>
                 => standardise_model_data<dataset> => restructure_dirs
-            configure_recipe & restructure_dirs => run_recipe<recipe>
-                => housekeeping
+            restructure_dirs => extract_variable_cubes => run_recipe<recipe>
+                => pause_after_housekeeping
+
 
     {%- if TEST %}
             run_recipe<recipe> => compare<recipe>
@@ -45,14 +46,14 @@
 {%- endif %}
 {%- if SKIP_CDDS %}
     {%- if USE_ESMVALTOOL_BRANCH %}
-            install_env_file => get_esmval_branch => configure_recipe & copy_datasets
+            install_env_file => get_esmval_branch => copy_datasets
     {%- endif %}
             install_env_file
-            => configure_recipe & copy_datasets
+            => copy_datasets
             => configure_for<recipe>
             => symlink_standardised_data
             => run_recipe<recipe>
-            => housekeeping
+            # => housekeeping
 {%- endif %}
         """
 
@@ -60,12 +61,17 @@
     [[root]]
         script = rose task-run
         env-script = "eval $(rose task-env)"
-        platform = localhost
+        platform = spice
+        [[[directives]]]
+            --wckey = CMEW
+            --ntasks = {{ MAX_PARALLEL_TASKS }}
+            --time = 60
+
         [[[environment]]]
             ESMVALTOOL_DIR=${CYLC_WORKFLOW_RUN_DIR}/lib/python/ESMValTool
             ESMVALTOOL_MODULE_NAME = {{ ESMVALTOOL_MODULE_NAME }}
-            ESMVALTOOL_CONFIG_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/etc/esmvaltool_config
-            USER_CONFIG_PATH = ${ESMVALTOOL_CONFIG_DIR}/config-user.yml
+            # ESMVALTOOL_CONFIG_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/etc/esmvaltool_config
+            # USER_CONFIG_PATH = ${ESMVALTOOL_CONFIG_DIR}/config-user.yml
             DEV_CONFIG_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/config-developer.yml
             OUTPUT_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/cycle/${CYLC_TASK_CYCLE_POINT}
             PYTHONPATH_PREPEND = ${ESMVALTOOL_DIR}
@@ -144,6 +150,11 @@
         [[[environment]]]
             SITE = {{ SITE }}
 
+    [[extract_variable_cubes]]
+        inherit = STANDARDISE, MODEL_RUNS
+        [[[environment]]]
+            ROSE_TASK_APP = extract_variable_cubes
+
     [[run_recipe<recipe>]]
         inherit = None, COMPUTE, RECIPE
         [[[environment]]]
@@ -165,6 +176,9 @@
 
     [[housekeeping]]
 
+    [[pause_after_housekeeping]]
+        script = "sleep 999999999"
+
 {% include "site/" ~ SITE ~ ".cylc" %}
 {%- if TEST or UNITTEST %}
     {% include "inc/unittest.cylc" %}
@@ -173,7 +187,7 @@
     {%- endif %}
 {%- endif %}
 
-{%- if not UNITTEST and AUTOASSESS %}
-    {% include "site/" ~ SITE ~ "_autoassess.cylc" %}
-    {% include "inc/autoassess.cylc" %}
-{%- endif %}
+# {%- if not UNITTEST and AUTOASSESS %}
+#     {% include "site/" ~ SITE ~ "_autoassess.cylc" %}
+#     {% include "inc/autoassess.cylc" %}
+# {%- endif %}

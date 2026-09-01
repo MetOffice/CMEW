@@ -43,7 +43,10 @@ export NUMEXPR_NUM_THREADS=1
 # Ensure '~/.local' isn't added to 'sys.path'.
 export PYTHONNOUSERSITE=True
 
-safe_load "${ESMVALTOOL_MODULE_NAME}"
+# safe_load "${ESMVALTOOL_MODULE_NAME}"
+set +u
+conda activate esmvaltool-dev2
+set -u
 
 # If PYTHONPATH_PREPEND has been set, prepend it to PYTHONPATH to extend the
 # Python environment.

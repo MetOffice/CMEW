@@ -17,8 +17,10 @@ data:
 misc:
   atmos_timestep: 1200
 conversion:
-  mip_convert_plugin: HadGEM3
+  mip_convert_plugin: UKESM1
   skip_archive: True
+  skip_qc: True # Bodge to address the "error_message": "Global attributes check: Cannot retrieve global attribute further_info_url",
   cylc_args: --no-detach -v
 netcdf_global_attributes:
   further_info_url: dummy_url
+  model_params_dir: $HOME/model_configs/

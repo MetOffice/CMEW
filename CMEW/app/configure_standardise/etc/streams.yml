@@ -1,17 +1,16 @@
 # (C) Crown Copyright 2026, Met Office.
 # The LICENSE.md file contains full licensing details.
 apm:
-- Amon/hfls
-- Amon/hfss
-- Amon/rlds
-- Amon/rlut
-- Amon/rlutcs
-- Amon/rsds
-- Amon/rsdt
-- Amon/rsut
-- Amon/rsutcs
 - Amon/tas
-- Emon/rls
-- Emon/rss
-inm:
-- SImon/siconc
+- Amon/pr
+- Amon/rtmt
+- Amon/rsut
+- Amon/rlut
+- AERmon/od550aer
+- AERmon/cdnc
+- AERmon/ch4
+- Amon/clw
+- Amon/clt
+- AERmon/co2 #Available in UKESM, not HADGEM3
+- Lmon/nbp #Available in UKESM, not HADGEM3
+- Omon/fgco2 #Available in UKESM, not HADGEM3
