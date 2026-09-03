@@ -22,14 +22,50 @@ filename = os.path.basename(__file__)
 logger = logging.getLogger(filename)
 
 
-def extract_sections_from_naml(naml_fp):
+def list_files(directory, extension):
     """
-    Read sections from a namelist file and return them as a list of strings.
+    Looks for files in a directory based on the file suffix.
 
     Parameters
     ----------
-    naml_fp: str
-        The file path to the namelist file containing the datasets.
+    directory: str
+        The directory containing the files to return.
+    extension: str
+        The file suffix to match.
+
+    Returns
+    -------
+    dict
+        A dictionary of file base names and their file paths.
+    """
+    filepaths = {}
+
+    # Grab all the namelist files, in case we add more in future
+    for file in os.listdir(directory):
+        if file.endswith(extension):
+            logger.debug("Found file %s", file)
+
+            # Read the name of the file for the key, minus ".nl"
+            basename = os.path.basename(file)[:-3]
+
+            # Use the filepath for the value
+            namelist_fp = os.path.join(directory, file)
+
+            # Add to the dictionary
+            filepaths[basename] = namelist_fp
+
+    return filepaths
+
+
+def extract_sections_from_naml_content(content):
+    """
+    Read sections from the contents of a namelist file
+    and return them as a list of strings.
+
+    Parameters
+    ----------
+    content: str
+        The content of the namelist file containing the datasets.
 
     Returns
     -------
@@ -37,19 +73,8 @@ def extract_sections_from_naml(naml_fp):
         A list of strings, each containing the content of a section in the
         namelist file minus the headers and separating characters.
     """
-
-    # Read the namelist file
-    with open(naml_fp, "r") as file:
-        content = file.read()
-    logger.debug("Namelist content:\n", content)
-
     # Namelist files are separated by a line containing only "/"
     datasets = content.split("\n/\n")
-
-    # Read the line containing the header for the first dataset's section
-    first_dataset = datasets[0]
-    first_line = first_dataset.split("\n")[0]
-    name = first_line.replace("&", "")  # This could be returned if needed
 
     # Initialise a list to hold the extracted datasets
     extracted_datasets = []
@@ -57,14 +82,19 @@ def extract_sections_from_naml(naml_fp):
     for dataset in datasets:
         logger.debug("Extracting dataset %s", dataset)
         if dataset:  # There is an empty dataset at the end
+
+            # Ignore the headers, denoted by &[name]
+            lines = dataset.splitlines()
+            relevant_lines = [
+                line for line in lines if not line.startswith("&")
+            ]
+            dataset = "\n".join(relevant_lines)
+
             # Replace newlines with just commas
             dataset = dataset.replace(",\n", ",")
 
             # Remove remaining new lines
             dataset = dataset.replace("\n", "")
-
-            # Remove the header
-            dataset = dataset.replace(f"&{name}", "")
 
             # Add the datasets to the list
             extracted_datasets.append(dataset)
@@ -155,16 +185,69 @@ def add_common_facets(
     return dataset_dict
 
 
-def process_naml_file(
-    naml_fp, start_year, number_of_years, institute, project=None
+def use_facet_as_key(data, key_facet):
+    """
+    Convert a list of dictionaries to a dictionary,
+    using the specified facet as a key.
+
+    The keys of the new dictionary must be present in each section of the list
+    and be unique.
+
+    Parameters
+    ----------
+    data: list[dict]
+        The content to be converted to a dictionary.
+    key_facet: str
+        The facet to use as the key in the new dictionary.
+
+    Returns
+    -------
+    dict
+        The new dictionary with the facets converted to key value pairs
+        inside inner dictionaries.
+    """
+    # Create a new dictionary with the same sections as the list
+    new_dict = {}
+    for section in data:
+        logger.debug("Adding key to %s", section)
+
+        # Use the facet as a unique key
+        unique = section[key_facet]
+
+        # The information in each section remains unchanged
+        new_dict[unique] = section
+
+    return new_dict
+
+
+def add_reference_key(dataset_dict, ref_dataset):
+    """
+    Add a "benchmark_dataset" key with the value "true" to a dictionary.
+
+    The section to which the key is added is determined by the function
+    `find_ref` in CMEW/lib/python/scrape_ini.py.
+
+    Parameters
+    ----------
+    dataset_dict: dict
+        The dictionary to have the key added.
+    ref_dataset: str
+        The suite ID of the reference dataset.
+    """
+    # Add the extra key and re-save the file
+    dataset_dict[ref_dataset]["benchmark_dataset"] = True
+
+
+def process_naml_content(
+    naml_content, start_year, number_of_years, institute, project=None
 ):
     """
     Extract the datasets and their facets from a namelist file.
 
     Parameters
     ----------
-    naml_fp: str
-        The file path to the namelist file containing the datasets.
+    naml_content: str
+        The contents of the namelist file containing the datasets.
     start_year: str
         The first year to extract for each dataset.
     number_of_years: str
@@ -179,9 +262,9 @@ def process_naml_file(
     datasets: list of dict
         A list of dictionaries, each containing the facets of one dataset.
     """
-    logger.info("Processing %s", naml_fp)
     datasets = []
-    sections = extract_sections_from_naml(naml_fp)
+    sections = extract_sections_from_naml_content(naml_content)
+    print(sections)
     for section in sections:
         dataset_dict = convert_str_to_facets(section)
         dataset_dict = add_common_facets(
@@ -191,30 +274,6 @@ def process_naml_file(
     return datasets
 
 
-# Note: I've stolen this with a slight rename from update_recipe_file.py
-# Eventually the plan is to move it to a common directory
-def write_dict_to_yaml(dict_to_write, target_path):
-    """Write the contents of a dictionary to a YAML file at ``target_path``.
-
-    Parameters
-    ----------
-    dict_to_write dict
-        Dictionary containing the content to write.
-
-    target_path: str
-        Location at which to write the content.
-    """
-    with open(target_path, "w") as file_handle:
-        yaml.dump(
-            dict_to_write,
-            file_handle,
-            default_flow_style=False,
-            sort_keys=True,
-        )
-
-
-# If the above function does stay here, there's no reason to have this
-# whole function just to create a target path then call the above
 def write_datasets_to_yaml(datasets, name, target_dir):
     """
     Write a list of dataset dictionaries to a YAML file in the directory.
@@ -230,105 +289,13 @@ def write_datasets_to_yaml(datasets, name, target_dir):
     """
     target_fp = os.path.join(target_dir, f"{name}.yml")
     logger.debug("Writing\n%s\nto %s", datasets, target_fp)
-    write_dict_to_yaml(datasets, target_fp)
-
-
-def list_files(directory, extension):
-    """
-    Looks for files in a directory based on the file suffix.
-
-    Parameters
-    ----------
-    directory: str
-        The directory containing the files to return.
-    extension: str
-        The file suffix to match.
-
-    Returns
-    -------
-    dict
-        A dictionary of file base names and their file paths.
-    """
-    filepaths = {}
-
-    # Grab all the namelist files, in case we add more in future
-    for file in os.listdir(directory):
-        if file.endswith(extension):
-            logger.debug("Found file %s", file)
-
-            # Read the name of the file for the key, minus ".nl"
-            basename = os.path.basename(file)[:-3]
-
-            # Use the filepath for the value
-            namelist_fp = os.path.join(directory, file)
-
-            # Add to the dictionary
-            filepaths[basename] = namelist_fp
-
-    return filepaths
-
-
-def use_facet_as_key(filepath, key_facet):
-    """
-    Edit a YAML file in place, from a list to a dictionary.
-
-    The keys of the new dictionary are the values of the specified facet,
-    which must be present in each section of the list and be unique.
-
-    Parameters
-    ----------
-    filepath: str
-        The file path to the YAML file to be edited.
-    key_facet: str
-        The facet to use as the key in the new dictionary.
-        Defaults to 'suite_id', which is the unique identifier for now.
-    """
-    # Read the YAML file that has datasets as a list
-    with open(filepath, "r") as f:
-        data = yaml.safe_load(f)
-
-    # Create a new dictionary with the same sections as the list
-    new_dict = {}
-    for section in data:
-        logger.debug("Adding key to %s", section)
-
-        # Use the facet as a unique key
-        unique = section[key_facet]
-
-        # The information in each section remains unchanged
-        new_dict[unique] = section
-
-    # Write the new dictionary back to the existing YAML filepath
-    with open(filepath, "w") as f:
-        yaml.dump(new_dict, f)
-
-
-def add_reference_key(filepath):
-    """
-    Add a "benchmark_dataset" key with the value "true" to a YAML file.
-
-    The section to which the key is added is determined by the function
-    `find_ref` in CMEW/lib/python/scrape_ini.py.
-
-    Parameters
-    ----------
-    filepath: str
-        The location of the YAML file to be edited.
-    """
-    # Find the reference suite ID in the `rose-suite.conf` file
-    rose_suite_fp = (
-        Path(__file__).parent.parent.parent.parent / "rose-suite.conf"
-    )
-    ref_dataset = find_ref(rose_suite_fp)
-
-    # Read the yaml as a dictionary without the extra key
-    with open(filepath, "r") as f:
-        dataset_dict = yaml.safe_load(f)
-
-    # Add the extra key and re-save the file
-    dataset_dict[ref_dataset]["benchmark_dataset"] = True
-    with open(filepath, "w") as f:
-        yaml.dump(dataset_dict, f)
+    with open(target_fp, "w") as file_handle:
+        yaml.dump(
+            datasets,
+            file_handle,
+            default_flow_style=False,
+            sort_keys=True,
+        )
 
 
 def add_datasets_to_share(
@@ -363,34 +330,53 @@ def add_datasets_to_share(
         # Check if it's model runs
         if basename == "model_runs":
 
+            # Read the namelist file
+            with open(nl_fp, "r") as file:
+                naml_content = file.read()
+            logger.debug("Namelist content:\n", naml_content)
+
             # Write the datasets to a YAML file with ESMVal project
-            datasets = process_naml_file(
-                nl_fp, start_year, number_of_years, institute, "ESMVal"
+            datasets = process_naml_content(
+                naml_content, start_year, number_of_years, institute, "ESMVal"
             )
             # Update the experiment to encode the suite ID
             for dataset in datasets:
                 dataset["experiment_id"] = (
                     f"{dataset['experiment_id']}-{dataset['suite_id']}"
                 )
+
+            # Reformat list as a dictionary, keyed by suite ID
+            dict_to_write = use_facet_as_key(datasets, "suite_id")
+
+            # Add the reference identifier
+            logger.info("Adding benchmarking key to model runs YAML")
+            rose_suite_fp = (
+                Path(__file__).parent.parent.parent.parent / "rose-suite.conf"
+            )
+            # Find the reference suite ID in the `rose-suite.conf` file
+            ref_dataset = find_ref(rose_suite_fp)
+            logger.info("Reference dataset: %s", ref_dataset)
+            add_reference_key(dict_to_write, ref_dataset)
+
+            # Write to file
             logger.info("Writing model runs YAML")
-            write_datasets_to_yaml(datasets, basename, target_dir)
+            write_datasets_to_yaml(dict_to_write, basename, target_dir)
 
         # Check if it's CMIP6:
         if basename == "cmip6_datasets":
 
+            # Read the namelist file
+            with open(nl_fp, "r") as file:
+                naml_content = file.read()
+            logger.debug("Namelist content:\n", naml_content)
+
             # Write the datasets to a YAML file with CMIP6 project
-            datasets = process_naml_file(
-                nl_fp, start_year, number_of_years, institute, "CMIP6"
+            datasets = process_naml_content(
+                naml_content, start_year, number_of_years, institute, "CMIP6"
             )
+
+            # Reformat list as a dictionary, keyed by model ID
+            dict_to_write = use_facet_as_key(datasets, "model_id")
+
             logger.info("Writing CMIP6 runs YAML")
-            write_datasets_to_yaml(datasets, basename, target_dir)
-
-    # Reformat the YAML files to use unique identifiers as keys
-    logger.info("Reformatting YAML files to use suite IDs as keys")
-    model_runs_yaml = f"{target_dir}/model_runs.yml"
-    use_facet_as_key(model_runs_yaml, "suite_id")
-    use_facet_as_key(f"{target_dir}/cmip6_datasets.yml", "model_id")
-
-    # Add the reference identifier
-    logger.info("Adding benchmarking key to model runs YAML")
-    add_reference_key(model_runs_yaml)
+            write_datasets_to_yaml(dict_to_write, basename, target_dir)

@@ -7,43 +7,43 @@ Test data files:
 /app/unittest/mock_data/model_runs.nl
     input for test_extract_sections_from_naml
     input for test_process_naml_file
-/app/unittest/mock_data/model_runs_as_list.yml
-    input for test_use_facet_as_key
-/app/unittest/kgo/model_runs_as_dict.yml
-    kgo for test_use_facet_as_key
-/app/unittest/kgo/basic_dict.yml
-    kgo for test_write_dict_to_yaml
 """
 from add_datasets_to_share import (
-    extract_sections_from_naml,
+    extract_sections_from_naml_content,
     convert_str_to_facets,
     add_common_facets,
-    process_naml_file,
-    write_dict_to_yaml,
-    write_datasets_to_yaml,
+    process_naml_content,
     list_files,
     use_facet_as_key,
 )
-import yaml
 import pytest
-import shutil
-import tempfile
 from unittest.mock import patch
-from copy_datasets_conftest import (
-    model_runs_nl_fp,
-    model_runs_as_list_yml_fp,
-    basic_dict_yml_fp,
-    model_runs_as_dict_yml_fp,
-)
+from textwrap import dedent
 
 START_YEAR = "1993"
 NUMBER_OF_YEARS = "10"
 INSTITUTE = "mock_institute"
 
 
-def test_extract_sections_from_naml():
-    # Note that I actually expect one long string for each section,
-    # not a concatenated string, but this fails the flake8 tests.
+def test_extract_sections_from_naml_content():
+    input = dedent(
+        """
+        &model_runs
+        calendar=gregorian,
+        label_for_plots=HadGEM3-GC5E-LL N96ORCA1,
+        model_id=HadGEM3-GC5E-LL,
+        suite_id=u-cw673,
+        variant_label=r1i1p1f1,
+        /
+        &model_runs
+        calendar=360_day,
+        label_for_plots=HadGEM3-GC3.1 N96ORCA1,
+        model_id=HadGEM3-GC31-LL,
+        suite_id=u-bv526,
+        variant_label=r5i1p1f3,
+        /
+    """
+    )
     expected = [
         (
             "calendar=gregorian,"
@@ -61,7 +61,7 @@ def test_extract_sections_from_naml():
         ),
     ]
 
-    actual = extract_sections_from_naml(str(model_runs_nl_fp()))
+    actual = extract_sections_from_naml_content(input)
     assert actual == expected
 
 
@@ -111,7 +111,26 @@ def test_add_common_facets():
     assert actual == expected
 
 
-def test_process_naml_file():
+def test_process_naml_content():
+    input = dedent(
+        """
+        &model_runs
+        calendar=gregorian,
+        label_for_plots=HadGEM3-GC5E-LL N96ORCA1,
+        model_id=HadGEM3-GC5E-LL,
+        suite_id=u-cw673,
+        variant_label=r1i1p1f1,
+        /
+        &model_runs
+        calendar=360_day,
+        label_for_plots=HadGEM3-GC3.1 N96ORCA1,
+        model_id=HadGEM3-GC31-LL,
+        suite_id=u-bv526,
+        variant_label=r5i1p1f3,
+        /
+    """
+    )
+
     expected = [
         {
             "calendar": "gregorian",
@@ -135,48 +154,14 @@ def test_process_naml_file():
         },
     ]
 
-    actual = process_naml_file(
-        str(model_runs_nl_fp()),
+    actual = process_naml_content(
+        input,
         START_YEAR,
         NUMBER_OF_YEARS,
         INSTITUTE,
         "CMIP6",
     )
     assert actual == expected
-
-
-def test_write_dict_to_yaml():
-    # Note the keys are not alphabetical here but are in the output
-    test_dict = {
-        "key_1": "value_1",
-        "key_for_list": ["item_1", "item_2", "item_3"],
-        "key_for_dict": {
-            "nested_key_1": "nested_value_1",
-            "nested_key_2": "nested_value_2",
-        },
-    }
-
-    # Write the test dictionary to a temporary file
-    with tempfile.NamedTemporaryFile() as tmp:
-        write_dict_to_yaml(test_dict, tmp.name)
-        tmp.seek(0)
-        actual = yaml.safe_load(tmp)
-
-    # Load the expected dictionary
-    with open(str(basic_dict_yml_fp()), "r") as file_handle:
-        expected = yaml.safe_load(file_handle)
-
-    assert expected == actual
-
-
-# I tested most of the functionality above, so this just checks the filename
-@patch("add_datasets_to_share.write_dict_to_yaml", return_value=None)
-def test_write_datasets_to_yaml(mock_writing):
-
-    write_datasets_to_yaml({"key": "value"}, "test_name", "/a/b")
-
-    # Filepath should be the second ([1]) argument of the call
-    assert mock_writing.call_args.args[1] == "/a/b/test_name.yml"
 
 
 @pytest.mark.parametrize("extension", ["nl", ".nl"])
@@ -201,19 +186,33 @@ def test_list_files(mock_listdir, mock_dirname, extension):
 
 
 def test_use_facet_as_key():
-    # Copy known input to a temp file
-    with tempfile.NamedTemporaryFile() as tmp:
-        shutil.copyfile(str(model_runs_as_list_yml_fp()), tmp.name)
-
-        # The filepath is given by .name
-        use_facet_as_key(str(tmp.name), "suite_id")
-
-        # Read the result
-        tmp.seek(0)
-        actual = yaml.safe_load(tmp)
-
-    # Load the expected output
-    with open(str(model_runs_as_dict_yml_fp()), "r") as file_handle:
-        expected = yaml.safe_load(file_handle)
-
+    input = [
+        {
+            "key_1": "value_1.1",
+            "key_2": 2,
+            "key_3": {"inner_key": "inner_value_1"},
+            "chosen_key": "first_entry",
+        },
+        {
+            "key_1": "value_1.2",
+            "key_2": 4,
+            "key_3": {"inner_key": "inner_value_2"},
+            "chosen_key": "second_entry",
+        },
+    ]
+    expected = {
+        "first_entry": {
+            "key_1": "value_1.1",
+            "key_2": 2,
+            "key_3": {"inner_key": "inner_value_1"},
+            "chosen_key": "first_entry",
+        },
+        "second_entry": {
+            "key_1": "value_1.2",
+            "key_2": 4,
+            "key_3": {"inner_key": "inner_value_2"},
+            "chosen_key": "second_entry",
+        },
+    }
+    actual = use_facet_as_key(input, "chosen_key")
     assert actual == expected
