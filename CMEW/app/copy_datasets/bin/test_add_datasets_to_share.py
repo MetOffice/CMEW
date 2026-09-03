@@ -9,25 +9,41 @@ Test data files:
     input for test_process_naml_file
 """
 from add_datasets_to_share import (
-    extract_sections_from_naml,
+    extract_sections_from_naml_content,
     convert_str_to_facets,
     add_common_facets,
-    process_naml_file,
+    process_naml_content,
     list_files,
     use_facet_as_key,
 )
 import pytest
 from unittest.mock import patch
-from copy_datasets_conftest import model_runs_nl_fp
+from textwrap import dedent
 
 START_YEAR = "1993"
 NUMBER_OF_YEARS = "10"
 INSTITUTE = "mock_institute"
 
 
-def test_extract_sections_from_naml():
-    # Note that I actually expect one long string for each section,
-    # not a concatenated string, but this fails the flake8 tests.
+def test_extract_sections_from_naml_content():
+    input = dedent(
+        """
+        &model_runs
+        calendar=gregorian,
+        label_for_plots=HadGEM3-GC5E-LL N96ORCA1,
+        model_id=HadGEM3-GC5E-LL,
+        suite_id=u-cw673,
+        variant_label=r1i1p1f1,
+        /
+        &model_runs
+        calendar=360_day,
+        label_for_plots=HadGEM3-GC3.1 N96ORCA1,
+        model_id=HadGEM3-GC31-LL,
+        suite_id=u-bv526,
+        variant_label=r5i1p1f3,
+        /
+    """
+    )
     expected = [
         (
             "calendar=gregorian,"
@@ -45,7 +61,7 @@ def test_extract_sections_from_naml():
         ),
     ]
 
-    actual = extract_sections_from_naml(str(model_runs_nl_fp()))
+    actual = extract_sections_from_naml_content(input)
     assert actual == expected
 
 
@@ -95,7 +111,26 @@ def test_add_common_facets():
     assert actual == expected
 
 
-def test_process_naml_file():
+def test_process_naml_content():
+    input = dedent(
+        """
+        &model_runs
+        calendar=gregorian,
+        label_for_plots=HadGEM3-GC5E-LL N96ORCA1,
+        model_id=HadGEM3-GC5E-LL,
+        suite_id=u-cw673,
+        variant_label=r1i1p1f1,
+        /
+        &model_runs
+        calendar=360_day,
+        label_for_plots=HadGEM3-GC3.1 N96ORCA1,
+        model_id=HadGEM3-GC31-LL,
+        suite_id=u-bv526,
+        variant_label=r5i1p1f3,
+        /
+    """
+    )
+
     expected = [
         {
             "calendar": "gregorian",
@@ -119,8 +154,8 @@ def test_process_naml_file():
         },
     ]
 
-    actual = process_naml_file(
-        str(model_runs_nl_fp()),
+    actual = process_naml_content(
+        input,
         START_YEAR,
         NUMBER_OF_YEARS,
         INSTITUTE,
