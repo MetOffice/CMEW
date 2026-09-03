@@ -17,7 +17,7 @@ from pathlib import Path
 import sys
 import logging
 
-logging.basicConfig(level=logging.INFO, stream=sys.stdout)
+logging.basicConfig(level=logging.DEBUG, stream=sys.stdout)
 filename = os.path.basename(__file__)
 logger = logging.getLogger(filename)
 
@@ -198,7 +198,7 @@ def write_dict_to_yaml(dict_to_write, target_path):
 
     Parameters
     ----------
-    dict_to_write dict
+    dict_to_write: dict
         Dictionary containing the content to write.
 
     target_path: str
@@ -268,25 +268,27 @@ def list_files(directory, extension):
     return filepaths
 
 
-def use_facet_as_key(filepath, key_facet):
+def use_facet_as_key(data, key_facet):
     """
-    Edit a YAML file in place, from a list to a dictionary.
+    Convert a list of dictionaries to a dictionary,
+    using the specified facet as a key.
 
-    The keys of the new dictionary are the values of the specified facet,
-    which must be present in each section of the list and be unique.
+    The keys of the new dictionary must be present in each section of the list
+    and be unique.
 
     Parameters
     ----------
-    filepath: str
-        The file path to the YAML file to be edited.
+    data: list[dict]
+        The content to be converted to a dictionary.
     key_facet: str
         The facet to use as the key in the new dictionary.
-        Defaults to 'suite_id', which is the unique identifier for now.
-    """
-    # Read the YAML file that has datasets as a list
-    with open(filepath, "r") as f:
-        data = yaml.safe_load(f)
 
+    Returns
+    -------
+    dict
+        The new dictionary with the facets converted to key value pairs
+        inside inner dictionaries.
+    """
     # Create a new dictionary with the same sections as the list
     new_dict = {}
     for section in data:
@@ -298,37 +300,25 @@ def use_facet_as_key(filepath, key_facet):
         # The information in each section remains unchanged
         new_dict[unique] = section
 
-    # Write the new dictionary back to the existing YAML filepath
-    with open(filepath, "w") as f:
-        yaml.dump(new_dict, f)
+    return new_dict
 
 
-def add_reference_key(filepath):
+def add_reference_key(dataset_dict, ref_dataset):
     """
-    Add a "benchmark_dataset" key with the value "true" to a YAML file.
+    Add a "benchmark_dataset" key with the value "true" to a dictionary.
 
     The section to which the key is added is determined by the function
     `find_ref` in CMEW/lib/python/scrape_ini.py.
 
     Parameters
     ----------
-    filepath: str
-        The location of the YAML file to be edited.
+    dataset_dict: dict
+        The dictionary to have the key added.
+    ref_dataset: str
+        The suite ID of the reference dataset.
     """
-    # Find the reference suite ID in the `rose-suite.conf` file
-    rose_suite_fp = (
-        Path(__file__).parent.parent.parent.parent / "rose-suite.conf"
-    )
-    ref_dataset = find_ref(rose_suite_fp)
-
-    # Read the yaml as a dictionary without the extra key
-    with open(filepath, "r") as f:
-        dataset_dict = yaml.safe_load(f)
-
     # Add the extra key and re-save the file
     dataset_dict[ref_dataset]["benchmark_dataset"] = True
-    with open(filepath, "w") as f:
-        yaml.dump(dataset_dict, f)
 
 
 def add_datasets_to_share(
@@ -372,8 +362,23 @@ def add_datasets_to_share(
                 dataset["experiment_id"] = (
                     f"{dataset['experiment_id']}-{dataset['suite_id']}"
                 )
+
+            # Reformat list as a dictionary, keyed by suite ID
+            dict_to_write = use_facet_as_key(datasets, "suite_id")
+
+            # Add the reference identifier
+            logger.info("Adding benchmarking key to model runs YAML")
+            rose_suite_fp = (
+                Path(__file__).parent.parent.parent.parent / "rose-suite.conf"
+            )
+            # Find the reference suite ID in the `rose-suite.conf` file
+            ref_dataset = find_ref(rose_suite_fp)
+            logger.info("Reference dataset: %s", ref_dataset)
+            add_reference_key(dict_to_write, ref_dataset)
+
+            # Write to file
             logger.info("Writing model runs YAML")
-            write_datasets_to_yaml(datasets, basename, target_dir)
+            write_datasets_to_yaml(dict_to_write, basename, target_dir)
 
         # Check if it's CMIP6:
         if basename == "cmip6_datasets":
@@ -382,15 +387,9 @@ def add_datasets_to_share(
             datasets = process_naml_file(
                 nl_fp, start_year, number_of_years, institute, "CMIP6"
             )
+
+            # Reformat list as a dictionary, keyed by model ID
+            dict_to_write = use_facet_as_key(datasets, "model_id")
+
             logger.info("Writing CMIP6 runs YAML")
-            write_datasets_to_yaml(datasets, basename, target_dir)
-
-    # Reformat the YAML files to use unique identifiers as keys
-    logger.info("Reformatting YAML files to use suite IDs as keys")
-    model_runs_yaml = f"{target_dir}/model_runs.yml"
-    use_facet_as_key(model_runs_yaml, "suite_id")
-    use_facet_as_key(f"{target_dir}/cmip6_datasets.yml", "model_id")
-
-    # Add the reference identifier
-    logger.info("Adding benchmarking key to model runs YAML")
-    add_reference_key(model_runs_yaml)
+            write_datasets_to_yaml(dict_to_write, basename, target_dir)
