@@ -19,7 +19,7 @@ INSTITUTE = "mock_institute"
 
 
 def test_extract_sections_from_naml_content():
-    input = dedent(
+    naml_content_to_input = dedent(
         """
         &model_runs
         calendar=gregorian,
@@ -54,7 +54,7 @@ def test_extract_sections_from_naml_content():
         ),
     ]
 
-    actual = extract_sections_from_naml_content(input)
+    actual = extract_sections_from_naml_content(naml_content_to_input)
     assert actual == expected
 
 
@@ -105,7 +105,7 @@ def test_add_common_facets():
 
 
 def test_process_naml_content():
-    input = dedent(
+    naml_content_to_input = dedent(
         """
         &model_runs
         calendar=gregorian,
@@ -148,7 +148,7 @@ def test_process_naml_content():
     ]
 
     actual = process_naml_content(
-        input,
+        naml_content_to_input,
         START_YEAR,
         NUMBER_OF_YEARS,
         INSTITUTE,
@@ -179,7 +179,7 @@ def test_list_files(mock_listdir, mock_dirname, extension):
 
 
 def test_use_facet_as_key():
-    input = [
+    list_to_input = [
         {
             "key_1": "value_1.1",
             "key_2": 2,
@@ -207,5 +207,5 @@ def test_use_facet_as_key():
             "chosen_key": "second_entry",
         },
     }
-    actual = use_facet_as_key(input, "chosen_key")
+    actual = use_facet_as_key(list_to_input, "chosen_key")
     assert actual == expected
