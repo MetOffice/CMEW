@@ -264,7 +264,6 @@ def process_naml_content(
     """
     datasets = []
     sections = extract_sections_from_naml_content(naml_content)
-    print(sections)
     for section in sections:
         dataset_dict = convert_str_to_facets(section)
         dataset_dict = add_common_facets(
