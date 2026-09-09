@@ -21,7 +21,6 @@ import tempfile
 from configure_standardise_conftest import (
     mock_data_dir,
     variables_txt_fp,
-    streams_yml_fp,
 )
 
 
@@ -64,7 +63,27 @@ def test_add_stream_to_variables():
         "Amon/tas",
         "SImon/siconc",
     ]
-    actual = add_stream_to_variables(str(streams_yml_fp()), input)
+    mock_stream_dict = {
+        "apm": [
+            "Amon/hfls",
+            "Amon/hfss",
+            "Amon/rlds",
+            "Amon/rlut",
+            "Amon/rlutcs",
+            "Amon/rsds",
+            "Amon/rsdt",
+            "Amon/rsut",
+            "Amon/rsutcs",
+            "Amon/tas",
+            "Emon/rls",
+            "Emon/rss",
+        ],
+        "inm": [
+            "SImon/siconc",
+        ],
+    }
+
+    actual = add_stream_to_variables(input, mock_stream_dict)
 
     with open(str(variables_txt_fp()), "r") as file:
         expected = file.read().splitlines()
