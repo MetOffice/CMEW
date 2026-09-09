@@ -24,6 +24,7 @@ from update_recipe_file import (
     add_extra_datasets,
     remove_additional_datasets,
     update_recipe_file,
+    filter_enabled_diagnostics,
 )
 import shutil
 import yaml
@@ -38,6 +39,11 @@ from configure_for_conftest import (
     no_ds_in_recipe_fp,
     recipe_additional_datasets_removed_yml_fp,
     extended_radiation_budget_recipe_yml_fp,
+)
+
+from configure_for_conftest import (
+    monitor_original_fp,
+    monitor_enabled_kgo_fp,
 )
 
 
@@ -117,3 +123,18 @@ def test_update_recipe_file(tmp_path):
     kgo_without_comment = kgo_with_comment[5:]
 
     assert actual_lines == kgo_without_comment
+
+
+def test_filter_enabled_diagnostics():
+    recipe_id = "mock_monitor"
+    with open(str(monitor_enabled_kgo_fp()), "r") as file_handle_1:
+        expected = yaml.safe_load(file_handle_1)
+
+    with open(str(monitor_original_fp()), "r") as file_handle_2:
+        pre_recipe = yaml.safe_load(file_handle_2)
+
+    actual = filter_enabled_diagnostics(
+        pre_recipe, recipe_id, str(recipe_paths_yml_fp())
+    )
+
+    assert actual == expected

@@ -46,3 +46,11 @@ def recipe_additional_datasets_removed_yml_fp():
 
 def extended_radiation_budget_recipe_yml_fp():
     return kgo_dir() / "extended_radiation_budget_recipe.yml"
+
+
+def monitor_original_fp():
+    return mock_data_dir() / "monitor_original.yml"
+
+
+def monitor_enabled_kgo_fp():
+    return kgo_dir() / "monitor_enabled_only.yml"

@@ -1,0 +1,23 @@
+---
+documentation:
+  title: Monitor original mock recipe
+
+preprocessors: {}
+
+diagnostics:
+  diag_a:
+    description: Diagnostic A
+    variables:
+      v1:
+        preprocessor: p1
+    scripts:
+      s1:
+        script: path/to/script.py
+  diag_c:
+    description: Diagnostic C
+    variables:
+      v3:
+        preprocessor: p3
+    scripts:
+      s1:
+        script: path/to/script.py

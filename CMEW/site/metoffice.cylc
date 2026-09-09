@@ -13,7 +13,8 @@
             --wckey = CMEW
             --ntasks = {{ MAX_PARALLEL_TASKS }}
 
-    [[run_recipe<recipe=cmm>]]
+    [[run_recipe<recipe=recipe_cmm>]]
+    # [[run_recipe<recipe=recipe_monitor_with_refs>]]
         [[[directives]]]
             --time = 20
             --mem = 60G

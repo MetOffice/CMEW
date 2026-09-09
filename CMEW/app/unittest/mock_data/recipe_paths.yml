@@ -4,3 +4,10 @@ mock_entry:
   recipe_name: recipe_specified_name.yml
   recipe_fp: subdir_1/recipe_second_name.yml
   empty_additional_datasets: true
+
+mock_monitor:
+  recipe_name: monitor_original.yml
+  recipe_fp: monitor_original.yml
+  enabled_diagnostics:
+    - diag_a
+    - diag_c

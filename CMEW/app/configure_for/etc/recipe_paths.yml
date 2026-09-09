@@ -10,3 +10,13 @@ python:
 ref_cre:
   recipe_name: recipe_ref_cre.yml
   recipe_fp: ref/recipe_ref_cre.yml
+
+recipe_monitor_with_refs:
+  recipe_name: recipe_monitor_with_refs.yml
+  recipe_fp: monitor/recipe_monitor_with_refs.yml
+  # Optionally list diagnostics from the recipe to enable on this system.
+  # If provided, only diagnostics in this list will be kept; all others
+  # will be removed from the generated recipe.
+  enabled_diagnostics:
+    - plot_multiple_timeseries
+    - plot_maps_with_references
