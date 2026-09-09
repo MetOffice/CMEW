@@ -43,6 +43,13 @@ def parse_args_for_add_datasets_to_share(arguments):
     parser.add_argument(
         "--institute", help="The institution ID to add to the datasets."
     )
+    parser.add_argument(
+        "--rose_suite_fp",
+        help=(
+            "The full path to the file where the "
+            "suite configuration variables are written."
+        ),
+    )
     return parser.parse_args(arguments)
 
 
@@ -65,10 +72,12 @@ def main_for_add_datasets_to_share(arguments=None):
     print(f"Start year: {args.start_year}")
     print(f"Number of years: {args.number_of_years}")
     print(f"Institution ID: {args.institute}")
+    print(f"rose-suite.conf filepath: {args.rose_suite_fp}")
     add_datasets_to_share(
         args.source_dir,
         args.target_dir,
         args.start_year,
         args.number_of_years,
         args.institute,
+        args.rose_suite_fp,
     )
