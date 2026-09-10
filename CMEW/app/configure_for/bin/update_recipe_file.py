@@ -11,13 +11,14 @@ import os
 import yaml
 import sys
 import logging
+from typing import Any
 
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 filename = os.path.basename(__file__)
 logger = logging.getLogger(filename)
 
 
-def return_blank_recipe(recipe_path):
+def return_blank_recipe(recipe_path: str) -> dict[str, Any]:
     """Empty the datasets section of an ESMValTool recipe.
 
     Parameters
@@ -30,7 +31,7 @@ def return_blank_recipe(recipe_path):
     recipe_content: dict
         The content of the ESMValTool recipe with an empty datasets section.
     """
-    with open(recipe_path, "r") as file_handle:
+    with open(recipe_path, "r", encoding="utf-8") as file_handle:
         recipe_content = yaml.safe_load(file_handle)
 
     # Empty the datasets section of the recipe
@@ -40,7 +41,9 @@ def return_blank_recipe(recipe_path):
     return recipe_content
 
 
-def add_extra_datasets(recipe_content, yaml_filepath):
+def add_extra_datasets(
+    recipe_content: dict[str, Any], yaml_filepath: str
+) -> dict[str, Any]:
     """
     Adds all datasets listed in a YAML file to an ESMValTool recipe.
 
@@ -60,7 +63,7 @@ def add_extra_datasets(recipe_content, yaml_filepath):
         with an extended datasets section.
     """
     # Read the extra datasets from the provided YAML file
-    with open(yaml_filepath, "r") as file_handle:
+    with open(yaml_filepath, "r", encoding="utf-8") as file_handle:
         extra_datasets = yaml.safe_load(file_handle)
     logger.debug("Processing extra datasets:\n%s", extra_datasets)
 
@@ -94,7 +97,9 @@ def add_extra_datasets(recipe_content, yaml_filepath):
     return recipe_content
 
 
-def remove_additional_datasets(recipe_content, recipe_id, recipe_dict_fp):
+def remove_additional_datasets(
+    recipe_content: dict[str, Any], recipe_id: str, recipe_dict_fp: str
+) -> dict[str, Any]:
     """
     Optionally remove additional_datasets sections from an ESMValTool recipe.
 
@@ -119,7 +124,7 @@ def remove_additional_datasets(recipe_content, recipe_id, recipe_dict_fp):
     """
     # Load the yaml config file from ../etc
     logger.debug("Reading recipe dict from %s", recipe_dict_fp)
-    with open(recipe_dict_fp, "r") as f:
+    with open(recipe_dict_fp, "r", encoding="utf-8") as f:
         recipe_dict = yaml.safe_load(f)
     logger.debug("Recipe dict:\n%s", recipe_dict)
 
@@ -148,7 +153,9 @@ def remove_additional_datasets(recipe_content, recipe_id, recipe_dict_fp):
     return recipe_content
 
 
-def filter_enabled_diagnostics(recipe_content, recipe_id, recipe_dict_fp):
+def filter_enabled_diagnostics(
+    recipe_content: dict[str, Any], recipe_id: str, recipe_dict_fp: str
+) -> dict[str, Any]:
     """
     Keep only diagnostics listed in `enabled_diagnostics` for a recipe.
 
@@ -173,7 +180,7 @@ def filter_enabled_diagnostics(recipe_content, recipe_id, recipe_dict_fp):
         diagnostics removed because they were not explicitly enabled.
     """
     logger.debug("Reading recipe dict from %s", recipe_dict_fp)
-    with open(recipe_dict_fp, "r") as f:
+    with open(recipe_dict_fp, "r", encoding="utf-8") as f:
         recipe_dict = yaml.safe_load(f)
     logger.debug("Recipe dict:\n%s", recipe_dict)
 
@@ -205,7 +212,7 @@ def filter_enabled_diagnostics(recipe_content, recipe_id, recipe_dict_fp):
     return recipe_content
 
 
-def write_recipe(updated_recipe, target_path):
+def write_recipe(updated_recipe: dict[str, Any], target_path: str) -> None:
     """Write updated ESMValTool recipe to a YAML file at ``target_path``.
 
     Parameters
@@ -216,7 +223,7 @@ def write_recipe(updated_recipe, target_path):
     target_path: str
         Location to write the updated ESMValTool recipe.
     """
-    with open(target_path, "w") as file_handle:
+    with open(target_path, "w", encoding="utf-8") as file_handle:
         yaml.dump(
             updated_recipe,
             file_handle,
@@ -226,12 +233,12 @@ def write_recipe(updated_recipe, target_path):
 
 
 def update_recipe_file(
-    recipe_path,
-    model_runs_yml_fp,
-    cmip6_datasets_yml_fp,
-    recipe_id,
-    recipe_dict_fp,
-):
+    recipe_path: str,
+    model_runs_yml_fp: str,
+    cmip6_datasets_yml_fp: str,
+    recipe_id: str,
+    recipe_dict_fp: str,
+) -> None:
     """
     Update the datasets in an ESMValTool recipe.
 
