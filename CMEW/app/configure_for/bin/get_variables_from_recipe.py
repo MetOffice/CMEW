@@ -81,7 +81,11 @@ def parse_variables_from_recipe(recipe_content):
         List of variables from the ESMValTool recipe,
         formatted as ``<mip>/<variable>``.
     """
+    # Lookin in diagnostics section
+    logger.debug("Recipe content:\n%s", recipe_content)
     recipe_diagnostics = recipe_content["diagnostics"]
+
+    # List variables from diagnostics
     formatted_variables = []
     for diagnostic in recipe_diagnostics:
         variables = recipe_diagnostics[diagnostic]["variables"]
