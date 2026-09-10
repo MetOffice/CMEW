@@ -11,6 +11,17 @@ apm:
 - AERmon/ch4
 - Amon/clw
 - Amon/clt
+- Amon/hfls
+- Amon/hfss
+- Amon/rlds
+- Emon/rls
+- Amon/rlutcs
+- Amon/rsutcs
+- Amon/rsds
+- Amon/rsdt
+- Emon/rss
 - AERmon/co2 #Available in UKESM, not HADGEM3
 - Lmon/nbp #Available in UKESM, not HADGEM3
 - Omon/fgco2 #Available in UKESM, not HADGEM3
+inm:
+- SImon/siconc
