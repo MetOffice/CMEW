@@ -13,41 +13,6 @@ Test data files:
     kgo for test_write_variables
 """
 from get_variables_from_recipe import parse_variables_from_recipe
-from pathlib import Path
-import pytest
-
-
-@pytest.fixture
-def path_to_radiation_budget_recipe():
-    path = (
-        Path(__file__).parent.parent.parent
-        / "unittest"
-        / "mock_data"
-        / "original_recipe_radiation_budget.yml"
-    )
-    return str(path)
-
-
-@pytest.fixture
-def path_to_zec_recipe():
-    path = (
-        Path(__file__).parent.parent.parent
-        / "unittest"
-        / "mock_data"
-        / "original_recipe_zec.yml"
-    )
-    return str(path)
-
-
-@pytest.fixture
-def path_to_radiation_budget_variables():
-    path = (
-        Path(__file__).parent.parent.parent
-        / "unittest"
-        / "kgo"
-        / "radiation_budget_variables.txt"
-    )
-    return path
 
 
 def test_parse_variables_from_outer_key():
