@@ -9,25 +9,34 @@
 {% from "scrape_ini" import list_datasets %}
 {% set datasets = list_datasets("rose-suite.conf") %}
 
+{# What tool is running a recipe, ESMValTool or AutoAssess? #}
+{% set SOURCE_RECIPES = {
+    "africa": "autoassess",
+    "monsoon": "autoassess",
+    "radiation_budget": "esmvaltool",
+} %}
+
+
 [scheduler]
     UTC mode = True
 
 [task parameters]
     dataset = {{ datasets }}
-    recipe = radiation_budget
-{%- if not UNITTEST and AUTOASSESS %}
-    autoassess_area = monsoon, africa
-{%- endif %}
+    recipe = {{x for x in RECIPES.split(",") if SOURCE_RECIPES[x] == "esmvaltool" }}
+    autoassess_area = {{ x for x in RECIPES.split(",") if SOURCE_RECIPES[x] == "autoassess" }}
 
 [scheduling]
     [[graph]]
         R1 = """
+
 {%- if UNITTEST or TEST %}
             install_env_file => unittest
 {%- endif %}
+
 {%- if USE_ESMVALTOOL_BRANCH %}
             install_env_file => get_esmval_branch => configure_recipe & copy_datasets
 {%- endif %}
+
 {%- if not UNITTEST and not SKIP_CDDS %}
             install_env_file => configure_recipe & copy_datasets
             copy_datasets => configure_for<recipe>
@@ -38,11 +47,10 @@
 
     {%- if TEST %}
             run_recipe<recipe> => compare<recipe>
-        {%- if AUTOASSESS %}
             html_page<autoassess_area> => compare<autoassess_area>
-        {%- endif %}
     {%- endif %}
 {%- endif %}
+
 {%- if SKIP_CDDS %}
     {%- if USE_ESMVALTOOL_BRANCH %}
             install_env_file => get_esmval_branch => configure_recipe & copy_datasets
@@ -54,6 +62,7 @@
             => run_recipe<recipe>
             => housekeeping
 {%- endif %}
+
         """
 
 [runtime]
@@ -170,9 +179,4 @@
     {%- if TEST %}
         {% include "inc/test.cylc" %}
     {%- endif %}
-{%- endif %}
-
-{%- if not UNITTEST and AUTOASSESS %}
-    {% include "site/" ~ SITE ~ "_autoassess.cylc" %}
-    {% include "inc/autoassess.cylc" %}
 {%- endif %}
