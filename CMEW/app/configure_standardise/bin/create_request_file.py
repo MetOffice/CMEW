@@ -9,6 +9,7 @@ import os
 import sys
 import yaml
 import logging
+from config_configure_standardise import requests_defaults
 
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 filename = os.path.basename(__file__)
@@ -86,7 +87,6 @@ def list_streams(variables_file):
 
 
 def create_request(
-    defaults_path,
     dataset,
     mip_table_dir,
     model_runs_yml_fp,
@@ -94,6 +94,7 @@ def create_request(
     root_data_dir,
     variables_file,
     raw_data_dir_mode,
+    request_defaults=requests_defaults,
 ):
     """
     Build a CDDS request configuration for a run identified by a suite_id.
@@ -102,8 +103,6 @@ def create_request(
 
     Parameters
     ----------
-    defaults_path : str
-        The full path to the file containing default values for a CDDS request.
     dataset : str
         The model run to be extracted from MASS and processed.
     mip_table_dir : str
@@ -119,13 +118,15 @@ def create_request(
         the list of variables to be processed.
     raw_data_dir_mode : str
         Whether to save or reuse raw CDDS data files.
+    request_defaults : dict
+        A dictionary containing the CDDS request default values.
 
     Returns
     -------
     dict
         CDDS request configuration.
     """
-    defaults = load_request_defaults(defaults_path)
+    defaults = request_defaults
 
     # Read the model run information from the model_runs.yml file
     with open(model_runs_yml_fp, "r") as file_handle:
@@ -140,8 +141,7 @@ def create_request(
     request = {}
     request["metadata"] = {
         **defaults["metadata"],
-        # The internal dictionary replaces the T with a space
-        "base_date": defaults["metadata"]["base_date"].isoformat(),
+        "base_date": defaults["metadata"]["base_date"],
         "calendar": dataset_dict["calendar"],
         "experiment_id": dataset_dict["experiment_id"],
         "institution_id": dataset_dict["institute"],
@@ -199,7 +199,6 @@ def write_request(request, output_filepath):
 def create_request_file(
     dataset,
     output_filepath,
-    defaults_path,
     mip_table_dir,
     model_runs_yml_fp,
     root_proc_dir,
@@ -217,8 +216,6 @@ def create_request_file(
     output_filepath : str
         The full path to the file where the
         request configuration will be written.
-    defaults_path : str
-        The full path to the file containing default values for a CDDS request.
     mip_table_dir : str
         The path to the MIP table directory to use from CDDS.
     model_runs_yml_fp : str
@@ -236,7 +233,6 @@ def create_request_file(
     logger.info("Creating CDDS request for dataset %s", dataset)
 
     request = create_request(
-        defaults_path,
         dataset,
         mip_table_dir,
         model_runs_yml_fp,
