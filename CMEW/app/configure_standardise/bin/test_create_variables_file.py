@@ -16,10 +16,7 @@ from create_variables_file import (
     combine_variable_lists,
     add_stream_to_variables,
 )
-from configure_standardise_conftest import (
-    mock_data_dir,
-    variables_txt_fp,
-)
+from configure_standardise_conftest import mock_data_dir
 
 
 def test_combine_variable_lists():
@@ -80,10 +77,21 @@ def test_add_stream_to_variables():
             "SImon/siconc",
         ],
     }
+    expected = [
+        "Amon/hfls:apm",
+        "Amon/hfss:apm",
+        "Amon/rlds:apm",
+        "Emon/rls:apm",
+        "Amon/rlut:apm",
+        "Amon/rlutcs:apm",
+        "Amon/rsds:apm",
+        "Amon/rsdt:apm",
+        "Emon/rss:apm",
+        "Amon/rsut:apm",
+        "Amon/rsutcs:apm",
+        "Amon/tas:apm",
+        "SImon/siconc:inm",
+    ]
 
     actual = add_stream_to_variables(input, mock_stream_dict)
-
-    with open(str(variables_txt_fp()), "r") as file:
-        expected = file.read().splitlines()
-
     assert actual == expected
