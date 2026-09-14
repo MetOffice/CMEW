@@ -9,8 +9,6 @@ Test data files:
     input for test_combine_variable_lists
 /app/unittest/mock_data/seaice_variables.txt
     input for test_combine_variable_lists
-/app/unittest/kgo/variables.txt
-    kgo for add_stream_to_variables
 """
 from create_variables_file import (
     combine_variable_lists,
