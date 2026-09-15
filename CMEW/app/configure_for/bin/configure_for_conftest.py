@@ -172,7 +172,3 @@ def mock_data_dir():
 
 def model_runs_yml_fp():
     return mock_data_dir() / "model_runs.yml"
-
-
-def original_recipe_radiation_budget_fp():
-    return mock_data_dir() / "original_recipe_radiation_budget.yml"
