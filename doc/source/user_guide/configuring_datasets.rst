@@ -60,14 +60,19 @@ Once a new dataset has been added, it may be named as the reference (or evaluati
 
 * Clicking the "Rename a section" button.
 
+* Overwriting the text in brackets with "reference" or "evaluation".
 
-There is currently no way to select a CMIP dataset as the reference (or evaluation) run
-so these sections may be named in any way with no effects.
 
 .. image:: images/rename_section.png
    :alt: An image of the Rose GUI showing a pop-up menu over a model run named "1",
          with an arrow pointing to the option "Rename a section".
    :width: 800px
+
+.. image:: images/rename_overwrite.png
+   :alt: An image of a pop-up from the Rose GUI showing a text field entry
+         first filled with "namelist:model_runs(1)",
+         then filled with "namelist:model_runs(reference)".
+   :width: 550px
 
 
 These changes may also be made directly to the ``rose-suite.conf`` file
@@ -77,6 +82,10 @@ rather than using the Rose GUI.
    :alt: An image of the ``rose-suite.conf`` file in a text editor
          with an arrow pointing to the section header "namelist:model_runs(reference)".
    :width: 300px
+
+
+There is currently no way to select a CMIP dataset as the reference (or evaluation) run
+so these sections may be named in any way with no effects.
 
 
 .. warning::
