@@ -15,6 +15,20 @@
             --mem=2GB
             --ntasks=1
 
+    [[SITE_AA_MKSUPER]]
+        inherit = COMPUTE
+        execution time limit = PT6H
+        [[[directives]]]
+            --mem=5GB
+            --ntasks=1
+
+    [[SITE_AA_VALNOTE]]
+        inherit = COMPUTE
+        execution time limit = PT2H
+        [[[directives]]]
+            --mem=4GB
+            --ntasks=1
+
     [[SITE_AA_RETRIEVAL]]
         inherit = COMPUTE
         execution time limit = PT5H

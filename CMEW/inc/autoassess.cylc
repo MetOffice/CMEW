@@ -15,13 +15,17 @@
 [scheduling]
     [[graph]]
         R1 = """
-            install_env_file
-                => install_autoassess
+            install_env_file => install_autoassess
+            install_autoassess
                 => retrieve_data<autoassess_area><aa_dataset>
                 => index_data<autoassess_area><aa_dataset>
                 => run_area<autoassess_area>
                 => nac_plot<autoassess_area>
                 => html_page<autoassess_area>
+                => html_page_overview
+            install_autoassess
+                => mksuper<aa_dataset>
+                => run_validation_note
                 => html_page_overview
         """
 
@@ -47,11 +51,26 @@
             AUTOASSESS_DATA_DIR = $CYLC_WORKFLOW_SHARE_DIR/data/autoassess
             ASSESSMENT_TITLE = {{ AUTOASSESS_TITLE }}
             ESMVALTOOL_MODULE_NAME = {{ ESMVALTOOL_MODULE_NAME }}
+            START_YEAR = {{ START_YEAR }}
+            NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
             START_DATE = {{ (START_YEAR-1)|string + '/12/01' }}
             END_DATE = {{ (START_YEAR+NUMBER_OF_YEARS-1)|string + '/12/01' }}
 
     [[install_autoassess]]
         inherit = AUTOASSESS, SITE_AA_INSTALL
+
+    [[mksuper<aa_dataset>]]
+        inherit = AUTOASSESS, SITE_AA_MKSUPER
+        [[[environment]]]
+            ROSE_TASK_APP = aa_retrieve_data
+            ROSE_APP_OPT_CONF_KEYS = mksuper
+            SUITE_ID = $CYLC_TASK_PARAM_aa_dataset
+
+    [[run_validation_note]]
+        inherit = AUTOASSESS, SITE_AA_VALNOTE
+        [[[environment]]]
+            ROSE_TASK_APP = aa_run_area
+            ROSE_APP_OPT_CONF_KEYS = valnote
 
     [[retrieve_data<autoassess_area><aa_dataset>]]
         inherit = AUTOASSESS, SITE_AA_RETRIEVAL
