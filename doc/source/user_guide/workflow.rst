@@ -167,7 +167,7 @@ The |AutoAssess| assessments use the following steps:
   :Runs on:
      Localhost
   :Executes:
-     The ``install_autoassess.sh`` script from the |Rose| app
+     The ``install_package.sh`` script from the workflow ``bin`` directory
   :Details:
      Makes use of the |Rose| install capabilities to copy a specified commit of
      the |AutoAssess| repository to the workflow share directory. The script

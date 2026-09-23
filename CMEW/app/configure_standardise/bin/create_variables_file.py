@@ -5,9 +5,9 @@
 Create a variables file to standardise model data with CDDS.
 """
 import os
-import yaml
 import sys
 import logging
+from config_configure_standardise import streams_dict
 
 
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
@@ -44,45 +44,25 @@ def combine_variable_lists(directory):
     return variables
 
 
-def load_stream_dict(stream_config_fp):
-    """
-    Loads stream information from the ../etc/streams.yml file.
-
-    Returns
-    -------
-    dict
-        A mapping of pre-defined streams to their associated variables
-    """
-    # Read the stream mappings
-    with open(stream_config_fp, "r") as f:
-        config = yaml.safe_load(f)
-
-    # Return the whole dictionary
-    return config
-
-
-def add_stream_to_variables(stream_config_fp, variables):
+def add_stream_to_variables(variables, streams_dict=streams_dict):
     """Add stream information to a list of variables.
 
     Parameters
     ----------
-    stream_config_fp : str
-        The full path to the file containing
-        the data streams for each variable.
     variables : list[str]
         List of variables in the format "MIP_table/variable_name"
+    streams_dict : dict
+        A dictionary containing information about data streams.
 
     Returns
     -------
     list[str]
         List of variables in the format "MIP_table/variable_name:stream"
     """
-    stream_dict = load_stream_dict(stream_config_fp)
-
     # Using a second dictionary to avoid looping
     var_to_stream = {
         var: stream
-        for stream, var_list in stream_dict.items()
+        for stream, var_list in streams_dict.items()
         for var in var_list
     }
 
@@ -113,11 +93,9 @@ def write_variables(variables, output_filepath):
         target_file.write(variables_str)
 
 
-def create_variables_file(
-    vars_files_list_dir, stream_config_fp, output_filepath
-):
+def create_variables_file(vars_files_list_dir, output_filepath):
     """Create a variables file to standardise model data with CDDS."""
     variables = combine_variable_lists(vars_files_list_dir)
-    streamed_variables = add_stream_to_variables(stream_config_fp, variables)
+    streamed_variables = add_stream_to_variables(variables)
     logger.info("Writing variables file to %s", output_filepath)
     write_variables(streamed_variables, output_filepath)
