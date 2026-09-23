@@ -1,48 +1,28 @@
 .. _recipes_monsoon:
 
+.. include:: ../../common.txt
+
 Monsoon
 =======
+
+This assessment is available via |AutoAssess|.
 
 Overview
 --------
 
-This diagnostic analyses the South and and East Asian monsoon.
+This diagnostic analyses the South and East Asian monsoon.
 
 
 Available recipes and diagnostics
 ---------------------------------
 
-Recipes are stored in esmvaltool/recipes/
-
-* recipe_<mynewrecipe>.yml
-
-Diagnostics are stored in esmvaltool/diag_scripts/<mynewdiag>/
-
-* <mynewdiag.py/.ncl/.r>: one line scription
+The assessment code is available from the `AutoAssess`_ repository.
 
 
 User settings in recipe
 -----------------------
 
-#. Script <mynewdiag.py/.ncl/.r>
-
-   *Required settings for script*
-
-   * xxx: zzz
-
-   *Optional settings for script*
-
-   *Required settings for variables*
-
-   *Optional settings for variables*
-
-   *Required settings for preprocessor*
-
-   *Optional settings for preprocessor*
-
-   *Color tables*
-
-   * list required color tables (if any) here
+There are no user settings for this recipe
 
 
 Variables
@@ -82,18 +62,57 @@ Seasonal Mean Variables:
 Observations and reformat scripts
 ---------------------------------
 
-*Note: (1) obs4MIPs data can be used directly without any preprocessing;
-(2) see headers of reformat scripts for non-obs4MIPs data for download
-instructions.*
-
 * ECMWF Reanalysis (ERA-Interim?) (psl, ua, va, uas, zg)
 * Climate Research Unit (CRU-TS 3.23? tmp) (tas)
 * GPCP (vn2.2?) (pr)
 
-  *Reformat script:* <myreformatscript.py>
 
 References
 ----------
 
+There is no reference for this recipe.
+
 Example plots
 -------------
+
+.. figure:: monsoon_overview.png
+   :scale: 50 %
+   :alt: NAC plot for Monsoon area
+
+   This is the summary overview of metrics from the Monsoon assessment.
+
+.. figure:: monsoon_east.png
+   :scale: 50 %
+   :alt: East Asian monsoon metrics
+
+   These are the East Asian Monsoon metrics.
+
+.. figure:: monsoon_east_indices.png
+   :scale: 50 %
+   :alt: East Asian monsoon indices
+
+   These are the East Asian Monsoon indices.
+
+.. figure:: monsoon_east_other.png
+   :scale: 50 %
+   :alt: Other miscellaneous East Asian Monsoon metrics
+
+   These are other miscellaneous East Asian Monsoon metrics.
+
+.. figure:: monsoon_south.png
+   :scale: 50 %
+   :alt: South Asian monsoon metrics
+
+   These are the South Asian Monsoon metrics.
+
+.. figure:: monsoon_south_indices.png
+   :scale: 50 %
+   :alt: South Asian monsoon indices
+
+   These are the South Asian Monsoon indices.
+
+.. figure:: monsoon_south_other.png
+   :scale: 50 %
+   :alt: Other miscellaneous South Asian Monsoon metrics
+
+   These are other miscellaneous South Asian Monsoon metrics.

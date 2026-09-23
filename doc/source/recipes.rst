@@ -18,5 +18,5 @@ Implemented in |AutoAssess|:
 .. toctree::
    :maxdepth: 1
 
-   areas/monsoon.rst
-   areas/africa.rst
+   areas/monsoon/monsoon.rst
+   areas/africa/africa.rst
