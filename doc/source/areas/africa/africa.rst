@@ -45,8 +45,8 @@ Observations and reformat scripts
 References
 ----------
 
-Bain, C.L., K. Williams, S. Milton, J. Heming (2013): 
-Tracking African Easterly Waves in Met Office models 
+Bain, C.L., K. Williams, S. Milton, J. Heming (2013):
+Tracking African Easterly Waves in Met Office models
 QJRMS
 
 
