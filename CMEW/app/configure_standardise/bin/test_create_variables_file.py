@@ -9,20 +9,12 @@ Test data files:
     input for test_combine_variable_lists
 /app/unittest/mock_data/seaice_variables.txt
     input for test_combine_variable_lists
-/app/unittest/kgo/variables.txt
-    kgo for add_stream_to_variables
 """
 from create_variables_file import (
     combine_variable_lists,
     add_stream_to_variables,
-    write_variables,
 )
-import tempfile
-from configure_standardise_conftest import (
-    mock_data_dir,
-    variables_txt_fp,
-    streams_yml_fp,
-)
+from configure_standardise_conftest import mock_data_dir
 
 
 def test_combine_variable_lists():
@@ -64,16 +56,26 @@ def test_add_stream_to_variables():
         "Amon/tas",
         "SImon/siconc",
     ]
-    actual = add_stream_to_variables(str(streams_yml_fp()), input)
-
-    with open(str(variables_txt_fp()), "r") as file:
-        expected = file.read().splitlines()
-
-    assert actual == expected
-
-
-def test_write_variables():
-    input = [
+    mock_stream_dict = {
+        "apm": [
+            "Amon/hfls",
+            "Amon/hfss",
+            "Amon/rlds",
+            "Amon/rlut",
+            "Amon/rlutcs",
+            "Amon/rsds",
+            "Amon/rsdt",
+            "Amon/rsut",
+            "Amon/rsutcs",
+            "Amon/tas",
+            "Emon/rls",
+            "Emon/rss",
+        ],
+        "inm": [
+            "SImon/siconc",
+        ],
+    }
+    expected = [
         "Amon/hfls:apm",
         "Amon/hfss:apm",
         "Amon/rlds:apm",
@@ -89,14 +91,5 @@ def test_write_variables():
         "SImon/siconc:inm",
     ]
 
-    # Write the test dictionary to a temporary file
-    with tempfile.NamedTemporaryFile() as tmp:
-        write_variables(input, tmp.name)
-        tmp.seek(0)
-        actual = tmp.read().decode("utf-8")  # decode bytes to string
-
-    # Load the expected list
-    with open(str(variables_txt_fp()), "r") as file_handle:
-        expected = file_handle.read()
-
-    assert expected == actual
+    actual = add_stream_to_variables(input, mock_stream_dict)
+    assert actual == expected
