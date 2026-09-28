@@ -2,7 +2,11 @@
 # (C) Crown Copyright 2022-2026, Met Office.
 # The LICENSE.md file contains full licensing details.
 # flow.cylc
-{{ assert(SITE != "", "SITE must be set to something other than an empty string") }}
+{% set SITE = SITE | default("") %}
+{{ assert(
+    SITE != "",
+    "SITE must be set. Specify a site using '-O <site>', e.g. 'cylc vip -O metoffice'."
+) }}
 {{ assert(ESMVALTOOL_MODULE_NAME != "", "ESMVALTOOL_MODULE_NAME must be set to something other than an empty string") }}
 {% set SKIP_CDDS = SKIP_CDDS | default(false) %}
 
