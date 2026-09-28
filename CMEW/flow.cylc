@@ -6,7 +6,7 @@
 {{ assert(
     SITE != "",
     "SITE must be set. Specify a site using '-O <site>', e.g. 'cylc vip -O metoffice'."
-) }}
+    ) }}
 {{ assert(ESMVALTOOL_MODULE_NAME != "", "ESMVALTOOL_MODULE_NAME must be set to something other than an empty string") }}
 {% set SKIP_CDDS = SKIP_CDDS | default(false) %}
 
