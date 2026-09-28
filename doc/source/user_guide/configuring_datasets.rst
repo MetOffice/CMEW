@@ -25,16 +25,16 @@ and then edit the details. To do this:
 
 * In the Rose GUI, click the triangle to the left of "suite conf" to expose a submenu.
 
-* Click the triangle to the left of "namelist" to expand the namelist sections.
+* Click the triangle to the left of "Datasets" to expand the dataset sections.
 
-* Select the type of dataset you wish to add, e.g. "model_runs".
+* Select the type of dataset you wish to add, e.g. "Model runs to assess".
 
 * Right-click an existing entry and select "Clone this section" from the pop-up menu.
 
 .. image:: images/clone_button.png
    :alt: An image of the Rose GUI showing the "suite conf",
-         with the "namelist" section expanded,
-         the model_runs section of the namelist selected,
+         with the "Datasets" section expanded,
+         the "Model runs to assess" section selected,
          and a pop-up menu over the second entry.
    :width: 800px
 
@@ -54,20 +54,25 @@ If the clone button is used, the default is "1", "2" and so on.
 
 Once a new dataset has been added, it may be named as the reference (or evaluation) run by
 
-* Navigating to the "model_runs" area of the namelists.
+* Navigating to the "Model runs to assess" area of "Datasets".
 
 * Right-clicking the entry to be amended (renamed).
 
 * Clicking the "Rename a section" button.
 
+* Overwriting the text in brackets with "reference" or "evaluation".
 
-There is currently no way to select a CMIP dataset as the reference (or evaluation) run
-so these sections may be named in any way with no effects.
 
 .. image:: images/rename_section.png
-   :alt: An image of the Rose GUI showing a pop-up menu over a model_runs entry named "1",
+   :alt: An image of the Rose GUI showing a pop-up menu over a model run named "1",
          with an arrow pointing to the option "Rename a section".
-   :width: 600px
+   :width: 800px
+
+.. image:: images/rename_overwrite.png
+   :alt: An image of a pop-up from the Rose GUI showing a text field entry
+         first filled with "namelist:model_runs(1)",
+         then filled with "namelist:model_runs(reference)".
+   :width: 550px
 
 
 These changes may also be made directly to the ``rose-suite.conf`` file
@@ -77,6 +82,10 @@ rather than using the Rose GUI.
    :alt: An image of the ``rose-suite.conf`` file in a text editor
          with an arrow pointing to the section header "namelist:model_runs(reference)".
    :width: 300px
+
+
+There is currently no way to select a CMIP dataset as the reference (or evaluation) run
+so these sections may be named in any way with no effects.
 
 
 .. warning::
