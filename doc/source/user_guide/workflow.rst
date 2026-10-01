@@ -180,7 +180,9 @@ The |AutoAssess| assessments use the following steps:
   :Runs on:
      Localhost
   :Executes:
-     The |AutoAssess| ``aa_retriever`` script from the ``aa_retrieve_data`` |Rose| app
+     The |AutoAssess| ``aa_retriever`` script from the ``aa_retrieve_data`` |Rose| app.
+     There is an optional configuration for retrieving data for the Validation Note that
+     uses the ``aa_mksuper`` script.
   :Details:
      This task runs on a per area and per dataset basis
 
@@ -200,7 +202,9 @@ The |AutoAssess| assessments use the following steps:
   :Runs on:
      Localhost
   :Executes:
-     The |AutoAssess| ``aa_run_area`` script from the ``aa_run_area`` |Rose| app
+     The |AutoAssess| ``aa_run_area`` script from the ``aa_run_area`` |Rose| app.
+     There is an optional configuration for Validation Notes that uses the
+     ``aa_mksource`` and ``aa_valnote`` scripts.
   :Details:
      This task runs on a per area basis.
 
