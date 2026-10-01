@@ -62,7 +62,7 @@ Observations and reformat scripts
 ---------------------------------
 
 * 2001-2012 climatologies (seasonal means) from CERES-EBAF Ed2.7.
-* 1999-2008 climatologies (seasonal means) from ESA ECV Soil Moisture Dataset v1. Produced by the `ESA CCI soil moisture project`_.
+* 1999-2008 climatologies (seasonal means) from ESA ECV Soil Moisture Dataset v1.
 
 
 References

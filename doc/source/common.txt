@@ -34,4 +34,3 @@
 .. _Land-surface Permafrost: https://docs.esmvaltool.org/en/latest/recipes/recipe_autoassess_landsurface_permafrost.html
 .. _Land-surface Surface Radiation: https://docs.esmvaltool.org/en/latest/recipes/recipe_autoassess_landsurface_surfrad.html
 .. _Land-surface Soil Moisture: https://docs.esmvaltool.org/en/latest/recipes/recipe_autoassess_landsurface_soilmoisture.html
-.. _ESA CCI soil moisture project: https://www.esa-soilmoisture-cci.org/node/93
