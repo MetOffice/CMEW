@@ -18,5 +18,13 @@ Implemented in |AutoAssess|:
 .. toctree::
    :maxdepth: 1
 
-   areas/monsoon/monsoon.rst
+   areas/aerosols/aerosols.rst
    areas/africa/africa.rst
+   areas/australia/australia.rst
+   areas/enso/enso.rst
+   areas/globaltrop/globaltrop.rst
+   areas/hydrocycle/hydrocycle.rst
+   areas/land_surface/land_surface.rst
+   areas/mjo/mjo.rst
+   areas/monsoon/monsoon.rst
+   areas/stratosphere/stratosphere.rst

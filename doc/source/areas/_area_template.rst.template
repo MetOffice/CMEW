@@ -1,7 +1,11 @@
 .. _recipes_<mynewrecipe>:
 
+.. include:: ../../common.txt
+
 Title
 =====
+
+This recipe is available via |AutoAssess|.
 
 Overview
 --------
@@ -12,37 +16,13 @@ Brief description of the diagnostic.
 Available recipes and diagnostics
 ---------------------------------
 
-Recipes are stored in esmvaltool/recipes/
-
-* recipe_<mynewrecipe>.yml
-
-Diagnostics are stored in esmvaltool/diag_scripts/<mynewdiag>/
-
-* <mynewdiag.py/.ncl/.r>: one line scription
+The assessment code is available from the `AutoAssess`_ repository.
 
 
 User settings in recipe
 -----------------------
 
-#. Script <mynewdiag.py/.ncl/.r>
-
-   *Required settings for script*
-
-   * xxx: zzz
-
-   *Optional settings for script*
-
-   *Required settings for variables*
-
-   *Optional settings for variables*
-
-   *Required settings for preprocessor*
-
-   *Optional settings for preprocessor*
-
-   *Color tables*
-
-   * list required color tables (if any) here
+There are no user settings for this recipe
 
 
 Variables

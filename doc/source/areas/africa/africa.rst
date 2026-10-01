@@ -54,31 +54,36 @@ Example plots
 -------------
 
 .. figure:: africa_overview.png
+   :align: center
    :scale: 50 %
    :alt: NAC plot for Africa area
 
-   This is the summary overview of metrics from the Africa assessment.
+   Summary overview of metrics from the Africa assessment
 
 .. figure:: AEWstats.png
+   :align: center
    :scale: 50 %
-   :alt: African Easterly Wave Statistics
+   :alt: AEWstats.png
 
-   This displays statistics of various aspects of African Easterly Waves.
+   Statistics of various aspects of African Easterly Waves
 
 .. figure:: raincoupling.png
+   :align: center
    :scale: 50 %
-   :alt: Rain coupling with AEW
+   :alt: raincoupling.png
 
-   This highlights the coupling between AEWs and rainfall.
+   Coupling between AEWs and rainfall
 
 .. figure:: egAEWhov.png
+   :align: center
    :scale: 50 %
-   :alt: Hovmoller of African Easterly Waves
+   :alt: egAEWhov.png
 
-   This shows a hovmoller of curvature vorticity overlaid with AEW tracks.
+   Hovmoller of curvature vorticity overlaid with AEW tracks
 
 .. figure:: egAEWRAINhov.png
+   :align: center
    :scale: 50 %
-   :alt: Hovmoller of Rainfall
+   :alt: egAEWRAINhov.png
 
-   This shows a hovmoller of rainfall overlaid with AEW tracks.
+   Hovmoller of rainfall overlaid with AEW tracks
