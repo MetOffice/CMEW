@@ -181,16 +181,15 @@ References
 
 Adler, R.F. et al., 2003: The Version 2 Global Precipitation Climatology Project (GPCP) Monthly Precipitation Analysis (1979-Present). J. Hydrometeor., 4,1147-1167.
 
-Colman, R. A., A. F. Moise, and L. I. Hanson (2011), Tropical Australian climate and the Australian monsoon as
-simulated by 23 CMIP3 models, J. Geophys. Res., 116, D10116, doi:10.1029/2010JD015149.
+Colman, R. A., A. F. Moise, and L. I. Hanson (2011), Tropical Australian climate and the Australian monsoon as simulated by 23 CMIP3 models, J. Geophys. Res., 116, D10116, doi:10.1029/2010JD015149.
 
 Kajikawa, Y., Wang, B. and Yang, J. (2010), A multi‐time scale Australian monsoon index. Int. J. Climatol., 30: 1114-1120. doi:10.1002/joc.1955
 
-Narsey, S.Y., Brown, J. R.,Colman,R.A., Delage, F., Power, S. B., Moise, A. F., & Zhang, H. (2020). Climate change projections for the Australian monsoon from CMIP6 models. Geophysical Research Letters, 47, e2019GL086816. https://doi.org/10.1029/2019GL086816
+Narsey, S.Y., Brown, J. R.,Colman,R.A., Delage, F., Power, S. B., Moise, A. F., & Zhang, H. (2020). Climate change projections for the Australian monsoon from CMIP6 models. Geophysical Research Letters, 47, e2019GL086816.
 
-McKenna, S., Santoso, A., Gupta, A.S. et al. Indian Ocean Dipole in CMIP5 and CMIP6: characteristics, biases, and links to ENSO. Sci Rep 10, 11500 (2020). https://doi.org/10.1038/s41598-020-68268-9
+McKenna, S., Santoso, A., Gupta, A.S. et al. Indian Ocean Dipole in CMIP5 and CMIP6: characteristics, biases, and links to ENSO. Sci Rep 10, 11500 (2020).
 
-Toh, Y.Y., Turner, A.G., Johnson, S.J. et al. Maritime Continent seasonal climate biases in AMIP experiments of the CMIP5 multimodel ensemble. Clim Dyn 50, 777–800 (2018). https://doi.org/10.1007/s00382-017-3641-x
+Toh, Y.Y., Turner, A.G., Johnson, S.J. et al. Maritime Continent seasonal climate biases in AMIP experiments of the CMIP5 multimodel ensemble. Clim Dyn 50, 777–800 (2018).
 
 Xie and Arkin 1997. Global precipitation: a 17-year monthly analysis based on gauge observations, satellite estimates and numerical model outputs. BAMS vol 78, 2539-2558.
 
