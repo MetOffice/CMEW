@@ -34,10 +34,10 @@ Performance metrics:
 Diagnostics:
 
 * Time series for sea surface temperature for areas Nino1+2, Nino3, Nino3.4 and Nino4
-* Annual mean sea surface temperature (5N-5S) and zonal wind stress (5N-5S) for Pacific longitudes 
+* Annual mean sea surface temperature (5N-5S) and zonal wind stress (5N-5S) for Pacific longitudes
 * Seasonal cycle of standard deviation of Nino3 sea surface temperature "phase locking"
 * Nino3 sea surface temperature power spectrum
-* Composite sea surface temperature (tropical Pacific) for DJF and JJA for El Nino (Nino3.4>0.8) and La Nina (Nino3.4<0.8) composites 
+* Composite sea surface temperature (tropical Pacific) for DJF and JJA for El Nino (Nino3.4>0.8) and La Nina (Nino3.4<0.8) composites
 * Composite MSLP anomalies (global) for DJF and JJA for El Nino and La Nina
 * Composite MSLP anomalies (N. Hem) for JFM (late winter) for El Nino and La Nina
 * Composite precipitation anomalies (global) for DJF and JJA for El Nino and La Nina
@@ -54,7 +54,7 @@ Variables
 ---------
 
 ===========================   ================== ==============
-Variable/Field name           realm              frequency     
+Variable/Field name           realm              frequency
 ===========================   ================== ==============
 Sea surface temperature       Atmosphere         monthly mean
 TAUX                          Atmosphere         monthly mean

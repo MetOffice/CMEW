@@ -20,10 +20,10 @@ Maritime continent averages;
 RMSE and PCC for seasonal rainfall over MC;
 IOD metrics.
 
-Land fraction information is taken from the model files.  
+Land fraction information is taken from the model files.
 
-Area-averaged metrics are calculated on the native grid (model and obs).  
-Model and observational data are regridded to the coarsest grid (variable dependent) for plotting and RMS/PCC calculation.  This means plots from a N216 model will differ when comparing with another N216 or N96 but metrics should stay the same.  
+Area-averaged metrics are calculated on the native grid (model and obs).
+Model and observational data are regridded to the coarsest grid (variable dependent) for plotting and RMS/PCC calculation.  This means plots from a N216 model will differ when comparing with another N216 or N96 but metrics should stay the same.
 Number of vectors (quiver plots) plotted is resolution dependentso higher resolution doesn't mean more vectors.
 
 Maritime continent domain is 90-160E, 20S-20N to be consistent with the TerraMaris project (Matthews).
@@ -48,7 +48,7 @@ Overall performance metrics:
 * NAus (land) DJF temp vs. CRU
 * mean AUSMI (DJF) vs ERA-I
 * Standard deviation AUSMI (DJF) vs ERA-I
-* Correlation of precip with AUSMI (DJF) 
+* Correlation of precip with AUSMI (DJF)
 * Wang index (U850)
 * St dev Wang index
 * Webster-Yang index (U850-U200)
@@ -168,39 +168,12 @@ surface wind stress (y-comp)  Atmosphere         monthly mean   1st level only (
 Observations and reformat scripts
 ---------------------------------
 
-Currently this only uses data already available and used by other assessment areas - some of these cover different time peiods.  Need to update to include one climatological period consistent with all variables.
-
-Precipitation (monthly)= GPCP and CMAP
-Precipitation (diurnal cycle) = TRMM
-Land air temperature = CRU
-Sea surface temperature = HadISST
-MSLP = ERA Interim
-u,v winds= ERA Interim
-Wind stress= MERRA
-
-How to obtain the data:
-
-All data can be downloaded free of charge
-
-GPCP2 monthly data (Adler et al., 2003): Jan 1979 - Dec 2006, 2.5x2.5 deg resolution, units: kg/m2/day. Downloaded from http://precip.gsfc.nasa.gov/gpcp_v2_comb.html
-
-CMAP/O monthly data (Xie and Arkin, 1997): Jan 1979 - Dec 2001, 2.5x2.5 deg resolution, units: kg/m2/day. Obtained from ftp://ftp.cpc.ncep.noaa.gov/precip/cmap
-
-TRMM data (for diurnal cycle) from https://disc.gsfc.nasa.gov/datasets/TRMM_3B42_Daily_7/summary
-
-ERA-Interim monthly data (Dee et al., 2011) from ECMWF http://apps.ecmwf.int/datasets/
-
-MERRA monthly data (Rienecker et al., 2011) from NASA https://gmao.gsfc.nasa.gov/reanalysis/
-
-HadISST and CRU from  Met Office
-
-
-
-How to process the data:
-
-Instructions how to reproduce the used observations/reanalysis files
-
-aus_obs_metrics.py
+* GPCP2 monthly data (Adler et al., 2003): Jan 1979 - Dec 2006, 2.5x2.5 deg resolution, units: kg/m2/day.
+* CMAP/O monthly data (Xie and Arkin, 1997): Jan 1979 - Dec 2001, 2.5x2.5 deg resolution, units: kg/m2/day.
+* TRMM data (for diurnal cycle)
+* ERA-Interim monthly data (Dee et al., 2011)
+* MERRA monthly data (Rienecker et al., 2011)
+* HadISST and CRU from  Met Office
 
 
 References

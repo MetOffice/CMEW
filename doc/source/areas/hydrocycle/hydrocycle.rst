@@ -17,7 +17,7 @@ Our aim is to examine where water is in the system. The metrics include:
 * Global, all-land and all-ocean quantities;
 * Values from annual and seasonal climatologies;
 * Regional averages (Tropics (30S-30N) and NH, SH extra-tropics);
-* Inter-annual standard deviation of rainfall only, for global and regional means. 
+* Inter-annual standard deviation of rainfall only, for global and regional means.
 
 
 For runoff, the observations only extend to 60S so the SH region is limited to this latitude.
@@ -69,12 +69,12 @@ Variables
 ========================= ======== ==========  =================================================
 Variable/Field name       realm    frequency   Comment
 ========================= ======== ==========  =================================================
-Precipitation             Global   seasonal    
-Evaporation               Global   seasonal    
-Runoff                    Global   seasonal    Limited to north of 60S. Observational constraint only for annual.            
-Sensible heat flux        Global   seasonal    
-Latent heat flux          Global   seasonal    
-Total water vapour        Global   seasonal    
+Precipitation             Global   seasonal
+Evaporation               Global   seasonal
+Runoff                    Global   seasonal    Limited to north of 60S. Observational constraint only for annual.
+Sensible heat flux        Global   seasonal
+Latent heat flux          Global   seasonal
+Total water vapour        Global   seasonal
 Total cloud liquid water  Global   seasonal    For monitoring only; no observational constraint
 Total cloud ice water     Global   seasonal    For monitoring only; no observational constraint
 ========================= ======== ==========  =================================================
@@ -88,10 +88,10 @@ Precipitation (global, regional, seasonal, IAV):                            Calc
 Evaporation Global (annual only):                                           Taken as the same as precipitation (so that obs have P-E balance).
 Evaporation Land (annual only):                         1.56 +/- 0.2 mm/d   Range of values from Mueller et al. 2011.
 Evaporation Ocean (global, regional, seasonal):                             Calculated from NOCS2.0 only; see below for dataset information.
-Evaporation Ocean (global, annual-only):                2.97 mm/d           Fixed value taken from Yu 2007 (though note large decadal variation); second value calculated from NOCS2.0 
+Evaporation Ocean (global, annual-only):                2.97 mm/d           Fixed value taken from Yu 2007 (though note large decadal variation); second value calculated from NOCS2.0
 Total Runoff Land (global, regional, annual-only):                          Calculated from Fekete et al. (2002) annual means only and limited to north of 60S.
-Sensible heat flux Global (annual only)                 15.7 to 18.9 W/m2   Range of estimates quoted in Trenberth et al (2009) 
-Sensible heat flux Land (annual only)                   26.0 to 47.0 W/m2   Jimenez et al (2011) (41.0 +/- 6 W/m2); excl Antarctic, Greenland; and Trenberth et al. (2009) 
+Sensible heat flux Global (annual only)                 15.7 to 18.9 W/m2   Range of estimates quoted in Trenberth et al (2009)
+Sensible heat flux Land (annual only)                   26.0 to 47.0 W/m2   Jimenez et al (2011) (41.0 +/- 6 W/m2); excl Antarctic, Greenland; and Trenberth et al. (2009)
 Sensible heat flux Ocean (global, regional, seasonal)                       Calculated from COADS (DaSilva et al 1994) and NOCS2.0
 Sensible heat flux Ocean (global, annual):                                  Fixed value 7 W/m2  Taken from SOC (Josey 1999); Value of 12 W/m2 given by Trenberth et al. (2009). Also use values calculated from NOCS2.0 and COADS.
 Latent heat flux Global (annual only)                   80.0 to 83.0 W/m2   Range of estimates quoted in Trenberth et al (2009)
@@ -100,60 +100,16 @@ Latent heat flux Ocean (global, regional, seasonal)                         Calc
 Total water vapour Global (annual only)                 24.2  mm            Fixed value from Trenberth (2011) (SSM/I)
 Total water vapour Land (annual only)                   18.5  mm            Fixed value from Trenberth (2011) (SSM/I)
 Total water vapour Ocean (annual only)                  26.6  mm            Fixed value from Trenberth (2011) (SSM/I)
-Total cloud liquid water Global                         None                 
-Total cloud liquid water Land                           None                 
-Total cloud liquid water Ocean                          None                 
-Total cloud ice water Global                            None                 
-Total cloud ice water Land                              None                 
-Total cloud ice water Ocean                             None                 
-P minus E Global                                        0.0                 
+Total cloud liquid water Global                         None
+Total cloud liquid water Land                           None
+Total cloud liquid water Ocean                          None
+Total cloud ice water Global                            None
+Total cloud ice water Land                              None
+Total cloud ice water Ocean                             None
+P minus E Global                                        0.0
 P minus E Land                                                              Using P and E ranges above
 P minus E Ocean                                                             Using P and E ranges above
 ======================================================  ==================  ====================================================================================================================================
-
-How to obtain the data:
-
-NOCS2.0 (Berry and Kent, 2014):
-    
-* Berry, D.; Kent, E.C. (2014): NOCS 2.0: National Oceanography Centre Southampton Surface Flux Climatology (version 2.0). NCAS British Atmospheric Data Centre. 
-* Seasonal climatologies (ocean only) from 1982-2001. 1.0x1.0 deg resolution. 
-* Units:
-
-    * Evaporation  kg/m2/s; 
-    * SH and LH fluxes units W/m2
-
-* Available at: http://catalogue.ceda.ac.uk/uuid/21b5b970a6844d72afa4b2c551944d9b
-
-COADS 1945-1989 LH flux, SH flux (Dasilva et al. 1994):
- 
-* Da Silva, A M, C C Young and S Levitus (1994): Atlas of Surface Marine data (1994). Vol 1: Algorithms and Procedures.
-* Monthly mean climatological fields. 1.0x1.0 deg resolution, units: W/m2
-* Available at https://www.nodc.noaa.gov/OC5/ASMD94/pr_asmd.html 
-
-GPCP2 monthly data (Adler et al., 2003):
-    
-* Adler, R.F. et al., 2003: The Version 2 Global Precipitation Climatology Project (GPCP) Monthly Precipitation Analysis (1979-Present). J. Hydrometeor., 4,1147-1167. 
-* Jan 1979 - Dec 2006, 2.5x2.5 deg resolution, units: kg/m2/day
-* Downloaded from http://precip.gsfc.nasa.gov/gpcp_v2_comb.html
-
-CMAP/O monthly data (Xie and Arkin, 1997):
-
-* Xie and Arkin 1997. Global precipitation: a 17-year monthly analysis based on gauge observations, satellite estimates and numerical model outputs. BAMS vol 78, 2539-2558.
-* Jan 1979 - Dec 2001, 2.5x2.5 deg resolution, units: kg/m2/day 
-* Obtained from ftp://ftp.cpc.ncep.noaa.gov/precip/cmap    
-
-Runoff data (Fekete et al. 2002):
-                
-* Fekete, B. M., et al. (2002) High-resolution fields of global runoff combining observed river discharge and simulated water balances, Global Biogeochem. Cycles, 16(3), doi:10.1029/1999GB001254,2002.
-* Annual climatological, land only, from some period before 2000 (not clear from documentation). 
-* Resolution: 0.5x0.5 deg resolution, units: kg/m2/year. 
-* Data from http://www.grdc.sr.unh.edu/ 
-
-
-How to process the data:
-
-* Insert filename paths into **hydrocycle_obs_filenames.py**
-* Use module **hydrocycle_obs_metrics.py**, which calls module **hydrocycle_obs_filenames.py**, to create hydrocycle_obs.csv file.
 
 
 References
@@ -163,7 +119,7 @@ Adler, R.F. et al., 2003: The Version 2 Global Precipitation Climatology Project
 
 Berry, D., Kent, E.C. (2014): NOCS 2.0: National Oceanography Centre Southampton Surface Flux Climatology (version 2.0). NCAS British Atmospheric Data Centre. http://catalogue.ceda.ac.uk/uuid/21b5b970a6844d72afa4b2c551944d9b
 
-Da Silva, A M, C C Young and S Levitus (1994): Atlas of Surface Marine data (1994). Vol 1: Algorithms and Procedures. 
+Da Silva, A M, C C Young and S Levitus (1994): Atlas of Surface Marine data (1994). Vol 1: Algorithms and Procedures.
 
 Fekete, B. M., et al. (2002) High-resolution fields of global runoff combining observed river discharge and simulated water balances, Global Biogeochem. Cycles, 16(3), doi:10.1029/1999GB001254,2002.
 

@@ -190,9 +190,11 @@ The |AutoAssess| assessments use the following steps:
   :Runs on:
      Localhost
   :Executes:
-     The |AutoAssess| ``aa_data_indexer`` script from the ``aa_index_data`` |Rose| app
+     The |AutoAssess| ``aa_data_indexer`` script from the ``aa_index_data`` |Rose| app.
   :Details:
-     This task runs on a per area and per dataset basis
+     This task runs on a per area and per dataset basis. There is an optional
+     configuation for the Aerosols area to invoke the ``--ncconv`` option that
+     forces conversion to netcdf before indexing.
 
 ``run_area<area>``
   :Description:
