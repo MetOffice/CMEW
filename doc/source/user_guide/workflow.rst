@@ -200,7 +200,9 @@ The |AutoAssess| assessments use the following steps:
   :Runs on:
      Localhost
   :Executes:
-     The |AutoAssess| ``aa_run_area`` script from the ``aa_run_area`` |Rose| app
+     The |AutoAssess| ``aa_run_area`` script from the ``aa_run_area`` |Rose| app.
+     Optional configurations exist for the Australia and MJO areas which run the
+     ``aa_australia`` and ``aa_mjo`` |AutoAssess| scripts respectively.
   :Details:
      This task runs on a per area basis.
 
