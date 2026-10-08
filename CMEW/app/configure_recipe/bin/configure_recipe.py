@@ -131,10 +131,12 @@ def create_user_config(
     dev_config_path,
     drs_cmip6,
     drs_obs4mips,
+    drs_obs6,
     max_parallel_tasks,
     output_dir,
     rootpath_cmip6,
     rootpath_obs4mips,
+    rootpath_obs6,
 ):
     """
     Return the contents of the user configuration file.
@@ -151,6 +153,8 @@ def create_user_config(
         The DRS for CMIP6.
     drs_obs4mips:
         The DRS for obs4MIPS.
+    drs_obs6:
+        The DRS for OBS6.
     max_parallel_tasks:
         A parallelisation option to feed to ESMValTool.
     output_dir:
@@ -159,6 +163,8 @@ def create_user_config(
         The rootpath for CMIP6.
     rootpath_obs4mips:
         The rootpath for obs4MIPS.
+    rootpath_obs6:
+        The rootpath for OBS6.
 
     Returns
     -------
@@ -182,6 +188,7 @@ def create_user_config(
         "drs": {
             "CMIP6": drs_cmip6,
             "obs4MIPs": drs_obs4mips,
+            "OBS6": drs_obs6,
             "ESMVal": "BADC",
         },
         "max_parallel_tasks": max_parallel_tasks,
@@ -190,6 +197,7 @@ def create_user_config(
         "rootpath": {
             "CMIP6": rootpath_cmip6,
             "obs4MIPs": rootpath_obs4mips,
+            "OBS6": rootpath_obs6,
             "ESMVal": cmew_data_for_esmval_dir,
         },
     }
@@ -232,11 +240,13 @@ def configure_recipe(
     dev_config_path,
     drs_cmip6,
     drs_obs4mips,
+    drs_obs6,
     max_parallel_tasks,
     mip_table_dir,
     output_dir,
     rootpath_cmip6,
     rootpath_obs4mips,
+    rootpath_obs6,
     user_config_path,
 ):
     """
@@ -255,10 +265,12 @@ def configure_recipe(
         dev_config_path,
         drs_cmip6,
         drs_obs4mips,
+        drs_obs6,
         max_parallel_tasks,
         output_dir,
         rootpath_cmip6,
         rootpath_obs4mips,
+        rootpath_obs6,
     )
     ensure_parent_dir(user_config_path)
     logger.info("Writing user config to %s", user_config_path)

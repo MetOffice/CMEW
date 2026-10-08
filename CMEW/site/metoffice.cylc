@@ -6,6 +6,8 @@
     [[root]]
         [[[environment]]]
             INSTITUTION_ID="MOHC"
+            DRS_OBS6 = default
+            ROOTPATH_OBS6 = /data/users/esmval/ESMValTool/obs
 
     [[COMPUTE]]
         platform = spice
@@ -13,7 +15,7 @@
             --wckey = CMEW
             --ntasks = {{ MAX_PARALLEL_TASKS }}
 
-    [[run_recipe<recipe=radiation_budget>]]
+    [[run_recipe<recipe=ocean_quadmap>]]
         [[[directives]]]
-            --time = 2
-            --mem = 3G
+            --time = 10
+            --mem = 8G

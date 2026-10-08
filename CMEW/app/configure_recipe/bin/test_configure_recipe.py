@@ -9,10 +9,12 @@ def test_create_user_config():
     test_dev_config_path = "/test/dev/config.yml"
     test_drs_cmip6 = "test_cmip6_drs"
     test_drs_obs4mips = "test_obs4mips_drs"
+    test_drs_obs6 = "test_obs6_drs"
     test_max_parallel_tasks = "99"
     test_output_dir = "/test/output/dir"
     test_rootpath_cmip6 = "test_cmip6_rootpath"
     test_rootpath_obs4mips = "test_obs4mips_rootpath"
+    test_rootpath_obs6 = "test_obs6_rootpath"
 
     expected = {
         "auxiliary_data_dir": "",
@@ -21,6 +23,7 @@ def test_create_user_config():
         "drs": {
             "CMIP6": test_drs_cmip6,
             "obs4MIPs": test_drs_obs4mips,
+            "OBS6": test_drs_obs6,
             "ESMVal": "BADC",
         },
         "max_parallel_tasks": int(test_max_parallel_tasks),
@@ -29,6 +32,7 @@ def test_create_user_config():
         "rootpath": {
             "CMIP6": test_rootpath_cmip6,
             "obs4MIPs": test_rootpath_obs4mips,
+            "OBS6": test_rootpath_obs6,
             "ESMVal": test_cmew_data_for_esmval_dir,
         },
     }
@@ -38,10 +42,12 @@ def test_create_user_config():
         test_dev_config_path,
         test_drs_cmip6,
         test_drs_obs4mips,
+        test_drs_obs6,
         test_max_parallel_tasks,
         test_output_dir,
         test_rootpath_cmip6,
         test_rootpath_obs4mips,
+        test_rootpath_obs6,
     )
 
     assert actual == expected

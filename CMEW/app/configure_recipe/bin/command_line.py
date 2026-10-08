@@ -45,6 +45,10 @@ def parse_args_for_configure_recipe(arguments):
         help=("The DRS for obs4MIPS."),
     )
     parser.add_argument(
+        "--drs_obs6",
+        help=("The DRS for OBS6."),
+    )
+    parser.add_argument(
         "--max_parallel_tasks",
         help=("A parallelisation option to feed to ESMValTool."),
     )
@@ -63,6 +67,10 @@ def parse_args_for_configure_recipe(arguments):
     parser.add_argument(
         "--rootpath_obs4mips",
         help=("The rootpath for obs4MIPS."),
+    )
+    parser.add_argument(
+        "--rootpath_obs6",
+        help=("The rootpath for OBS6."),
     )
     parser.add_argument(
         "--user_config_path",
@@ -92,21 +100,25 @@ def main_for_configure_recipe(arguments=None):
     print(f"dev_config_path: {args.dev_config_path}")
     print(f"drs_cmip6: {args.drs_cmip6}")
     print(f"drs_obs4mips: {args.drs_obs4mips}")
+    print(f"drs_obs6: {args.drs_obs6}")
     print(f"max_parallel_tasks: {args.max_parallel_tasks}")
     print(f"mip_table_dir: {args.mip_table_dir}")
     print(f"output_dir: {args.output_dir}")
     print(f"rootpath_cmip6: {args.rootpath_cmip6}")
     print(f"rootpath_obs4mips: {args.rootpath_obs4mips}")
+    print(f"rootpath_obs6: {args.rootpath_obs6}")
     print(f"user_config_path: {args.user_config_path}")
     configure_recipe(
         args.cmew_data_for_esmval_dir,
         args.dev_config_path,
         args.drs_cmip6,
         args.drs_obs4mips,
+        args.drs_obs6,
         args.max_parallel_tasks,
         args.mip_table_dir,
         args.output_dir,
         args.rootpath_cmip6,
         args.rootpath_obs4mips,
+        args.rootpath_obs6,
         args.user_config_path,
     )

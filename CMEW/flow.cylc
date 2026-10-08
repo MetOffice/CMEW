@@ -18,7 +18,7 @@
 
 [task parameters]
     dataset = {{ datasets }}
-    recipe = radiation_budget
+    recipe = ocean_quadmap
 {%- if not UNITTEST and AUTOASSESS %}
     autoassess_area = monsoon, africa
 {%- endif %}
