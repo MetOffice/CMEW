@@ -23,10 +23,6 @@
                 => nac_plot<autoassess_area>
                 => html_page<autoassess_area>
                 => html_page_overview
-            install_autoassess
-                => mksuper<aa_dataset>
-                => run_validation_note
-                => html_page_overview
         """
 
     [[queues]]
@@ -59,23 +55,11 @@
     [[install_autoassess]]
         inherit = AUTOASSESS, SITE_AA_INSTALL
 
-    [[mksuper<aa_dataset>]]
-        inherit = AUTOASSESS, SITE_AA_MKSUPER
-        [[[environment]]]
-            ROSE_TASK_APP = aa_retrieve_data
-            ROSE_APP_OPT_CONF_KEYS = mksuper
-            SUITE_ID = $CYLC_TASK_PARAM_aa_dataset
-
-    [[run_validation_note]]
-        inherit = AUTOASSESS, SITE_AA_VALNOTE
-        [[[environment]]]
-            ROSE_TASK_APP = aa_run_area
-            ROSE_APP_OPT_CONF_KEYS = valnote
-
     [[retrieve_data<autoassess_area><aa_dataset>]]
         inherit = AUTOASSESS, SITE_AA_RETRIEVAL
         [[[environment]]]
             ROSE_TASK_APP = aa_retrieve_data
+            ROSE_APP_OPT_CONF_KEYS = ($CYLC_TASK_PARAM_autoassess_area)
             SUITE_ID = $CYLC_TASK_PARAM_aa_dataset
             AREA = $CYLC_TASK_PARAM_autoassess_area
 
@@ -97,12 +81,14 @@
         inherit = AUTOASSESS, SITE_AA_NAC_PLOT
         [[[environment]]]
             ROSE_TASK_APP = aa_nac_plot
+            ROSE_APP_OPT_CONF_KEYS = ($CYLC_TASK_PARAM_autoassess_area)
             AREA = $CYLC_TASK_PARAM_autoassess_area
 
     [[html_page<autoassess_area>]]
         inherit = AUTOASSESS, SITE_AA_HTML_PAGE
         [[[environment]]]
             ROSE_TASK_APP = aa_html_page
+            ROSE_APP_OPT_CONF_KEYS = ($CYLC_TASK_PARAM_autoassess_area)
             AREA = $CYLC_TASK_PARAM_autoassess_area
 
     [[html_page_overview]]
