@@ -2,8 +2,8 @@
 
 .. include:: ../../common.txt
 
-Monsoon
-=======
+Radiation
+=========
 
 This assessment is available via |AutoAssess|.
 
@@ -52,14 +52,16 @@ There is no reference for this recipe.
 Example plots
 -------------
 
-.. figure:: radiation_overview.png
-   :scale: 50 %
-   :alt: NAC plot for Radiation area
-
-   Summary overview of metrics from the Radiation assessment.
-
 .. figure:: feedback_summary.png
-   :scale: 50 %
+   :align: center
+   :scale: 75 %
    :alt: feedback_summary.png
 
    Radiatve feedback summary
+
+.. figure:: rlnt.png
+   :align: center
+   :scale: 75 %
+   :alt: rlnt.png
+
+   Zonal mean radiative feedback for Net Downward Longwave Radiation at TOA
