@@ -105,6 +105,7 @@
         inherit = AUTOASSESS, SITE_AA_NAC_PLOT
         [[[environment]]]
             ROSE_TASK_APP = aa_nac_plot
+            ROSE_APP_OPT_CONF_KEYS = ($CYLC_TASK_PARAM_autoassess_area)
             AREA = $CYLC_TASK_PARAM_autoassess_area
 
     [[html_page<autoassess_area>]]
