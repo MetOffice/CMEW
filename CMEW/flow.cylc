@@ -16,7 +16,7 @@
     dataset = {{ datasets }}
     recipe = radiation_budget
 {%- if not UNITTEST and AUTOASSESS %}
-    autoassess_area = monsoon, africa
+    autoassess_area = radiation
 {%- endif %}
 
 [scheduling]
@@ -62,7 +62,7 @@
         env-script = "eval $(rose task-env)"
         platform = localhost
         [[[environment]]]
-            ESMVALTOOL_DIR=${CYLC_WORKFLOW_RUN_DIR}/lib/python/ESMValTool
+            ESMVALTOOL_DIR = ${CYLC_WORKFLOW_RUN_DIR}/lib/python/ESMValTool
             ESMVALTOOL_MODULE_NAME = {{ ESMVALTOOL_MODULE_NAME }}
             ESMVALTOOL_CONFIG_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/etc/esmvaltool_config
             USER_CONFIG_PATH = ${ESMVALTOOL_CONFIG_DIR}/config-user.yml

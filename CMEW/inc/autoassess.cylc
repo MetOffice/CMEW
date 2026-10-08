@@ -3,14 +3,17 @@
 # The LICENSE.md file contains full licensing details.
 # autoassess.cylc
 
-{% from "scrape_ini" import find_ref, find_eval, find_ref_label, find_eval_label %}
+{% from "scrape_ini" import find_ref, find_eval, find_ref_label, find_eval_label, find_ref_fdbk, find_eval_fdbk %}
 {% set ref_dataset = find_ref("rose-suite.conf") %}
 {% set eval_dataset = find_eval("rose-suite.conf") %}
 {% set ref_label = find_ref_label("rose-suite.conf") %}
 {% set eval_label = find_eval_label("rose-suite.conf") %}
+{% set ref_fdbk_dataset = find_ref_fdbk("rose-suite.conf") %}
+{% set eval_fdbk_dataset = find_eval_fdbk("rose-suite.conf") %}
 
 [task parameters]
     aa_dataset = {{ [ref_dataset, eval_dataset] | join(", ") }}
+    aa_fdbk_dataset = {{ [ref_fdbk_dataset, eval_fdbk_dataset] | join(", ") }}
 
 [scheduling]
     [[graph]]
@@ -23,6 +26,13 @@
                 => nac_plot<autoassess_area>
                 => html_page<autoassess_area>
                 => html_page_overview
+            # Deal with extra models for radiation assessment
+            # - Will this be ignored if radiation not in list of assessments
+            # - What if feedback model ids not specified?
+            install_autoassess
+                => retrieve_data<autoassess_area=radiation><aa_fdbk_dataset>
+                => index_data<autoassess_area=radiation><aa_fdbk_dataset>
+                => run_area<autoassess_area=radiation>
         """
 
     [[queues]]
@@ -36,9 +46,12 @@
     [[root]]
         [[[environment]]]
             REF_SUITE_ID = {{ ref_dataset }}
+            REF_SUITE_FDBK_ID = {{ ref_fdbk_dataset }}
             REF_SUITE_TITLE = {{ ref_label }}
             SUITE_ID = {{ eval_dataset }}
+            SUITE_FDBK_ID = {{ eval_fdbk_dataset }}
             SUITE_TITLE = {{ eval_label }}
+            FDBK_SCENARIO = "SST+4K"
 
     [[AUTOASSESS]]
         inherit = SITE_AUTOASSESS
@@ -65,6 +78,20 @@
         [[[environment]]]
             ROSE_TASK_APP = aa_index_data
             SUITE_ID = $CYLC_TASK_PARAM_aa_dataset
+            AREA = $CYLC_TASK_PARAM_autoassess_area
+
+    [[retrieve_data<autoassess_area=radiation><aa_fdbk_dataset>]]
+        inherit = AUTOASSESS, SITE_AA_RETRIEVAL
+        [[[environment]]]
+            ROSE_TASK_APP = aa_retrieve_data
+            SUITE_ID = $CYLC_TASK_PARAM_aa_fdbk_dataset
+            AREA = $CYLC_TASK_PARAM_autoassess_area
+
+    [[index_data<autoassess_area=radiation><aa_fdbk_dataset>]]
+        inherit = AUTOASSESS, SITE_AA_DATA_INDEXING
+        [[[environment]]]
+            ROSE_TASK_APP = aa_index_data
+            SUITE_ID = $CYLC_TASK_PARAM_aa_fdbk_dataset
             AREA = $CYLC_TASK_PARAM_autoassess_area
 
     [[run_area<autoassess_area>]]

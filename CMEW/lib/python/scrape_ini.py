@@ -131,3 +131,17 @@ def find_eval_label(fp):
     eval_label = retrieve_value(fp, "experiment", "label_for_plots")
     print(f"[scrape_ini.py] Eval label: {eval_label}")
     return eval_label
+
+
+def find_ref_fdbk(fp):
+    """Return the reference suite ID"""
+    ref_suite_fdbk_id = retrieve_value(fp, "reference", "suite_fdbk_id")
+    print(f"[scrape_ini.py] Feedback Ref suite ID: {ref_suite_fdbk_id}")
+    return ref_suite_fdbk_id
+
+
+def find_eval_fdbk(fp):
+    """Return the evaluation suite ID"""
+    eval_suite_fdbk_id = retrieve_value(fp, "experiment", "suite_fdbk_id")
+    print(f"[scrape_ini.py] Feedback Eval suite ID: {eval_suite_fdbk_id}")
+    return eval_suite_fdbk_id
