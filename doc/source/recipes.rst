@@ -18,5 +18,6 @@ Implemented in |AutoAssess|:
 .. toctree::
    :maxdepth: 1
 
+   areas/valnote/valnote.rst
    areas/monsoon/monsoon.rst
    areas/africa/africa.rst
