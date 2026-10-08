@@ -20,3 +20,4 @@ Implemented in |AutoAssess|:
 
    areas/monsoon/monsoon.rst
    areas/africa/africa.rst
+   areas/radiation/radiation.rst
