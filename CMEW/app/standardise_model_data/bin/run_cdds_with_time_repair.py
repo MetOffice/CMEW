@@ -6,7 +6,6 @@ Run CDDS conversion with the NEMO time metadata repair injected between
 extraction and MIP conversion.
 """
 import argparse
-import configparser
 import os
 import shlex
 import subprocess
@@ -37,7 +36,9 @@ def sanitise_workflow_id(workflow_id):
     """
     sanitised = re.sub(r"[^A-Za-z0-9._-]+", "_", workflow_id).strip("_")
     if not sanitised:
-        raise ValueError("CYLC_WORKFLOW_ID does not contain a usable identifier")
+        raise ValueError(
+            "CYLC_WORKFLOW_ID does not contain a usable identifier"
+        )
 
     return sanitised
 

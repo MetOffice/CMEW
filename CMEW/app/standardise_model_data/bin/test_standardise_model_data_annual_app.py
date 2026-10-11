@@ -50,7 +50,10 @@ def _render_dataset_partitioning(datasets_string, archive_streams):
     start = contents.index(start_marker)
     end = contents.index(end_marker, start) + len(end_marker)
     snippet = contents[start:end]
-    snippet += "\n{{ monthly_datasets | join(',') }}|{{ annual_datasets | join(',') }}"
+    snippet += (
+        "\n{{ monthly_datasets | join(',') }}|"
+        "{{ annual_datasets | join(',') }}"
+    )
 
     rendered = jinja2.Template(snippet).render(
         datasets=datasets_string, archive_streams=archive_streams

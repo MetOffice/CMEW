@@ -11,8 +11,9 @@ OPday``, excluding ``Oyr``. Rather than modifying the shared CDDS
 installation, this plugin subclasses the installed ``HadGEM3MappingPlugin``
 and widens only those four mappings to also support ``Oyr``, reusing all
 other HadGEM3 mappings unchanged. It is loaded by standalone ``mip_convert``
-via the ``mip_convert_external_plugin``/``mip_convert_external_plugin_location``
-cfg options -- no change to the installed mip_convert package is required.
+via the ``mip_convert_external_plugin`` and
+``mip_convert_external_plugin_location`` cfg options -- no change to the
+installed mip_convert package is required.
 """
 from mip_convert.plugins.hadgem3.hadgem3_plugin import HadGEM3MappingPlugin
 

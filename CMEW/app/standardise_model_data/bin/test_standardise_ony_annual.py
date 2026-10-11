@@ -381,12 +381,12 @@ def test_retrieve_annual_files_calls_moo_get_per_year(monkeypatch, tmp_path):
     assert len(calls) == 2
     assert calls[0][:2] == ["moo", "get"]
     assert (
-        "moose:/crum/u-eb014/ony.nc.file/nemo_eb014o_1y_18501201-18511201_grid-T.nc"
-        in calls[0]
+        "moose:/crum/u-eb014/ony.nc.file/"
+        "nemo_eb014o_1y_18501201-18511201_grid-T.nc" in calls[0]
     )
     assert (
-        "moose:/crum/u-eb014/ony.nc.file/nemo_eb014o_1y_18511201-18521201_grid-T.nc"
-        in calls[1]
+        "moose:/crum/u-eb014/ony.nc.file/"
+        "nemo_eb014o_1y_18511201-18521201_grid-T.nc" in calls[1]
     )
     assert len(retrieved) == 2
     assert retrieved[0].endswith("nemo_eb014o_1y_18501201-18511201_grid-T.nc")

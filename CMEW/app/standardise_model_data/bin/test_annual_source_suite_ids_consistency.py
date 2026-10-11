@@ -27,7 +27,9 @@ def test_rose_suite_conf_marks_annual_model_runs_with_archive_stream():
 
     for suite_id in ("u-eb014", "u-eb021"):
         section_start = contents.index('suite_id="{}"'.format(suite_id))
-        section_text = contents[max(0, section_start - 300) : section_start]
+        section_text = contents[
+            max(0, section_start - 300) : section_start  # noqa: E203
+        ]
         assert 'archive_stream="ony"' in section_text
 
 

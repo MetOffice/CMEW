@@ -47,7 +47,10 @@ def test_gcmodeldev_oyr_entries_match_omon_except_frequency():
     ) as file_handle:
         oyr = json.load(file_handle)
 
-    omon_path = "/home/users/cdds/etc/mip_tables/GCModelDev/0.0.25/GCModelDev_Omon.json"
+    omon_path = (
+        "/home/users/cdds/etc/mip_tables/GCModelDev/0.0.25/"
+        "GCModelDev_Omon.json"
+    )
     if not os.path.isfile(omon_path):
         return  # Shared CDDS install not available in this environment.
 

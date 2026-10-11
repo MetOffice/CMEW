@@ -80,13 +80,8 @@ def test_parent_scoped_request_preserves_original(tmp_path):
         tmp_path / "request_u-eb014_CMEW_run13.cfg"
     )
 
-    scoped_config = run_cdds_with_time_repair.read_request(
-        scoped_request_path
-    )
-    assert (
-        scoped_config["common"]["workflow_basename"]
-        == "u-eb014_CMEW_run13"
-    )
+    scoped_config = run_cdds_with_time_repair.read_request(scoped_request_path)
+    assert scoped_config["common"]["workflow_basename"] == "u-eb014_CMEW_run13"
 
 
 def test_parent_scoped_paths_are_unique(tmp_path):
@@ -97,21 +92,15 @@ def test_parent_scoped_paths_are_unique(tmp_path):
             request_path, "CMEW/run13"
         )
     )
-    scoped_config = run_cdds_with_time_repair.read_request(
-        scoped_request_path
-    )
+    scoped_config = run_cdds_with_time_repair.read_request(scoped_request_path)
 
     assert run_cdds_with_time_repair.derive_workflow_dir(
         scoped_config
-    ).endswith(
-        "/convert/cdds_u-eb014_CMEW_run13"
-    )
+    ).endswith("/convert/cdds_u-eb014_CMEW_run13")
     # CDDS extraction is keyed by model_workflow_id, so making the nested
     # Cylc workflow name parent-specific must not change the archive data
     # extraction path.
-    assert run_cdds_with_time_repair.derive_input_dir(
-        scoped_config
-    ).endswith(
+    assert run_cdds_with_time_repair.derive_input_dir(scoped_config).endswith(
         "/input/u-eb014/onm"
     )
 
@@ -143,9 +132,7 @@ def test_calls_cdds_convert_patch_then_cylc_vip_in_order(
         ]
     )
 
-    scoped_request_path = str(
-        tmp_path / "request_u-eb014_CMEW_run13.cfg"
-    )
+    scoped_request_path = str(tmp_path / "request_u-eb014_CMEW_run13.cfg")
     assert calls[0] == [
         "cdds_convert",
         scoped_request_path,
@@ -323,8 +310,10 @@ def test_failed_patch_prevents_submit(monkeypatch, tmp_path):
             ]
         )
 
-    assert calls == [[
-        "cdds_convert",
-        str(tmp_path / "request_u-eb014_CMEW_run13.cfg"),
-        "--no-submit",
-    ]]
+    assert calls == [
+        [
+            "cdds_convert",
+            str(tmp_path / "request_u-eb014_CMEW_run13.cfg"),
+            "--no-submit",
+        ]
+    ]

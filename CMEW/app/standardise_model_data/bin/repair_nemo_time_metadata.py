@@ -10,7 +10,7 @@ import os
 import re
 import sys
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime
 
 import netCDF4
 

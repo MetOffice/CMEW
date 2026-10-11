@@ -284,7 +284,7 @@ def test_non_annual_cmew_dataset_years_not_shifted():
         assert "mip" not in dataset_items
 
 
-def test_update_ocean_quadmap_model_selectors_leaves_variable_level_mip_unchanged():
+def test_ocean_quadmap_model_selectors_keep_variable_level_mip():
     # The variable-level "mip: Omon" default (used by ACCESS-CM2/WOA) is
     # declared in the recipe's "variables" section, which
     # update_ocean_quadmap_model_selectors must not touch.
