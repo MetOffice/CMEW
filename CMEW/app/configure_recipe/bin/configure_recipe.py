@@ -14,6 +14,17 @@ logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 filename = os.path.basename(__file__)
 logger = logging.getLogger(filename)
 
+# Workflow-local copy of the CMIP6 table tree (cmor_path requires a
+# <dir>/Tables/*.json layout), extended with an annual Oyr definition
+# for tos/sos/thetao/so. This lets ESMValCore resolve "mip: Oyr" for the
+# annual ony route under cmor_strict: true, without modifying ESMValCore's
+# own installed tables.
+ESMVAL_CMOR_PATH = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+    "cmor_tables",
+    "cmip6_local",
+)
+
 
 def create_developer_config(
     mip_table_dir,
@@ -37,6 +48,7 @@ def create_developer_config(
         },
         "ESMVal": {
             "cmor_strict": True,
+            "cmor_path": ESMVAL_CMOR_PATH,
             "input_dir": {
                 "default": "/",
                 "BADC": (
@@ -121,6 +133,29 @@ def create_developer_config(
             "cmor_type": "CMIP6",
             "cmor_path": "obs4mips",
             "cmor_default_table_prefix": "obs4MIPs_",
+        },
+        # OBS6 uses the CMIP6 tables for variable metadata, but its
+        # observational archive follows a different directory/file layout.
+        "OBS6": {
+            "cmor_strict": False,
+            "input_dir": {
+                "default": "Tier{tier}/{dataset}",
+                "BSC": (
+                    "{type}/{institute.lower}/{dataset.lower}/"
+                    "{freq_folder}/{short_name}{freq_base}"
+                ),
+            },
+            "input_file": {
+                "default": (
+                    "{project}_{dataset}_{type}_{version}_{mip}_"
+                    "{short_name}[_.]*nc"
+                ),
+                "BSC": "{short_name}_*.nc",
+            },
+            "output_file": (
+                "{project}_{dataset}_{type}_{version}_{mip}_{short_name}"
+            ),
+            "cmor_type": "CMIP6",
         },
     }
     return developer_config_file_contents

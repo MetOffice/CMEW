@@ -27,6 +27,7 @@ def test_create_request(monkeypatch):
     root_data_dir = "/path/to/data/dir/"
     variables_path = "/path/to/variables.txt"
     raw_data_dir_mode = "use_saved"
+    model_params_dir = "/path/to/model_params"
 
     mock_request_defaults = {
         "metadata": {
@@ -72,6 +73,7 @@ def test_create_request(monkeypatch):
         root_data_dir,
         variables_path,
         raw_data_dir_mode,
+        model_params_dir,
         mock_request_defaults,
     )
     cfg = configparser.ConfigParser()
@@ -84,5 +86,6 @@ def test_create_request(monkeypatch):
     expected = {
         section: dict(config[section]) for section in config.sections()
     }
+    expected["conversion"]["model_params_dir"] = model_params_dir
 
     assert actual == expected

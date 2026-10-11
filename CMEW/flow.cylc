@@ -10,15 +10,40 @@
 {{ assert(ESMVALTOOL_MODULE_NAME != "", "ESMVALTOOL_MODULE_NAME must be set to something other than an empty string") }}
 {% set SKIP_CDDS = SKIP_CDDS | default(false) %}
 
-{% from "scrape_ini" import list_datasets %}
+{% from "scrape_ini" import list_datasets, facet_per_dataset %}
 {% set datasets = list_datasets("rose-suite.conf") %}
+
+# Each model run's own "archive_stream" metadata (set in rose-suite.conf's
+# [namelist:model_runs(...)] sections) is the single authoritative source
+# for whether it uses the annual "ony" archive (via
+# standardise_model_data_annual/standardise_ony_annual.py) or the default
+# monthly "onm" archive (via cdds_convert). A future annual suite opts in
+# purely by setting archive_stream="ony" in rose-suite.conf -- no code
+# change is required here.
+{% set archive_streams = facet_per_dataset("rose-suite.conf", "archive_stream", "onm") %}
+{# list_datasets() returns a comma-separated string, not a list. #}
+{% set datasets_list = datasets.split(", ") if datasets else [] %}
+{% set annual_datasets = [] %}
+{% set monthly_datasets = [] %}
+{%- for dataset in datasets_list %}
+{%- if archive_streams.get(dataset, "onm") == "ony" %}
+{%- set _ = annual_datasets.append(dataset) %}
+{%- else %}
+{%- set _ = monthly_datasets.append(dataset) %}
+{%- endif %}
+{%- endfor %}
 
 [scheduler]
     UTC mode = True
 
 [task parameters]
-    dataset = {{ datasets }}
+{%- if monthly_datasets %}
+    dataset = {{ monthly_datasets | join(", ") }}
+{%- endif %}
     recipe = ocean_quadmap
+{%- if annual_datasets %}
+    annual_dataset = {{ annual_datasets | join(", ") }}
+{%- endif %}
 {%- if not UNITTEST and AUTOASSESS %}
     autoassess_area = monsoon, africa
 {%- endif %}
@@ -35,10 +60,20 @@
 {%- if not UNITTEST and not SKIP_CDDS %}
             install_env_file => configure_recipe & copy_datasets
             copy_datasets => configure_for<recipe>
+    {%- if monthly_datasets %}
             configure_for<recipe> => configure_standardise<recipe,dataset>
                 => standardise_model_data<dataset> => restructure_dirs
+    {%- endif %}
             configure_recipe & restructure_dirs => run_recipe<recipe>
                 => housekeeping
+    {%- if annual_datasets %}
+            # Opt-in annual "ony" route for the subset of model runs in
+            # annual_dataset. Runs independently of the monthly route
+            # above and writes into ROOT_DATA_DIR, so the existing
+            # restructure_dirs task picks up its output unchanged.
+            copy_datasets => standardise_model_data_annual<annual_dataset>
+                => restructure_dirs
+    {%- endif %}
 
     {%- if TEST %}
             run_recipe<recipe> => compare<recipe>
@@ -89,6 +124,7 @@
         [[[environment]]]
             CDDS_BIN_DIR = "~cdds/bin"
             CDDS_SOFTWARE_DIR = "~cdds/software"
+            MODEL_PARAMS_DIR = ${CYLC_WORKFLOW_RUN_DIR}/app/configure_standardise/model_params
             RAW_DATA_DIR = {{ RAW_DATA_DIR | default("") }}
             RAW_DATA_DIR_MODE = {{ RAW_DATA_DIR_MODE }}
             # Workaround for bug in CDDS: ROOT_SOFTWARE_DIR: unbound variable.
@@ -100,6 +136,15 @@
             REQUEST_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/request_${CYLC_TASK_PARAM_dataset}.cfg
             VARIABLES_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/variables_${CYLC_TASK_PARAM_dataset}.txt
             RAW_DATA_DIR_SUITE = {{ RAW_DATA_DIR | default("") }}"/$CYLC_TASK_PARAM_dataset"
+
+    [[ANNUAL_DATASET]]
+        [[[environment]]]
+            ANNUAL_END_YEAR = {{ START_YEAR + NUMBER_OF_YEARS - 1 }}
+            # Model-specific ancillary/coordinate file paths are owned by
+            # this JSON file (keyed by model_id), not hardcoded here, so
+            # new annual model configurations don't require a flow.cylc
+            # change.
+            MODEL_ANCILLARIES_FP = ${CYLC_WORKFLOW_RUN_DIR}/app/standardise_model_data/model_ancillaries.json
 
     [[MODEL_RUNS]]
         [[[environment]]]
@@ -127,6 +172,7 @@
         [[[environment]]]
             ROSE_TASK_APP = configure_for
 
+{%- if monthly_datasets %}
     [[configure_standardise<recipe,dataset>]]
         inherit = STANDARDISE, RECIPE, MODEL_RUNS, DATASET
         [[[environment]]]
@@ -139,6 +185,14 @@
         inherit = STANDARDISE, DATASET
         [[[environment]]]
             ROSE_TASK_APP = standardise_model_data
+{%- endif %}
+
+{%- if annual_datasets %}
+    [[standardise_model_data_annual<annual_dataset>]]
+        inherit = STANDARDISE, MODEL_RUNS, ANNUAL_DATASET
+        [[[environment]]]
+            ROSE_TASK_APP = standardise_model_data_annual
+{%- endif %}
 
     [[restructure_dirs]]
         inherit = STANDARDISE

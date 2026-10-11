@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # (C) Crown Copyright 2024-2026, Met Office.
 # The LICENSE.md file contains full licensing details.
+import configure_recipe
 from configure_recipe import create_user_config, create_developer_config
 
 
@@ -62,6 +63,7 @@ def test_create_developer_config():
         },
         "ESMVal": {
             "cmor_strict": True,
+            "cmor_path": configure_recipe.ESMVAL_CMOR_PATH,
             "input_dir": {
                 "default": "/",
                 "BADC": (
@@ -146,6 +148,27 @@ def test_create_developer_config():
             "cmor_type": "CMIP6",
             "cmor_path": "obs4mips",
             "cmor_default_table_prefix": "obs4MIPs_",
+        },
+        "OBS6": {
+            "cmor_strict": False,
+            "input_dir": {
+                "default": "Tier{tier}/{dataset}",
+                "BSC": (
+                    "{type}/{institute.lower}/{dataset.lower}/"
+                    "{freq_folder}/{short_name}{freq_base}"
+                ),
+            },
+            "input_file": {
+                "default": (
+                    "{project}_{dataset}_{type}_{version}_{mip}_"
+                    "{short_name}[_.]*nc"
+                ),
+                "BSC": "{short_name}_*.nc",
+            },
+            "output_file": (
+                "{project}_{dataset}_{type}_{version}_{mip}_{short_name}"
+            ),
+            "cmor_type": "CMIP6",
         },
     }
 

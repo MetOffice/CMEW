@@ -94,6 +94,7 @@ def create_request(
     root_data_dir,
     variables_file,
     raw_data_dir_mode,
+    model_params_dir,
     request_defaults=requests_defaults,
 ):
     """
@@ -118,6 +119,8 @@ def create_request(
         the list of variables to be processed.
     raw_data_dir_mode : str
         Whether to save or reuse raw CDDS data files.
+    model_params_dir : str
+        The directory containing CDDS model parameter overrides.
     request_defaults : dict
         A dictionary containing the CDDS request default values.
 
@@ -165,6 +168,9 @@ def create_request(
     }
     request["misc"] = dict(defaults["misc"])
     request["conversion"] = dict(defaults["conversion"])
+    # Use workflow-local model parameter overrides without modifying
+    # the shared CDDS installation.
+    request["conversion"]["model_params_dir"] = model_params_dir
     if raw_data_dir_mode == "use_saved":
         request["conversion"]["skip_extract"] = "True"
     request["netcdf_global_attributes"] = dict(
@@ -205,6 +211,7 @@ def create_request_file(
     root_data_dir,
     variables_file,
     raw_data_dir_mode,
+    model_params_dir,
 ):
     """
     Create a request file to standardise model data with CDDS.
@@ -229,6 +236,8 @@ def create_request_file(
         the list of variables to be processed.
     raw_data_dir_mode : str
         Whether to save or reuse raw CDDS data files.
+    model_params_dir : str
+        The directory containing CDDS model parameter overrides.
     """
     logger.info("Creating CDDS request for dataset %s", dataset)
 
@@ -240,5 +249,6 @@ def create_request_file(
         root_data_dir,
         variables_file,
         raw_data_dir_mode,
+        model_params_dir,
     )
     write_request(request, output_filepath)

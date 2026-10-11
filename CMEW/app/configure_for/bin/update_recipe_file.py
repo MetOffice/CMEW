@@ -16,6 +16,33 @@ logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 filename = os.path.basename(__file__)
 logger = logging.getLogger(filename)
 
+# The value of each model run's "archive_stream" facet (set in
+# rose-suite.conf's [namelist:model_runs(...)] sections and carried
+# through to model_runs.yml) that marks it as sourced from the annual
+# "ony" archive, rather than the default monthly "onm" archive. This is
+# the single authoritative source for annual/monthly routing; a new
+# annual model run opts in purely by setting archive_stream="ony" in
+# rose-suite.conf, with no code change required here.
+ANNUAL_ARCHIVE_STREAM = "ony"
+
+
+def is_annual_source(run):
+    """
+    Return whether a model run dict is sourced from the annual "ony"
+    archive stream.
+
+    Parameters
+    ----------
+    run : dict
+        A model run dict, as read from model_runs.yml.
+
+    Returns
+    -------
+    bool
+        True if the run's "archive_stream" facet is "ony".
+    """
+    return run.get("archive_stream") == ANNUAL_ARCHIVE_STREAM
+
 
 def load_yaml(file_path):
     """
@@ -87,6 +114,75 @@ def remove_additional_datasets(recipe):
     return recipe
 
 
+def remove_extract_time(recipe):
+    """
+    Remove fixed ``extract_time`` settings from recipe preprocessors.
+
+    CMEW supplies the evaluation period through the configured model
+    datasets, so the ocean quadmap recipe must not impose the upstream
+    recipe's fixed analysis period.
+    """
+    logger.debug("Removing fixed extract_time settings from preprocessors")
+    for preprocessor in recipe.get("preprocessors", {}).values():
+        preprocessor.pop("extract_time", None)
+
+    return recipe
+
+
+def update_ocean_quadmap_model_selectors(recipe, model_runs):
+    """
+    Update ocean quadmap control and experiment model selectors.
+
+    The upstream recipe hard-codes specific CMIP6 models. CMEW instead
+    derives these selectors from the configured model runs, using the
+    run marked ``benchmark_dataset`` as the control model.
+    """
+    control_runs = [
+        run
+        for run in model_runs.values()
+        if run.get("benchmark_dataset", False)
+    ]
+    experiment_runs = [
+        run
+        for run in model_runs.values()
+        if not run.get("benchmark_dataset", False)
+    ]
+
+    if len(control_runs) != 1 or len(experiment_runs) != 1:
+        raise ValueError(
+            "ocean_quadmap requires exactly one benchmark/control model "
+            "and exactly one experiment model"
+        )
+
+    def model_selector(run):
+        # The ony archive convention labels the annual record by the
+        # calendar year containing its midpoint, one year after the
+        # configured start year (e.g. configured 1850 -> Oyr year 1851),
+        # so annual CMEW datasets must use mip: Oyr here to match the
+        # corresponding generated dataset entry.
+        mip = "Oyr" if is_annual_source(run) else "Omon"
+        return {
+            "dataset": run["model_id"],
+            "ensemble": run["variant_label"],
+            "exp": run["experiment_id"],
+            "mip": mip,
+            "project": run["project"],
+        }
+
+    control_model = model_selector(control_runs[0])
+    exper_model = model_selector(experiment_runs[0])
+
+    # Update every instance of the ocean quadmap diagnostic rather than
+    # relying on YAML anchor behaviour from the upstream recipe.
+    for diagnostic in recipe.get("diagnostics", {}).values():
+        for script in diagnostic.get("scripts", {}).values():
+            if script.get("script") == "ocean/diagnostic_maps_quad.py":
+                script["control_model"] = control_model.copy()
+                script["exper_model"] = exper_model.copy()
+
+    return recipe
+
+
 def construct_datasets_contents(datasets):
     """
     Return the contents of a ``datasets`` section
@@ -115,12 +211,28 @@ def construct_datasets_contents(datasets):
     }
 
     # Some attributes are neither needed nor wanted by ESMValTool.
-    unwanted_keys = ["calendar", "suite_id"]
+    unwanted_keys = ["calendar", "suite_id", "archive_stream"]
 
     # Update the keys in the datasets, as appropriate.
     datasets_for_recipe = []
     for dataset in datasets:
         for dataset_items in dataset.values():
+            # Datasets sourced from the annual "ony" stream need an
+            # explicit per-dataset "mip: Oyr" override so this dataset
+            # alone deviates from the recipe's default "mip: Omon"
+            # variable declaration (ESMValCore supports per-dataset mip
+            # overrides; see facets.update(recipe_dataset) in
+            # esmvalcore's recipe parsing).
+            if is_annual_source(dataset_items):
+                dataset_items["mip"] = "Oyr"
+                # The ony archive file for configured year N spans
+                # N-12-01 to (N+1)-12-01, with its Oyr-labelled midpoint
+                # year N+1, so the recipe's requested period must shift
+                # by one year to match the Oyr data actually present.
+                if "start_year" in dataset_items:
+                    dataset_items["start_year"] += 1
+                if "end_year" in dataset_items:
+                    dataset_items["end_year"] += 1
             for key in unwanted_keys:
                 if key in dataset_items:
                     del dataset_items[key]
@@ -210,6 +322,14 @@ def update_recipe_file(
     recipe = remove_datasets_contents(recipe)
     if recipe_id == "correlation":
         recipe = remove_additional_datasets(recipe)
+    if recipe_id == "ocean_quadmap":
+        # The upstream recipe fixes the analysis period to 2000-2003,
+        # which is incompatible with CMEW's user-configured model period.
+        recipe = remove_extract_time(recipe)
+
+        # Replace the upstream hard-coded model selectors with selectors
+        # derived from the model runs configured for this CMEW workflow.
+        recipe = update_ocean_quadmap_model_selectors(recipe, model_runs)
 
     datasets = construct_datasets_contents([model_runs, cmip6_datasets])
     recipe = add_datasets_contents(recipe, datasets)

@@ -131,3 +131,53 @@ def find_eval_label(fp):
     eval_label = retrieve_value(fp, "experiment", "label_for_plots")
     print(f"[scrape_ini.py] Eval label: {eval_label}")
     return eval_label
+
+
+def facet_per_dataset(fp, key, default=None):
+    """
+    Return a dict mapping each model_runs suite_id to the value of a
+    given key within its own namelist section (or ``default`` if the
+    key is absent for that suite_id).
+
+    This is the single authoritative way to read per-model-run source
+    metadata (e.g. "archive_stream") before the workflow starts, since
+    Jinja2 template rendering happens before model_runs.yml exists.
+
+    Parameters
+    ----------
+    fp: str
+        The file path to the ini-style file.
+    key: str
+        The name of the key to look up in each model_runs section.
+    default:
+        The value to use for a suite_id whose section does not define
+        the key.
+
+    Returns
+    -------
+    dict
+        Mapping of suite_id to the value of ``key`` (or ``default``).
+    """
+    with open(fp, "r") as f:
+        content = f.read()
+
+    # Split into model_runs namelist sections.
+    sections = content.split("[namelist:model_runs(")[1:]
+
+    facets = {}
+    for section in sections:
+        suite_id = None
+        value = default
+        for line in section.splitlines():
+            line = line.strip()
+            if line.startswith("["):
+                break
+            if line.startswith("suite_id"):
+                suite_id = line.split("=", 1)[1].strip().replace('"', "")
+            elif line.startswith(key):
+                value = line.split("=", 1)[1].strip().replace('"', "")
+        if suite_id:
+            facets[suite_id] = value
+
+    print(f"[scrape_ini.py] {key} per dataset: {facets}")
+    return facets
