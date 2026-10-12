@@ -588,3 +588,131 @@ def test_main_computes_calendar_year_run_bounds(monkeypatch, tmp_path):
     # containing its midpoint is 1851.
     assert written["run_bounds_start"] == "1851-01-01T00:00:00"
     assert written["run_bounds_end"] == "1852-01-01T00:00:00"
+
+
+def test_annual_variables_from_recipe(tmp_path):
+    recipe_variables_file = tmp_path / "recipe_variables.txt"
+    recipe_variables_file.write_text(
+        "Omon/tos\n" "Omon/sos\n" "Omon/thetao\n" "Omon/so\n"
+    )
+
+    actual = standardise_ony_annual.annual_variables_from_recipe(
+        str(recipe_variables_file)
+    )
+
+    assert actual == ["tos", "sos", "thetao", "so"]
+
+
+def test_annual_variables_from_recipe_removes_duplicates(tmp_path):
+    recipe_variables_file = tmp_path / "recipe_variables.txt"
+    recipe_variables_file.write_text("Omon/tos\n" "Omon/tos\n" "Omon/sos\n")
+
+    actual = standardise_ony_annual.annual_variables_from_recipe(
+        str(recipe_variables_file)
+    )
+
+    assert actual == ["tos", "sos"]
+
+
+def test_annual_variables_from_recipe_rejects_unsupported_variable(tmp_path):
+    import pytest
+
+    recipe_variables_file = tmp_path / "recipe_variables.txt"
+    recipe_variables_file.write_text("Omon/tos\n" "Amon/tas\n")
+
+    with pytest.raises(
+        ValueError,
+        match="does not support recipe variables: tas",
+    ):
+        standardise_ony_annual.annual_variables_from_recipe(
+            str(recipe_variables_file)
+        )
+
+
+def test_annual_variables_from_recipe_rejects_malformed_entry(tmp_path):
+    import pytest
+
+    recipe_variables_file = tmp_path / "recipe_variables.txt"
+    recipe_variables_file.write_text("tos\n")
+
+    with pytest.raises(
+        ValueError,
+        match="expected '<mip>/<short_name>'",
+    ):
+        standardise_ony_annual.annual_variables_from_recipe(
+            str(recipe_variables_file)
+        )
+
+
+def test_main_uses_recipe_variables_file(monkeypatch, tmp_path):
+    """Main should request only annual variables required by the recipe."""
+    written = {}
+
+    def fake_write_cfg(cfg_path, **template_values):
+        written.update(template_values)
+        return ""
+
+    monkeypatch.setattr(
+        standardise_ony_annual,
+        "retrieve_annual_files",
+        lambda *a, **k: [],
+    )
+    monkeypatch.setattr(
+        standardise_ony_annual,
+        "repair_annual_files",
+        lambda *a, **k: None,
+    )
+    monkeypatch.setattr(
+        standardise_ony_annual,
+        "write_mip_convert_cfg",
+        fake_write_cfg,
+    )
+    monkeypatch.setattr(
+        standardise_ony_annual,
+        "run_standalone_mip_convert",
+        lambda *a: None,
+    )
+
+    recipe_variables_file = tmp_path / "ocean_variables.txt"
+    recipe_variables_file.write_text("Omon/tos\n")
+
+    standardise_ony_annual.main(
+        [
+            "--suite-id",
+            "u-eb014",
+            "--start-year",
+            "1850",
+            "--end-year",
+            "1850",
+            "--model-id",
+            "UKESM1-0-LL",
+            "--experiment-id",
+            "test-u-eb014",
+            "--variant-label",
+            "r1i1p1f1",
+            "--ancil-files",
+            "/tmp/ancil.pp",
+            "--hybrid-heights-files",
+            "/tmp/hybrid.txt",
+            "--replacement-coordinate-files",
+            "/tmp/coords.nc",
+            "--sites-file",
+            "/tmp/sites.txt",
+            "--recipe-variables-file",
+            str(recipe_variables_file),
+            "--retrieval-dir",
+            str(tmp_path / "retrieval"),
+            "--model-output-dir",
+            str(tmp_path / "input"),
+            "--output-dir",
+            str(tmp_path / "output"),
+            "--cfg-path",
+            str(tmp_path / "mip_convert.cfg"),
+            "--cmor-log-file",
+            str(tmp_path / "cmor.log"),
+            "--datestamp",
+            "2026-10-12T0000Z",
+        ]
+    )
+
+    assert written["variables"] == "tos"

@@ -9,6 +9,7 @@
     ) }}
 {{ assert(ESMVALTOOL_MODULE_NAME != "", "ESMVALTOOL_MODULE_NAME must be set to something other than an empty string") }}
 {% set SKIP_CDDS = SKIP_CDDS | default(false) %}
+{% set selected_recipe = "radiation_budget" if TEST else RECIPE %}
 
 {% from "scrape_ini" import list_datasets, facet_per_dataset %}
 {% set datasets = list_datasets("rose-suite.conf") %}
@@ -40,13 +41,7 @@
 {%- if monthly_datasets %}
     dataset = {{ monthly_datasets | join(", ") }}
 {%- endif %}
-{%- if TEST %}
-    # Preserve the existing regression-test recipe.
-    recipe = radiation_budget
-{%- else %}
-    # Normal runs use the recipe selected by the user in rose-suite.conf.
-    recipe = {{ RECIPE }}
-{%- endif %}
+    recipe = {{ selected_recipe }}
 {%- if annual_datasets %}
     annual_dataset = {{ annual_datasets | join(", ") }}
 {%- endif %}
@@ -77,7 +72,8 @@
             # annual_dataset. Runs independently of the monthly route
             # above and writes into ROOT_DATA_DIR, so the existing
             # restructure_dirs task picks up its output unchanged.
-            copy_datasets => standardise_model_data_annual<annual_dataset>
+            configure_for<recipe>
+                => standardise_model_data_annual<annual_dataset>
                 => restructure_dirs
     {%- endif %}
 
@@ -151,6 +147,7 @@
             # new annual model configurations don't require a flow.cylc
             # change.
             MODEL_ANCILLARIES_FP = ${CYLC_WORKFLOW_RUN_DIR}/app/standardise_model_data/model_ancillaries.json
+            RECIPE_VARIABLES_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/variables_lists/{{ selected_recipe }}_variables.txt
 
     [[MODEL_RUNS]]
         [[[environment]]]
