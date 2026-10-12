@@ -136,3 +136,32 @@ def test_mixed_streams_are_routed_independently(tmp_path):
     assert monthly["mip"] == "Omon"
     assert monthly["effective_start"] == 1850
     assert monthly["effective_end"] == 1859
+
+
+def test_dataset_roles_are_identified_from_model_run_sections(tmp_path):
+    """Preflight should label experiment and reference datasets correctly."""
+    config = tmp_path / "rose-suite.conf"
+    config.write_text(
+        "[namelist:model_runs(1)]\n"
+        'archive_stream="ony"\n'
+        'label_for_plots="experiment-model"\n'
+        'model_id="UKESM1-0-LL"\n'
+        'suite_id="u-experiment"\n'
+        "\n"
+        "[namelist:model_runs(reference)]\n"
+        'archive_stream="ony"\n'
+        'label_for_plots="reference-model"\n'
+        'model_id="UKESM1-0-LL"\n'
+        'suite_id="u-reference"\n'
+        "\n"
+        "[template variables]\n"
+        "NUMBER_OF_YEARS=2\n"
+        "START_YEAR=1850\n"
+    )
+
+    plan = build_preflight(config)
+
+    datasets = {dataset["suite_id"]: dataset for dataset in plan["datasets"]}
+
+    assert datasets["u-experiment"]["role"] == "experiment"
+    assert datasets["u-reference"]["role"] == "reference"

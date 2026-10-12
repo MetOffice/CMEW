@@ -82,6 +82,40 @@ def year_range(start_year, number_of_years, offset=0):
     return first_year, last_year
 
 
+def role_per_dataset(config_path):
+    """Return a mapping of suite ID to experiment/reference role."""
+    roles = {}
+
+    with config_path.open() as handle:
+        lines = handle.readlines()
+
+    current_indicator = None
+    for raw_line in lines:
+        line = raw_line.strip()
+
+        if line.startswith("[namelist:model_runs("):
+            current_indicator = line.split("(", 1)[1].split(")", 1)[0]
+            continue
+
+        if current_indicator is None:
+            continue
+
+        if line.startswith("["):
+            current_indicator = None
+            continue
+
+        if line.startswith("suite_id"):
+            suite_id = line.split("=", 1)[1].strip().replace('"', "")
+            role = (
+                "reference"
+                if current_indicator == "reference"
+                else "experiment"
+            )
+            roles[suite_id] = role
+
+    return roles
+
+
 def build_preflight(config_path):
     """Build the current CMEW model-data routing summary."""
     variables = template_variables(config_path)
@@ -109,6 +143,7 @@ def build_preflight(config_path):
         "onm",
     )
     labels = facet_per_dataset(config_path, "label_for_plots")
+    roles = role_per_dataset(config_path)
 
     requested_start, requested_end = year_range(
         start_year,
@@ -136,6 +171,7 @@ def build_preflight(config_path):
         datasets.append(
             {
                 "suite_id": suite_id,
+                "role": roles.get(suite_id, "experiment"),
                 "label": labels.get(suite_id),
                 "model_id": model_ids.get(suite_id),
                 "archive_stream": archive_stream,
@@ -169,7 +205,7 @@ def print_preflight(plan):
 
     for dataset in plan["datasets"]:
         print()
-        print(dataset["suite_id"])
+        print(f"{dataset['role'].title()}: {dataset['suite_id']}")
 
         if dataset["label"]:
             print(f"  label: {dataset['label']}")
