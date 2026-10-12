@@ -15,7 +15,9 @@
             --wckey = CMEW
             --ntasks = {{ MAX_PARALLEL_TASKS }}
 
+{%- if not TEST and RECIPE == "ocean_quadmap" %}
     [[run_recipe<recipe=ocean_quadmap>]]
         [[[directives]]]
             --time = 10
             --mem = 8G
+{%- endif %}

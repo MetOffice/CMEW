@@ -40,7 +40,13 @@
 {%- if monthly_datasets %}
     dataset = {{ monthly_datasets | join(", ") }}
 {%- endif %}
-    recipe = ocean_quadmap
+{%- if TEST %}
+    # Preserve the existing regression-test recipe.
+    recipe = radiation_budget
+{%- else %}
+    # Normal runs use the recipe selected by the user in rose-suite.conf.
+    recipe = {{ RECIPE }}
+{%- endif %}
 {%- if annual_datasets %}
     annual_dataset = {{ annual_datasets | join(", ") }}
 {%- endif %}

@@ -86,26 +86,15 @@ def year_range(start_year, number_of_years, offset=0):
     return first_year, last_year
 
 
-def workflow_recipe(flow_path):
-    """Return the recipe configured in the Cylc task parameters."""
-    in_task_parameters = False
+def configured_recipe(config_path):
+    """Return the recipe selected in the Rose template variables."""
+    values = template_variables(config_path)
+    recipe = values.get("RECIPE")
 
-    with flow_path.open() as handle:
-        for raw_line in handle:
-            line = raw_line.strip()
+    if not recipe:
+        raise ValueError(f"RECIPE is missing from {config_path}.")
 
-            if line == "[task parameters]":
-                in_task_parameters = True
-                continue
-
-            if in_task_parameters and line.startswith("["):
-                break
-
-            if in_task_parameters and line.startswith("recipe"):
-                _, value = line.split("=", 1)
-                return value.strip()
-
-    raise ValueError(f"No recipe task parameter was found in {flow_path}.")
+    return recipe
 
 
 def site_esmvaltool_config(repo_root, site):
@@ -396,7 +385,7 @@ def main():
     variables = []
 
     try:
-        recipe = workflow_recipe(REPO_ROOT / "flow.cylc")
+        recipe = configured_recipe(config_path)
 
         if args.site:
             try:

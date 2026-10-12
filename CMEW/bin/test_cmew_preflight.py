@@ -263,3 +263,25 @@ def test_preflight_output_shows_recipe_variables(tmp_path, capsys):
     assert "tos (Omon)" in output
     assert "sos (Omon)" in output
     assert "output MIP table: Oyr" in output
+
+
+def test_configured_recipe_comes_from_rose_template_variables(tmp_path):
+    """The selected recipe should come from Rose user configuration."""
+    config = tmp_path / "rose-suite.conf"
+    config.write_text("[template variables]\n" 'RECIPE="example_recipe"\n')
+
+    recipe = PREFLIGHT["configured_recipe"](config)
+
+    assert recipe == "example_recipe"
+
+
+def test_workflow_uses_configured_recipe_and_preserves_test_override():
+    """Normal and test recipe selection should remain separate."""
+    repo_root = PREFLIGHT["REPO_ROOT"]
+
+    flow = (repo_root / "flow.cylc").read_text()
+    test_include = (repo_root / "inc" / "test.cylc").read_text()
+
+    assert "recipe = {{ RECIPE }}" in flow
+    assert "recipe = ocean_quadmap" not in flow
+    assert "recipe = radiation_budget" in test_include
