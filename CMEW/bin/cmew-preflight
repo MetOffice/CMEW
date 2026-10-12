@@ -1,0 +1,226 @@
+#!/usr/bin/env python3
+# (C) Crown Copyright 2026, Met Office.
+# The LICENSE.md file contains full licensing details.
+"""
+Display a read-only summary of how CMEW will interpret model-run inputs.
+
+This utility does not modify Rose configuration, Cylc configuration, recipes,
+or model data.  It provides a user-facing view of routing decisions that are
+already made by the CMEW workflow.
+"""
+
+import argparse
+import sys
+from pathlib import Path
+
+
+# CMEW keeps shared Python helpers under lib/python rather than an installed
+# package.  Resolve that location relative to this executable so that the
+# command works when called from anywhere inside or outside the repository.
+REPO_ROOT = Path(__file__).resolve().parent.parent
+LIB_PYTHON = REPO_ROOT / "lib" / "python"
+
+if str(LIB_PYTHON) not in sys.path:
+    sys.path.insert(0, str(LIB_PYTHON))
+
+from scrape_ini import facet_per_dataset  # noqa: E402
+
+
+SUPPORTED_ARCHIVE_STREAMS = {
+    "onm": {
+        "frequency": "monthly",
+        "route": "monthly standardisation",
+        "mip": "Omon",
+        "year_offset": 0,
+    },
+    "ony": {
+        "frequency": "annual",
+        "route": "annual standardisation",
+        "mip": "Oyr",
+        # NEMO ony files use Dec-to-Dec source bounds.  CMEW assigns the
+        # resulting annual mean to the following calendar/model year.
+        "year_offset": 1,
+    },
+}
+
+
+def template_variables(config_path):
+    """Return values from the Rose ``[template variables]`` section."""
+    values = {}
+    in_template_variables = False
+
+    with config_path.open() as handle:
+        for raw_line in handle:
+            line = raw_line.strip()
+
+            if line == "[template variables]":
+                in_template_variables = True
+                continue
+
+            if in_template_variables and line.startswith("["):
+                break
+
+            if not in_template_variables:
+                continue
+
+            if not line or line.startswith("#") or line.startswith("!!"):
+                continue
+
+            if "=" not in line:
+                continue
+
+            key, value = line.split("=", 1)
+            values[key.strip()] = value.strip().strip('"')
+
+    return values
+
+
+def year_range(start_year, number_of_years, offset=0):
+    """Return inclusive start/end years after applying a source offset."""
+    first_year = start_year + offset
+    last_year = start_year + number_of_years - 1 + offset
+    return first_year, last_year
+
+
+def build_preflight(config_path):
+    """Build the current CMEW model-data routing summary."""
+    variables = template_variables(config_path)
+
+    try:
+        start_year = int(variables["START_YEAR"])
+        number_of_years = int(variables["NUMBER_OF_YEARS"])
+    except KeyError as exc:
+        raise ValueError(
+            f"Required template variable {exc.args[0]} is missing."
+        ) from exc
+    except ValueError as exc:
+        raise ValueError(
+            "START_YEAR and NUMBER_OF_YEARS must both be integers."
+        ) from exc
+
+    if number_of_years < 1:
+        raise ValueError("NUMBER_OF_YEARS must be at least 1.")
+
+    # Reuse the same metadata reader already used by flow.cylc.
+    model_ids = facet_per_dataset(config_path, "model_id")
+    archive_streams = facet_per_dataset(
+        config_path,
+        "archive_stream",
+        "onm",
+    )
+    labels = facet_per_dataset(config_path, "label_for_plots")
+
+    requested_start, requested_end = year_range(
+        start_year,
+        number_of_years,
+    )
+
+    datasets = []
+
+    for suite_id, archive_stream in archive_streams.items():
+        if archive_stream not in SUPPORTED_ARCHIVE_STREAMS:
+            raise ValueError(
+                f"{suite_id}: unsupported archive_stream "
+                f"{archive_stream!r}. Expected one of: "
+                f"{', '.join(SUPPORTED_ARCHIVE_STREAMS)}."
+            )
+
+        source = SUPPORTED_ARCHIVE_STREAMS[archive_stream]
+
+        effective_start, effective_end = year_range(
+            start_year,
+            number_of_years,
+            source["year_offset"],
+        )
+
+        datasets.append(
+            {
+                "suite_id": suite_id,
+                "label": labels.get(suite_id),
+                "model_id": model_ids.get(suite_id),
+                "archive_stream": archive_stream,
+                "frequency": source["frequency"],
+                "route": source["route"],
+                "mip": source["mip"],
+                "effective_start": effective_start,
+                "effective_end": effective_end,
+            }
+        )
+
+    return {
+        "requested_start": requested_start,
+        "requested_end": requested_end,
+        "number_of_years": number_of_years,
+        "datasets": datasets,
+    }
+
+
+def print_preflight(plan):
+    """Print a human-readable CMEW preflight summary."""
+    print()
+    print("CMEW preflight")
+    print("==============")
+    print()
+    print(
+        "Requested period: "
+        f"{plan['requested_start']}-{plan['requested_end']} "
+        f"({plan['number_of_years']} years)"
+    )
+
+    for dataset in plan["datasets"]:
+        print()
+        print(dataset["suite_id"])
+
+        if dataset["label"]:
+            print(f"  label: {dataset['label']}")
+
+        print(f"  model: {dataset['model_id']}")
+        print(f"  archive stream: {dataset['archive_stream']}")
+        print(f"  source frequency: {dataset['frequency']}")
+        print(f"  standardisation route: {dataset['route']}")
+        print(f"  output MIP table: {dataset['mip']}")
+        print(
+            "  effective period: "
+            f"{dataset['effective_start']}-"
+            f"{dataset['effective_end']}"
+        )
+
+    print()
+    print("This is a read-only summary; no workflow has been started.")
+
+
+def parse_args():
+    """Parse command-line arguments."""
+    parser = argparse.ArgumentParser(
+        description="Show how CMEW will route configured model datasets."
+    )
+    parser.add_argument(
+        "config",
+        nargs="?",
+        default="rose-suite.conf",
+        help="Rose suite configuration file (default: rose-suite.conf)",
+    )
+    return parser.parse_args()
+
+
+def main():
+    """Run the CMEW preflight command."""
+    args = parse_args()
+    config_path = Path(args.config)
+
+    if not config_path.is_file():
+        raise SystemExit(
+            f"CMEW preflight error: configuration file not found: "
+            f"{config_path}"
+        )
+
+    try:
+        plan = build_preflight(config_path)
+    except ValueError as exc:
+        raise SystemExit(f"CMEW preflight error: {exc}") from exc
+
+    print_preflight(plan)
+
+
+if __name__ == "__main__":
+    main()
