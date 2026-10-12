@@ -10,8 +10,12 @@ already made by the CMEW workflow.
 """
 
 import argparse
+import os
+import subprocess
 import sys
 from pathlib import Path
+
+import yaml
 
 
 # CMEW keeps shared Python helpers under lib/python rather than an installed
@@ -82,6 +86,123 @@ def year_range(start_year, number_of_years, offset=0):
     return first_year, last_year
 
 
+def workflow_recipe(flow_path):
+    """Return the recipe configured in the Cylc task parameters."""
+    in_task_parameters = False
+
+    with flow_path.open() as handle:
+        for raw_line in handle:
+            line = raw_line.strip()
+
+            if line == "[task parameters]":
+                in_task_parameters = True
+                continue
+
+            if in_task_parameters and line.startswith("["):
+                break
+
+            if in_task_parameters and line.startswith("recipe"):
+                _, value = line.split("=", 1)
+                return value.strip()
+
+    raise ValueError(f"No recipe task parameter was found in {flow_path}.")
+
+
+def site_esmvaltool_config(repo_root, site):
+    """Return the ESMValTool module and environment wrapper for a site."""
+    option_path = repo_root / "opt" / f"rose-suite-{site}.conf"
+    wrapper_path = repo_root / "site" / f"{site}-esmvaltool-env"
+
+    if not option_path.is_file():
+        raise ValueError(f"Site option file not found: {option_path}")
+
+    if not wrapper_path.is_file():
+        raise ValueError(f"Site ESMValTool wrapper not found: {wrapper_path}")
+
+    values = template_variables(option_path)
+    module_name = values.get("ESMVALTOOL_MODULE_NAME")
+
+    if not module_name:
+        raise ValueError(
+            f"ESMVALTOOL_MODULE_NAME is missing from {option_path}."
+        )
+
+    return {
+        "site": site,
+        "module_name": module_name,
+        "wrapper_path": wrapper_path,
+    }
+
+
+def recipe_yaml_from_site(recipe, site_config):
+    """Return the installed ESMValTool recipe YAML without copying it."""
+    recipe_name = f"recipe_{recipe}.yml"
+
+    environment = os.environ.copy()
+    environment.update(
+        {
+            "ESMVALTOOL_MODULE_NAME": site_config["module_name"],
+            "CYLC_TASK_LOG_ROOT": "/tmp/cmew-preflight",
+            "QUIET_MODE": "1",
+        }
+    )
+
+    command = [
+        str(site_config["wrapper_path"]),
+        "esmvaltool",
+        "recipes",
+        "show",
+        recipe_name,
+    ]
+
+    try:
+        result = subprocess.run(
+            command,
+            check=True,
+            capture_output=True,
+            text=True,
+            env=environment,
+        )
+    except (OSError, subprocess.CalledProcessError) as exc:
+        raise ValueError(
+            f"Unable to inspect ESMValTool recipe {recipe_name}."
+        ) from exc
+
+    lines = result.stdout.splitlines()
+
+    try:
+        yaml_start = lines.index("---")
+    except ValueError as exc:
+        raise ValueError(
+            f"ESMValTool recipe output for {recipe_name} "
+            "did not contain YAML."
+        ) from exc
+
+    return yaml.safe_load("\n".join(lines[yaml_start:]))
+
+
+def recipe_variables(recipe_content):
+    """Return unique short-name/MIP pairs required by a recipe."""
+    variables = []
+
+    diagnostics = recipe_content.get("diagnostics", {})
+
+    for diagnostic in diagnostics.values():
+        for name, details in diagnostic.get("variables", {}).items():
+            short_name = details.get("short_name", name)
+            mip = details.get("mip")
+
+            item = {
+                "short_name": short_name,
+                "mip": mip,
+            }
+
+            if item not in variables:
+                variables.append(item)
+
+    return variables
+
+
 def role_per_dataset(config_path):
     """Return a mapping of suite ID to experiment/reference role."""
     roles = {}
@@ -116,7 +237,7 @@ def role_per_dataset(config_path):
     return roles
 
 
-def build_preflight(config_path):
+def build_preflight(config_path, recipe=None, recipe_variables=None):
     """Build the current CMEW model-data routing summary."""
     variables = template_variables(config_path)
 
@@ -184,6 +305,8 @@ def build_preflight(config_path):
         )
 
     return {
+        "recipe": recipe,
+        "recipe_variables": recipe_variables or [],
         "requested_start": requested_start,
         "requested_end": requested_end,
         "number_of_years": number_of_years,
@@ -196,6 +319,18 @@ def print_preflight(plan):
     print()
     print("CMEW preflight")
     print("==============")
+    if plan["recipe"]:
+        print()
+        print(f"Recipe: {plan['recipe']}")
+
+    if plan["recipe_variables"]:
+        print()
+        print("Required recipe variables:")
+        for variable in plan["recipe_variables"]:
+            short_name = variable["short_name"]
+            mip = variable["mip"]
+            print(f"  {short_name} ({mip})")
+
     print()
     print(
         "Requested period: "
@@ -236,6 +371,13 @@ def parse_args():
         default="rose-suite.conf",
         help="Rose suite configuration file (default: rose-suite.conf)",
     )
+    parser.add_argument(
+        "--site",
+        help=(
+            "Inspect the installed ESMValTool recipe using the "
+            "configuration for this CMEW site."
+        ),
+    )
     return parser.parse_args()
 
 
@@ -250,8 +392,34 @@ def main():
             f"{config_path}"
         )
 
+    recipe = None
+    variables = []
+
     try:
-        plan = build_preflight(config_path)
+        recipe = workflow_recipe(REPO_ROOT / "flow.cylc")
+
+        if args.site:
+            try:
+                site_config = site_esmvaltool_config(
+                    REPO_ROOT,
+                    args.site,
+                )
+                recipe_content = recipe_yaml_from_site(
+                    recipe,
+                    site_config,
+                )
+                variables = recipe_variables(recipe_content)
+            except ValueError as exc:
+                print(
+                    "CMEW preflight warning: "
+                    f"recipe inspection unavailable: {exc}"
+                )
+
+        plan = build_preflight(
+            config_path,
+            recipe=recipe,
+            recipe_variables=variables,
+        )
     except ValueError as exc:
         raise SystemExit(f"CMEW preflight error: {exc}") from exc
 

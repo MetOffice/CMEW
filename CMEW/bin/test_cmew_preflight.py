@@ -165,3 +165,101 @@ def test_dataset_roles_are_identified_from_model_run_sections(tmp_path):
 
     assert datasets["u-experiment"]["role"] == "experiment"
     assert datasets["u-reference"]["role"] == "reference"
+
+
+def test_recipe_variables_returns_unique_short_names_and_mips():
+    """Recipe requirements should expose unique short-name/MIP pairs."""
+    recipe_content = {
+        "diagnostics": {
+            "surface_temperature": {
+                "variables": {
+                    "tos": {
+                        "mip": "Omon",
+                    }
+                }
+            },
+            "surface_salinity": {
+                "variables": {
+                    "salinity": {
+                        "short_name": "sos",
+                        "mip": "Omon",
+                    }
+                }
+            },
+            "duplicate_temperature": {
+                "variables": {
+                    "tos": {
+                        "mip": "Omon",
+                    }
+                }
+            },
+        }
+    }
+
+    variables = PREFLIGHT["recipe_variables"](recipe_content)
+
+    assert variables == [
+        {
+            "short_name": "tos",
+            "mip": "Omon",
+        },
+        {
+            "short_name": "sos",
+            "mip": "Omon",
+        },
+    ]
+
+
+def test_preflight_plan_can_include_recipe_information(tmp_path):
+    """Recipe metadata should be carried into the preflight plan."""
+    config = write_config(tmp_path, archive_stream="ony")
+
+    variables = [
+        {
+            "short_name": "tos",
+            "mip": "Omon",
+        },
+        {
+            "short_name": "sos",
+            "mip": "Omon",
+        },
+    ]
+
+    plan = build_preflight(
+        config,
+        recipe="ocean_quadmap",
+        recipe_variables=variables,
+    )
+
+    assert plan["recipe"] == "ocean_quadmap"
+    assert plan["recipe_variables"] == variables
+
+
+def test_preflight_output_shows_recipe_variables(tmp_path, capsys):
+    """Human-readable output should show recipe requirements."""
+    config = write_config(tmp_path, archive_stream="ony")
+
+    plan = build_preflight(
+        config,
+        recipe="ocean_quadmap",
+        recipe_variables=[
+            {
+                "short_name": "tos",
+                "mip": "Omon",
+            },
+            {
+                "short_name": "sos",
+                "mip": "Omon",
+            },
+        ],
+    )
+
+    PREFLIGHT["print_preflight"](plan)
+
+    output = capsys.readouterr().out
+
+    assert "Recipe: ocean_quadmap" in output
+    assert "Required recipe variables:" in output
+    assert "tos (Omon)" in output
+    assert "sos (Omon)" in output
+    assert "output MIP table: Oyr" in output
