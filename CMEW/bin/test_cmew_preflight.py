@@ -282,6 +282,51 @@ def test_workflow_uses_configured_recipe_and_preserves_test_override():
     flow = (repo_root / "flow.cylc").read_text()
     test_include = (repo_root / "inc" / "test.cylc").read_text()
 
-    assert "recipe = {{ RECIPE }}" in flow
+    assert 'selected_recipe = "radiation_budget" if TEST else RECIPE' in flow
+    assert "recipe = {{ selected_recipe }}" in flow
     assert "recipe = ocean_quadmap" not in flow
     assert "recipe = radiation_budget" in test_include
+
+
+def test_annual_recipe_variables_accept_supported_variables():
+    recipe_vars = [
+        {"short_name": "tos", "mip": "Omon"},
+        {"short_name": "so", "mip": "Omon"},
+    ]
+    datasets = [{"archive_stream": "ony"}]
+
+    PREFLIGHT["validate_annual_recipe_variables"](
+        recipe_vars,
+        datasets,
+    )
+
+
+def test_annual_recipe_variables_reject_unsupported_variable():
+    import pytest
+
+    recipe_vars = [
+        {"short_name": "tos", "mip": "Omon"},
+        {"short_name": "tas", "mip": "Amon"},
+    ]
+    datasets = [{"archive_stream": "ony"}]
+
+    with pytest.raises(
+        ValueError,
+        match="cannot satisfy recipe variables: tas",
+    ):
+        PREFLIGHT["validate_annual_recipe_variables"](
+            recipe_vars,
+            datasets,
+        )
+
+
+def test_monthly_route_does_not_apply_annual_variable_limit():
+    recipe_vars = [
+        {"short_name": "tas", "mip": "Amon"},
+    ]
+    datasets = [{"archive_stream": "onm"}]
+
+    PREFLIGHT["validate_annual_recipe_variables"](
+        recipe_vars,
+        datasets,
+    )

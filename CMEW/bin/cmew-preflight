@@ -170,6 +170,37 @@ def recipe_yaml_from_site(recipe, site_config):
     return yaml.safe_load("\n".join(lines[yaml_start:]))
 
 
+ANNUAL_SUPPORTED_VARIABLES = ("tos", "sos", "thetao", "so")
+
+
+def validate_annual_recipe_variables(recipe_vars, datasets):
+    """Validate recipe variables against the annual ony route."""
+    if not recipe_vars:
+        return
+
+    if not any(dataset["archive_stream"] == "ony" for dataset in datasets):
+        return
+
+    required = []
+    for variable in recipe_vars:
+        short_name = variable["short_name"]
+        if short_name not in required:
+            required.append(short_name)
+
+    unsupported = [
+        variable
+        for variable in required
+        if variable not in ANNUAL_SUPPORTED_VARIABLES
+    ]
+
+    if unsupported:
+        raise ValueError(
+            "Annual ony standardisation cannot satisfy recipe variables: "
+            f"{', '.join(unsupported)}. Supported annual variables: "
+            f"{', '.join(ANNUAL_SUPPORTED_VARIABLES)}."
+        )
+
+
 def recipe_variables(recipe_content):
     """Return unique short-name/MIP pairs required by a recipe."""
     variables = []
@@ -292,6 +323,11 @@ def build_preflight(config_path, recipe=None, recipe_variables=None):
                 "effective_end": effective_end,
             }
         )
+
+    validate_annual_recipe_variables(
+        recipe_variables or [],
+        datasets,
+    )
 
     return {
         "recipe": recipe,
