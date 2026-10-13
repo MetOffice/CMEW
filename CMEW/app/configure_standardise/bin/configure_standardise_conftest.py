@@ -18,7 +18,3 @@ def kgo_dir():
 
 def request_u_cw673_cfg_fp():
     return kgo_dir() / "request_u-cw673.cfg"
-
-
-def variables_txt_fp():
-    return kgo_dir() / "variables.txt"
