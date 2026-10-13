@@ -66,7 +66,7 @@ Once a new dataset has been added, it may be named as the reference (or evaluati
 .. image:: images/rename_section.png
    :alt: An image of the Rose GUI showing a pop-up menu over a model run named "1",
          with an arrow pointing to the option "Rename a section".
-   :width: 800px
+   :width: 650px
 
 .. image:: images/rename_overwrite.png
    :alt: An image of a pop-up from the Rose GUI showing a text field entry
