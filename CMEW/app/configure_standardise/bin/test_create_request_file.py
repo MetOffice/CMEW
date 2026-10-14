@@ -80,8 +80,8 @@ def test_create_request(monkeypatch):
             "experiment_id": experiment_id,
             "institution_id": institute,
             "license": (
-                "GCModelDev model data is licensed "
-                "under the Open Government License v3 "
+                "GCModelDev model data is licensed under the "
+                "Open Government License v3 "
                 "(https://www.nationalarchives.gov.uk/"
                 "doc/open-government-licence/version/3/)"
             ),
