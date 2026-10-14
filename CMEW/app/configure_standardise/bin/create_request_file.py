@@ -9,11 +9,32 @@ import os
 import sys
 import yaml
 import logging
-from config_configure_standardise import requests_defaults
+from config_configure_standardise import request_defaults
 
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 filename = os.path.basename(__file__)
 logger = logging.getLogger(filename)
+
+
+def retrieve_all_dataset_metadata(dataset_metadata_path):
+    """
+    Return the metadata associated with all the datasets.
+
+    Parameters
+    ----------
+    dataset_metadata_path : str
+        The full path to the file containing
+        the metadata for all datasets.
+
+    Returns
+    -------
+    dict
+        The metadata associated with all the datasets.
+    """
+    with open(dataset_metadata_path, "r") as file_handle:
+        dataset_metadata = yaml.safe_load(file_handle)
+    logger.debug(f"{dataset_metadata=}")
+    return dataset_metadata
 
 
 def load_request_defaults(defaults_path):
@@ -87,28 +108,23 @@ def list_streams(variables_file):
 
 
 def create_request(
-    dataset,
     mip_table_dir,
-    model_runs_yml_fp,
+    dataset_metadata,
     root_proc_dir,
     root_data_dir,
     variables_file,
     raw_data_dir_mode,
-    request_defaults=requests_defaults,
+    request_defaults=request_defaults,
 ):
     """
-    Build a CDDS request configuration for a run identified by a suite_id.
-
-    Uses information from the model_runs.yml file.
+    Return a CDDS request for a dataset.
 
     Parameters
     ----------
-    dataset : str
-        The model run to be extracted from MASS and processed.
     mip_table_dir : str
         The path to the MIP table directory to use from CDDS.
-    model_runs_yml_fp : str
-        The full path to the YAML file containing details of the model runs.
+    dataset_metadata : dict
+        The metadata associated with the dataset.
     root_proc_dir : str
         The directory for use when processing data with CDDS.
     root_data_dir : str
@@ -124,49 +140,40 @@ def create_request(
     Returns
     -------
     dict
-        CDDS request configuration.
+        The CDDS request.
     """
     defaults = request_defaults
-
-    # Read the model run information from the model_runs.yml file
-    with open(model_runs_yml_fp, "r") as file_handle:
-        dataset_dict = yaml.safe_load(file_handle)[dataset]
-    logger.debug(
-        "Dataset % config:\n%s",
-        dataset,
-        dataset_dict,
-    )
 
     # Create the CDDS request
     request = {}
     request["metadata"] = {
         **defaults["metadata"],
         "base_date": defaults["metadata"]["base_date"],
-        "calendar": dataset_dict["calendar"],
-        "experiment_id": dataset_dict["experiment_id"],
-        "institution_id": dataset_dict["institute"],
-        "model_id": dataset_dict["model_id"],
-        "variant_label": dataset_dict["variant_label"],
+        "calendar": dataset_metadata["calendar"],
+        "experiment_id": dataset_metadata["experiment_id"],
+        "institution_id": dataset_metadata["institute"],
+        "model_id": dataset_metadata["model_id"],
+        "variant_label": dataset_metadata["variant_label"],
     }
     request["common"] = {
         **defaults["common"],
         "mip_table_dir": os.path.expanduser(mip_table_dir),
         "root_proc_dir": root_proc_dir,
         "root_data_dir": root_data_dir,
-        "workflow_basename": dataset_dict["suite_id"],
+        "workflow_basename": dataset_metadata["suite_id"],
     }
     request["data"] = {
         **defaults["data"],
-        "start_date": f"{dataset_dict['start_year']}-01-01T00:00:00",
-        "end_date": f"{int(dataset_dict['end_year'])+1}-01-01T00:00:00",
-        "model_workflow_id": dataset_dict["suite_id"],
+        "start_date": f"{dataset_metadata['start_year']}-01-01T00:00:00",
+        "end_date": f"{int(dataset_metadata['end_year'])+1}-01-01T00:00:00",
+        "model_workflow_id": dataset_metadata["suite_id"],
         "streams": list_streams(variables_file),
         "variable_list_file": variables_file,
     }
     request["misc"] = dict(defaults["misc"])
     request["conversion"] = dict(defaults["conversion"])
     if raw_data_dir_mode == "use_saved":
-        request["conversion"]["skip_extract"] = "True"
+        request["conversion"]["skip_extract"] = True
     request["netcdf_global_attributes"] = dict(
         defaults["netcdf_global_attributes"]
     )
@@ -232,10 +239,11 @@ def create_request_file(
     """
     logger.info("Creating CDDS request for dataset %s", dataset)
 
+    all_dataset_metadata = retrieve_all_dataset_metadata(model_runs_yml_fp)
+    dataset_metadata = all_dataset_metadata[dataset]
     request = create_request(
-        dataset,
         mip_table_dir,
-        model_runs_yml_fp,
+        dataset_metadata,
         root_proc_dir,
         root_data_dir,
         variables_file,
