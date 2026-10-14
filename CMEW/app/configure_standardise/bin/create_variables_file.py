@@ -28,7 +28,7 @@ def retrieve_variables_files_contents(directory):
 
     Returns
     -------
-    list[list]
+    list of list
        The contents of all variables files in the directory.
     """
     variables_files_contents = []
@@ -48,12 +48,12 @@ def determine_unique_variables(variables):
 
     Parameters
     ----------
-    variables: list[list]
+    variables: list of list
         The variables, which may or may not contain duplicates.
 
     Returns
     -------
-    list
+    list of str
         The unique variables.
 
     """
@@ -71,14 +71,14 @@ def add_stream_to_variables(variables, streams_dict=streams_dict):
 
     Parameters
     ----------
-    variables : list[str]
+    variables : list of str
         List of variables in the format "MIP_table/variable_name"
     streams_dict : dict
         A dictionary containing information about data streams.
 
     Returns
     -------
-    list[str]
+    list of str
         List of variables in the format "MIP_table/variable_name:stream"
     """
     # Using a second dictionary to avoid looping
@@ -102,7 +102,7 @@ def write_variables(variables, output_filepath):
 
     Parameters
     ----------
-    variables : list[str]
+    variables : list of str
         List of variables to be written to file.
 
     output_filepath : str
