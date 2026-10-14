@@ -15,150 +15,81 @@ filename = os.path.basename(__file__)
 logger = logging.getLogger(filename)
 
 
-def create_developer_config(
-    mip_table_dir,
+# TODO: use generic naming instead, see PR 587
+def retrieve_config_defaults(
+    esmvaltool_config_path,
 ):
     """
-    Return the contents of the developer configuration file.
+    Return the configuration stored in an ESMValTool configuration file.
 
     Parameters
     ----------
-    mip_table_dir:
-        The full path to the MIP tables root directory.
+    esmvaltool_config_path : str
+        The full path to the file containing the configuration.
 
     Returns
     -------
     dict
-        Developer configuration content.
+        The configuration contained in the file.
     """
-    developer_config_file_contents = {
-        "custom": {
-            "cmor_path": mip_table_dir,
-        },
-        "ESMVal": {
-            "cmor_strict": True,
-            "input_dir": {
-                "default": "/",
-                "BADC": (
-                    "{activity}/{institute}/{dataset}/{exp}/"
-                    "{ensemble}/{mip}/{short_name}/{grid}/{version}"
-                ),
-                "DKRZ": (
-                    "{activity}/{institute}/{dataset}/{exp}/"
-                    "{ensemble}/{mip}/{short_name}/{grid}/{version}"
-                ),
-                "ESGF": (
-                    "{project}/{activity}/{institute}/{dataset}/{exp}/"
-                    "{ensemble}/{mip}/{short_name}/{grid}/{version}"
-                ),
-                "ETHZ": (
-                    "{exp}/{mip}/{short_name}/{dataset}/" "{ensemble}/{grid}/"
-                ),
-                "SYNDA": (
-                    "{activity}/{institute}/{dataset}/{exp}/"
-                    "{ensemble}/{mip}/{short_name}/{grid}/{version}"
-                ),
-            },
-            "input_file": (
-                "{short_name}_{mip}_{dataset}_{exp}_{ensemble}_{grid}*.nc"
-            ),
-            "output_file": (
-                "{project}_{dataset}_{mip}_{exp}_{ensemble}_"
-                "{short_name}_{grid}"
-            ),
-            "cmor_type": "CMIP6",
-            "cmor_default_table_prefix": "GCModelDev_",
-        },
-        "CMIP6": {
-            "cmor_strict": True,
-            "input_dir": {
-                "default": "/",
-                "BADC": (
-                    "{activity}/{institute}/{dataset}/{exp}/"
-                    "{ensemble}/{mip}/{short_name}/{grid}/{version}"
-                ),
-                "DKRZ": (
-                    "{activity}/{institute}/{dataset}/{exp}/"
-                    "{ensemble}/{mip}/{short_name}/{grid}/{version}"
-                ),
-                "ESGF": (
-                    "{project}/{activity}/{institute}/{dataset}/{exp}/"
-                    "{ensemble}/{mip}/{short_name}/{grid}/{version}"
-                ),
-                "ETHZ": (
-                    "{exp}/{mip}/{short_name}/{dataset}/" "{ensemble}/{grid}/"
-                ),
-                "SYNDA": (
-                    "{activity}/{institute}/{dataset}/{exp}/"
-                    "{ensemble}/{mip}/{short_name}/{grid}/{version}"
-                ),
-            },
-            "input_file": (
-                "{short_name}_{mip}_{dataset}_{exp}_{ensemble}_{grid}*.nc"
-            ),
-            "output_file": (
-                "{project}_{dataset}_{mip}_{exp}_{ensemble}_"
-                "{short_name}_{grid}"
-            ),
-            "cmor_type": "CMIP6",
-        },
-        "obs4MIPs": {
-            "cmor_strict": False,
-            "input_dir": {
-                "default": "Tier{tier}/{dataset}",
-                "ESGF": "{project}/{dataset}/{version}",
-                "RCAST": "/",
-                "IPSL": (
-                    "{realm}/{short_name}/{freq}/{grid}/"
-                    "{institute}/{dataset}/{latest_version}"
-                ),
-            },
-            "input_file": {
-                "default": "{short_name}_*.nc",
-                "ESGF": "{short_name}_*.nc",
-            },
-            "output_file": "{project}_{dataset}_{short_name}",
-            "cmor_type": "CMIP6",
-            "cmor_path": "obs4mips",
-            "cmor_default_table_prefix": "obs4MIPs_",
-        },
-    }
-    return developer_config_file_contents
+    with open(esmvaltool_config_path, "r") as file_handle:
+        esmvaltool_config = yaml.safe_load(file_handle)
+    logger.debug(f"{esmvaltool_config=}")
+    return esmvaltool_config
 
 
-def create_user_config(
+def amend_site_config(
+    site_config_defaults,
     cmew_data_for_esmval_dir,
-    dev_config_path,
-    drs_cmip6,
-    drs_obs4mips,
-    max_parallel_tasks,
-    output_dir,
-    rootpath_cmip6,
-    rootpath_obs4mips,
 ):
     """
-    Return the contents of the user configuration file.
+    Amend the contents of the site configuration file.
 
     Parameters
     ----------
+    site_config_defaults:
+        The contents of ESMValTool's configuration file for the site.
     cmew_data_for_esmval_dir:
-        The full path to the directory where data
-        processed with CMEW will be stored.
-    dev_config_path:
-        The full path to the file where the
-        developer config file for ESMValTool will be written.
-    drs_cmip6:
-        The DRS for CMIP6.
-    drs_obs4mips:
-        The DRS for obs4MIPS.
+        The full path to the directory
+        where data processed with CMEW will be stored.
+
+    Returns
+    -------
+    dict
+        Site configuration content.
+    """
+    site_config_file_contents = site_config_defaults
+
+    # Much of the configuration is the same as for CMIP6 data
+    site_config_file_contents["projects"]["ESMVal"] = (
+        site_config_file_contents["projects"]["CMIP6"]
+    )
+
+    # But CMEW data is stored locally to the CMEW workflow  # TODO: change "mo"
+    site_config_file_contents["projects"]["ESMVal"]["data"]["mo"][
+        "rootpath"
+    ] = cmew_data_for_esmval_dir
+
+    logger.debug("Site config file contents:\n%s", site_config_file_contents)
+    return site_config_file_contents
+
+
+def amend_user_config(
+    user_config_defaults,
+    max_parallel_tasks,
+    output_dir,
+):
+    """
+    Amend the contents of the default user configuration file.
+
+    Parameters
+    ----------
+    user_config_defaults:
+        The contents of ESMValTool's default user configuration file.
     max_parallel_tasks:
         A parallelisation option to feed to ESMValTool.
     output_dir:
         The path to the directory where ESMValTool should write its output.
-    rootpath_cmip6:
-        The rootpath for CMIP6.
-    rootpath_obs4mips:
-        The rootpath for obs4MIPS.
 
     Returns
     -------
@@ -167,32 +98,12 @@ def create_user_config(
     """
     max_parallel_tasks = int(max_parallel_tasks)
 
-    # Note that 'auxiliary_data_dir' and 'download_dir'
-    # are set to empty values and cannot currently be
-    # configured. However, 'download_dir' is used only when using the
-    # automatic download feature via ESMValTool (which we do not intend
-    # to use here).
-    # 'auxiliary_data_dir' is used by some recipes to look for
-    # additional datasets, so may need to be configured in the future.
+    # Overwrite with changes from default config
+    user_config_file_contents = user_config_defaults
+    user_config_defaults["max_parallel_tasks"] = (max_parallel_tasks,)
+    user_config_defaults["output_dir"] = (output_dir,)
+    user_config_defaults["remove_preproc_dir"] = (False,)
 
-    user_config_file_contents = {
-        "auxiliary_data_dir": "",
-        "config_developer_file": dev_config_path,
-        "download_dir": "",
-        "drs": {
-            "CMIP6": drs_cmip6,
-            "obs4MIPs": drs_obs4mips,
-            "ESMVal": "BADC",
-        },
-        "max_parallel_tasks": max_parallel_tasks,
-        "output_dir": output_dir,
-        "remove_preproc_dir": False,
-        "rootpath": {
-            "CMIP6": rootpath_cmip6,
-            "obs4MIPs": rootpath_obs4mips,
-            "ESMVal": cmew_data_for_esmval_dir,
-        },
-    }
     logger.debug("User config file contents:\n%s", user_config_file_contents)
     return user_config_file_contents
 
@@ -228,38 +139,35 @@ def write_yaml(file_path, contents):
 
 
 def configure_recipe(
+    site_config_defaults_filepath,
+    user_config_defaults_filepath,
     cmew_data_for_esmval_dir,
-    dev_config_path,
-    drs_cmip6,
-    drs_obs4mips,
     max_parallel_tasks,
-    mip_table_dir,
     output_dir,
-    rootpath_cmip6,
-    rootpath_obs4mips,
-    user_config_path,
+    site_config_output_path,
+    user_config_output_path,
 ):
-    """
-    Write the required user and developer configuration files for
-    ESMValTool.
-    """
-    logger.info("Creating developer config")
-    developer_config_contents = create_developer_config(mip_table_dir)
-    ensure_parent_dir(dev_config_path)
-    logger.info("Writing developer config to %s", dev_config_path)
-    write_yaml(dev_config_path, developer_config_contents)
+    """Write the required configuration files for ESMValTool."""
+    logger.info("Creating ESMValTool site config")
+    site_config_defaults = retrieve_config_defaults(
+        site_config_defaults_filepath
+    )
+    site_config_contents = amend_site_config(
+        site_config_defaults, cmew_data_for_esmval_dir
+    )
+    ensure_parent_dir(site_config_output_path)
+    logger.info("Writing developer config to %s", site_config_output_path)
+    write_yaml(site_config_output_path, site_config_contents)
 
-    logger.info("Creating user config")
-    user_config_contents = create_user_config(
-        cmew_data_for_esmval_dir,
-        dev_config_path,
-        drs_cmip6,
-        drs_obs4mips,
+    logger.info("Creating ESMValTool user config")
+    user_config_defaults = retrieve_config_defaults(
+        user_config_defaults_filepath
+    )
+    user_config_contents = amend_user_config(
+        user_config_defaults,
         max_parallel_tasks,
         output_dir,
-        rootpath_cmip6,
-        rootpath_obs4mips,
     )
-    ensure_parent_dir(user_config_path)
-    logger.info("Writing user config to %s", user_config_path)
-    write_yaml(user_config_path, user_config_contents)
+    ensure_parent_dir(user_config_output_path)
+    logger.info("Writing user config to %s", user_config_output_path)
+    write_yaml(user_config_output_path, user_config_contents)
