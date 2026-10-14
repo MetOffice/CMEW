@@ -12,7 +12,6 @@ then writes those dictionaries to YAML files in the share directory.
 """
 import os
 import yaml
-from scrape_ini import find_ref
 import sys
 import logging
 
@@ -302,7 +301,6 @@ def add_datasets_to_share(
     start_year,
     number_of_years,
     institute,
-    rose_suite_fp,
 ):
     """
     Copy the datasets defined in namelist files into YAML files.
@@ -319,9 +317,6 @@ def add_datasets_to_share(
         The number of years to extract for each dataset.
     institute: str
         The institution ID to add to the datasets.
-    rose_suite_fp: str
-        The full path to the file where the
-        suite configuration variables are written.
     """
     # Create the target directory if it doesn't exist
     os.makedirs(target_dir, exist_ok=True)
@@ -356,8 +351,8 @@ def add_datasets_to_share(
 
             # Add the reference identifier
             logger.info("Adding benchmarking key to model runs YAML")
-            # Find the reference suite ID in the `rose-suite.conf` file
-            ref_dataset = find_ref(rose_suite_fp)
+            # Find the reference suite ID
+            ref_dataset = dataset["suite_id"]
             logger.info("Reference dataset: %s", ref_dataset)
             add_reference_key(dict_to_write, ref_dataset)
 

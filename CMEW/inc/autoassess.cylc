@@ -3,11 +3,10 @@
 # The LICENSE.md file contains full licensing details.
 # autoassess.cylc
 
-{% from "scrape_ini" import find_ref, find_eval, find_ref_label, find_eval_label %}
-{% set ref_dataset = find_ref("rose-suite.conf") %}
-{% set eval_dataset = find_eval("rose-suite.conf") %}
-{% set ref_label = find_ref_label("rose-suite.conf") %}
-{% set eval_label = find_eval_label("rose-suite.conf") %}
+{% set ref_dataset = suite_ids[0] %}
+{% set eval_dataset = suite_ids[1] %}
+{% set ref_label = suite_ids[0] %}
+{% set eval_label = suite_ids[1] %}
 
 [task parameters]
     aa_dataset = {{ [ref_dataset, eval_dataset] | join(", ") }}
