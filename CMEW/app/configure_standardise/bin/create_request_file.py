@@ -16,50 +16,24 @@ filename = os.path.basename(__file__)
 logger = logging.getLogger(filename)
 
 
-def retrieve_all_dataset_metadata(dataset_metadata_path):
+def load_yaml(yaml_path):
     """
-    Return the metadata associated with all the datasets.
+    Return the contents of the YAML file.
 
     Parameters
     ----------
-    dataset_metadata_path : str
-        The full path to the file containing
-        the metadata for all datasets.
+    yaml_path : str
+        The full path to the YAML file.
 
     Returns
     -------
     dict
-        The metadata associated with all the datasets.
+        The contents of the YAML file.
     """
-    with open(dataset_metadata_path, "r") as file_handle:
-        dataset_metadata = yaml.safe_load(file_handle)
-    logger.debug(f"{dataset_metadata=}")
-    return dataset_metadata
-
-
-def load_request_defaults(defaults_path):
-    """
-    Load default values for request file.
-
-    Parameters
-    ----------
-    defaults_path : str
-        Path to the default configuration file.
-
-    Returns
-    -------
-    dict
-        CDDS request configuration default settings.
-    """
-    # Read the defaults
-    with open(defaults_path, "r") as f:
-        config = yaml.safe_load(f)
-
-    logger.debug(
-        "Default config:\n%s",
-        config,
-    )
-    return config
+    with open(yaml_path, "r") as file_handle:
+        contents = yaml.safe_load(file_handle)
+    logger.debug(f"Contents of {yaml_path}: {contents}")
+    return contents
 
 
 def list_streams(variables_file):
@@ -239,7 +213,7 @@ def create_request_file(
     """
     logger.info("Creating CDDS request for dataset %s", dataset)
 
-    all_dataset_metadata = retrieve_all_dataset_metadata(model_runs_yml_fp)
+    all_dataset_metadata = load_yaml(model_runs_yml_fp)
     dataset_metadata = all_dataset_metadata[dataset]
     request = create_request(
         mip_table_dir,
