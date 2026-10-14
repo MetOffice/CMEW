@@ -1,11 +1,7 @@
 # (C) Crown Copyright 2024-2026, Met Office.
 # The LICENSE.md file contains full licensing details.
 """
-Unit tests for add_datasets_to_share.py
-
-Test data files:
-/app/unittest/mock_data/model_runs.yml
-    input for test_create_request
+Unit tests for create_request_file.
 """
 import os
 
