@@ -97,121 +97,6 @@ def add_extra_datasets(
     return recipe_content
 
 
-def remove_additional_datasets(
-    recipe_content: dict[str, Any], recipe_id: str, recipe_dict_fp: str
-) -> dict[str, Any]:
-    """
-    Optionally remove additional_datasets sections from an ESMValTool recipe.
-
-    The option to remove additional datasets is controlled by the key
-    empty_additional_datasets in the YAML file at RECIPE_DICT_PATH.
-
-    Parameters
-    ----------
-    recipe_content: dict
-        The content of the recipe which may have additional datasets.
-    recipe_id: str
-        The id that acts as a key in the recipe_dict_fp.
-    recipe_dict_fp: str
-        The location of the YAML file containing information
-        about whether to remove additional datasets.
-
-    Returns
-    -------
-    recipe_content: dict
-        The content of the recipe which may be unchanged
-        or may have had additional_datasets removed.
-    """
-    # Load the yaml config file from ../etc
-    logger.debug("Reading recipe dict from %s", recipe_dict_fp)
-    with open(recipe_dict_fp, "r", encoding="utf-8") as f:
-        recipe_dict = yaml.safe_load(f)
-    logger.debug("Recipe dict:\n%s", recipe_dict)
-
-    # Don't empty by default
-    empty_additionals = False
-
-    # Read specific recipe names and filepaths from the yaml config file
-    if recipe_id in recipe_dict:
-        logger.debug("Using info from recipe dictionary for %s", recipe_id)
-        if "empty_additional_datasets" in recipe_dict[recipe_id]:
-
-            # Assign True if specified in YAML file (boolean)
-            empty_additionals = recipe_dict[recipe_id][
-                "empty_additional_datasets"
-            ]
-
-    # Empty from recipe if specified
-    if empty_additionals:
-        for diag in recipe_content["diagnostics"]:
-            for var in recipe_content["diagnostics"][diag]["variables"]:
-                del recipe_content["diagnostics"][diag]["variables"][var][
-                    "additional_datasets"
-                ]
-
-    logger.debug("Updated recipe content:\n%s", recipe_content)
-    return recipe_content
-
-
-def filter_enabled_diagnostics(
-    recipe_content: dict[str, Any], recipe_id: str, recipe_dict_fp: str
-) -> dict[str, Any]:
-    """
-    Keep only diagnostics listed in `enabled_diagnostics` for a recipe.
-
-    The list of diagnostics to enable is controlled by the key
-    `enabled_diagnostics` in the YAML file at `recipe_dict_fp`. If the key
-    is not present, the recipe is left unchanged.
-
-    Parameters
-    ----------
-    recipe_content: dict
-        The content of the recipe which may have diagnostics filtered.
-    recipe_id: str
-        The id that acts as a key in the recipe_dict_fp.
-    recipe_dict_fp: str
-        The location of the YAML file containing information
-        about which diagnostics to enable.
-
-    Returns
-    -------
-    recipe_content: dict
-        The content of the recipe which may be unchanged or have had
-        diagnostics removed because they were not explicitly enabled.
-    """
-    logger.debug("Reading recipe dict from %s", recipe_dict_fp)
-    with open(recipe_dict_fp, "r", encoding="utf-8") as f:
-        recipe_dict = yaml.safe_load(f)
-    logger.debug("Recipe dict:\n%s", recipe_dict)
-
-    # By default don't filter anything
-    enabled = None
-
-    if recipe_id in recipe_dict:
-        logger.debug("Using info from recipe dictionary for %s", recipe_id)
-        if "enabled_diagnostics" in recipe_dict[recipe_id]:
-            enabled = recipe_dict[recipe_id]["enabled_diagnostics"]
-
-    # If no explicit enabled list provided, return unchanged
-    if enabled is None:
-        logger.debug(
-            "No enabled_diagnostics specified; leaving recipe unchanged"
-        )
-        return recipe_content
-
-    # Build set for faster membership tests
-    enabled_set = set(enabled)
-
-    # Remove any diagnostics not in the enabled set
-    for diag in list(recipe_content.get("diagnostics", {}).keys()):
-        if diag not in enabled_set:
-            logger.info("Removing diagnostic not in enabled list: %s", diag)
-            del recipe_content["diagnostics"][diag]
-
-    logger.debug("Updated recipe content:\n%s", recipe_content)
-    return recipe_content
-
-
 def write_recipe(updated_recipe: dict[str, Any], target_path: str) -> None:
     """Write updated ESMValTool recipe to a YAML file at ``target_path``.
 
@@ -236,8 +121,6 @@ def update_recipe_file(
     recipe_path: str,
     model_runs_yml_fp: str,
     cmip6_datasets_yml_fp: str,
-    recipe_id: str,
-    recipe_dict_fp: str,
 ) -> None:
     """
     Update the datasets in an ESMValTool recipe.
@@ -253,29 +136,13 @@ def update_recipe_file(
     cmip6_datasets_yml_fp:
         The full path to the YAML file containing details of the CMIP6
         datasets to include.
-    recipe_id:
-        The id that acts as a key in the recipe_dict_fp.
-    recipe_dict_fp:
-        The full path to the YAML file containing information
-        about whether to remove additional datasets.
     """
     blank_recipe = return_blank_recipe(recipe_path)
     logger.info("Amending recipe from %s", recipe_path)
 
-    # Filter diagnostics by an explicit enabled list if specified
-    logger.info("Filtering recipe diagnostics by enabled list (if present)")
-    recipe_minus_diagnostics = filter_enabled_diagnostics(
-        blank_recipe, recipe_id, recipe_dict_fp
-    )
-
-    # Remove additional datasets if specified
-    amended_recipe = remove_additional_datasets(
-        recipe_minus_diagnostics, recipe_id, recipe_dict_fp
-    )
-
     # Add the model runs into the datasets section of the recipe
     logger.info("Adding model runs to recipe")
-    updated_recipe = add_extra_datasets(amended_recipe, model_runs_yml_fp)
+    updated_recipe = add_extra_datasets(blank_recipe, model_runs_yml_fp)
 
     # Add the CMIP6 datasets to the recipe
     logger.info("Adding CMIP6 runs to recipe")

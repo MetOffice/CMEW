@@ -22,28 +22,18 @@ Test data files:
 from update_recipe_file import (
     return_blank_recipe,
     add_extra_datasets,
-    remove_additional_datasets,
     update_recipe_file,
-    filter_enabled_diagnostics,
 )
 import shutil
 import yaml
 
 from configure_for_conftest import (
-    recipe_paths_yml_fp,
     model_runs_yml_fp,
     cmip6_datasets_yml_fp,
     original_recipe_radiation_budget_fp,
-    recipe_with_additional_datasets_yml_fp,
     updated_recipe_radiation_budget_yml_fp,
     no_ds_in_recipe_fp,
-    recipe_additional_datasets_removed_yml_fp,
     extended_radiation_budget_recipe_yml_fp,
-)
-
-from configure_for_conftest import (
-    monitor_original_fp,
-    monitor_enabled_kgo_fp,
 )
 
 
@@ -70,25 +60,6 @@ def test_add_extra_datasets():
     assert actual == expected
 
 
-def test_remove_additional_datasets():
-    recipe_id = "mock_entry"
-    with open(
-        str(recipe_additional_datasets_removed_yml_fp()), "r"
-    ) as file_handle_1:
-        expected = yaml.safe_load(file_handle_1)
-
-    with open(
-        str(recipe_with_additional_datasets_yml_fp()), "r"
-    ) as file_handle_2:
-        pre_recipe = yaml.safe_load(file_handle_2)
-
-    # Using str(filepath) here as update_recipe_file.py uses os, not pathlib
-    actual = remove_additional_datasets(
-        pre_recipe, recipe_id, str(recipe_paths_yml_fp())
-    )
-    assert actual == expected
-
-
 def test_update_recipe_file(tmp_path):
     """update_recipe_file() should overwrite the recipe in place."""
     # Copy the original recipe to a tmp_path location to allow it to be
@@ -99,15 +70,10 @@ def test_update_recipe_file(tmp_path):
     )
     recipe_path = str(path_to_temp_recipe)
 
-    # These are used to check with additional datasets are removed
-    recipe_id = "radiation_budget"
-
     update_recipe_file(
         recipe_path,
         str(model_runs_yml_fp()),
         str(cmip6_datasets_yml_fp()),
-        recipe_id,
-        str(recipe_paths_yml_fp()),
     )
 
     with open(path_to_temp_recipe, "r") as file_handle_1:
@@ -123,18 +89,3 @@ def test_update_recipe_file(tmp_path):
     kgo_without_comment = kgo_with_comment[5:]
 
     assert actual_lines == kgo_without_comment
-
-
-def test_filter_enabled_diagnostics():
-    recipe_id = "mock_monitor"
-    with open(str(monitor_enabled_kgo_fp()), "r") as file_handle_1:
-        expected = yaml.safe_load(file_handle_1)
-
-    with open(str(monitor_original_fp()), "r") as file_handle_2:
-        pre_recipe = yaml.safe_load(file_handle_2)
-
-    actual = filter_enabled_diagnostics(
-        pre_recipe, recipe_id, str(recipe_paths_yml_fp())
-    )
-
-    assert actual == expected

@@ -8,10 +8,6 @@ def mock_data_dir() -> Path:
     return Path(__file__).parent.parent.parent / "unittest" / "mock_data"
 
 
-def recipe_paths_yml_fp() -> Path:
-    return mock_data_dir() / "recipe_paths.yml"
-
-
 def model_runs_yml_fp() -> Path:
     return mock_data_dir() / "model_runs.yml"
 
