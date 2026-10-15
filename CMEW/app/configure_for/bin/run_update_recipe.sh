@@ -5,7 +5,7 @@ set -euxo pipefail
 # Rose app. Uses environment variables provided by Cylc/Rose (e.g. CYLC_TASK_PARAM_recipe,
 # RECIPE_PATH, RECIPE_DICT_PATH, DATASETS_LIST_DIR, RECIPE_VARIABLES_PATH).
 
-ESMVALTOOL_RECIPE_PATH=$(cmew-esmvaltool-env esmvaltool recipes list | grep "$CYLC_TASK_PARAM_recipe" | tail -n 1 | sed "s/^ • //" | sed 's/:.*$//') || true
+ESMVALTOOL_RECIPE_PATH=$(cmew-esmvaltool-env esmvaltool recipes list | grep "$CYLC_TASK_PARAM_recipe.yml" | tail -n 1 | sed "s/^ • //" | sed 's/:.*$//') || true
 cmew-esmvaltool-env esmvaltool recipes get "$ESMVALTOOL_RECIPE_PATH"
 pwd
 ESMVALTOOL_RECIPE_NAME=${ESMVALTOOL_RECIPE_PATH##*/}
