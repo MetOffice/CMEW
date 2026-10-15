@@ -21,6 +21,6 @@ conversion:
   skip_archive: True
   skip_qc: True # Bodge to address the "error_message": "Global attributes check: Cannot retrieve global attribute further_info_url",
   cylc_args: --no-detach -v
+  model_params_dir: $HOME/model_configs/
 netcdf_global_attributes:
   further_info_url: dummy_url
-  model_params_dir: $HOME/model_configs/
