@@ -15,31 +15,29 @@ filename = os.path.basename(__file__)
 logger = logging.getLogger(filename)
 
 
-# TODO: use generic naming instead, see PR 587
-def retrieve_config_defaults(
-    esmvaltool_config_path,
-):
+def load_yaml(yaml_path):
     """
-    Return the configuration stored in an ESMValTool configuration file.
+    Return the contents of the YAML file.
 
     Parameters
     ----------
-    esmvaltool_config_path : str
-        The full path to the file containing the configuration.
+    yaml_path : str
+        The full path to the YAML file.
 
     Returns
     -------
     dict
-        The configuration contained in the file.
+        The contents of the YAML file.
     """
-    with open(esmvaltool_config_path, "r") as file_handle:
-        esmvaltool_config = yaml.safe_load(file_handle)
-    logger.debug(f"{esmvaltool_config=}")
-    return esmvaltool_config
+    with open(yaml_path, "r") as file_handle:
+        contents = yaml.safe_load(file_handle)
+    logger.debug(f"Contents of {yaml_path}: {contents}")
+    return contents
 
 
 def amend_site_config(
     site_config_defaults,
+    site_local_data_key,
     cmew_data_for_esmval_dir,
 ):
     """
@@ -60,15 +58,36 @@ def amend_site_config(
     """
     site_config_file_contents = site_config_defaults
 
-    # Much of the configuration is the same as for CMIP6 data
-    site_config_file_contents["projects"]["ESMVal"] = (
-        site_config_file_contents["projects"]["CMIP6"]
-    )
+    # Add a section for finding CMEW data
+    site_config_file_contents["projects"].setdefault("ESMVal", {}).setdefault(
+        "data", {}
+    )["local"] = {}
 
-    # But CMEW data is stored locally to the CMEW workflow  # TODO: change "mo"
-    site_config_file_contents["projects"]["ESMVal"]["data"]["mo"][
+    # The type and filename templates are the same as for CMIP6 data
+    for key in site_config_file_contents["projects"]["CMIP6"]["data"][
+        site_local_data_key
+    ]:
+        if key != "rootpath" and key != "dirname_template":
+            site_config_file_contents["projects"]["ESMVal"]["data"]["local"][
+                key
+            ] = site_config_file_contents["projects"]["CMIP6"]["data"][
+                site_local_data_key
+            ][
+                key
+            ]
+
+    # But CMEW data is stored locally to the CMEW workflow
+    site_config_file_contents["projects"]["ESMVal"]["data"]["local"][
         "rootpath"
     ] = cmew_data_for_esmval_dir
+
+    # And the directory structure template misses the 'activity' level
+    site_config_file_contents["projects"]["ESMVal"]["data"]["local"][
+        "dirname_template"
+    ] = (
+        "{project}/{institute}/{dataset}/{exp}/"
+        "{ensemble}/{mip}/{short_name}/{grid}/{version}"
+    )
 
     logger.debug("Site config file contents:\n%s", site_config_file_contents)
     return site_config_file_contents
@@ -100,9 +119,9 @@ def amend_user_config(
 
     # Overwrite with changes from default config
     user_config_file_contents = user_config_defaults
-    user_config_defaults["max_parallel_tasks"] = (max_parallel_tasks,)
-    user_config_defaults["output_dir"] = (output_dir,)
-    user_config_defaults["remove_preproc_dir"] = (False,)
+    user_config_defaults["max_parallel_tasks"] = max_parallel_tasks
+    user_config_defaults["output_dir"] = output_dir
+    user_config_defaults["remove_preproc_dir"] = False
 
     logger.debug("User config file contents:\n%s", user_config_file_contents)
     return user_config_file_contents
@@ -141,6 +160,7 @@ def write_yaml(file_path, contents):
 def configure_recipe(
     site_config_defaults_filepath,
     user_config_defaults_filepath,
+    site_local_data_key,
     cmew_data_for_esmval_dir,
     max_parallel_tasks,
     output_dir,
@@ -149,20 +169,16 @@ def configure_recipe(
 ):
     """Write the required configuration files for ESMValTool."""
     logger.info("Creating ESMValTool site config")
-    site_config_defaults = retrieve_config_defaults(
-        site_config_defaults_filepath
-    )
+    site_config_defaults = load_yaml(site_config_defaults_filepath)
     site_config_contents = amend_site_config(
-        site_config_defaults, cmew_data_for_esmval_dir
+        site_config_defaults, site_local_data_key, cmew_data_for_esmval_dir
     )
     ensure_parent_dir(site_config_output_path)
     logger.info("Writing developer config to %s", site_config_output_path)
     write_yaml(site_config_output_path, site_config_contents)
 
     logger.info("Creating ESMValTool user config")
-    user_config_defaults = retrieve_config_defaults(
-        user_config_defaults_filepath
-    )
+    user_config_defaults = load_yaml(user_config_defaults_filepath)
     user_config_contents = amend_user_config(
         user_config_defaults,
         max_parallel_tasks,

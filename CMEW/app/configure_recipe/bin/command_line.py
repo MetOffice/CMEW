@@ -39,6 +39,14 @@ def parse_args_for_configure_recipe(arguments):
         ),
     )
     parser.add_argument(
+        "--site_local_data_key",
+        help=(
+            "The site-specific fourth-level key "
+            "in the ESMValTool site configuration file, "
+            "occurring between 'data' and 'rootpath'."
+        ),
+    )
+    parser.add_argument(
         "--cmew_data_for_esmval_dir",
         help=(
             "The full path to the directory where data "
@@ -91,6 +99,7 @@ def main_for_configure_recipe(arguments=None):
         f"user_config_defaults_filepath: {args.user_config_defaults_filepath}"
     )
     print(f"cmew_data_for_esmval_dir: {args.cmew_data_for_esmval_dir}")
+    print(f"site_local_data_key: {args.site_local_data_key}")
     print(f"max_parallel_tasks: {args.max_parallel_tasks}")
     print(f"output_dir: {args.output_dir}")
     print(f"site_config_output_path: {args.site_config_output_path}")
@@ -98,6 +107,7 @@ def main_for_configure_recipe(arguments=None):
     configure_recipe(
         args.site_config_defaults_filepath,
         args.user_config_defaults_filepath,
+        args.site_local_data_key,
         args.cmew_data_for_esmval_dir,
         args.max_parallel_tasks,
         args.output_dir,
