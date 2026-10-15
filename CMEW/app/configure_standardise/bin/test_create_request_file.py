@@ -20,6 +20,29 @@ def fake_list_streams(*args):
     return "apm inm"
 
 
+def test_external_mapping_plugin_location(monkeypatch):
+    monkeypatch.setattr(create_request_file, "list_streams", fake_list_streams)
+    defaults_path = request_defaults_yml_fp()
+    request = create_request_file.create_request(
+        str(defaults_path),
+        "u-cw673",
+        "/path/to/mip_tables",
+        str(model_runs_yml_fp()),
+        "/path/to/proc",
+        "/path/to/data",
+        "/path/to/variables.txt",
+        "off",
+    )
+
+    assert request["conversion"]["mip_convert_plugin"] == "UKESM1"
+    assert request["conversion"]["mip_convert_external_plugin"] == (
+        "cmew_ukesm1_plugin"
+    )
+    assert request["conversion"]["mip_convert_external_plugin_location"] == (
+        str(defaults_path.resolve().parent.parent / "bin")
+    )
+
+
 def test_create_request(monkeypatch):
     monkeypatch.setattr(create_request_file, "list_streams", fake_list_streams)
     dataset = "u-cw673"

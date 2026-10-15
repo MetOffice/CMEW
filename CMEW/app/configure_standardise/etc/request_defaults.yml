@@ -10,6 +10,7 @@ metadata:
 common:
   mode: relaxed
   package: round-1
+  mip_table_dir: /data/scratch/jonathan.lillis/mip_tables/0.0.25/
 data:
   mass_data_class: crum
   model_workflow_branch: trunk
@@ -18,6 +19,7 @@ misc:
   atmos_timestep: 1200
 conversion:
   mip_convert_plugin: UKESM1
+  mip_convert_external_plugin: cmew_ukesm1_plugin
   skip_archive: True
   skip_qc: True # Bodge to address the "error_message": "Global attributes check: Cannot retrieve global attribute further_info_url",
   cylc_args: --no-detach -v

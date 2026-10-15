@@ -7,6 +7,8 @@ Generate CDDS request configuration file.
 import configparser
 import os
 import sys
+from pathlib import Path
+
 import yaml
 import logging
 
@@ -150,7 +152,7 @@ def create_request(
     }
     request["common"] = {
         **defaults["common"],
-        "mip_table_dir": os.path.expanduser(mip_table_dir),
+        "mip_table_dir": "/data/scratch/jonathan.lillis/mip_tables/0.0.25/",
         "root_proc_dir": root_proc_dir,
         "root_data_dir": root_data_dir,
         "workflow_basename": dataset_dict["suite_id"],
@@ -165,6 +167,10 @@ def create_request(
     }
     request["misc"] = dict(defaults["misc"])
     request["conversion"] = dict(defaults["conversion"])
+    if request["conversion"].get("mip_convert_external_plugin"):
+        request["conversion"]["mip_convert_external_plugin_location"] = str(
+            Path(defaults_path).resolve().parent.parent / "bin"
+        )
     if raw_data_dir_mode == "use_saved":
         request["conversion"]["skip_extract"] = "True"
     request["netcdf_global_attributes"] = dict(
