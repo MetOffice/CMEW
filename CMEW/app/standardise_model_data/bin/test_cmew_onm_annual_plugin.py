@@ -8,9 +8,7 @@ import cmew_onm_annual_plugin
 def test_plugin_responsibility():
     plugin = cmew_onm_annual_plugin.CMEWOnmAnnualMappingPlugin()
 
-    assert plugin.is_responsible(
-        cmew_onm_annual_plugin.PLUGIN_ID
-    )
+    assert plugin.is_responsible(cmew_onm_annual_plugin.PLUGIN_ID)
     assert not plugin.is_responsible("GCModelDev")
 
 

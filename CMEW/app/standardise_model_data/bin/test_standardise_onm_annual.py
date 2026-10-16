@@ -12,10 +12,7 @@ import standardise_onm_annual
 def test_annual_variables_from_recipe_accepts_supported_variables(tmp_path):
     variables_file = tmp_path / "variables.txt"
     variables_file.write_text(
-        "Oyr/tos\n"
-        "Oyr/sos\n"
-        "Oyr/thetao\n"
-        "Oyr/so\n"
+        "Oyr/tos\n" "Oyr/sos\n" "Oyr/thetao\n" "Oyr/so\n"
     )
 
     assert standardise_onm_annual.annual_variables_from_recipe(
@@ -107,9 +104,7 @@ def test_main_processes_each_year_and_cleans_after_success(
                 values["run_bounds_end"],
             )
         )
-        events.append(
-            ("cfg", int(values["run_bounds_start"][:4]))
-        )
+        events.append(("cfg", int(values["run_bounds_start"][:4])))
 
     def fake_convert(cfg_path, datestamp):
         year = int(cfg_bounds[-1][0][:4])
@@ -201,9 +196,7 @@ def test_main_processes_each_year_and_cleans_after_success(
             assert not Path(path).exists()
 
 
-def test_main_keeps_staged_files_if_conversion_fails(
-    tmp_path, monkeypatch
-):
+def test_main_keeps_staged_files_if_conversion_fails(tmp_path, monkeypatch):
     staged = []
 
     def fake_retrieve(*args):

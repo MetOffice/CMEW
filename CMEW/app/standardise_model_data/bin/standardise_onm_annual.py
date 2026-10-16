@@ -2,12 +2,14 @@
 # (C) Crown Copyright 2026, Met Office.
 # The LICENSE.md file contains full licensing details.
 """
-Standardise monthly NEMO ``onm`` grid-T data to annual ``Oyr`` using standalone mip_convert.
+Standardise monthly NEMO ``onm`` grid-T data to annual ``Oyr`` using
+standalone mip_convert.
 
 This is a separate, opt-in path alongside the existing monthly ``onm``
 route (via ``cdds_convert``/``cdds_extract``/``run_mip_convert``). It is
 used only for datasets configured to source ocean variables from the
-monthly ``onm`` archive stream and annualises it to calendar-year ``Oyr`` output.
+monthly ``onm`` archive stream and annualises it to calendar-year
+``Oyr`` output.
 
 The sequence is:
     MASS retrieval (moo get) of the requested annual period
@@ -164,9 +166,7 @@ GCModelDev_Oyr = {variables}
 """
 
 
-def retrieve_monthly_files(
-    suite_id, start_year, end_year, destination_dir
-):
+def retrieve_monthly_files(suite_id, start_year, end_year, destination_dir):
     """
     Retrieve complete calendar years of monthly NEMO ``onm`` grid-T data.
 
@@ -202,9 +202,7 @@ def retrieve_monthly_files(
                 next_month = 1
                 next_year += 1
 
-            pattern = (
-                "nemo_{}o_1m_{}{:02d}01-{}{:02d}01_grid-T.nc"
-            ).format(
+            pattern = ("nemo_{}o_1m_{}{:02d}01-{}{:02d}01_grid-T.nc").format(
                 suite_name,
                 year,
                 month,
@@ -233,7 +231,6 @@ def retrieve_monthly_files(
             retrieved.append(destination_path)
 
     return retrieved
-
 
 
 def model_run_metadata_from_yaml(model_runs_yml_fp, suite_id):
@@ -362,8 +359,9 @@ def parse_args(arguments):
     """
     parser = argparse.ArgumentParser(
         description=(
-            "Standardise monthly NEMO onm grid-T data to annual Oyr using standalone "
-            "mip_convert, as an opt-in alternative to the monthly onm "
+            "Standardise monthly NEMO onm grid-T data to annual Oyr "
+            "using standalone mip_convert, as an opt-in alternative "
+            "to the monthly onm "
             "route."
         ),
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
@@ -619,7 +617,6 @@ def main(arguments=None):
         for file_path in retrieved_files:
             logger.info("Removing staged monthly file %s", file_path)
             os.remove(file_path)
-
 
 
 if __name__ == "__main__":
