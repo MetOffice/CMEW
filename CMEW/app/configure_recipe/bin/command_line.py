@@ -25,47 +25,54 @@ def parse_args_for_configure_recipe(arguments):
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     parser.add_argument(
-        "--cmew_data_for_esmval_dir",
-        help="The full path to the directory where data "
-        "processed with CMEW will be stored.",
-    )
-    parser.add_argument(
-        "--dev_config_path",
+        "--site_config_defaults_filepath",
         help=(
-            "The full path to the file where the "
-            "developer config file for ESMValTool will be written."
+            "The full path to the YAML file containing the "
+            "contents of ESMValTool's configuration file for the site."
         ),
     )
     parser.add_argument(
-        "--drs_cmip6",
-        help=("The DRS for CMIP6."),
+        "--user_config_defaults_filepath",
+        help=(
+            "The full path to the YAML file containing the "
+            "contents of ESMValTool's default user configuration file."
+        ),
     )
     parser.add_argument(
-        "--drs_obs4mips",
-        help=("The DRS for obs4MIPS."),
+        "--site_local_data_key",
+        help=(
+            "The site-specific fourth-level key "
+            "in the ESMValTool site configuration file, "
+            "occurring between 'data' and 'rootpath'."
+        ),
+    )
+    parser.add_argument(
+        "--cmew_data_for_esmval_dir",
+        help=(
+            "The full path to the directory where data "
+            "processed with CMEW will be stored."
+        ),
     )
     parser.add_argument(
         "--max_parallel_tasks",
-        help=("A parallelisation option to feed to ESMValTool."),
-    )
-    parser.add_argument(
-        "--mip_table_dir",
-        help=("The full path to the MIP tables root directory"),
+        help="A parallelisation option to feed to ESMValTool.",
     )
     parser.add_argument(
         "--output_dir",
-        help=("The path to the directory for ESMValTool to write its output."),
+        help=(
+            "The full path to the directory "
+            "for ESMValTool to write its output."
+        ),
     )
     parser.add_argument(
-        "--rootpath_cmip6",
-        help=("The rootpath for CMIP6."),
+        "--site_config_output_path",
+        help=(
+            "The full path to the file where the "
+            "site config file for ESMValTool will be written."
+        ),
     )
     parser.add_argument(
-        "--rootpath_obs4mips",
-        help=("The rootpath for obs4MIPS."),
-    )
-    parser.add_argument(
-        "--user_config_path",
+        "--user_config_output_path",
         help=(
             "The full path to the file where the "
             "user config file for ESMValTool will be written."
@@ -88,25 +95,25 @@ def main_for_configure_recipe(arguments=None):
     args = parse_args_for_configure_recipe(arguments)
 
     # Run the code.
+    print(
+        f"site_config_defaults_filepath: {args.site_config_defaults_filepath}"
+    )
+    print(
+        f"user_config_defaults_filepath: {args.user_config_defaults_filepath}"
+    )
     print(f"cmew_data_for_esmval_dir: {args.cmew_data_for_esmval_dir}")
-    print(f"dev_config_path: {args.dev_config_path}")
-    print(f"drs_cmip6: {args.drs_cmip6}")
-    print(f"drs_obs4mips: {args.drs_obs4mips}")
+    print(f"site_local_data_key: {args.site_local_data_key}")
     print(f"max_parallel_tasks: {args.max_parallel_tasks}")
-    print(f"mip_table_dir: {args.mip_table_dir}")
     print(f"output_dir: {args.output_dir}")
-    print(f"rootpath_cmip6: {args.rootpath_cmip6}")
-    print(f"rootpath_obs4mips: {args.rootpath_obs4mips}")
-    print(f"user_config_path: {args.user_config_path}")
+    print(f"site_config_output_path: {args.site_config_output_path}")
+    print(f"user_config_output_path: {args.user_config_output_path}")
     configure_recipe(
+        args.site_config_defaults_filepath,
+        args.user_config_defaults_filepath,
+        args.site_local_data_key,
         args.cmew_data_for_esmval_dir,
-        args.dev_config_path,
-        args.drs_cmip6,
-        args.drs_obs4mips,
         args.max_parallel_tasks,
-        args.mip_table_dir,
         args.output_dir,
-        args.rootpath_cmip6,
-        args.rootpath_obs4mips,
-        args.user_config_path,
+        args.site_config_output_path,
+        args.user_config_output_path,
     )
