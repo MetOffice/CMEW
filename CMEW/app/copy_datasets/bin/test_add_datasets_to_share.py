@@ -209,3 +209,31 @@ def test_use_facet_as_key():
     }
     actual = use_facet_as_key(list_to_input, "chosen_key")
     assert actual == expected
+
+
+def test_process_naml_content_preserves_standardisation_frequency():
+    naml_content = dedent(
+        """
+        &model_runs
+        archive_stream=onm,
+        calendar=gregorian,
+        experiment_id=test,
+        model_id=UKESM1-0-LL,
+        standardisation_frequency=annual,
+        suite_id=u-eb014,
+        variant_label=r1i1p1f1,
+        /
+        """
+    )
+
+    actual = process_naml_content(
+        naml_content,
+        "1850",
+        "10",
+        "MOHC",
+        "ESMVal",
+    )
+
+    assert len(actual) == 1
+    assert actual[0]["archive_stream"] == "onm"
+    assert actual[0]["standardisation_frequency"] == "annual"

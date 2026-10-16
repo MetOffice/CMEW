@@ -18,6 +18,7 @@ def write_config(
     tmp_path,
     *,
     archive_stream=None,
+    standardisation_frequency=None,
     start_year=1850,
     number_of_years=10,
 ):
@@ -26,10 +27,17 @@ def write_config(
     if archive_stream is not None:
         archive_line = f'archive_stream="{archive_stream}"\n'
 
+    frequency_line = ""
+    if standardisation_frequency is not None:
+        frequency_line = (
+            f'standardisation_frequency="{standardisation_frequency}"\n'
+        )
+
     config = tmp_path / "rose-suite.conf"
     config.write_text(
         "[namelist:model_runs(1)]\n"
         f"{archive_line}"
+        f"{frequency_line}"
         'calendar="gregorian"\n'
         'experiment_id="test"\n'
         'label_for_plots="experiment"\n'
@@ -44,9 +52,13 @@ def write_config(
     return config
 
 
-def test_annual_ony_uses_oyr_and_shifts_effective_years(tmp_path):
-    """Annual ony data should follow the Oyr route with a +1 year shift."""
-    config = write_config(tmp_path, archive_stream="ony")
+def test_annual_onm_uses_oyr_without_year_shift(tmp_path):
+    """Annual onm data should follow the Oyr route without a year shift."""
+    config = write_config(
+        tmp_path,
+        archive_stream="onm",
+        standardisation_frequency="annual",
+    )
 
     plan = build_preflight(config)
 
@@ -56,12 +68,13 @@ def test_annual_ony_uses_oyr_and_shifts_effective_years(tmp_path):
     dataset = plan["datasets"][0]
 
     assert dataset["suite_id"] == "u-test001"
-    assert dataset["archive_stream"] == "ony"
-    assert dataset["frequency"] == "annual"
-    assert dataset["route"] == "annual standardisation"
+    assert dataset["archive_stream"] == "onm"
+    assert dataset["source_frequency"] == "monthly"
+    assert dataset["standardisation_frequency"] == "annual"
+    assert dataset["route"] == "annual-from-monthly standardisation"
     assert dataset["mip"] == "Oyr"
-    assert dataset["effective_start"] == 1851
-    assert dataset["effective_end"] == 1860
+    assert dataset["effective_start"] == 1850
+    assert dataset["effective_end"] == 1859
 
 
 def test_missing_archive_stream_defaults_to_monthly_without_year_shift(
@@ -79,7 +92,8 @@ def test_missing_archive_stream_defaults_to_monthly_without_year_shift(
 
     assert dataset["suite_id"] == "u-test001"
     assert dataset["archive_stream"] == "onm"
-    assert dataset["frequency"] == "monthly"
+    assert dataset["source_frequency"] == "monthly"
+    assert dataset["standardisation_frequency"] == "monthly"
     assert dataset["route"] == "monthly standardisation"
     assert dataset["mip"] == "Omon"
     assert dataset["effective_start"] == 1850
@@ -103,7 +117,8 @@ def test_mixed_streams_are_routed_independently(tmp_path):
     config = tmp_path / "rose-suite.conf"
     config.write_text(
         "[namelist:model_runs(1)]\n"
-        'archive_stream="ony"\n'
+        'archive_stream="onm"\n'
+        'standardisation_frequency="annual"\n'
         'label_for_plots="annual-model"\n'
         'model_id="UKESM1-0-LL"\n'
         'suite_id="u-annual"\n'
@@ -124,11 +139,12 @@ def test_mixed_streams_are_routed_independently(tmp_path):
     datasets = {dataset["suite_id"]: dataset for dataset in plan["datasets"]}
 
     annual = datasets["u-annual"]
-    assert annual["archive_stream"] == "ony"
-    assert annual["route"] == "annual standardisation"
+    assert annual["archive_stream"] == "onm"
+    assert annual["standardisation_frequency"] == "annual"
+    assert annual["route"] == "annual-from-monthly standardisation"
     assert annual["mip"] == "Oyr"
-    assert annual["effective_start"] == 1851
-    assert annual["effective_end"] == 1860
+    assert annual["effective_start"] == 1850
+    assert annual["effective_end"] == 1859
 
     monthly = datasets["u-monthly"]
     assert monthly["archive_stream"] == "onm"
@@ -143,13 +159,15 @@ def test_dataset_roles_are_identified_from_model_run_sections(tmp_path):
     config = tmp_path / "rose-suite.conf"
     config.write_text(
         "[namelist:model_runs(1)]\n"
-        'archive_stream="ony"\n'
+        'archive_stream="onm"\n'
+        'standardisation_frequency="annual"\n'
         'label_for_plots="experiment-model"\n'
         'model_id="UKESM1-0-LL"\n'
         'suite_id="u-experiment"\n'
         "\n"
         "[namelist:model_runs(reference)]\n"
-        'archive_stream="ony"\n'
+        'archive_stream="onm"\n'
+        'standardisation_frequency="annual"\n'
         'label_for_plots="reference-model"\n'
         'model_id="UKESM1-0-LL"\n'
         'suite_id="u-reference"\n'
@@ -212,7 +230,11 @@ def test_recipe_variables_returns_unique_short_names_and_mips():
 
 def test_preflight_plan_can_include_recipe_information(tmp_path):
     """Recipe metadata should be carried into the preflight plan."""
-    config = write_config(tmp_path, archive_stream="ony")
+    config = write_config(
+        tmp_path,
+        archive_stream="onm",
+        standardisation_frequency="annual",
+    )
 
     variables = [
         {
@@ -237,7 +259,11 @@ def test_preflight_plan_can_include_recipe_information(tmp_path):
 
 def test_preflight_output_shows_recipe_variables(tmp_path, capsys):
     """Human-readable output should show recipe requirements."""
-    config = write_config(tmp_path, archive_stream="ony")
+    config = write_config(
+        tmp_path,
+        archive_stream="onm",
+        standardisation_frequency="annual",
+    )
 
     plan = build_preflight(
         config,
@@ -293,7 +319,7 @@ def test_annual_recipe_variables_accept_supported_variables():
         {"short_name": "tos", "mip": "Omon"},
         {"short_name": "so", "mip": "Omon"},
     ]
-    datasets = [{"archive_stream": "ony"}]
+    datasets = [{"standardisation_frequency": "annual"}]
 
     PREFLIGHT["validate_annual_recipe_variables"](
         recipe_vars,
@@ -308,7 +334,7 @@ def test_annual_recipe_variables_reject_unsupported_variable():
         {"short_name": "tos", "mip": "Omon"},
         {"short_name": "tas", "mip": "Amon"},
     ]
-    datasets = [{"archive_stream": "ony"}]
+    datasets = [{"standardisation_frequency": "annual"}]
 
     with pytest.raises(
         ValueError,
@@ -324,7 +350,7 @@ def test_monthly_route_does_not_apply_annual_variable_limit():
     recipe_vars = [
         {"short_name": "tas", "mip": "Amon"},
     ]
-    datasets = [{"archive_stream": "onm"}]
+    datasets = [{"standardisation_frequency": "monthly"}]
 
     PREFLIGHT["validate_annual_recipe_variables"](
         recipe_vars,

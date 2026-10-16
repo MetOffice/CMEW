@@ -32,18 +32,18 @@ from scrape_ini import facet_per_dataset  # noqa: E402
 
 SUPPORTED_ARCHIVE_STREAMS = {
     "onm": {
-        "frequency": "monthly",
+        "source_frequency": "monthly",
+    },
+}
+
+SUPPORTED_STANDARDISATION_FREQUENCIES = {
+    "monthly": {
         "route": "monthly standardisation",
         "mip": "Omon",
-        "year_offset": 0,
     },
-    "ony": {
-        "frequency": "annual",
-        "route": "annual standardisation",
+    "annual": {
+        "route": "annual-from-monthly standardisation",
         "mip": "Oyr",
-        # NEMO ony files use Dec-to-Dec source bounds.  CMEW assigns the
-        # resulting annual mean to the following calendar/model year.
-        "year_offset": 1,
     },
 }
 
@@ -174,11 +174,14 @@ ANNUAL_SUPPORTED_VARIABLES = ("tos", "sos", "thetao", "so")
 
 
 def validate_annual_recipe_variables(recipe_vars, datasets):
-    """Validate recipe variables against the annual ony route."""
+    """Validate recipe variables against the annual Oyr route."""
     if not recipe_vars:
         return
 
-    if not any(dataset["archive_stream"] == "ony" for dataset in datasets):
+    if not any(
+        dataset["standardisation_frequency"] == "annual"
+        for dataset in datasets
+    ):
         return
 
     required = []
@@ -195,7 +198,7 @@ def validate_annual_recipe_variables(recipe_vars, datasets):
 
     if unsupported:
         raise ValueError(
-            "Annual ony standardisation cannot satisfy recipe variables: "
+            "Annual standardisation cannot satisfy recipe variables: "
             f"{', '.join(unsupported)}. Supported annual variables: "
             f"{', '.join(ANNUAL_SUPPORTED_VARIABLES)}."
         )
@@ -283,6 +286,11 @@ def build_preflight(config_path, recipe=None, recipe_variables=None):
         "archive_stream",
         "onm",
     )
+    standardisation_frequencies = facet_per_dataset(
+        config_path,
+        "standardisation_frequency",
+        "monthly",
+    )
     labels = facet_per_dataset(config_path, "label_for_plots")
     roles = role_per_dataset(config_path)
 
@@ -301,12 +309,28 @@ def build_preflight(config_path, recipe=None, recipe_variables=None):
                 f"{', '.join(SUPPORTED_ARCHIVE_STREAMS)}."
             )
 
+        standardisation_frequency = standardisation_frequencies.get(
+            suite_id,
+            "monthly",
+        )
+        if (
+            standardisation_frequency
+            not in SUPPORTED_STANDARDISATION_FREQUENCIES
+        ):
+            raise ValueError(
+                f"{suite_id}: unsupported standardisation_frequency "
+                f"{standardisation_frequency!r}. Expected one of: "
+                f"{', '.join(SUPPORTED_STANDARDISATION_FREQUENCIES)}."
+            )
+
         source = SUPPORTED_ARCHIVE_STREAMS[archive_stream]
+        output = SUPPORTED_STANDARDISATION_FREQUENCIES[
+            standardisation_frequency
+        ]
 
         effective_start, effective_end = year_range(
             start_year,
             number_of_years,
-            source["year_offset"],
         )
 
         datasets.append(
@@ -316,9 +340,10 @@ def build_preflight(config_path, recipe=None, recipe_variables=None):
                 "label": labels.get(suite_id),
                 "model_id": model_ids.get(suite_id),
                 "archive_stream": archive_stream,
-                "frequency": source["frequency"],
-                "route": source["route"],
-                "mip": source["mip"],
+                "source_frequency": source["source_frequency"],
+                "standardisation_frequency": standardisation_frequency,
+                "route": output["route"],
+                "mip": output["mip"],
                 "effective_start": effective_start,
                 "effective_end": effective_end,
             }
@@ -372,7 +397,11 @@ def print_preflight(plan):
 
         print(f"  model: {dataset['model_id']}")
         print(f"  archive stream: {dataset['archive_stream']}")
-        print(f"  source frequency: {dataset['frequency']}")
+        print(f"  source frequency: {dataset['source_frequency']}")
+        print(
+            "  standardisation frequency: "
+            f"{dataset['standardisation_frequency']}"
+        )
         print(f"  standardisation route: {dataset['route']}")
         print(f"  output MIP table: {dataset['mip']}")
         print(

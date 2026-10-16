@@ -14,20 +14,19 @@
 {% from "scrape_ini" import list_datasets, facet_per_dataset %}
 {% set datasets = list_datasets("rose-suite.conf") %}
 
-# Each model run's own "archive_stream" metadata (set in rose-suite.conf's
-# [namelist:model_runs(...)] sections) is the single authoritative source
-# for whether it uses the annual "ony" archive (via
-# standardise_model_data_annual/standardise_ony_annual.py) or the default
-# monthly "onm" archive (via cdds_convert). A future annual suite opts in
-# purely by setting archive_stream="ony" in rose-suite.conf -- no code
-# change is required here.
-{% set archive_streams = facet_per_dataset("rose-suite.conf", "archive_stream", "onm") %}
+# archive_stream describes the native model-data source, while
+# standardisation_frequency describes the requested CMEW output cadence.
+# Both monthly Omon and annual Oyr routes can therefore use native "onm"
+# data without overloading archive_stream to control workflow routing.
+{% set standardisation_frequencies = facet_per_dataset(
+    "rose-suite.conf", "standardisation_frequency", "monthly"
+) %}
 {# list_datasets() returns a comma-separated string, not a list. #}
 {% set datasets_list = datasets.split(", ") if datasets else [] %}
 {% set annual_datasets = [] %}
 {% set monthly_datasets = [] %}
 {%- for dataset in datasets_list %}
-{%- if archive_streams.get(dataset, "onm") == "ony" %}
+{%- if standardisation_frequencies.get(dataset, "monthly") == "annual" %}
 {%- set _ = annual_datasets.append(dataset) %}
 {%- else %}
 {%- set _ = monthly_datasets.append(dataset) %}
@@ -68,10 +67,9 @@
             configure_recipe & restructure_dirs => run_recipe<recipe>
                 => housekeeping
     {%- if annual_datasets %}
-            # Opt-in annual "ony" route for the subset of model runs in
-            # annual_dataset. Runs independently of the monthly route
-            # above and writes into ROOT_DATA_DIR, so the existing
-            # restructure_dirs task picks up its output unchanged.
+            # Opt-in annual Oyr route for the subset of model runs in
+            # annual_dataset. It derives annual fields from native monthly
+            # onm data and writes into ROOT_DATA_DIR for restructuring.
             configure_for<recipe>
                 => standardise_model_data_annual<annual_dataset>
                 => restructure_dirs
@@ -194,7 +192,7 @@
     [[standardise_model_data_annual<annual_dataset>]]
         inherit = STANDARDISE, MODEL_RUNS, ANNUAL_DATASET
         [[[environment]]]
-            ROSE_TASK_APP = standardise_model_data_annual
+            ROSE_TASK_APP = standardise_model_data_onm_annual
 {%- endif %}
 
     [[restructure_dirs]]

@@ -111,14 +111,16 @@ def test_update_ocean_quadmap_model_selectors():
             "variant_label": "r1i1p1f1",
             "experiment_id": "test-u-eb014",
             "project": "ESMVal",
-            "archive_stream": "ony",
+            "archive_stream": "onm",
+            "standardisation_frequency": "annual",
         },
         "u-eb021": {
             "model_id": "UKESM1-0-LL",
             "variant_label": "r1i1p1f1",
             "experiment_id": "test-u-eb021",
             "project": "ESMVal",
-            "archive_stream": "ony",
+            "archive_stream": "onm",
+            "standardisation_frequency": "annual",
         },
     }
 
@@ -206,7 +208,8 @@ def test_annual_source_dataset_gets_mip_oyr_override():
             "start_year": 1850,
             "end_year": 1851,
             "variant_label": "r1i1p1f1",
-            "archive_stream": "ony",
+            "archive_stream": "onm",
+            "standardisation_frequency": "annual",
         },
     }
 
@@ -233,10 +236,9 @@ def test_access_cm2_cmip6_dataset_unaffected_by_annual_override():
     assert "mip" not in actual[0]
 
 
-def test_annual_source_dataset_years_shifted_by_one():
-    # The ony archive file for configured year N spans N-12-01 to
-    # (N+1)-12-01 and is Oyr-labelled by year N+1, so the recipe period
-    # for annual CMEW datasets must shift by one year.
+def test_annual_source_dataset_years_are_not_shifted():
+    # Annual CMEW datasets are derived from calendar-year monthly onm
+    # input, so the recipe period must remain unchanged.
     model_runs = {
         "u-eb014": {
             "model_id": "UKESM1-0-LL",
@@ -245,7 +247,8 @@ def test_annual_source_dataset_years_shifted_by_one():
             "start_year": 1850,
             "end_year": 1859,
             "variant_label": "r1i1p1f1",
-            "archive_stream": "ony",
+            "archive_stream": "onm",
+            "standardisation_frequency": "annual",
         },
         "u-eb021": {
             "model_id": "UKESM1-0-LL",
@@ -254,17 +257,19 @@ def test_annual_source_dataset_years_shifted_by_one():
             "start_year": 1850,
             "end_year": 1859,
             "variant_label": "r1i1p1f1",
-            "archive_stream": "ony",
+            "archive_stream": "onm",
+            "standardisation_frequency": "annual",
         },
     }
 
     actual = construct_datasets_contents([model_runs])
 
     for dataset_items in actual:
-        assert dataset_items["start_year"] == 1851
-        assert dataset_items["end_year"] == 1860
+        assert dataset_items["start_year"] == 1850
+        assert dataset_items["end_year"] == 1859
         assert dataset_items["mip"] == "Oyr"
         assert "archive_stream" not in dataset_items
+        assert "standardisation_frequency" not in dataset_items
 
 
 def test_access_cm2_years_not_shifted():
@@ -311,14 +316,16 @@ def test_ocean_quadmap_model_selectors_keep_variable_level_mip():
             "variant_label": "r1i1p1f1",
             "experiment_id": "test-u-eb014",
             "project": "ESMVal",
-            "archive_stream": "ony",
+            "archive_stream": "onm",
+            "standardisation_frequency": "annual",
         },
         "u-eb021": {
             "model_id": "UKESM1-0-LL",
             "variant_label": "r1i1p1f1",
             "experiment_id": "test-u-eb021",
             "project": "ESMVal",
-            "archive_stream": "ony",
+            "archive_stream": "onm",
+            "standardisation_frequency": "annual",
         },
     }
 

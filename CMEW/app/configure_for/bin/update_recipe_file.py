@@ -16,20 +16,15 @@ logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 filename = os.path.basename(__file__)
 logger = logging.getLogger(filename)
 
-# The value of each model run's "archive_stream" facet (set in
-# rose-suite.conf's [namelist:model_runs(...)] sections and carried
-# through to model_runs.yml) that marks it as sourced from the annual
-# "ony" archive, rather than the default monthly "onm" archive. This is
-# the single authoritative source for annual/monthly routing; a new
-# annual model run opts in purely by setting archive_stream="ony" in
-# rose-suite.conf, with no code change required here.
-ANNUAL_ARCHIVE_STREAM = "ony"
+# Annual/monthly routing is controlled by the model run's
+# "standardisation_frequency" facet. The native archive source is
+# independent: both monthly Omon and annual Oyr routes may use "onm".
+ANNUAL_STANDARDISATION_FREQUENCY = "annual"
 
 
 def is_annual_source(run):
     """
-    Return whether a model run dict is sourced from the annual "ony"
-    archive stream.
+    Return whether a model run requests annual standardisation.
 
     Parameters
     ----------
@@ -39,9 +34,12 @@ def is_annual_source(run):
     Returns
     -------
     bool
-        True if the run's "archive_stream" facet is "ony".
+        True if "standardisation_frequency" is "annual".
     """
-    return run.get("archive_stream") == ANNUAL_ARCHIVE_STREAM
+    return (
+        run.get("standardisation_frequency")
+        == ANNUAL_STANDARDISATION_FREQUENCY
+    )
 
 
 def load_yaml(file_path):
@@ -211,28 +209,25 @@ def construct_datasets_contents(datasets):
     }
 
     # Some attributes are neither needed nor wanted by ESMValTool.
-    unwanted_keys = ["calendar", "suite_id", "archive_stream"]
+    unwanted_keys = [
+        "calendar",
+        "suite_id",
+        "archive_stream",
+        "standardisation_frequency",
+    ]
 
     # Update the keys in the datasets, as appropriate.
     datasets_for_recipe = []
     for dataset in datasets:
         for dataset_items in dataset.values():
-            # Datasets sourced from the annual "ony" stream need an
+            # Datasets requesting annual standardisation need an
             # explicit per-dataset "mip: Oyr" override so this dataset
             # alone deviates from the recipe's default "mip: Omon"
-            # variable declaration (ESMValCore supports per-dataset mip
-            # overrides; see facets.update(recipe_dataset) in
-            # esmvalcore's recipe parsing).
+            # variable declaration. The new annual route derives true
+            # calendar-year means from monthly onm input, so no year
+            # offset is required.
             if is_annual_source(dataset_items):
                 dataset_items["mip"] = "Oyr"
-                # The ony archive file for configured year N spans
-                # N-12-01 to (N+1)-12-01, with its Oyr-labelled midpoint
-                # year N+1, so the recipe's requested period must shift
-                # by one year to match the Oyr data actually present.
-                if "start_year" in dataset_items:
-                    dataset_items["start_year"] += 1
-                if "end_year" in dataset_items:
-                    dataset_items["end_year"] += 1
             for key in unwanted_keys:
                 if key in dataset_items:
                     del dataset_items[key]

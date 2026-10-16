@@ -18,7 +18,10 @@ REPO_ROOT = os.path.dirname(
 )
 
 ANNUAL_ROSE_APP_CONF = os.path.join(
-    REPO_ROOT, "app", "standardise_model_data_annual", "rose-app.conf"
+    REPO_ROOT,
+    "app",
+    "standardise_model_data_onm_annual",
+    "rose-app.conf",
 )
 FLOW_CYLC = os.path.join(REPO_ROOT, "flow.cylc")
 
@@ -32,7 +35,7 @@ def _env_var_value(contents, var_name):
     return match.group(1)
 
 
-def _render_dataset_partitioning(datasets_string, archive_streams):
+def _render_dataset_partitioning(datasets_string, frequencies):
     """
     Render flow.cylc's dataset-partitioning Jinja loop standalone
     (extracted by marker comments), given fake list_datasets()/
@@ -56,7 +59,8 @@ def _render_dataset_partitioning(datasets_string, archive_streams):
     )
 
     rendered = jinja2.Template(snippet).render(
-        datasets=datasets_string, archive_streams=archive_streams
+        datasets=datasets_string,
+        standardisation_frequencies=frequencies,
     )
     monthly_part, annual_part = rendered.strip().split("|")
     monthly = [d for d in monthly_part.split(",") if d]
@@ -90,13 +94,13 @@ def test_annual_rose_app_conf_does_not_invoke_cdds_entry_points():
     assert "cdds_extract" not in command_lines
     assert "cdds_convert" not in command_lines
     assert "run_mip_convert" not in command_lines
-    assert "standardise_ony_annual.py" in command_lines
+    assert "standardise_onm_annual.py" in command_lines
 
 
 def test_annual_retrieval_dir_matches_model_output_dir_relationship():
-    # Proves mip_convert's required <model_output_dir>/<suite_id>/ony/
+    # Proves mip_convert's required <model_output_dir>/<suite_id>/onm/
     # layout cannot regress: retrieval-dir must equal
-    # model-output-dir/${CYLC_TASK_PARAM_annual_dataset}/ony.
+    # model-output-dir/${CYLC_TASK_PARAM_annual_dataset}/onm.
     with open(ANNUAL_ROSE_APP_CONF) as file_handle:
         contents = file_handle.read()
 
@@ -105,7 +109,7 @@ def test_annual_retrieval_dir_matches_model_output_dir_relationship():
 
     assert (
         retrieval_dir
-        == model_output_dir + "/${CYLC_TASK_PARAM_annual_dataset}/ony"
+        == model_output_dir + "/${CYLC_TASK_PARAM_annual_dataset}/onm"
     )
 
 
@@ -127,7 +131,7 @@ def test_flow_cylc_annual_dataset_param_only_for_opt_in_graph_block():
 
 def test_u_eb014_is_annual_only():
     monthly, annual = _render_dataset_partitioning(
-        "u-eb014", {"u-eb014": "ony"}
+        "u-eb014", {"u-eb014": "annual"}
     )
     assert monthly == []
     assert annual == ["u-eb014"]
@@ -135,7 +139,7 @@ def test_u_eb014_is_annual_only():
 
 def test_u_eb021_is_annual_only():
     monthly, annual = _render_dataset_partitioning(
-        "u-eb021", {"u-eb021": "ony"}
+        "u-eb021", {"u-eb021": "annual"}
     )
     assert monthly == []
     assert annual == ["u-eb021"]
@@ -143,7 +147,7 @@ def test_u_eb021_is_annual_only():
 
 def test_non_annual_dataset_remains_monthly_only():
     monthly, annual = _render_dataset_partitioning(
-        "u-az513", {"u-az513": "onm"}
+        "u-az513", {"u-az513": "monthly"}
     )
     assert monthly == ["u-az513"]
     assert annual == []
@@ -153,10 +157,10 @@ def test_monthly_and_annual_datasets_are_disjoint():
     monthly, annual = _render_dataset_partitioning(
         "u-az513, u-eb014, u-eb021, u-bv526",
         {
-            "u-az513": "onm",
-            "u-eb014": "ony",
-            "u-eb021": "ony",
-            "u-bv526": "onm",
+            "u-az513": "monthly",
+            "u-eb014": "annual",
+            "u-eb021": "annual",
+            "u-bv526": "monthly",
         },
     )
     assert set(monthly) == {"u-az513", "u-bv526"}
@@ -171,9 +175,9 @@ def test_monthly_and_annual_datasets_are_disjoint():
     }
 
 
-def test_dataset_missing_archive_stream_facet_defaults_to_monthly():
-    # A dataset with no archive_stream facet at all (the common case for
-    # non-annual runs) must default to the monthly route.
+def test_dataset_missing_frequency_facet_defaults_to_monthly():
+    # A dataset with no standardisation_frequency facet must default
+    # to the monthly route.
     monthly, annual = _render_dataset_partitioning("u-az513", {})
     assert monthly == ["u-az513"]
     assert annual == []
