@@ -13,6 +13,8 @@
 .. |ESM| replace:: :term:`ESM`
 .. |ESMs| replace:: :term:`ESMs <ESM>`
 .. |ESMValTool| replace:: :term:`ESMValTool`
+.. |Metric| replace:: :term:`Metric`
+.. |Metrics| replace:: :term:`Metrics <Metric>`
 .. |MIAO| replace:: :term:`MIAO`
 .. |Recipe| replace:: :term:`Recipe`
 .. |Recipes| replace:: :term:`Recipes <Recipe>`
