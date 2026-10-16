@@ -218,24 +218,6 @@ def use_facet_as_key(data, key_facet):
     return new_dict
 
 
-def add_reference_key(dataset_dict, ref_dataset):
-    """
-    Add a "benchmark_dataset" key with the value "true" to a dictionary.
-
-    The section to which the key is added is determined by the function
-    `find_ref` in CMEW/lib/python/scrape_ini.py.
-
-    Parameters
-    ----------
-    dataset_dict: dict
-        The dictionary to have the key added.
-    ref_dataset: str
-        The suite ID of the reference dataset.
-    """
-    # Add the extra key and re-save the file
-    dataset_dict[ref_dataset]["benchmark_dataset"] = True
-
-
 def process_naml_content(
     naml_content, start_year, number_of_years, institute, project=None
 ):
@@ -348,13 +330,6 @@ def add_datasets_to_share(
 
             # Reformat list as a dictionary, keyed by suite ID
             dict_to_write = use_facet_as_key(datasets, "suite_id")
-
-            # Add the reference identifier
-            logger.info("Adding benchmarking key to model runs YAML")
-            # Find the reference suite ID
-            ref_dataset = dataset["suite_id"]
-            logger.info("Reference dataset: %s", ref_dataset)
-            add_reference_key(dict_to_write, ref_dataset)
 
             # Write to file
             logger.info("Writing model runs YAML")
