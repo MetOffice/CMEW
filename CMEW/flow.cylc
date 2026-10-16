@@ -18,9 +18,7 @@
 # standardisation_frequency describes the requested CMEW output cadence.
 # Both monthly Omon and annual Oyr routes can therefore use native "onm"
 # data without overloading archive_stream to control workflow routing.
-{% set standardisation_frequencies = facet_per_dataset(
-    "rose-suite.conf", "standardisation_frequency", "monthly"
-) %}
+{% set standardisation_frequencies = facet_per_dataset("rose-suite.conf", "standardisation_frequency", "monthly") %}
 {# list_datasets() returns a comma-separated string, not a list. #}
 {% set datasets_list = datasets.split(", ") if datasets else [] %}
 {% set annual_datasets = [] %}

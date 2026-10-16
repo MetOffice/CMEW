@@ -17,7 +17,7 @@
 
 {%- if not TEST and RECIPE == "ocean_quadmap" %}
     [[run_recipe<recipe=ocean_quadmap>]]
+        execution time limit = PT10M
         [[[directives]]]
-            --time = 10
             --mem = 8G
 {%- endif %}
