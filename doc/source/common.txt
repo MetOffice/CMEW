@@ -16,6 +16,7 @@
 .. |Metric| replace:: :term:`Metric`
 .. |Metrics| replace:: :term:`Metrics <Metric>`
 .. |MIAO| replace:: :term:`MIAO`
+.. |NAC Plot| replace:: :term:`NAC Plot`
 .. |Recipe| replace:: :term:`Recipe`
 .. |Recipes| replace:: :term:`Recipes <Recipe>`
 .. |Rose| replace:: :term:`Rose`
