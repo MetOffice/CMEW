@@ -188,7 +188,7 @@
 
 {%- if annual_datasets %}
     [[standardise_model_data_annual<annual_dataset>]]
-        inherit = STANDARDISE, MODEL_RUNS, ANNUAL_DATASET
+        inherit = STANDARDISE, MODEL_RUNS, ANNUAL_DATASET, COMPUTE
         [[[environment]]]
             ROSE_TASK_APP = standardise_model_data_onm_annual
 {%- endif %}
