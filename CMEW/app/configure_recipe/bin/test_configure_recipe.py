@@ -87,16 +87,22 @@ def test_amend_site_config():
 
 
 def test_amend_user_config():
-    mock_user_config_defaults = ""
-    mock_max_parallel_tasks = ""
-    mock_output_dir = ""
+    mock_user_config_defaults = {
+        "other_field": "a string",
+        "output_dir": "/default/output/dir/to/overwrite",
+        "max_parallel_tasks": "null",
+    }
+    mock_max_parallel_tasks = "99"
+    mock_output_dir = "/given/output/dir"
     actual = amend_user_config(
         mock_user_config_defaults,
         mock_max_parallel_tasks,
         mock_output_dir,
     )
-    expected = {}
-    if actual == expected:
-        pass
-    else:
-        pass
+    expected = {
+        "other_field": "a string",
+        "output_dir": "/given/output/dir",
+        "max_parallel_tasks": 99,
+        "remove_preproc_dir": False,
+    }
+    assert actual == expected
