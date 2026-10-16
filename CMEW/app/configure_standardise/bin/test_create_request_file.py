@@ -1,71 +1,101 @@
-# (C) Crown Copyright 2024-2025, Met Office.
+# (C) Crown Copyright 2024-2026, Met Office.
 # The LICENSE.md file contains full licensing details.
+"""
+Unit tests for create_request_file.
+"""
 import os
 
-from create_request_file import create_request
+import create_request_file
+from config_configure_standardise import request_defaults
+
+
+def fake_list_streams(*args):
+    return "apm inm"
 
 
 def test_create_request(monkeypatch):
-    # In the order defined in 'create_request_file.py'.
-    monkeypatch.setenv("START_YEAR", "1993")
-    monkeypatch.setenv("NUMBER_OF_YEARS", "1")
-    monkeypatch.setenv("CALENDAR", "360_day")
-    monkeypatch.setenv("INSTITUTION_ID", "MOHC")
-    monkeypatch.setenv("MODEL_ID", "UKESM1-0-LL")
-    monkeypatch.setenv("ROOT_PROC_DIR", "/path/to/proc/dir/")
-    monkeypatch.setenv("ROOT_DATA_DIR", "/path/to/data/dir/")
-    monkeypatch.setenv("SUITE_ID", "u-az513")
-    monkeypatch.setenv("VARIABLES_PATH", "/path/to/variables.txt")
-    monkeypatch.setenv("VARIANT_LABEL", "r1i1p1f1")
-
-    config = create_request()
-    actual = {
-        section: dict(config.items(section)) for section in config.sections()
+    monkeypatch.setattr(create_request_file, "list_streams", fake_list_streams)
+    calendar = "gregorian"
+    experiment_id = "amip"
+    institute = "MOHC"
+    model_id = "HadGEM3-GC5E-LL"
+    variant_label = "r1i1p1f1"
+    suite_id = "u-cw673"
+    start_year = 1993
+    end_year = 2003
+    dataset_metadata = {
+        "calendar": calendar,
+        "experiment_id": experiment_id,
+        "institute": institute,
+        "model_id": model_id,
+        "variant_label": variant_label,
+        "suite_id": suite_id,
+        "start_year": start_year,
+        "end_year": end_year,
     }
+    mip_table_dir = "~cdds/etc/mip_tables/GCModelDev/0.0.25"
+    root_proc_dir = "/path/to/proc/dir/"
+    root_data_dir = "/path/to/data/dir/"
+    variables_file = "/path/to/variables.txt"
+    raw_data_dir_mode = "use_saved"
+
+    actual = create_request_file.create_request(
+        mip_table_dir,
+        dataset_metadata,
+        root_proc_dir,
+        root_data_dir,
+        variables_file,
+        raw_data_dir_mode,
+        request_defaults,
+    )
     expected = {
-        "metadata": {
-            "branch_method": "no parent",
-            "calendar": "360_day",
-            "base_date": "1850-01-01T00:00:00",
-            "experiment_id": "amip",
-            "institution_id": "MOHC",
-            "license": "GCModelDev model data is licensed under the Open Government License v3 (https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/)",  # noqa: E501
-            "mip": "ESMVal",
-            "mip_era": "GCModelDev",
-            "model_id": "UKESM1-0-LL",
-            "model_type": "AGCM AER",
-            "sub_experiment_id": "none",
-            "variant_label": "r1i1p1f1",
-        },
         "common": {
-            "external_plugin": "",
-            "external_plugin_location": "",
-            "mip_table_dir": os.path.expanduser(
-                "~cdds/etc/mip_tables/GCModelDev/0.0.9"
-            ),
+            "mip_table_dir": os.path.expanduser(mip_table_dir),
             "mode": "relaxed",
             "package": "round-1",
-            "root_proc_dir": "/path/to/proc/dir/",
-            "root_data_dir": "/path/to/data/dir/",
-            "workflow_basename": "CMEW",
-        },
-        "data": {
-            "end_date": "1994-01-01T00:00:00",
-            "mass_data_class": "crum",
-            "model_workflow_branch": "trunk",
-            "model_workflow_id": "u-az513",
-            "model_workflow_revision": "not used except with data request",
-            "start_date": "1993-01-01T00:00:00",
-            "streams": "apm",
-            "variable_list_file": "/path/to/variables.txt",
-        },
-        "misc": {
-            "atmos_timestep": "1200",
+            "root_data_dir": root_data_dir,
+            "root_proc_dir": root_proc_dir,
+            "workflow_basename": suite_id,
         },
         "conversion": {
-            "mip_convert_plugin": "UKESM1",
-            "skip_archive": "True",
             "cylc_args": "--no-detach -v",
+            "mip_convert_plugin": "HadGEM3",
+            "skip_archive": True,
+            "skip_extract": True,
+        },
+        "data": {
+            "end_date": f"{end_year+1}-01-01T00:00:00",
+            "mass_data_class": "crum",
+            "model_workflow_branch": "trunk",
+            "model_workflow_id": suite_id,
+            "model_workflow_revision": "not used except with data request",
+            "start_date": f"{start_year}-01-01T00:00:00",
+            "streams": "apm inm",
+            "variable_list_file": variables_file,
+        },
+        "metadata": {
+            "base_date": "1850-01-01T00:00:00",
+            "branch_method": "no parent",
+            "calendar": calendar,
+            "experiment_id": experiment_id,
+            "institution_id": institute,
+            "license": (
+                "GCModelDev model data is licensed under the "
+                "Open Government License v3 "
+                "(https://www.nationalarchives.gov.uk/"
+                "doc/open-government-licence/version/3/)"
+            ),
+            "mip": "ESMVal",
+            "mip_era": "GCModelDev",
+            "model_id": model_id,
+            "model_type": "AGCM AER",
+            "variant_label": variant_label,
+        },
+        "misc": {
+            "atmos_timestep": 1200,
+        },
+        "netcdf_global_attributes": {
+            "further_info_url": "dummy_url",
         },
     }
     assert actual == expected

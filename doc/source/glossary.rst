@@ -14,6 +14,11 @@ Glossary
      relating to that thematic aspect, owned by a single domain expert.
      An assessment area contains at least one |recipe| and multiple metrics.
 
+   AutoAssess
+     `AutoAssess`_ is the internal Met Office tool for evaluating climate model
+     simulations. It is being phased out in preference to |CMEW| and
+     |ESMValTool| |recipes|.
+
    CDDS
      CDDS is a package that |CMEW| uses to standardise data for use in
      |ESMValTool| |recipes|.

@@ -1,0 +1,53 @@
+<!-- (C) Crown Copyright 2026, Met Office. -->
+<!-- The LICENSE.md file contains full licensing details. -->
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <title>{{ title }}</title>
+        <style>
+body {font-family: Verdana, Geneva, sans-serif;}
+h1 {text-align: center;}
+h2 {text-align: center;}
+h3 {text-align: center;}
+a {display: inline-block;
+    border-radius: 4px;
+    padding: 5px;
+    transition: 0.3s;}
+a:hover {box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);}
+tr:nth-child(even) {
+    background-color: #F5F5F5;
+}
+.nac_plot {width: 700px;}
+        </style>
+    </head>
+    <body>
+        <h1>{{ title }}</h1>
+        <hr>
+
+        <h1>{{ exp_suite_id }} vs. {{ ref_suite_id }} (reference)</h1>
+        <h2>Period: {{ start_date }} to {{ end_date }}</h2>
+        <hr>
+        <table width="100%" align="center">
+            <tr>
+                <td align="center" valign="top">
+                    <h2>Africa</h2>
+                    <a href="africa.html">
+                        <img class="nac_plot"
+                             src="africa/nac_plots/africa_overview.png"
+                             alt="africa/nac_plots/africa_overview.png">
+                    </a>
+                </td>
+                <td align="center" valign="top">
+                    <h2>Monsoon</h2>
+                    <a href="monsoon.html">
+                        <img class="nac_plot"
+                             src="monsoon/nac_plots/monsoon_overview.png"
+                             alt="monsoon/nac_plots/monsoon_overview.png">
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

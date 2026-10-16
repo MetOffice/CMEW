@@ -2,153 +2,216 @@
 # (C) Crown Copyright 2024-2026, Met Office.
 # The LICENSE.md file contains full licensing details.
 """
-Overwrite the ESMValTool recipe with an updated version. Include:
+Update the datasets in an ESMValTool recipe. Include:
 
 * CMEW required values
 * User configurable variables from the Rose suite configuration
 """
 import os
 import yaml
+import sys
+import logging
+
+logging.basicConfig(level=logging.INFO, stream=sys.stdout)
+filename = os.path.basename(__file__)
+logger = logging.getLogger(filename)
 
 
-def update_recipe(recipe_path):
-    """Update the ESMValTool recipe.
-
-    * Read the ESMValTool recipe YAML file from the provided ``recipe_path``
-    * Update the datasets section of the recipe with:
-      - CMEW required key/values
-      - User configurable values from the Rose suite configuration
-        for both the reference and evaluation model runs.
-
-    Recipe file/datasets section snippet (human written YAML)::
-
-    datasets:
-      - {dataset: <dataset>, project: <project>, exp: <exp>,
-         ensemble: <ensemble>, grid: <grid>, start_year: <start_year>,
-         end_year: <end_year>}
-      - {dataset: <dataset>, project: <project>, exp: <exp>,
-         ensemble: <ensemble>, grid: <grid>, start_year: <start_year>,
-         end_year: <end_year>}
-
-    Updated recipe file/datasets section snippet (machine written YAML)::
-
-    datasets:
-    - {activity: <activity>, alias: <ref_alias>, dataset: <ref_model_id>,
-      end_year: <end_year>, ensemble: <ref_variant>, exp: <exp>, grid: <grid>,
-      project: <project>, start_year: <start_year>}
-    - {activity: <activity>, alias: <alias>, dataset: <eval_model_id>,
-      end_year: <end_year>, ensemble: <eval_variant>, exp: <exp>, grid: <grid>,
-      project: <project>, start_year: <start_year>}
-
-    Notes
-    -----
-    The updated recipe includes:
-    * Reference dataset (index 0) using REF_MODEL_ID and REF_VARIANT_LABEL
-    * Evaluation dataset (index 1) using MODEL_ID and VARIANT_LABEL
-    * two additional CMEW required keys: "Activity" and "Alias".
+def load_yaml(file_path):
+    """
+    Return the contents of the YAML file.
 
     Parameters
     ----------
-    recipe_path: str
-        Location of the ESMValTool recipe file.
+    file_path : str
+        The full path to the YAML file.
 
     Returns
     -------
-    recipe: dict
-        The content of the ESMValTool recipe with updated datasets section.
+    : dict
+        The contents of the YAML file.
     """
-    # Time window from environment
-    start_year = int(os.environ["START_YEAR"])
-    end_year = (
-        int(os.environ["START_YEAR"]) + int(os.environ["NUMBER_OF_YEARS"]) - 1
-    )
+    logger.debug(f"Loading {file_path}")
+    with open(file_path, "r") as file_handle:
+        contents = yaml.safe_load(file_handle)
 
-    # Model metadata from environment
-    ref_model_id = os.environ["REF_MODEL_ID"]
-    ref_variant = os.environ["REF_VARIANT_LABEL"]
-    eval_model_id = os.environ["MODEL_ID"]
-    eval_variant = os.environ["VARIANT_LABEL"]
+    return contents
 
-    # Read given reference alias or use the suite ID
-    if os.environ.get("REF_LABEL_FOR_PLOTS"):
-        ref_alias = os.environ["REF_LABEL_FOR_PLOTS"]
-    else:
-        ref_alias = os.environ["REF_SUITE_ID"]
 
-    # Read given evaluation alias or use the suite ID
-    if os.environ.get("LABEL_FOR_PLOTS"):
-        alias = os.environ["LABEL_FOR_PLOTS"]
-    else:
-        alias = os.environ["SUITE_ID"]
+def remove_datasets_contents(recipe):
+    """
+    Return the contents of an ESMValTool recipe
+    with an empty ``datasets`` section.
 
-    with open(recipe_path, "r") as file_handle:
-        recipe = yaml.safe_load(file_handle)
+    Parameters
+    ----------
+    recipe : dict
+        The contents of an ESMValTool recipe.
 
-    datasets = recipe.get("datasets", [])
-    if len(datasets) < 2:
-        raise ValueError(
-            "Expected at least two datasets in the recipe, "
-            "one for the reference and one for the evaluation run."
-        )
-
-    # Reference dataset: treat as a GCModelDev / ESMVal / amip run,
-    # using REF_MODEL_ID & REF_VARIANT_LABEL, with the configured time window.
-    ref_dataset = datasets[0]
-    ref_dataset.update(
-        {
-            "dataset": ref_model_id,
-            "project": "ESMVal",
-            "exp": "amip",
-            "activity": "ESMVal",
-            "ensemble": ref_variant,
-            "start_year": start_year,
-            "end_year": end_year,
-            "alias": ref_alias,
-        }
-    )
-
-    # Evaluation dataset: ESMVal / amip run using MODEL_ID and VARIANT_LABEL
-    eval_dataset = datasets[1]
-    eval_dataset.update(
-        {
-            "dataset": eval_model_id,
-            "project": "ESMVal",
-            "exp": "amip",
-            "activity": "ESMVal",
-            "ensemble": eval_variant,
-            "start_year": start_year,
-            "end_year": end_year,
-            "alias": alias,
-        }
-    )
+    Returns
+    -------
+    : dict
+        The content of an ESMValTool recipe
+        with an empty ``datasets`` section.
+    """
+    logger.debug("Emptying the 'datasets' section in the ESMValTool recipe")
+    recipe["datasets"] = []
 
     return recipe
 
 
-def write_recipe(updated_recipe, target_path):
-    """Write updated ESMValTool recipe to a YAML file at ``target_path``.
+def remove_additional_datasets(recipe):
+    """
+    Return the contents of an ESMValTool recipe
+    with any ``additional_datasets`` removed.
 
     Parameters
     ----------
-    updated_recipe: dict
-        Dictionary containing the updated ESMValTool recipe content.
+    recipe : dict
+        The contents of an ESMValTool recipe
+        that may have additional datasets.
 
-    target_path: str
-        Location to write the updated ESMValTool recipe.
+    Returns
+    -------
+    : dict
+        The content of an ESMValTool recipe
+        with any ``additional_datasets`` removed.
+    """
+    logger.debug("Removing additional datasets in the ESMValTool recipe")
+    for diagnostic in recipe["diagnostics"]:
+        for variable in recipe["diagnostics"][diagnostic]["variables"]:
+            del recipe["diagnostics"][diagnostic]["variables"][variable][
+                "additional_datasets"
+            ]
+
+    return recipe
+
+
+def construct_datasets_contents(datasets):
+    """
+    Return the contents of a ``datasets`` section
+    for an ESMValTool recipe.
+
+    Parameters
+    ----------
+    datasets : list of dict
+        The datasets to format for the ``datasets`` section in the form:
+        [{suite_id_1: {<dataset_1>}, {model_id_2: {<dataset_2>}, ...].
+
+    Returns
+    -------
+    : dict
+        The contents of a ``datasets`` sections
+        for an ESMValTool recipe.
+    """
+    logger.debug("Constructing the contents of the ``datasets`` section")
+
+    # ESMValTool recipes expect keys to have the values on the right.
+    cmew_to_esmvaltool_key_mapping = {
+        "label_for_plots": "alias",
+        "model_id": "dataset",
+        "variant_label": "ensemble",
+        "experiment_id": "exp",
+    }
+
+    # Some attributes are neither needed nor wanted by ESMValTool.
+    unwanted_keys = ["calendar", "suite_id"]
+
+    # Update the keys in the datasets, as appropriate.
+    datasets_for_recipe = []
+    for dataset in datasets:
+        for dataset_items in dataset.values():
+            for key in unwanted_keys:
+                if key in dataset_items:
+                    del dataset_items[key]
+            for old_key, new_key in cmew_to_esmvaltool_key_mapping.items():
+                if old_key in dataset_items:
+                    dataset_items[new_key] = dataset_items.pop(old_key)
+            datasets_for_recipe.append(dataset_items)
+
+    return datasets_for_recipe
+
+
+def add_datasets_contents(recipe, datasets):
+    """
+    Return the contents of a ESMValTool recipe
+    with a complete ``datasets`` section.
+
+    Parameters
+    ----------
+    recipe : dict
+        The contents of an ESMValTool recipe.
+    datasets : dict
+        The datasets to be added to the ESMValTool recipe.
+
+    Returns
+    -------
+    : dict
+        The contents of a valid ESMValTool recipe.
+    """
+    # Add the datasets to the 'datasets' section
+    # of the ESMValTool recipe.
+    logger.debug("Adding the datasets to the ESMValTool recipe")
+    recipe["datasets"] = datasets
+
+    return recipe
+
+
+def write_yaml(contents, target_path):
+    """
+    Write the contents to a YAML file at ``target_path``.
+
+    Parameters
+    ----------
+    contents : dict
+        The contents to write to the YAML file.
+    target_path : str
+        The full path to write the YAML file.
     """
     with open(target_path, "w") as file_handle:
-        yaml.dump(updated_recipe, file_handle, default_flow_style=False)
+        yaml.dump(
+            contents,
+            file_handle,
+            default_flow_style=False,
+            sort_keys=True,
+        )
 
 
-def main():
+def update_recipe_file(
+    recipe_path,
+    model_runs_yml_fp,
+    cmip6_datasets_yml_fp,
+    recipe_id,
+):
     """
-    Load and update the ESMValTool recipe. Overwrite the original recipe with
-    the updated recipe.
+    Update the datasets in an ESMValTool recipe.
+
+    Overwrite the original recipe content
+    with the updated recipe content.
+
+    Parameters
+    ----------
+    recipe_path:
+        The full path to the ESMValTool recipe.
+    model_runs_yml_fp:
+        The full path to the YAML file
+        containing details of the model datasets to include.
+    cmip6_datasets_yml_fp:
+        The full path to the YAML file
+        containing details of the CMIP6 datasets to include.
+    recipe_id:
+        The identifier that determines
+        whether additional datasets should be removed.
     """
-    recipe_path = os.environ["RECIPE_PATH"]
-    updated_recipe = update_recipe(recipe_path)
-    write_recipe(updated_recipe, recipe_path)
+    recipe = load_yaml(recipe_path)
+    model_runs = load_yaml(model_runs_yml_fp)
+    cmip6_datasets = load_yaml(cmip6_datasets_yml_fp)
 
+    recipe = remove_datasets_contents(recipe)
+    if recipe_id == "correlation":
+        recipe = remove_additional_datasets(recipe)
 
-if __name__ == "__main__":
-    main()
+    datasets = construct_datasets_contents([model_runs, cmip6_datasets])
+    recipe = add_datasets_contents(recipe, datasets)
+
+    write_yaml(recipe, recipe_path)

@@ -20,6 +20,14 @@ on how to contribute to CMEW.
 ## Support
 The [Support](SUPPORT.md) file provides details on how to get help with CMEW.
 
+## Generative AI Assistance
+
+Some of the code in this repository has been produced with the assistance of
+GitHub Copilot Enterprise.
+Information on how Generative AI tools are used in this project
+and the requirements for contributions, can be found in the
+[developer guidance on coding requirements](https://github.com/MetOffice/CMEW/wiki/Detailed-Working-Practices#coding-requirements).
+
 ## Maintainers
 
 Current maintainers of this package are:

@@ -1,93 +1,124 @@
 #!/usr/bin/env python
-# (C) Crown Copyright 2024-2025, Met Office.
+# (C) Crown Copyright 2024-2026, Met Office.
 # The LICENSE.md file contains full licensing details.
 """
-Generates the variables.txt file from the ESMValTool recipe.
+Create a variables file to standardise model data with CDDS.
 """
 import os
-from esmvalcore.experimental.recipe import Recipe
+import sys
+import logging
+from config_configure_standardise import streams_dict
 
 
-def parse_variables_from_recipe(recipe_path):
-    """Retrieve variables from ESMValTool recipe.
+logging.basicConfig(level=logging.INFO, stream=sys.stdout)
+filename = os.path.basename(__file__)
+logger = logging.getLogger(filename)
 
-    * Read the ESMValTool recipe YAML file from the provided ``recipe_path``
-    * For each diagnostic defined in the recipe, extract the variables required
-      for that diagnostic
-    * For each variable, extract the mip table name
-    * Output a newline-separated list of variables, with each line formatted
-      as ``<mip>/<variable>:<stream>``
 
-    Recipe file snippet::
+def retrieve_variables_files_contents(directory):
+    """
+    Return the contents of all variables files in a directory.
 
-        diagnostics:
-          <diagnostic_1>:
-            variables:
-              <variable_1a>:
-                mip: <mip_1a>
-              <variable_1b>:
-                mip: <mip_1b>
-          <diagnostic_2>:
-            variables:
-              <variable_2a>:
-                mip: <mip_2a>
-              <variable_2b>:
-                mip: <mip_2b>
-
-    Will be formatted as::
-
-        <mip_1a>/<variable_1a>:<stream>
-        <mip_1b>/<variable_1b>:<stream>
-        <mip_2a>/<variable_2a>:<stream>
-        <mip_2b>/<variable_2b>:<stream>
+    Variables files are files ending with "_variables.txt".
 
     Parameters
     ----------
-    recipe_path : str
-        Location of the ESMValTool recipe file.
+    directory : str
+        The full path to the directory containing variables files.
 
     Returns
     -------
-    list[str]
-        List of variables from the ESMValTool recipe,
-        formatted as ``<mip>/<variable>:<stream>``.
+    list of list
+       The contents of all variables files in the directory.
     """
-    # For now, hard-code stream to apm, this is correct for Amon and Emon mip.
-    stream = "apm"
-    recipe = Recipe(recipe_path)
-    diagnostics = recipe.data["diagnostics"]
-    formatted_variables = []
-    for diagnostic in diagnostics:
-        variables = diagnostics[diagnostic]["variables"]
-        for variable in variables:
-            mip = variables[variable]["mip"]
-            formatted_variable = f"{mip}/{variable}:{stream}"
-            if formatted_variable not in formatted_variables:
-                formatted_variables.append(formatted_variable)
-    return formatted_variables
+    variables_files_contents = []
+    for filename in os.listdir(directory):
+        if filename.endswith("_variables.txt"):
+            logger.debug("Reading variables from %s", filename)
+            with open(os.path.join(directory, filename), "r") as file_handle:
+                variables_files_contents.append(
+                    [line.strip() for line in file_handle]
+                )
+    return variables_files_contents
 
 
-def write_variables(variables, target_path):
+def determine_unique_variables(variables):
+    """
+    Return the unique variables from the variables.
+
+    Parameters
+    ----------
+    variables: list of list
+        The variables, which may or may not contain duplicates.
+
+    Returns
+    -------
+    list of str
+        The unique variables.
+
+    """
+    unique_variables = []
+    for variable_list in variables:
+        for variable in variable_list:
+            if variable not in unique_variables:
+                logger.debug("Found variable %s", variable)
+                unique_variables.append(variable)
+    return unique_variables
+
+
+def add_stream_to_variables(variables, streams_dict=streams_dict):
+    """Add stream information to a list of variables.
+
+    Parameters
+    ----------
+    variables : list of str
+        List of variables in the format "MIP_table/variable_name"
+    streams_dict : dict
+        A dictionary containing information about data streams.
+
+    Returns
+    -------
+    list of str
+        List of variables in the format "MIP_table/variable_name:stream"
+    """
+    # Using a second dictionary to avoid looping
+    var_to_stream = {
+        var: stream
+        for stream, var_list in streams_dict.items()
+        for var in var_list
+    }
+
+    # Listing the input variables together with their stream
+    streamed_variables = [
+        f"{var}:{var_to_stream.get(var)}" for var in variables
+    ]
+    logger.debug("Variables with streams:\n%s", streamed_variables)
+
+    return streamed_variables
+
+
+def write_variables(variables, output_filepath):
     """Write a string of variables to a text file in the installed workflow.
 
     Parameters
     ----------
-    variables : list[str]
+    variables : list of str
         List of variables to be written to file.
 
-    target_path : str
+    output_filepath : str
         Location to write the variables file.
     """
     variables_str = "\n".join(variables) + "\n"
-    with open(target_path, "w") as target_file:
+    logger.debug("Writing variables:\n%s", variables_str)
+
+    with open(output_filepath, "w") as target_file:
         target_file.write(variables_str)
 
 
-def main():
-    recipe_path = os.environ["RECIPE_PATH"]
-    variables = parse_variables_from_recipe(recipe_path)
-    write_variables(variables, os.environ["VARIABLES_PATH"])
-
-
-if __name__ == "__main__":
-    main()
+def create_variables_file(vars_files_list_dir, output_filepath):
+    """Create a variables file to standardise model data with CDDS."""
+    variables = retrieve_variables_files_contents(vars_files_list_dir)
+    unique_variables = determine_unique_variables(variables)
+    streamed_variables = add_stream_to_variables(unique_variables)
+    logger.info("Writing variables file to %s", output_filepath)
+    write_variables(streamed_variables, output_filepath)

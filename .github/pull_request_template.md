@@ -1,49 +1,90 @@
-[(C) Crown Copyright 2023-2025, Met Office.]: #
+[(C) Crown Copyright 2023-2026, Met Office.]: #
 [The LICENSE.md file contains full licensing details.]: #
 Closes #<issue_number>.
 
 ## PR creation checklist for the _developer_
 
-- [ ] Has `<issue_number>` above :point_up: been replaced with the issue number?
-- [ ] Has `main` been selected as the base branch?
-- [ ] Does the feature branch name follow the format `<issue_number>_<short_description_of_feature>`?
-- [ ] Does the text of the PR title exactly match with the text (not including the issue number) of the issue title?
-- [ ] Have appropriate reviewers been added to the PR (once it is ready for review)?
-- [ ] Has the PR been assigned to the developer(s)?
-- [ ] Have the same labels as on the issue (except for the `good first issue` label) been added to the PR?
-- [ ] Has the `Climate Model Evaluation Workflow (CMEW)` project been added to the PR?
-- [ ] Has the appropriate milestone been added to the PR?
+- [ ] The `<issue_number>` above :point_up: has been replaced with the issue number.
+- [ ] `main` has been selected as the base branch.
+- [ ] The feature branch name follows the format `<issue_number>_<short_description_of_feature>`.
+- [ ] The text of the PR title exactly matches with the text (not including the issue number) of the issue title.
+- [ ] Appropriate reviewers have been added to the PR (once it is ready for review).
+- [ ] The PR has been assigned to the developer(s).
+- [ ] The same labels as on the issue (except for the `good first issue` label) have been added to the PR.
+- [ ] The `Climate Model Evaluation Workflow (CMEW)` project has been added to the PR.
+- [ ] The appropriate milestone has been added to the PR.
 
 ## Definition of Done for the _developer_
 
-- [ ] Does the change in this PR address the above issue / have all acceptance criteria been met?
-- [ ] Does the change in this PR follow the requirements in the [wiki: Developer Guide](https://github.com/MetOffice/CMEW/wiki/Developer-Guide) (including copyrights)?
-- [ ] Have new tests related to the change been added?
-- [ ] Do all the GitHub workflow checks pass?
-- [ ] Do all the tests run locally and pass? (Note: the tests are not run by the GitHub workflow, see [wiki: Run the tests locally](https://github.com/MetOffice/CMEW/wiki/Detailed-Working-Practices#run-the-tests-locally))
-- [ ] Has the API documentation (e.g. docstrings in Python modules) related to the change been updated appropriately?
-- [ ] Has the user documentation (i.e. everything in the `doc` directory) related to the change been updated appropriately, including the [Quick Start](https://github.com/MetOffice/CMEW/blob/main/doc/source/user_guide/quick_start.rst) section?
-- [ ] Do the HTML pages render correctly? (See [wiki: Build the documentation locally](https://github.com/MetOffice/CMEW/wiki/Detailed-Working-Practices#build-the-documentation-locally))
+- [ ] This PR contains **only** the changes needed to meet **all** acceptance criteria.
+- [ ] The change in this PR follows the requirements in the [wiki: Developer Guide](https://github.com/MetOffice/CMEW/wiki/Developer-Guide) (including copyrights).
+- [ ] The GitHub Actions workflow checks pass.
+- [ ] The tests run locally and pass (Note: the tests are not run by the GitHub Actions workflow, see [wiki: Run the tests locally](https://github.com/MetOffice/CMEW/wiki/Detailed-Working-Practices#run-the-tests-locally)).
+- Updating the Rose metadata (select one of the following):
+  - [ ] Rose metadata related to the change has been added or updated.
+  - [ ] The change does not require Rose metadata to be added or updated.
+- Rendering the Rose metadata (select one of the following):
+  - [ ] The Rose GUI shows the change as expected.
+  - [ ] The change in this PR does not affect the Rose GUI.
+- Updating the tests (select one of the following):
+  - [ ] Tests related to the change have been added or updated.
+  - [ ] The change does not require tests to be added or updated.
+- Updating the user documentation (i.e. everything in the `doc` directory, including the [Quick Start](https://github.com/MetOffice/CMEW/blob/main/doc/source/user_guide/quick_start.rst) section; select one of the following):
+  - [ ] The user documentation related to the change has been updated appropriately.
+  - [ ] The change in this PR does not require the user documentation to be updated.
+- Rendering the user documentation ([wiki: Build the documentation locally](https://github.com/MetOffice/CMEW/wiki/Detailed-Working-Practices#build-the-documentation-locally) provides instructions; select one of the following):
+  - [ ] The HTML pages show the change as expected.
+  - [ ] The change in this PR does not affect the HTML pages.
+- Updating the API documentation (e.g. docstrings in Python modules; select one of the following):
+  - [ ] The API documentation related to the change has been updated appropriately.
+  - [ ] The change in this PR does not affect the API documentation.
+
+Copyright and IPR:
+| | GitHub handles |
+|---|---|
+| I confirm that all code is my own and that my contributions are not subject to copyright or license restrictions. | **GitHub handle(s) of all developers of this PR** |
+| I confirm I have not knowingly violated intellectual property rights (IPR) and have taken [sensible measures to prevent doing so](https://github.com/MetOffice/CMEW/wiki/Detailed-Working-Practices#coding-requirements), including appropriate [attribution for usage of Generative AI](https://github.com/MetOffice/CMEW/wiki/Detailed-Working-Practices#modify-the-code). I confirm that this work is my own, and I understand that it is my responsibility to ensure I am not violating others’ IPR.  This includes taking reasonable steps to ensure that all tools used while creating this contribution did not infringe IPR. | **GitHub handle(s) of all developers of this PR** |
+
 
 ## PR creation checklist for the _reviewer_
 
-- [ ] Has `<issue_number>` above :point_up: been replaced with the issue number?
-- [ ] Has `main` been selected as the base branch?
-- [ ] Does the feature branch name follow the format `<issue_number>_<short_description_of_feature>`?
-- [ ] Does the text of the PR title exactly match with the text (not including the issue number) of the issue title?
-- [ ] Have appropriate reviewers been added to the PR (once it is ready for review)?
-- [ ] Has the PR been assigned to the developer(s)?
-- [ ] Have the same labels as on the issue (except for the `good first issue` label) been added to the PR?
-- [ ] Has the `Climate Model Evaluation Workflow (CMEW)` project been added to the PR?
-- [ ] Has the appropriate milestone been added to the PR?
+- [ ] The `<issue_number>` above :point_up: has been replaced with the issue number.
+- [ ] `main` has been selected as the base branch.
+- [ ] The feature branch name follows the format `<issue_number>_<short_description_of_feature>`.
+- [ ] The text of the PR title exactly matches with the text (not including the issue number) of the issue title.
+- [ ] Appropriate reviewers have been added to the PR (once it is ready for review).
+- [ ] The PR has been assigned to the developer(s).
+- [ ] The same labels as on the issue (except for the `good first issue` label) have been added to the PR.
+- [ ] The `Climate Model Evaluation Workflow (CMEW)` project has been added to the PR.
+- [ ] The appropriate milestone has been added to the PR.
 
 ## Definition of Done for the _reviewer_
 
-- [ ] Does the change in this PR address the above issue / have all acceptance criteria been met?
-- [ ] Does the change in this PR follow the requirements in the [wiki: Developer Guide](https://github.com/MetOffice/CMEW/wiki/Developer-Guide) (including copyrights)?
-- [ ] Have new tests related to the change been added?
-- [ ] Do all the GitHub workflow checks pass?
-- [ ] Do all the tests run locally and pass? (Note: the tests are not run by the GitHub workflow, see [wiki: Run the tests locally](https://github.com/MetOffice/CMEW/wiki/Detailed-Working-Practices#run-the-tests-locally))
-- [ ] Has the API documentation (e.g. docstrings in Python modules) related to the change been updated appropriately?
-- [ ] Has the user documentation (i.e. everything in the `doc` directory) related to the change been updated appropriately, including the [Quick Start](https://github.com/MetOffice/CMEW/blob/main/doc/source/user_guide/quick_start.rst) section?
-- [ ] Do the HTML pages render correctly? (See [wiki: Build the documentation locally](https://github.com/MetOffice/CMEW/wiki/Detailed-Working-Practices#build-the-documentation-locally))
+- [ ] This PR contains **only** the changes needed to meet **all** acceptance criteria.
+- [ ] The change in this PR follows the requirements in the [wiki: Developer Guide](https://github.com/MetOffice/CMEW/wiki/Developer-Guide) (including copyrights).
+- [ ] All developers of this PR have added their names to the Copyright and IPR statements above.
+- [ ] The GitHub Actions workflow checks pass.
+- [ ] The tests run locally and pass (Note: the tests are not run by the GitHub Actions workflow, see [wiki: Run the tests locally](https://github.com/MetOffice/CMEW/wiki/Detailed-Working-Practices#run-the-tests-locally)).
+- Updating the Rose metadata (select one of the following):
+  - [ ] Rose metadata related to the change has been added or updated.
+  - [ ] The change does not require Rose metadata to be added or updated.
+- Rendering the Rose metadata (select one of the following):
+  - [ ] The Rose GUI shows the change as expected.
+  - [ ] The change in this PR does not affect the Rose GUI.
+- Updating the tests (select one of the following):
+  - [ ] Tests related to the change have been added or updated.
+  - [ ] The change does not require tests to be added or updated.
+- Updating the user documentation (i.e. everything in the `doc` directory, including the [Quick Start](https://github.com/MetOffice/CMEW/blob/main/doc/source/user_guide/quick_start.rst) section; select one of the following):
+  - [ ] The user documentation related to the change has been updated appropriately.
+  - [ ] The change in this PR does not require the user documentation to be updated.
+- Rendering the user documentation ([wiki: Build the documentation locally](https://github.com/MetOffice/CMEW/wiki/Detailed-Working-Practices#build-the-documentation-locally) provides instructions; select one of the following):
+  - [ ] The HTML pages show the change as expected.
+  - [ ] The change in this PR does not affect the HTML pages.
+- Updating the API documentation (e.g. docstrings in Python modules; select one of the following):
+  - [ ] The API documentation related to the change has been updated appropriately.
+  - [ ] The change in this PR does not affect the API documentation.
+
+> [!IMPORTANT]
+> - Remember to re-check the Definition of Done after making changes in response to a review.
+> - The developer merges the PR.
+> - Remember to use the format `#<pull_request_number>: <pull_request_title>` when writing the merge commit message for the pull request, so the pull request number is immediately visible on GitHub, regardless of the length of the pull request title.

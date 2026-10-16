@@ -1,4 +1,4 @@
-.. (C) Crown Copyright 2022-2025, Met Office.
+.. (C) Crown Copyright 2022-2026, Met Office.
 .. The LICENSE.md file contains full licensing details.
 .. include:: ../common.txt
 
@@ -20,18 +20,29 @@ An overview of the workflow
   :Details:
      Runs once at the start of the workflow.
 
+``copy_datasets``
+  :Description:
+     Reads the namelist files in the top level of the cylc workflow,
+     then copies these details to YAML files
+     in the cylc workflow ``share/etc`` directory.
+  :Runs on:
+     Localhost
+  :Executes:
+     The ``add_datasets_to_share.py`` script from the |Rose| app.
+  :Details:
+     Runs once.
+
 ``configure_recipe``
   :Description:
-     Creates and modifies the |ESMValTool| user configuration file,
-     and writes it to the cylc workflow ``share/etc`` directory.
+     Creates and modifies the |ESMValTool| user and developer configuration files,
+     and writes them to the cylc workflow ``share/etc`` directory.
   :Runs on:
      Localhost
   :Executes:
      The ``configure_recipe.py`` script from the |Rose| app.
   :Details:
      Runs immediately after the successful completion of the ``install_env_file`` job.
-     Temporarily, the modified ESMValTool developer configuration file is copied from
-     the ``configure_recipe`` app to the ``share/etc`` directory in the installed workflow.
+     Temporarily, creates ESMValTool developer configuration file at ``share/etc`` directory in the installed workflow.
 
 ``configure_for``
   :Description:
@@ -39,12 +50,16 @@ An overview of the workflow
      into the Cylc workflow ``share/etc`` directory
      in the installed workflow and configures it
      to use standardised model data.
+     Also reads the required variables from the recipe
+     and writes these to a folder in the Cylc workflow ``share/etc`` directory
+     for use later in the workflow.
   :Runs on:
      Localhost
   :Executes:
      For the required |recipe|,
      executes the ``esmvaltool recipes get`` command
-     followed by the ``update_recipe_file.py`` script from the |Rose| app.
+     followed by the ``update_recipe_file.py`` and ``output_variables.py``
+     scripts from the |Rose| app.
   :Details:
      Runs once for each |recipe|,
      immediately after the successful completion
@@ -62,6 +77,8 @@ An overview of the workflow
      Creates the |CDDS| request metadata
      and variables list required to standardise two model development runs,
      then prepares the |CDDS| directory structure.
+     If previously saved raw data is being used,
+     the raw data will be symlinked to the this task's work directory.
   :Runs on:
      Localhost
   :Executes:
@@ -71,6 +88,8 @@ An overview of the workflow
      completion of the ``configure_for`` job.
      Generates |CDDS| request metadata for each model run (reference and evaluation):
      ``request_ref.json``, ``request_eval.json``.
+     Generates a list of variables to standardise for each model run
+     based on the lists of variables required for each recipe.
      Reads model-specific values from the workflow environment.
      Creates the required directory structure to support
      multiple |CDDS| standardisation workflows
@@ -80,6 +99,7 @@ An overview of the workflow
   :Description:
      Launches the CDDS workflow and converts both model runs into |CMIP|-compliant
      datasets suitable for |ESMValTool| evaluation.
+     Saves new raw data if required.
   :Runs on:
      Localhost
   :Executes:
@@ -139,6 +159,89 @@ An overview of the workflow
      Runs on its own when ``-O unittest`` command is invoked, or runs alongside the
      full workflow when running with ``-O test``.
 
+The |AutoAssess| assessments use the following steps:
+
+``install_autoassess``
+  :Description:
+     Installs the |AutoAssess| code base locally so the workflow can make use of it
+  :Runs on:
+     Localhost
+  :Executes:
+     The ``install_package.sh`` script from the workflow ``bin`` directory
+  :Details:
+     Makes use of the |Rose| install capabilities to copy a specified commit of
+     the |AutoAssess| repository to the workflow share directory. The script
+     then runs a pip install command to create the required executables in the
+     required location.
+
+``retrieve_data<area><dataset>``
+  :Description:
+     Retrieves UM model data from MASS in PP format
+  :Runs on:
+     Localhost
+  :Executes:
+     The |AutoAssess| ``aa_retriever`` script from the ``aa_retrieve_data`` |Rose| app
+  :Details:
+     This task runs on a per area and per dataset basis
+
+``index_data<area><dataset>``
+  :Description:
+     Prepares the retrieved model data in a form that can be more quickly read by Iris
+  :Runs on:
+     Localhost
+  :Executes:
+     The |AutoAssess| ``aa_data_indexer`` script from the ``aa_index_data`` |Rose| app
+  :Details:
+     This task runs on a per area and per dataset basis
+
+``run_area<area>``
+  :Description:
+     Runs the |AutoAssess| area assessment
+  :Runs on:
+     Localhost
+  :Executes:
+     The |AutoAssess| ``aa_run_area`` script from the ``aa_run_area`` |Rose| app
+  :Details:
+     This task runs on a per area basis.
+
+``nac_plot<area>``
+  :Description:
+     Produces a Normalised Assessment Criteria (NAC) plot based on the calculated
+     metrics in the ``run_area<area>`` task
+  :Runs on:
+     Localhost
+  :Executes:
+     The |AutoAssess| ``aa_create_nac_plots`` script from the ``aa_nac_plot`` |Rose| app
+  :Details:
+     This task runs after the ``run_area<area>`` task on a per area basis. The
+     inputs are csv files containing metric values generated from the
+     ``run_area<area>`` task.
+
+``html_page<area>``
+  :Description:
+     Produces an HTML page containing the results of the area assessment
+  :Runs on:
+     Localhost
+  :Executes:
+     The |AutoAssess| ``aa_create_page`` script from the ``aa_html_page`` |Rose| app
+  :Details:
+     This task runs on a per area basis, and runs after the ``nac_plot<area>``
+     task. It uses a jinja2 template from the |AutoAssess| code base along with
+     information on the assessment period and the datasets being assessed.
+
+``html_page_overview``
+  :Description:
+     Produces an HTML page containing an overview of the area assessments that
+     have been run
+  :Runs on:
+     Localhost
+  :Executes:
+     The |AutoAssess| ``aa_create_page`` script from the ``aa_html_page`` |Rose| app
+  :Details:
+     This task runs the ``template`` optional configuration for the app in order
+     to use the specified jinja2 template file rather than the centrally held
+     |AutoAssess| template files.
+
 Design considerations
 ---------------------
 
@@ -150,6 +253,9 @@ Portability
 
 ``site/<site>.cylc``
   Contains task definitions specific to the ``SITE``, for example, ``COMPUTE``
+
+``site/<site>_autoassess.cylc``
+  Contains task definitions specific for AutoAssess at the ``SITE``
 
 ``site/<site>-standardise-env``
   Contains details on how to set up the environment for CDDS at the ``SITE``
