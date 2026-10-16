@@ -3,10 +3,12 @@
 # The LICENSE.md file contains full licensing details.
 # autoassess.cylc
 
-{% set ref_dataset = suite_ids[0] %}
-{% set eval_dataset = suite_ids[1] %}
-{% set ref_label = suite_ids[0] %}
-{% set eval_label = suite_ids[1] %}
+# This is fragile as it assumes the dataset sections are labelled
+# 'reference' and 'experiment'.
+{% set ref_dataset = datasets_metadata["model_reference"]["suite_id"] %}
+{% set eval_dataset = datasets_metadata["model_experiment"]["suite_id"] %}
+{% set ref_label = datasets_metadata["model_reference"]["label_for_plots"] %}
+{% set eval_label = datasets_metadata["model_experiment"]["label_for_plots"] %}
 
 [task parameters]
     aa_dataset = {{ [ref_dataset, eval_dataset] | join(", ") }}
