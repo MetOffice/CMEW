@@ -14,7 +14,7 @@ filename = os.path.basename(__file__)
 logger = logging.getLogger(filename)
 
 
-def parse_variables_from_recipe(recipe_path):
+def parse_variables_from_recipe(recipe_content):
     """Retrieve variables from ESMValTool recipe.
 
     This function will first look to see if the variable's "short_name"
@@ -72,8 +72,8 @@ def parse_variables_from_recipe(recipe_path):
 
     Parameters
     ----------
-    recipe_path : str
-        Location of the ESMValTool recipe file.
+    recipe_content : dict
+        The content of the ESMValTool recipe file.
 
     Returns
     -------
@@ -81,12 +81,14 @@ def parse_variables_from_recipe(recipe_path):
         List of variables from the ESMValTool recipe,
         formatted as ``<mip>/<variable>``.
     """
-    recipe = Recipe(recipe_path)
-    logger.debug("Loading recipe %s", recipe_path)
-    diagnostics = recipe.data["diagnostics"]
+    # Lookin in diagnostics section
+    logger.debug("Recipe content:\n%s", recipe_content)
+    recipe_diagnostics = recipe_content["diagnostics"]
+
+    # List variables from diagnostics
     formatted_variables = []
-    for diagnostic in diagnostics:
-        variables = diagnostics[diagnostic]["variables"]
+    for diagnostic in recipe_diagnostics:
+        variables = recipe_diagnostics[diagnostic]["variables"]
         logger.debug("Diagnostic % variables:\n%s", diagnostic, variables)
         for variable, variable_items in variables.items():
             log_text = "key"
@@ -126,5 +128,6 @@ def write_variables(variables, target_path):
 
 
 def get_variables_from_recipe(recipe_path, output_filepath):
-    variables = parse_variables_from_recipe(recipe_path)
+    recipe_content = Recipe(recipe_path).data
+    variables = parse_variables_from_recipe(recipe_content)
     write_variables(variables, output_filepath)
