@@ -41,7 +41,8 @@
 # '<word>:<word>_<word>(<word>)', e.g. 'namelist:model_runs(reference)':
 {% for section in sections %}
     {% set dataset_metadata = {} %}
-    {% set match = search(".*\:([a-zA-Z0-9]*)_[a-zA-Z0-9]*\((.*)\)", section) %}
+    # Special characters must be double-escaped in Jinja2:
+    {% set match = search(".*\\:([a-zA-Z0-9]*)_[a-zA-Z0-9]*\\((.*)\\)", section) %}
     {% if match %}
         {% set dataset_name = "_".join(match.group(1, 2)) %}
         {% for option in ["suite_id", "label_for_plots"] %}
