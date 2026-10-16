@@ -47,7 +47,10 @@ def amend_site_config(
     ----------
     site_config_defaults:
         The contents of ESMValTool's configuration file for the site.
-    cmew_data_for_esmval_dir:
+    site_local_data_key : str
+        The site-specific fourth-level key in the ESMValTool
+        site configuration file, occurring between 'data' and 'rootpath'.
+    cmew_data_for_esmval_dir : str
         The full path to the directory
         where data processed with CMEW will be stored.
 
@@ -103,11 +106,11 @@ def amend_user_config(
 
     Parameters
     ----------
-    user_config_defaults:
+    user_config_defaults : dict
         The contents of ESMValTool's default user configuration file.
-    max_parallel_tasks:
+    max_parallel_tasks : str
         A parallelisation option to feed to ESMValTool.
-    output_dir:
+    output_dir : str
         The path to the directory where ESMValTool should write its output.
 
     Returns
@@ -167,7 +170,34 @@ def configure_recipe(
     site_config_output_path,
     user_config_output_path,
 ):
-    """Write the required configuration files for ESMValTool."""
+    """
+    Write the required configuration files for ESMValTool.
+
+    Parameters
+    ----------
+    site_config_defaults_filepath : str
+        The full path to the YAML file containing the
+        contents of ESMValTool's configuration file for the site.
+    user_config_defaults_filepath : str
+        The full path to the YAML file containing the
+        contents of ESMValTool's default user configuration file.
+    site_local_data_key : str
+        The site-specific fourth-level key in the ESMValTool
+        site configuration file, occurring between 'data' and 'rootpath'.
+    cmew_data_for_esmval_dir : str
+        The full path to the directory
+        where data processed with CMEW will be stored.
+    max_parallel_tasks : str
+        A parallelisation option to feed to ESMValTool.
+    output_dir : str
+        The full path to the directory for ESMValTool to write its output.
+    site_config_output_path : str
+        The full path to the file where the site config file
+        for ESMValTool will be written.
+    user_config_output_path : str
+        The full path to the file where the user config file
+        for ESMValTool will be written.
+    """
     logger.info("Creating ESMValTool site config")
     site_config_defaults = load_yaml(site_config_defaults_filepath)
     site_config_contents = amend_site_config(

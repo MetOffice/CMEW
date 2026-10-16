@@ -27,15 +27,15 @@ def parse_args_for_configure_recipe(arguments):
     parser.add_argument(
         "--site_config_defaults_filepath",
         help=(
-            "The full path to the file where the "
-            "site config file from ESMValTool was written."
+            "The full path to the YAML file containing the "
+            "contents of ESMValTool's configuration file for the site."
         ),
     )
     parser.add_argument(
         "--user_config_defaults_filepath",
         help=(
-            "The full path to the file where the "
-            "user config file from ESMValTool was written."
+            "The full path to the YAML file containing the "
+            "contents of ESMValTool's default user configuration file."
         ),
     )
     parser.add_argument(
@@ -59,7 +59,10 @@ def parse_args_for_configure_recipe(arguments):
     )
     parser.add_argument(
         "--output_dir",
-        help="The path to the directory for ESMValTool to write its output.",
+        help=(
+            "The full path to the directory "
+            "for ESMValTool to write its output."
+        ),
     )
     parser.add_argument(
         "--site_config_output_path",
