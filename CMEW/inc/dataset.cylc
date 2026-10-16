@@ -1,0 +1,22 @@
+#!jinja2
+# (C) Crown Copyright 2026, Met Office.
+# The LICENSE.md file contains full licensing details.
+# dataset.cylc
+
+{% set suite_ids = [] %}
+{% from "__python__.subprocess" import run %}
+# Return the sections in the 'rose-suite.conf' file.
+{% set command_sections = ["rose", "config", "--file=rose-suite.conf", "--keys"] %}
+# The encoding is needed so 'stdout' is a string rather than a bytes-like object.
+{% set output_sections = run(command_sections, capture_output=True, encoding="utf8") %}
+# 'stdout' is a string with each section separated with a new line.
+{% set sections = output_sections.stdout.strip("\n").split("\n") %}
+{% for section in sections %}
+    {% set command_suite_ids = ["rose", "config", "--file=rose-suite.conf", section, "suite_id"] %}
+    {% set output_suite_ids = run(command_suite_ids, capture_output=True, encoding="utf8") %}
+    {% set suite_id = output_suite_ids.stdout %}
+    {% if suite_id %}
+        {% do suite_ids.append(suite_id.strip("\n").strip("\"")) %}
+    {% endif %}
+{% endfor %}
+{% set datasets = ", ".join(suite_ids) %}
