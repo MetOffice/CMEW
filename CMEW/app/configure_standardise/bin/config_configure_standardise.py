@@ -27,7 +27,7 @@ streams_dict = {
 }
 
 # Default information to write into the CDDS request file.
-requests_defaults = {
+request_defaults = {
     "metadata": {
         "base_date": "1850-01-01T00:00:00",
         "branch_method": "no parent",
