@@ -49,7 +49,8 @@ def produce_html(
         html_path (Path): Path to html output file
 
     Keyword Args:
-        data_path (Path): Path to input file containing template variables (Default: None)
+        data_path (Path): Path to input file containing template variables
+                          (Default: None)
 
     Returns:
         None
