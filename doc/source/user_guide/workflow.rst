@@ -206,8 +206,8 @@ The |AutoAssess| assessments use the following steps:
 
 ``nac_plot<area>``
   :Description:
-     Produces a Normalised Assessment Criteria (NAC) plot based on the calculated
-     metrics in the ``run_area<area>`` task
+     Produces a |NAC plot| based on the calculated metrics in the
+     ``run_area<area>`` task
   :Runs on:
      Localhost
   :Executes:
