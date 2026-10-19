@@ -5,9 +5,9 @@
 Create a variables file to standardise model data with CDDS.
 """
 import os
-import yaml
 import sys
 import logging
+from config_configure_standardise import streams_dict
 
 
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
@@ -15,74 +15,76 @@ filename = os.path.basename(__file__)
 logger = logging.getLogger(filename)
 
 
-def combine_variable_lists(directory):
-    """Combine all variables list files from a directory.
+def retrieve_variables_files_contents(directory):
+    """
+    Return the contents of all variables files in a directory.
 
-    Looks for files ending with "_variables.txt" in the specified directory,
-    reads the lines of each file, deletes any duplicates and
-    then returns a single list of unique lines.
+    Variables files are files ending with "_variables.txt".
 
     Parameters
     ----------
     directory : str
-        Path to the directory containing variables list files.
+        The full path to the directory containing variables files.
+
     Returns
     -------
-    list[str]
-        A combined list of unique variables from all files in the directory.
+    list of list
+       The contents of all variables files in the directory.
     """
-    variables = []
-    for filename in sorted(os.listdir(directory)):  # sorted only to unit test
+    variables_files_contents = []
+    for filename in os.listdir(directory):
         if filename.endswith("_variables.txt"):
             logger.debug("Reading variables from %s", filename)
-            with open(os.path.join(directory, filename), "r") as file:
-                recipe_vars = file.read().splitlines()
-                for var in recipe_vars:
-                    if var not in variables:
-                        logger.debug("Found variable %s", var)
-                        variables.append(var)
-    return variables
+            with open(os.path.join(directory, filename), "r") as file_handle:
+                variables_files_contents.append(
+                    [line.strip() for line in file_handle]
+                )
+    return variables_files_contents
 
 
-def load_stream_dict(stream_config_fp):
+def determine_unique_variables(variables):
     """
-    Loads stream information from the ../etc/streams.yml file.
+    Return the unique variables from the variables.
+
+    Parameters
+    ----------
+    variables: list of list
+        The variables, which may or may not contain duplicates.
 
     Returns
     -------
-    dict
-        A mapping of pre-defined streams to their associated variables
+    list of str
+        The unique variables.
+
     """
-    # Read the stream mappings
-    with open(stream_config_fp, "r") as f:
-        config = yaml.safe_load(f)
+    unique_variables = []
+    for variable_list in variables:
+        for variable in variable_list:
+            if variable not in unique_variables:
+                logger.debug("Found variable %s", variable)
+                unique_variables.append(variable)
+    return unique_variables
 
-    # Return the whole dictionary
-    return config
 
-
-def add_stream_to_variables(stream_config_fp, variables):
+def add_stream_to_variables(variables, streams_dict=streams_dict):
     """Add stream information to a list of variables.
 
     Parameters
     ----------
-    stream_config_fp : str
-        The full path to the file containing
-        the data streams for each variable.
-    variables : list[str]
+    variables : list of str
         List of variables in the format "MIP_table/variable_name"
+    streams_dict : dict
+        A dictionary containing information about data streams.
 
     Returns
     -------
-    list[str]
+    list of str
         List of variables in the format "MIP_table/variable_name:stream"
     """
-    stream_dict = load_stream_dict(stream_config_fp)
-
     # Using a second dictionary to avoid looping
     var_to_stream = {
         var: stream
-        for stream, var_list in stream_dict.items()
+        for stream, var_list in streams_dict.items()
         for var in var_list
     }
 
@@ -100,7 +102,7 @@ def write_variables(variables, output_filepath):
 
     Parameters
     ----------
-    variables : list[str]
+    variables : list of str
         List of variables to be written to file.
 
     output_filepath : str
@@ -113,11 +115,10 @@ def write_variables(variables, output_filepath):
         target_file.write(variables_str)
 
 
-def create_variables_file(
-    vars_files_list_dir, stream_config_fp, output_filepath
-):
+def create_variables_file(vars_files_list_dir, output_filepath):
     """Create a variables file to standardise model data with CDDS."""
-    variables = combine_variable_lists(vars_files_list_dir)
-    streamed_variables = add_stream_to_variables(stream_config_fp, variables)
+    variables = retrieve_variables_files_contents(vars_files_list_dir)
+    unique_variables = determine_unique_variables(variables)
+    streamed_variables = add_stream_to_variables(unique_variables)
     logger.info("Writing variables file to %s", output_filepath)
     write_variables(streamed_variables, output_filepath)
