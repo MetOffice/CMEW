@@ -34,7 +34,7 @@
             configure_for<recipe> => configure_standardise<recipe,dataset>
                 => standardise_model_data<dataset> => restructure_dirs
             configure_recipe & restructure_dirs => run_recipe<recipe>
-                => housekeeping
+                => html_page & housekeeping
 
     {%- if TEST %}
             run_recipe<recipe> => compare<recipe>
@@ -146,7 +146,8 @@
         post-script = """
             # Symbolic link to output to deal with add date and time
             # - Is it better to just rename the directory?
-            ln -sfT $(ls -1d $OUTPUT_DIR/recipe_${CYLC_TASK_PARAM_recipe}_* | tail -1) $OUTPUT_DIR/recipe_${CYLC_TASK_PARAM_recipe}
+            ln -sfT $(ls -1d $OUTPUT_DIR/recipe_${CYLC_TASK_PARAM_recipe}_* | tail -1) \
+                $OUTPUT_DIR/recipe_${CYLC_TASK_PARAM_recipe}
         """
         [[[environment]]]
             ROSE_TASK_APP = run_recipe
