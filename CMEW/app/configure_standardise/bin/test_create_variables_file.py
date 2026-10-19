@@ -3,40 +3,37 @@
 # The LICENSE.md file contains full licensing details.
 """
 Unit tests for create_variables_file.py
-
-Test data files:
-/app/unittest/mock_data/radiation_budget_variables.txt
-    input for test_combine_variable_lists
-/app/unittest/mock_data/seaice_variables.txt
-    input for test_combine_variable_lists
 """
+import pytest
+
 from create_variables_file import (
-    combine_variable_lists,
+    determine_unique_variables,
     add_stream_to_variables,
 )
-from configure_standardise_conftest import mock_data_dir
 
 
-def test_combine_variable_lists():
-    mock_vars_lists_dir = str(mock_data_dir())
-    actual = combine_variable_lists(mock_vars_lists_dir)
-
-    expected = [
-        "Amon/hfls",
-        "Amon/hfss",
-        "Amon/rlds",
-        "Emon/rls",
-        "Amon/rlut",
-        "Amon/rlutcs",
-        "Amon/rsds",
-        "Amon/rsdt",
-        "Emon/rss",
-        "Amon/rsut",
-        "Amon/rsutcs",
-        "Amon/tas",
-        "SImon/siconc",
-    ]
-
+@pytest.mark.parametrize(
+    "variable_list_1,variable_list_2,expected",
+    [
+        pytest.param(
+            ["Amon/hfls", "Emon/rls"],
+            ["Amon/tas", "SImon/siconc"],
+            ["Amon/hfls", "Emon/rls", "Amon/tas", "SImon/siconc"],
+            id="no overlap",
+        ),
+        pytest.param(
+            ["Amon/hfls", "Emon/rls"],
+            ["Amon/hfls", "SImon/siconc"],
+            ["Amon/hfls", "Emon/rls", "SImon/siconc"],
+            id="with overlap",
+        ),
+    ],
+)
+def test_determine_unique_variables(
+    variable_list_1, variable_list_2, expected
+):
+    variable_lists = [variable_list_1, variable_list_2]
+    actual = determine_unique_variables(variable_lists)
     assert actual == expected
 
 

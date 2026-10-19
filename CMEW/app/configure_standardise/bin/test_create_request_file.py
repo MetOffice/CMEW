@@ -1,18 +1,12 @@
 # (C) Crown Copyright 2024-2026, Met Office.
 # The LICENSE.md file contains full licensing details.
 """
-Unit tests for add_datasets_to_share.py
-
-Test data files:
-/app/unittest/mock_data/model_runs.yml
-    input for test_create_request
+Unit tests for create_request_file.
 """
-import configparser
+import os
+
 import create_request_file
-from configure_standardise_conftest import (
-    model_runs_yml_fp,
-    request_u_cw673_cfg_fp,
-)
+from config_configure_standardise import request_defaults
 
 
 def fake_list_streams(*args):
@@ -21,17 +15,70 @@ def fake_list_streams(*args):
 
 def test_create_request(monkeypatch):
     monkeypatch.setattr(create_request_file, "list_streams", fake_list_streams)
-    dataset = "u-cw673"
+    calendar = "gregorian"
+    experiment_id = "amip"
+    institute = "MOHC"
+    model_id = "HadGEM3-GC5E-LL"
+    variant_label = "r1i1p1f1"
+    suite_id = "u-cw673"
+    start_year = 1993
+    end_year = 2003
+    dataset_metadata = {
+        "calendar": calendar,
+        "experiment_id": experiment_id,
+        "institute": institute,
+        "model_id": model_id,
+        "variant_label": variant_label,
+        "suite_id": suite_id,
+        "start_year": start_year,
+        "end_year": end_year,
+    }
     mip_table_dir = "~cdds/etc/mip_tables/GCModelDev/0.0.25"
     root_proc_dir = "/path/to/proc/dir/"
     root_data_dir = "/path/to/data/dir/"
-    variables_path = "/path/to/variables.txt"
+    variables_file = "/path/to/variables.txt"
     raw_data_dir_mode = "use_saved"
 
-    mock_request_defaults = {
+    actual = create_request_file.create_request(
+        mip_table_dir,
+        dataset_metadata,
+        root_proc_dir,
+        root_data_dir,
+        variables_file,
+        raw_data_dir_mode,
+        request_defaults,
+    )
+    expected = {
+        "common": {
+            "mip_table_dir": os.path.expanduser(mip_table_dir),
+            "mode": "relaxed",
+            "package": "round-1",
+            "root_data_dir": root_data_dir,
+            "root_proc_dir": root_proc_dir,
+            "workflow_basename": suite_id,
+        },
+        "conversion": {
+            "cylc_args": "--no-detach -v",
+            "mip_convert_plugin": "HadGEM3",
+            "skip_archive": True,
+            "skip_extract": True,
+        },
+        "data": {
+            "end_date": f"{end_year+1}-01-01T00:00:00",
+            "mass_data_class": "crum",
+            "model_workflow_branch": "trunk",
+            "model_workflow_id": suite_id,
+            "model_workflow_revision": "not used except with data request",
+            "start_date": f"{start_year}-01-01T00:00:00",
+            "streams": "apm inm",
+            "variable_list_file": variables_file,
+        },
         "metadata": {
             "base_date": "1850-01-01T00:00:00",
             "branch_method": "no parent",
+            "calendar": calendar,
+            "experiment_id": experiment_id,
+            "institution_id": institute,
             "license": (
                 "GCModelDev model data is licensed under the "
                 "Open Government License v3 "
@@ -40,49 +87,15 @@ def test_create_request(monkeypatch):
             ),
             "mip": "ESMVal",
             "mip_era": "GCModelDev",
+            "model_id": model_id,
             "model_type": "AGCM AER",
-        },
-        "common": {
-            "mode": "relaxed",
-            "package": "round-1",
-        },
-        "data": {
-            "mass_data_class": "crum",
-            "model_workflow_branch": "trunk",
-            "model_workflow_revision": "not used except with data request",
+            "variant_label": variant_label,
         },
         "misc": {
             "atmos_timestep": 1200,
-        },
-        "conversion": {
-            "mip_convert_plugin": "HadGEM3",
-            "skip_archive": True,
-            "cylc_args": "--no-detach -v",
         },
         "netcdf_global_attributes": {
             "further_info_url": "dummy_url",
         },
     }
-
-    actual_request = create_request_file.create_request(
-        dataset,
-        mip_table_dir,
-        str(model_runs_yml_fp()),
-        root_proc_dir,
-        root_data_dir,
-        variables_path,
-        raw_data_dir_mode,
-        mock_request_defaults,
-    )
-    cfg = configparser.ConfigParser()
-    cfg.read_dict(actual_request)
-    actual = {section: dict(cfg[section]) for section in cfg.sections()}
-
-    expected_request = str(request_u_cw673_cfg_fp())
-    config = configparser.ConfigParser()
-    config.read(expected_request)
-    expected = {
-        section: dict(config[section]) for section in config.sections()
-    }
-
     assert actual == expected

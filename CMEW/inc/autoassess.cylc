@@ -45,7 +45,7 @@
         [[[environment]]]
             AUTOASSESS_OUTPUT_DIR = $OUTPUT_DIR/{{ eval_dataset }}_vs_{{ ref_dataset }}
             AUTOASSESS_DATA_DIR = $CYLC_WORKFLOW_SHARE_DIR/data/autoassess
-            ASSESSMENT_TITLE = {{ AUTOASSESS_TITLE }}
+            ASSESSMENT_TITLE = {{ OUTPUT_WEBPAGE_TITLE }}
             ESMVALTOOL_MODULE_NAME = {{ ESMVALTOOL_MODULE_NAME }}
             START_DATE = {{ (START_YEAR-1)|string + '/12/01' }}
             END_DATE = {{ (START_YEAR+NUMBER_OF_YEARS-1)|string + '/12/01' }}
