@@ -52,7 +52,7 @@
             => configure_for<recipe>
             => symlink_standardised_data
             => run_recipe<recipe>
-            => housekeeping
+            => html_page & housekeeping
 {%- endif %}
         """
 
@@ -62,7 +62,7 @@
         env-script = "eval $(rose task-env)"
         platform = localhost
         [[[environment]]]
-            ESMVALTOOL_DIR=${CYLC_WORKFLOW_RUN_DIR}/lib/python/ESMValTool
+            ESMVALTOOL_DIR = ${CYLC_WORKFLOW_RUN_DIR}/lib/python/ESMValTool
             ESMVALTOOL_MODULE_NAME = {{ ESMVALTOOL_MODULE_NAME }}
             ESMVALTOOL_CONFIG_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/etc/esmvaltool_config
             USER_CONFIG_PATH = ${ESMVALTOOL_CONFIG_DIR}/config-user.yml
@@ -145,6 +145,11 @@
 
     [[run_recipe<recipe>]]
         inherit = None, COMPUTE, RECIPE
+        post-script = """
+            # Symbolic link to output to deal with add date and time
+            # - Is it better to just rename the directory?
+            ln -sfT $(ls -1d $OUTPUT_DIR/recipe_${CYLC_TASK_PARAM_recipe}_* | tail -1) $OUTPUT_DIR/recipe_${CYLC_TASK_PARAM_recipe}
+        """
         [[[environment]]]
             ROSE_TASK_APP = run_recipe
 
@@ -161,6 +166,15 @@
         inherit = STANDARDISE
         [[[environment]]]
             STANDARDISED_DATA_DIR = {{ STANDARDISED_DATA_DIR | default("") }}
+
+    [[html_page]]
+        [[[environment]]]
+            ASSESSMENT_TITLE = {{ AUTOASSESS_TITLE }}
+            DATASETS = {{ datasets }}
+            START_YEAR = {{ START_YEAR }}
+            NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
+            J2_TEMPLATE_FILE = top_level_template.jinja
+            OUTPUT_FILE = ${OUTPUT_DIR}/index.html
 
     [[housekeeping]]
 
