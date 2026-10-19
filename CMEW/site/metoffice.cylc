@@ -15,6 +15,12 @@
             --wckey = CMEW
             --ntasks = {{ MAX_PARALLEL_TASKS }}
 
+{%- if annual_datasets %}
+    [[standardise_model_data_annual<annual_dataset>]]
+        [[[directives]]]
+            --mem = 8G
+{%- endif %}
+
 {%- if not TEST and RECIPE == "ocean_quadmap" %}
     [[run_recipe<recipe=ocean_quadmap>]]
         execution time limit = PT10M
