@@ -39,7 +39,9 @@ def load_data(data_path: Path | None) -> dict:
     }
 
 
-def produce_html(template_path: Path, html_path: Path, data_path: Path | None) -> None:
+def produce_html(
+    template_path: Path, html_path: Path, data_path: Path | None
+) -> None:
     """Main routine to produce html page.
 
     Args:
@@ -62,8 +64,7 @@ def produce_html(template_path: Path, html_path: Path, data_path: Path | None) -
 
 
 def read_args() -> argparse.Namespace:
-    """Reading command line inputs.
-    """
+    """Reading command line inputs."""
 
     # Create argument parser
     parser = argparse.ArgumentParser(
@@ -72,13 +73,21 @@ def read_args() -> argparse.Namespace:
 
     # Add arguments
     parser.add_argument(
-        "template", type=Path, help="Jinja2 template file.",
+        "template",
+        type=Path,
+        help="Jinja2 template file.",
     )
     parser.add_argument(
-        "html_page", type=Path, help="File to write output to.",
+        "html_page",
+        type=Path,
+        help="File to write output to.",
     )
     parser.add_argument(
-        "-d", "--data", type=Path, default=None, help="Data file.",
+        "-d",
+        "--data",
+        type=Path,
+        default=None,
+        help="Data file.",
     )
 
     # Return parsed arguments
