@@ -42,7 +42,7 @@ def test_external_mapping_plugin_location(monkeypatch):
         str(Path(create_request_file.__file__).resolve().parent)
     )
     assert request["common"]["mip_table_dir"] == (
-        "/data/scratch/jonathan.lillis/mip_tables/0.0.25/"
+        request_defaults["common"]["mip_table_dir"]
     )
 
 
