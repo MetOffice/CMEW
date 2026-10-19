@@ -167,7 +167,7 @@
 
     [[html_page]]
         [[[environment]]]
-            ASSESSMENT_TITLE = {{ AUTOASSESS_TITLE }}
+            ASSESSMENT_TITLE = {{ OUTPUT_WEBPAGE_TITLE }}
             DATASETS = {{ datasets }}
             START_YEAR = {{ START_YEAR }}
             NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
