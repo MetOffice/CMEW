@@ -19,6 +19,10 @@ class CMEWUKESM1MappingPlugin(ukesm1_plugin.UKESM1MappingPlugin):
             mappings.read(
                 {
                     "ua": {
+                        # Override the default mapping for 'ua' to extract
+                        # data from MASS that is on 17 pressure levels
+                        # (PLEV17), and has been sampled at 6-hourly intervals
+                        # (lbtim_ia=6).
                         "status": "ok",
                         "dimension": "longitude latitude plev17 time",
                         "expression": (
