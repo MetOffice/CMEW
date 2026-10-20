@@ -43,10 +43,13 @@ def retrieve_variable_list(path: Path) -> list[tuple[str, str]]:
                 continue
             variable_token = line.split(":", maxsplit=1)[0]
             if "/" not in variable_token:
-                logger.warning("Skipping malformed variable token '%s'", line)
-                continue
+                raise ValueError(
+                    f"Malformed variable token '{line}' in {path}"
+                )
             mip, variable = variable_token.split("/", maxsplit=1)
             pairs.append((mip, variable))
+    if not pairs:
+        raise ValueError(f"No variables found in {path}")
     logger.info("Loaded %d variables from %s", len(pairs), path)
     return pairs
 
@@ -71,15 +74,15 @@ def find_files(
     )
 
     if not dataset_root.exists():
-        logger.warning(
-            "No directory for %s/%s at %s",
-            mip,
-            variable,
-            dataset_root,
+        raise FileNotFoundError(
+            f"No directory for {mip}/{variable} at {dataset_root}"
         )
-        return []
 
     files = sorted(dataset_root.rglob("*.nc"))
+    if not files:
+        raise FileNotFoundError(
+            f"No NetCDF files found for {mip}/{variable} at {dataset_root}"
+        )
     logger.info(
         "Found %d NetCDF files for %s/%s at %s",
         len(files),
@@ -196,11 +199,7 @@ def pick_matching_cube(
 def overwrite_with_single_cube(file_path: Path, variable: str) -> None:
     """Load a NetCDF file and overwrite it with the target variable cube."""
     cubes = iris.load(str(file_path))
-    try:
-        selected_cube = pick_matching_cube(cubes, variable, file_path)
-    except ValueError as exc:
-        logger.warning("Skipping %s: %s", file_path, exc)
-        return
+    selected_cube = pick_matching_cube(cubes, variable, file_path)
     selected_cube = sanitize_cube_for_output(selected_cube)
 
     logger.info(
@@ -233,12 +232,10 @@ def main() -> None:
     for dataset, dataset_config in model_runs.items():
         variables_path = variables_dir / f"variables_{dataset}.txt"
         if not variables_path.exists():
-            logger.warning(
-                "Variables file not found for dataset %s: %s",
-                dataset,
-                variables_path,
+            raise FileNotFoundError(
+                f"Variables file not found for dataset {dataset}: "
+                f"{variables_path}"
             )
-            continue
 
         logger.info("Processing dataset %s", dataset)
         variables = retrieve_variable_list(variables_path)

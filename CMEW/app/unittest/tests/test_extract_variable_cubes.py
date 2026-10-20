@@ -67,18 +67,18 @@ class TestRetrieveVariableList:
         result = extract_variable_cubes.retrieve_variable_list(p)
         assert result == [("Amon", "tas")]
 
-    def test_skips_malformed_token(self, tmp_path):
+    def test_raises_on_malformed_token(self, tmp_path):
         content = "tas: no_slash_here\nAmon/tas: tas\n"
         p = tmp_path / "vars.txt"
         p.write_text(content)
-        result = extract_variable_cubes.retrieve_variable_list(p)
-        assert result == [("Amon", "tas")]
+        with pytest.raises(ValueError, match="Malformed variable token"):
+            extract_variable_cubes.retrieve_variable_list(p)
 
-    def test_empty_file_returns_empty_list(self, tmp_path):
+    def test_raises_on_empty_file(self, tmp_path):
         p = tmp_path / "vars.txt"
         p.write_text("")
-        result = extract_variable_cubes.retrieve_variable_list(p)
-        assert result == []
+        with pytest.raises(ValueError, match="No variables found"):
+            extract_variable_cubes.retrieve_variable_list(p)
 
 
 class TestLoadModelRuns:
@@ -294,7 +294,7 @@ class TestFindFiles:
         )
         assert [f.name for f in result] == ["tas_a.nc", "tas_b.nc"]
 
-    def test_returns_empty_when_dir_missing(self, tmp_path):
+    def test_raises_when_dir_missing(self, tmp_path):
         config = {
             "activity": "ESMVal",
             "institute": "MOHC",
@@ -302,28 +302,43 @@ class TestFindFiles:
             "experiment_id": "amip-u-abc",
             "variant_label": "r1i1p1f1",
         }
-        result = extract_variable_cubes.find_files(
-            tmp_path, config, "Amon", "missing_var"
+        with pytest.raises(FileNotFoundError, match="No directory"):
+            extract_variable_cubes.find_files(
+                tmp_path, config, "Amon", "missing_var"
+            )
+
+    def test_raises_when_dir_has_no_netcdf_files(self, tmp_path):
+        config = {
+            "activity": "ESMVal",
+            "institute": "MOHC",
+            "model_id": "UKESM1-0-LL",
+            "experiment_id": "amip-u-abc",
+            "variant_label": "r1i1p1f1",
+        }
+        dataset_root = (
+            tmp_path
+            / "GCModelDev"
+            / "ESMVal"
+            / "MOHC"
+            / "UKESM1-0-LL"
+            / "amip-u-abc"
+            / "r1i1p1f1"
+            / "Amon"
+            / "tas"
         )
-        assert result == []
+        dataset_root.mkdir(parents=True)
+        with pytest.raises(FileNotFoundError, match="No NetCDF files"):
+            extract_variable_cubes.find_files(tmp_path, config, "Amon", "tas")
 
 
 class TestOverwriteWithSingleCube:
-    def test_skips_file_when_no_match(self, tmp_path, caplog):
-        """overwrite_with_single_cube warns and leaves file untouched."""
+    def test_raises_when_file_has_no_match(self, tmp_path):
         nc_path = tmp_path / "test.nc"
         cube = _make_dummy_cube(var_name="pr", with_time=True)
         iris.save(cube, str(nc_path))
 
-        import logging
-
-        with caplog.at_level(logging.WARNING):
+        with pytest.raises(ValueError, match="Could not find"):
             extract_variable_cubes.overwrite_with_single_cube(nc_path, "tas")
-
-        assert "Skipping" in caplog.text
-        # File should still exist and still contain 'pr'
-        reloaded = iris.load(str(nc_path))
-        assert any(c.var_name == "pr" for c in reloaded)
 
     def test_overwrites_file_with_correct_cube(self, tmp_path):
         nc_path = tmp_path / "test.nc"
