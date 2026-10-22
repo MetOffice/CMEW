@@ -16,14 +16,22 @@
     "radiation_budget": "esmvaltool",
 } %}
 
+{# List selected recipes using ESMValTool or AutoAssess #}
+{% from "utility" import select_recipes %}
+{% set esmvaltool_recipes = select_recipes(RECIPES, SOURCE_RECIPES, "esmvaltool") %}
+{% set autoassess_recipes = select_recipes(RECIPES, SOURCE_RECIPES, "autoassess") %}
+{# Create helper boolean to indicate an autoassess area has been selected #}
+{% set AUTOASSESS = autoassess_recipes | length > 0 %}
 
 [scheduler]
     UTC mode = True
 
 [task parameters]
     dataset = {{ datasets }}
-    recipe = {{x for x in RECIPES.split(",") if SOURCE_RECIPES[x] == "esmvaltool" }}
-    autoassess_area = {{ x for x in RECIPES.split(",") if SOURCE_RECIPES[x] == "autoassess" }}
+    recipe = {{ esmvaltool_recipes }}
+    {% if not UNITTEST and AUTOASSESS %}
+    autoassess_area = {{ autoassess_recipes }}
+    {% endif %}
 
 [scheduling]
     [[graph]]
@@ -47,7 +55,9 @@
 
     {%- if TEST %}
             run_recipe<recipe> => compare<recipe>
+        {% if not UNITTEST and AUTOASSESS %}
             html_page<autoassess_area> => compare<autoassess_area>
+        {% endif %}
     {%- endif %}
 {%- endif %}
 
@@ -180,3 +190,8 @@
         {% include "inc/test.cylc" %}
     {%- endif %}
 {%- endif %}
+
+{% if not UNITTEST and AUTOASSESS %}
+    {% include "site/" ~ SITE ~ "_autoassess.cylc" %}
+    {% include "inc/autoassess.cylc" %}
+{% endif %}
