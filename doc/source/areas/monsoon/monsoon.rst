@@ -76,43 +76,50 @@ Example plots
 -------------
 
 .. figure:: monsoon_overview.png
+   :align: center
    :scale: 50 %
    :alt: NAC plot for Monsoon area
 
-   This is the summary overview of metrics from the Monsoon assessment.
+   Summary overview of metrics from the Monsoon assessment
 
 .. figure:: monsoon_east.png
+   :align: center
    :scale: 50 %
-   :alt: East Asian monsoon metrics
+   :alt: monsoon_east.png
 
-   These are the East Asian Monsoon metrics.
+   East Asian Monsoon metrics
 
 .. figure:: monsoon_east_indices.png
+   :align: center
    :scale: 50 %
-   :alt: East Asian monsoon indices
+   :alt: monsoon_east_indices.png
 
-   These are the East Asian Monsoon indices.
+   East Asian Monsoon indices
 
 .. figure:: monsoon_east_other.png
+   :align: center
    :scale: 50 %
-   :alt: Other miscellaneous East Asian Monsoon metrics
+   :alt: monsoon_east_other.png
 
-   These are other miscellaneous East Asian Monsoon metrics.
+   Other miscellaneous East Asian Monsoon metrics
 
 .. figure:: monsoon_south.png
+   :align: center
    :scale: 50 %
-   :alt: South Asian monsoon metrics
+   :alt: monsoon_south.png
 
-   These are the South Asian Monsoon metrics.
+   South Asian Monsoon metrics
 
 .. figure:: monsoon_south_indices.png
+   :align: center
    :scale: 50 %
-   :alt: South Asian monsoon indices
+   :alt: monsoon_south_indices.png
 
-   These are the South Asian Monsoon indices.
+   South Asian Monsoon indices
 
 .. figure:: monsoon_south_other.png
+   :align: center
    :scale: 50 %
-   :alt: Other miscellaneous South Asian Monsoon metrics
+   :alt: monsoon_south_other.png
 
-   These are other miscellaneous South Asian Monsoon metrics.
+   Other miscellaneous South Asian Monsoon metrics

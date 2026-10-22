@@ -3,11 +3,12 @@
 # The LICENSE.md file contains full licensing details.
 # autoassess.cylc
 
-{% from "scrape_ini" import find_ref, find_eval, find_ref_label, find_eval_label %}
-{% set ref_dataset = find_ref("rose-suite.conf") %}
-{% set eval_dataset = find_eval("rose-suite.conf") %}
-{% set ref_label = find_ref_label("rose-suite.conf") %}
-{% set eval_label = find_eval_label("rose-suite.conf") %}
+# This is fragile as it assumes the dataset sections are labelled
+# 'reference' and 'experiment'.
+{% set ref_dataset = datasets_metadata["model_reference"]["suite_id"] %}
+{% set eval_dataset = datasets_metadata["model_experiment"]["suite_id"] %}
+{% set ref_label = datasets_metadata["model_reference"]["label_for_plots"] %}
+{% set eval_label = datasets_metadata["model_experiment"]["label_for_plots"] %}
 
 [task parameters]
     aa_dataset = {{ [ref_dataset, eval_dataset] | join(", ") }}
@@ -65,6 +66,7 @@
         inherit = AUTOASSESS, SITE_AA_DATA_INDEXING
         [[[environment]]]
             ROSE_TASK_APP = aa_index_data
+            ROSE_APP_OPT_CONF_KEYS = ($CYLC_TASK_PARAM_autoassess_area)
             SUITE_ID = $CYLC_TASK_PARAM_aa_dataset
             AREA = $CYLC_TASK_PARAM_autoassess_area
 
