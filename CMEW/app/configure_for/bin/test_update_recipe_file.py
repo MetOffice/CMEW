@@ -144,6 +144,9 @@ def test_update_ocean_quadmap_model_selectors():
         "mip": "Oyr",
         "project": "ESMVal",
     }
+    assert script["script"].endswith(
+        "/app/run_recipe/bin/diagnostic_maps_quad.py"
+    )
 
 
 def test_update_ocean_quadmap_model_selectors_mip_matches_monthly_route():

@@ -8,6 +8,7 @@ Update the datasets in an ESMValTool recipe. Include:
 * User configurable variables from the Rose suite configuration
 """
 import os
+from pathlib import Path
 import yaml
 import sys
 import logging
@@ -170,6 +171,19 @@ def update_ocean_quadmap_model_selectors(recipe, model_runs):
     control_model = model_selector(control_runs[0])
     exper_model = model_selector(experiment_runs[0])
 
+    workflow_root = Path(__file__).resolve().parents[3]
+    diagnostic_script = (
+        workflow_root
+        / "app"
+        / "run_recipe"
+        / "bin"
+        / "diagnostic_maps_quad.py"
+    )
+    if not diagnostic_script.is_file():
+        raise FileNotFoundError(
+            f"CMEW ocean diagnostic not found: {diagnostic_script}"
+        )
+
     # Update every instance of the ocean quadmap diagnostic rather than
     # relying on YAML anchor behaviour from the upstream recipe.
     for diagnostic in recipe.get("diagnostics", {}).values():
@@ -177,6 +191,7 @@ def update_ocean_quadmap_model_selectors(recipe, model_runs):
             if script.get("script") == "ocean/diagnostic_maps_quad.py":
                 script["control_model"] = control_model.copy()
                 script["exper_model"] = exper_model.copy()
+                script["script"] = str(diagnostic_script)
 
     return recipe
 
