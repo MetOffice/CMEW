@@ -52,7 +52,7 @@
             {% if raw_value %}
                 {% set value = raw_value.strip("\n").strip('"') %}
                 {% do dataset_metadata.update({option: value.strip("\n").strip("\"")}) %}
-                {% if option == "suite_id" %}:
+                {% if option == "suite_id" %}
                     {% do dataset_ids.append(value) %}
                 {% endif %}
             {% endif %}
