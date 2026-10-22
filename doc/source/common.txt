@@ -30,3 +30,7 @@
 .. _Rose Documentation: https://metomi.github.io/rose/doc/html/index.html
 .. _Rose Edit GUI: https://metomi.github.io/rose/doc/html/api/command-reference.html#rose-config-edit
 .. _rose_prune: https://metomi.github.io/rose/doc/html/api/built-in/rose_prune.html
+.. _Stratosphere: https://docs.esmvaltool.org/en/latest/recipes/recipe_autoassess_stratosphere.html
+.. _Land-surface Permafrost: https://docs.esmvaltool.org/en/latest/recipes/recipe_autoassess_landsurface_permafrost.html
+.. _Land-surface Surface Radiation: https://docs.esmvaltool.org/en/latest/recipes/recipe_autoassess_landsurface_surfrad.html
+.. _Land-surface Soil Moisture: https://docs.esmvaltool.org/en/latest/recipes/recipe_autoassess_landsurface_soilmoisture.html
