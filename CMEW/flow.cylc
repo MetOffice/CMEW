@@ -30,7 +30,7 @@
             install_env_file => get_esmval_branch => copy_datasets
 {%- endif %}
 {%- if not UNITTEST and not SKIP_CDDS %}
-            install_env_file => copy_datasets
+            install_env_file => configure_recipe & copy_datasets
             copy_datasets => configure_for<recipe>
             configure_for<recipe> => configure_standardise<recipe,dataset>
                 => standardise_model_data<dataset> => restructure_dirs
@@ -72,10 +72,11 @@
         [[[environment]]]
             ESMVALTOOL_DIR=${CYLC_WORKFLOW_RUN_DIR}/lib/python/ESMValTool
             ESMVALTOOL_MODULE_NAME = {{ ESMVALTOOL_MODULE_NAME }}
-            # ESMVALTOOL_CONFIG_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/etc/esmvaltool_config
-            # USER_CONFIG_PATH = ${ESMVALTOOL_CONFIG_DIR}/config-user.yml
+            ESMVALTOOL_CONFIG_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/etc/esmvaltool_config
+            USER_CONFIG_PATH = ${ESMVALTOOL_CONFIG_DIR}/config-user.yml
             DEV_CONFIG_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/config-developer.yml
-            OUTPUT_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/cycle/${CYLC_TASK_CYCLE_POINT}
+            # OUTPUT_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/cycle/${CYLC_TASK_CYCLE_POINT}
+            OUTPUT_DIR = /home/users/jonathan.lillis/esmvaltool_output
             PYTHONPATH_PREPEND = ${ESMVALTOOL_DIR}
             SHARE_DATA_CDDS = ${CYLC_WORKFLOW_SHARE_DIR}/data/cdds
             ROOT_PROC_DIR = ${SHARE_DATA_CDDS}/proc
@@ -126,6 +127,7 @@
             MIP_TABLE_DIR = {{ MIP_TABLE_DIR }}
             ROOTPATH_CMIP6 = {{ ROOTPATH_CMIP6 }}
             ROOTPATH_OBS4MIPS = {{ ROOTPATH_OBS4MIPS }}
+            ESGF_DOWNLOAD_DIR = {{ ESGF_DOWNLOAD_DIR }}
 
     [[configure_for<recipe>]]
         inherit = None, RECIPE, MODEL_RUNS
