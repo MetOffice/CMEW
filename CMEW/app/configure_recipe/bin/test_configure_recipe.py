@@ -13,11 +13,12 @@ def test_create_user_config():
     test_output_dir = "/test/output/dir"
     test_rootpath_cmip6 = "test_cmip6_rootpath"
     test_rootpath_obs4mips = "test_obs4mips_rootpath"
+    test_esgf_download_dir = "/test/climate_data"
 
     expected = {
         "auxiliary_data_dir": "",
         "config_developer_file": test_dev_config_path,
-        "download_dir": "",
+        "download_dir": test_esgf_download_dir,
         "drs": {
             "CMIP6": test_drs_cmip6,
             "obs4MIPs": test_drs_obs4mips,
@@ -25,12 +26,21 @@ def test_create_user_config():
         },
         "max_parallel_tasks": int(test_max_parallel_tasks),
         "output_dir": test_output_dir,
+        "projects": {
+            "ESMVal": {
+                "cmor_table": {
+                    "type": "esmvalcore.cmor.table.CMIP6Info",
+                    "paths": ["cmip6/Tables", "cmip6-custom"],
+                },
+            },
+        },
         "remove_preproc_dir": False,
         "rootpath": {
             "CMIP6": test_rootpath_cmip6,
             "obs4MIPs": test_rootpath_obs4mips,
             "ESMVal": test_cmew_data_for_esmval_dir,
         },
+        "search_data": "quick",
     }
 
     actual = create_user_config(
@@ -42,6 +52,7 @@ def test_create_user_config():
         test_output_dir,
         test_rootpath_cmip6,
         test_rootpath_obs4mips,
+        test_esgf_download_dir,
     )
 
     assert actual == expected

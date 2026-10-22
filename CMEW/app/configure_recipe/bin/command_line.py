@@ -71,6 +71,10 @@ def parse_args_for_configure_recipe(arguments):
             "user config file for ESMValTool will be written."
         ),
     )
+    parser.add_argument(
+        "--esgf_download_dir",
+        help=("The directory where ESGF data should be downloaded."),
+    )
 
     return parser.parse_args(arguments)
 
@@ -98,6 +102,7 @@ def main_for_configure_recipe(arguments=None):
     print(f"rootpath_cmip6: {args.rootpath_cmip6}")
     print(f"rootpath_obs4mips: {args.rootpath_obs4mips}")
     print(f"user_config_path: {args.user_config_path}")
+    print(f"esgf_download_dir: {args.esgf_download_dir}")
     configure_recipe(
         args.cmew_data_for_esmval_dir,
         args.dev_config_path,
@@ -109,4 +114,5 @@ def main_for_configure_recipe(arguments=None):
         args.rootpath_cmip6,
         args.rootpath_obs4mips,
         args.user_config_path,
+        args.esgf_download_dir,
     )

@@ -135,6 +135,7 @@ def create_user_config(
     output_dir,
     rootpath_cmip6,
     rootpath_obs4mips,
+    esgf_download_dir,
 ):
     """
     Return the contents of the user configuration file.
@@ -159,6 +160,8 @@ def create_user_config(
         The rootpath for CMIP6.
     rootpath_obs4mips:
         The rootpath for obs4MIPS.
+    esgf_download_dir:
+        The directory where ESGF data should be downloaded.
 
     Returns
     -------
@@ -167,18 +170,13 @@ def create_user_config(
     """
     max_parallel_tasks = int(max_parallel_tasks)
 
-    # Note that 'auxiliary_data_dir' and 'download_dir'
-    # are set to empty values and cannot currently be
-    # configured. However, 'download_dir' is used only when using the
-    # automatic download feature via ESMValTool (which we do not intend
-    # to use here).
     # 'auxiliary_data_dir' is used by some recipes to look for
     # additional datasets, so may need to be configured in the future.
 
     user_config_file_contents = {
         "auxiliary_data_dir": "",
         "config_developer_file": dev_config_path,
-        "download_dir": "",
+        "download_dir": os.path.expandvars(esgf_download_dir),
         "drs": {
             "CMIP6": drs_cmip6,
             "obs4MIPs": drs_obs4mips,
@@ -186,12 +184,21 @@ def create_user_config(
         },
         "max_parallel_tasks": max_parallel_tasks,
         "output_dir": output_dir,
+        "projects": {
+            "ESMVal": {
+                "cmor_table": {
+                    "type": "esmvalcore.cmor.table.CMIP6Info",
+                    "paths": ["cmip6/Tables", "cmip6-custom"],
+                },
+            },
+        },
         "remove_preproc_dir": False,
         "rootpath": {
             "CMIP6": rootpath_cmip6,
             "obs4MIPs": rootpath_obs4mips,
             "ESMVal": cmew_data_for_esmval_dir,
         },
+        "search_data": "quick",
     }
     logger.debug("User config file contents:\n%s", user_config_file_contents)
     return user_config_file_contents
@@ -238,6 +245,7 @@ def configure_recipe(
     rootpath_cmip6,
     rootpath_obs4mips,
     user_config_path,
+    esgf_download_dir,
 ):
     """
     Write the required user and developer configuration files for
@@ -259,6 +267,7 @@ def configure_recipe(
         output_dir,
         rootpath_cmip6,
         rootpath_obs4mips,
+        esgf_download_dir,
     )
     ensure_parent_dir(user_config_path)
     logger.info("Writing user config to %s", user_config_path)
