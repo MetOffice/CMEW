@@ -9,7 +9,9 @@ import os
 import sys
 import yaml
 import logging
-from config_configure_standardise import request_defaults
+from cmewpy.configure_standardise.config_configure_standardise import (
+    request_defaults,
+)
 
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 filename = os.path.basename(__file__)

@@ -30,7 +30,8 @@
             => get_esmval_branch => configure_recipe & copy_datasets
 {%- endif %}
 {%- if not UNITTEST and not SKIP_CDDS %}
-            install_env_file => configure_recipe & copy_datasets
+            install_env_file => install_package<package>
+            => configure_recipe & copy_datasets
             copy_datasets => configure_for<recipe>
             configure_for<recipe> => configure_standardise<recipe,dataset>
                 => standardise_model_data<dataset> => restructure_dirs
@@ -109,8 +110,9 @@
         [[[environment]]]
             SITE = {{ SITE }}
 
-    [[install_package]]
+    [[install_package<package>]]
         [[[environment]]]
+            ROSE_TASK_APP = install_package
             ROSE_APP_OPT_CONF_KEYS = ($CYLC_TASK_PARAM_package)
 
     [[configure_recipe]]

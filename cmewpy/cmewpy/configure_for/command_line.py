@@ -1,8 +1,10 @@
 # (C) Crown Copyright 2026, Met Office.
 # The LICENSE.md file contains full licensing details.
 import argparse
-from get_variables_from_recipe import get_variables_from_recipe
-from update_recipe_file import update_recipe_file
+from cmewpy.configure_for.get_variables_from_recipe import (
+    get_variables_from_recipe,
+)
+from cmewpy.configure_for.update_recipe_file import update_recipe_file
 
 
 def parse_args_for_get_variables_from_recipe(arguments):
