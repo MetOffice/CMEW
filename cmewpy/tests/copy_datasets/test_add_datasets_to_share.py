@@ -1,7 +1,7 @@
 # (C) Crown Copyright 2026, Met Office.
 # The LICENSE.md file contains full licensing details.
 """Unit tests for add_datasets_to_share.py"""
-from add_datasets_to_share import (
+from cmewpy.copy_datasets.add_datasets_to_share import (
     extract_sections_from_naml_content,
     convert_str_to_facets,
     add_common_facets,

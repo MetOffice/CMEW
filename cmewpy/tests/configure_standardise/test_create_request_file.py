@@ -5,8 +5,10 @@ Unit tests for create_request_file.
 """
 import os
 
-import create_request_file
-from config_configure_standardise import request_defaults
+from cmewpy.configure_standardise import create_request_file
+from cmewpy.configure_standardise.config_configure_standardise import (
+    request_defaults,
+)
 
 
 def fake_list_streams(*args):

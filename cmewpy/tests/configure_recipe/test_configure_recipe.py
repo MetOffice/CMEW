@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 # (C) Crown Copyright 2024-2026, Met Office.
 # The LICENSE.md file contains full licensing details.
-from configure_recipe import create_user_config, create_developer_config
+from cmewpy.configure_recipe.configure_recipe import (
+    create_user_config,
+    create_developer_config,
+)
 
 
 def test_create_user_config():

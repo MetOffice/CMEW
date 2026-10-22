@@ -3,13 +3,13 @@
 """
 Unit tests for 'update_recipe_file.py'.
 """
-from update_recipe_file import (
+from cmewpy.configure_for.update_recipe_file import (
     remove_datasets_contents,
     remove_additional_datasets,
     construct_datasets_contents,
     add_datasets_contents,
 )
-from configure_for_conftest import (
+from cmewpy.configure_for.configure_for_conftest import (
     datasets,
     model_datasets,
     cmip6_datasets,
