@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # (C) Crown Copyright 2026, Met Office.
 # The LICENSE.md file contains full licensing details.
-from pathlib import Path
-
-
 def datasets():
     return [
         {
@@ -164,15 +161,3 @@ def recipe_without_additional_datasets():
             },
         },
     }
-
-
-def mock_data_dir():
-    return Path(__file__).parent.parent.parent / "unittest" / "mock_data"
-
-
-def model_runs_yml_fp():
-    return mock_data_dir() / "model_runs.yml"
-
-
-def original_recipe_radiation_budget_fp():
-    return mock_data_dir() / "original_recipe_radiation_budget.yml"

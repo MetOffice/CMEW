@@ -6,14 +6,21 @@
 {{ assert(ESMVALTOOL_MODULE_NAME != "", "ESMVALTOOL_MODULE_NAME must be set to something other than an empty string") }}
 {% set SKIP_CDDS = SKIP_CDDS | default(false) %}
 
-{% from "scrape_ini" import list_datasets %}
-{% set datasets = list_datasets("rose-suite.conf") %}
+{% from "inc/dataset.cylc" import datasets, datasets_metadata %}
 
 {# What tool is running a recipe, ESMValTool or AutoAssess? #}
 {% set SOURCE_RECIPES = {
+    "aerosols": "autoassess",
     "africa": "autoassess",
+    "australia": "autoassess",
+    "enso": "autoassess",
+    "globaltrop": "autoassess",
+    "hydrocycle": "autoassess",
+    "land_surface": "autoassess",
+    "mjo": "autoassess",
     "monsoon": "autoassess",
     "radiation_budget": "esmvaltool",
+    "stratosphere": "autoassess",
 } %}
 
 {# List selected recipes using ESMValTool or AutoAssess #}
@@ -106,8 +113,6 @@
             CDDS_SOFTWARE_DIR = "~cdds/software"
             RAW_DATA_DIR = {{ RAW_DATA_DIR | default("") }}
             RAW_DATA_DIR_MODE = {{ RAW_DATA_DIR_MODE }}
-            REQUEST_DEFAULTS_PATH = ${CYLC_WORKFLOW_RUN_DIR}/app/configure_standardise/etc/request_defaults.yml
-            STREAM_CONFIG_PATH = ${CYLC_WORKFLOW_RUN_DIR}/app/configure_standardise/etc/streams.yml
             # Workaround for bug in CDDS: ROOT_SOFTWARE_DIR: unbound variable.
             ROOT_SOFTWARE_DIR = ${CDDS_SOFTWARE_DIR}
             CDDS_VERSION = {{ CDDS_VERSION }}

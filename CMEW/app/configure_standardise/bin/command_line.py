@@ -34,13 +34,6 @@ def parse_args_for_create_variables_file(arguments):
         ),
     )
     parser.add_argument(
-        "--stream_config_fp",
-        help=(
-            "The full path to the file containing "
-            "the data streams for each variable."
-        ),
-    )
-    parser.add_argument(
         "--output_filepath",
         help=(
             "The full path to the file where the "
@@ -64,11 +57,9 @@ def main_for_create_variables_file(arguments=None):
 
     # Run the code.
     print(f"variable_list_file: {args.vars_files_list_dir}"),
-    print(f"stream_config_fp: {args.stream_config_fp}"),
     print(f"output_filepath: {args.output_filepath}"),
     create_variables_file(
         args.vars_files_list_dir,
-        args.stream_config_fp,
         args.output_filepath,
     )
 
@@ -103,13 +94,6 @@ def parse_args_for_create_request_file(arguments):
         help=(
             "The full path to the file where the "
             "request file will be written."
-        ),
-    )
-    parser.add_argument(
-        "--defaults_path",
-        help=(
-            "The full path to the file where the "
-            "default values for a CDDS request are written."
         ),
     )
     parser.add_argument(
@@ -169,7 +153,6 @@ def main_for_create_request_file(arguments=None):
     # Run the code.
     print(f"dataset: {args.dataset}"),
     print(f"output_filepath: {args.output_filepath}"),
-    print(f"defaults_path: {args.defaults_path}"),
     print(f"mip_table_dir: {args.mip_table_dir}"),
     print(f"model_runs_yml_fp: {args.model_runs_yml_fp}"),
     print(f"root_proc_dir: {args.root_proc_dir}"),
@@ -179,7 +162,6 @@ def main_for_create_request_file(arguments=None):
     create_request_file(
         args.dataset,
         args.output_filepath,
-        args.defaults_path,
         args.mip_table_dir,
         args.model_runs_yml_fp,
         args.root_proc_dir,
