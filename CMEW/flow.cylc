@@ -15,21 +15,18 @@
     package = autoassess, cmewpy
     dataset = {{ datasets }}
     recipe = radiation_budget
-{%- if not UNITTEST and AUTOASSESS %}
+{%- if AUTOASSESS %}
     autoassess_area = aerosols, africa, australia, enso, globaltrop, hydrocycle, land_surface, mjo, monsoon, stratosphere
 {%- endif %}
 
 [scheduling]
     [[graph]]
         R1 = """
-{%- if UNITTEST or TEST %}
-            install_env_file => install_package<package> => unittest
-{%- endif %}
 {%- if USE_ESMVALTOOL_BRANCH %}
             install_env_file => install_package<package>
             => get_esmval_branch => configure_recipe & copy_datasets
 {%- endif %}
-{%- if not UNITTEST and not SKIP_CDDS %}
+{%- if not SKIP_CDDS %}
             install_env_file => install_package<package>
             => configure_recipe & copy_datasets
             copy_datasets => configure_for<recipe>
@@ -170,14 +167,11 @@
     [[housekeeping]]
 
 {% include "site/" ~ SITE ~ ".cylc" %}
-{%- if TEST or UNITTEST %}
-    {% include "inc/unittest.cylc" %}
-    {%- if TEST %}
-        {% include "inc/test.cylc" %}
-    {%- endif %}
+{%- if TEST  %}
+    {% include "inc/test.cylc" %}
 {%- endif %}
 
-{%- if not UNITTEST and AUTOASSESS %}
+{%- if AUTOASSESS %}
     {% include "site/" ~ SITE ~ "_autoassess.cylc" %}
     {% include "inc/autoassess.cylc" %}
 {%- endif %}

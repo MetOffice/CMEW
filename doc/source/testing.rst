@@ -29,22 +29,9 @@ Run the end-to-end tests
 
     cd <desired_repository_location>/CMEW/CMEW
 
-* Run |CMEW| at the Met Office, with all tests enabled::
+* Run |CMEW| at the Met Office, with the end-to-end tests enabled::
 
     cylc vip -O metoffice -O test
-
-* Ensure the tests pass. One way to do this is to check `Cylc Review`_.
-
-Run the unit tests via |CMEW|
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-* Navigate to the workflow directory::
-
-    cd <desired_repository_location>/CMEW/CMEW
-
-* Run the unit tests at the Met Office::
-
-    cylc vip -O metoffice -O unittest
 
 * Ensure the tests pass. One way to do this is to check `Cylc Review`_.
 
