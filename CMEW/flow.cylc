@@ -15,7 +15,7 @@
 [task parameters]
     dataset = {{ datasets }}
     # recipe = recipe_monitor_with_refs
-    recipe = recipe_cmm
+    recipe = recipe_mo_model_monitor
 {%- if not UNITTEST and AUTOASSESS %}
     autoassess_area = monsoon, africa
 {%- endif %}
