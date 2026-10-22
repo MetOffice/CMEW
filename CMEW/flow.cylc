@@ -16,7 +16,7 @@
     recipe = radiation_budget
 {%- if not UNITTEST and AUTOASSESS %}
     autoassess_area = valnote, aerosols, africa, australia, enso, globaltrop, \
-                      hydrocycle, land_surface, mjo, monsoon, stratosphere
+                        hydrocycle, land_surface, mjo, monsoon, stratosphere
 {%- endif %}
 
 [scheduling]
