@@ -64,6 +64,7 @@
         inherit = AUTOASSESS, SITE_AA_DATA_INDEXING
         [[[environment]]]
             ROSE_TASK_APP = aa_index_data
+            ROSE_APP_OPT_CONF_KEYS = ($CYLC_TASK_PARAM_autoassess_area)
             SUITE_ID = $CYLC_TASK_PARAM_aa_dataset
             AREA = $CYLC_TASK_PARAM_autoassess_area
 
