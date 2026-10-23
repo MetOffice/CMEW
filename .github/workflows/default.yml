@@ -38,8 +38,10 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE,
       # so your job can access it.
+      - name: Checkout repository
       - uses: actions/checkout@v6
 
+      - name: Create environment
       - uses: mamba-org/setup-micromamba@v3
         with:
           environment-file: .github/workflows/cmew-env/cmew-env.lock
@@ -76,7 +78,7 @@ jobs:
           cd CMEW
           rose metadata-check -C meta/
 
-      - name: Build documentation
+      - name: Build documentation using Sphinx
         run: make --directory=doc html
 
       - name: Check for broken links in the documentation
