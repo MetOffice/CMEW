@@ -12,8 +12,9 @@ Testing
   |CMEW| end-to-end tests verify whether the evaluation tools
   produce the expected output files.
   These checks are performed via the ``compare`` task.
-  They do not check the contents of those files;
-  this is covered by the Recipe Test Workflow.
+  They do not check the contents of those files.
+  Content checking is performed separately by the Recipe Test Workflow,
+  using outputs produced by that workflow.
 * **Unit tests**.
   |CMEW| unit tests ensure key functions
   in the ``cmewpy`` Python package behave as expected.
