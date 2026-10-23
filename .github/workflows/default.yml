@@ -42,7 +42,7 @@ jobs:
 
       - uses: mamba-org/setup-micromamba@v3
         with:
-          environment-file: conda-env-linux-64.lock
+          environment-file: cmew-env.lock
           environment-name: cmew-env
           cache-environment: true
           cache-environment-key: env-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('.github/workflows/cmew-env/cmew-env.lock') }}
