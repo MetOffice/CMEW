@@ -48,8 +48,6 @@
             AUTOASSESS_DATA_DIR = $CYLC_WORKFLOW_SHARE_DIR/data/autoassess
             ASSESSMENT_TITLE = {{ OUTPUT_WEBPAGE_TITLE }}
             ESMVALTOOL_MODULE_NAME = {{ ESMVALTOOL_MODULE_NAME }}
-            START_YEAR = {{ START_YEAR }}
-            NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
             START_DATE = {{ (START_YEAR-1)|string + '/12/01' }}
             END_DATE = {{ (START_YEAR+NUMBER_OF_YEARS-1)|string + '/12/01' }}
 

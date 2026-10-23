@@ -62,7 +62,7 @@
         env-script = "eval $(rose task-env)"
         platform = localhost
         [[[environment]]]
-            ESMVALTOOL_DIR=${CYLC_WORKFLOW_RUN_DIR}/lib/python/ESMValTool
+            ESMVALTOOL_DIR = ${CYLC_WORKFLOW_RUN_DIR}/lib/python/ESMValTool
             ESMVALTOOL_MODULE_NAME = {{ ESMVALTOOL_MODULE_NAME }}
             ESMVALTOOL_CONFIG_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/etc/esmvaltool_config
             USER_CONFIG_PATH = ${ESMVALTOOL_CONFIG_DIR}/config-user.yml
@@ -73,6 +73,8 @@
             ROOT_PROC_DIR = ${SHARE_DATA_CDDS}/proc
             ROOT_DATA_DIR = ${SHARE_DATA_CDDS}/cdds_data
             ROOT_RESTRUCTURED_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/work
+            START_YEAR = {{ START_YEAR }}
+            NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
 
     [[RECIPE]]
         [[[environment]]]
@@ -101,8 +103,6 @@
         [[[environment]]]
             # Directory containing dataset lists as YAML files
             DATASETS_LIST_DIR = "${CYLC_WORKFLOW_SHARE_DIR}/dataset_lists"
-            START_YEAR = {{ START_YEAR }}
-            NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
 
     [[install_env_file]]
         [[[environment]]]
