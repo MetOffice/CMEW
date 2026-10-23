@@ -6,8 +6,7 @@
 {{ assert(ESMVALTOOL_MODULE_NAME != "", "ESMVALTOOL_MODULE_NAME must be set to something other than an empty string") }}
 {% set SKIP_CDDS = SKIP_CDDS | default(false) %}
 
-{% from "scrape_ini" import list_datasets %}
-{% set datasets = list_datasets("rose-suite.conf") %}
+{% from "inc/dataset.cylc" import datasets, datasets_metadata %}
 
 [scheduler]
     UTC mode = True
@@ -16,7 +15,7 @@
     dataset = {{ datasets }}
     recipe = radiation_budget
 {%- if not UNITTEST and AUTOASSESS %}
-    autoassess_area = monsoon, africa
+    autoassess_area = aerosols, africa, australia, enso, globaltrop, hydrocycle, land_surface, mjo, monsoon, stratosphere
 {%- endif %}
 
 [scheduling]

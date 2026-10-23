@@ -133,7 +133,11 @@ def parse_args_for_create_request_file(arguments):
     )
     parser.add_argument(
         "--raw_data_dir_mode",
-        help=("Whether to save or reuse raw CDDS data files."),
+        help="Whether to save or reuse raw CDDS data files.",
+    )
+    parser.add_argument(
+        "--cdds_run_identifier",
+        help="A string to identify which CMEW run spawned the CDDS workflow.",
     )
     return parser.parse_args(arguments)
 
@@ -159,6 +163,7 @@ def main_for_create_request_file(arguments=None):
     print(f"root_data_dir: {args.root_data_dir}"),
     print(f"variables_file: {args.variables_file}"),
     print(f"raw_data_dir_mode: {args.raw_data_dir_mode}"),
+    print(f"cdds_run_identifier: {args.cdds_run_identifier}"),
     create_request_file(
         args.dataset,
         args.output_filepath,
@@ -168,4 +173,5 @@ def main_for_create_request_file(arguments=None):
         args.root_data_dir,
         args.variables_file,
         args.raw_data_dir_mode,
+        args.cdds_run_identifier,
     )
