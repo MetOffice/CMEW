@@ -17,13 +17,16 @@
     [[graph]]
         R1 = """
             install_env_file
-                => install_package<package>
+                => install_package<package=autoassess>
                 => retrieve_data<autoassess_area><aa_dataset>
                 => index_data<autoassess_area><aa_dataset>
                 => run_area<autoassess_area>
                 => nac_plot<autoassess_area>
                 => html_page<autoassess_area>
                 => html_page_overview
+{%- if TEST %}
+                html_page<autoassess_area> => compare<autoassess_area>
+{%- endif %}
         """
 
     [[queues]]

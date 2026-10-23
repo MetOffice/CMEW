@@ -22,36 +22,34 @@
 [scheduling]
     [[graph]]
         R1 = """
+            install_env_file
+            => install_package<package=cmewpy>
 {%- if USE_ESMVALTOOL_BRANCH %}
-            install_env_file => install_package<package>
-            => get_esmval_branch => configure_recipe & copy_datasets
+            install_package<package=cmewpy>
+            => get_esmval_branch
+            => configure_recipe & copy_datasets
+{%- else %}
+            install_package<package=cmewpy>
+            => configure_recipe & copy_datasets
 {%- endif %}
 {%- if not SKIP_CDDS %}
-            install_env_file => install_package<package>
-            => configure_recipe & copy_datasets
-            copy_datasets => configure_for<recipe>
-            configure_for<recipe> => configure_standardise<recipe,dataset>
-                => standardise_model_data<dataset> => restructure_dirs
-            configure_recipe & restructure_dirs => run_recipe<recipe>
-                => housekeeping
-
-    {%- if TEST %}
-            run_recipe<recipe> => compare<recipe>
-        {%- if AUTOASSESS %}
-            html_page<autoassess_area> => compare<autoassess_area>
-        {%- endif %}
-    {%- endif %}
-{%- endif %}
-{%- if SKIP_CDDS %}
-    {%- if USE_ESMVALTOOL_BRANCH %}
-            install_env_file => get_esmval_branch => configure_recipe & copy_datasets
-    {%- endif %}
-            install_env_file
-            => configure_recipe & copy_datasets
+            copy_datasets
+            => configure_for<recipe>
+            => configure_standardise<recipe,dataset>
+            => standardise_model_data<dataset>
+            => restructure_dirs
+            configure_recipe & restructure_dirs
+            => run_recipe<recipe>
+            => housekeeping
+{%- else %}
+            copy_datasets
             => configure_for<recipe>
             => symlink_standardised_data
             => run_recipe<recipe>
             => housekeeping
+{%- endif %}
+{%- if TEST %}
+            run_recipe<recipe> => compare<recipe>
 {%- endif %}
         """
 
