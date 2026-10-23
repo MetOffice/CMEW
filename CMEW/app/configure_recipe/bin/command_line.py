@@ -28,14 +28,14 @@ def parse_args_for_configure_recipe(arguments):
         "--site_config_defaults_filepath",
         help=(
             "The full path to the YAML file containing the "
-            "contents of ESMValTool's configuration file for the site."
+            "site-specific configuration for ESMValTool."
         ),
     )
     parser.add_argument(
         "--user_config_defaults_filepath",
         help=(
             "The full path to the YAML file containing the "
-            "contents of ESMValTool's default user configuration file."
+            "user-specific configuration for ESMValTool."
         ),
     )
     parser.add_argument(

@@ -102,7 +102,7 @@ def amend_user_config(
     output_dir,
 ):
     """
-    Amend the contents of the default user configuration file.
+    Return the updated version of the user configuration file.
 
     Parameters
     ----------
