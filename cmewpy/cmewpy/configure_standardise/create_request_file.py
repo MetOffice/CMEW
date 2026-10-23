@@ -90,6 +90,7 @@ def create_request(
     root_data_dir,
     variables_file,
     raw_data_dir_mode,
+    cdds_run_identifier,
     request_defaults=request_defaults,
 ):
     """
@@ -110,6 +111,8 @@ def create_request(
         the list of variables to be processed.
     raw_data_dir_mode : str
         Whether to save or reuse raw CDDS data files.
+    cdds_run_identifier
+        A string to identify which CMEW run spawned the CDDS workflow.
     request_defaults : dict
         A dictionary containing the CDDS request default values.
 
@@ -136,7 +139,9 @@ def create_request(
         "mip_table_dir": os.path.expanduser(mip_table_dir),
         "root_proc_dir": root_proc_dir,
         "root_data_dir": root_data_dir,
-        "workflow_basename": dataset_metadata["suite_id"],
+        "workflow_basename": (
+            f"{cdds_run_identifier}_{dataset_metadata['suite_id']}"
+        ),
     }
     request["data"] = {
         **defaults["data"],
@@ -188,6 +193,7 @@ def create_request_file(
     root_data_dir,
     variables_file,
     raw_data_dir_mode,
+    cdds_run_identifier,
 ):
     """
     Create a request file to standardise model data with CDDS.
@@ -212,6 +218,8 @@ def create_request_file(
         the list of variables to be processed.
     raw_data_dir_mode : str
         Whether to save or reuse raw CDDS data files.
+    cdds_run_identifier : str
+        A string to identify which CMEW run spawned the CDDS workflow.
     """
     logger.info("Creating CDDS request for dataset %s", dataset)
 
@@ -224,5 +232,6 @@ def create_request_file(
         root_data_dir,
         variables_file,
         raw_data_dir_mode,
+        cdds_run_identifier,
     )
     write_request(request, output_filepath)

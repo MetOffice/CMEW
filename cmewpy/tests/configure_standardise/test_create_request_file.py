@@ -40,6 +40,7 @@ def test_create_request(monkeypatch):
     root_data_dir = "/path/to/data/dir/"
     variables_file = "/path/to/variables.txt"
     raw_data_dir_mode = "use_saved"
+    cdds_run_identifier = "CMEW_run1"
 
     actual = create_request_file.create_request(
         mip_table_dir,
@@ -48,6 +49,7 @@ def test_create_request(monkeypatch):
         root_data_dir,
         variables_file,
         raw_data_dir_mode,
+        cdds_run_identifier,
         request_defaults,
     )
     expected = {
@@ -57,7 +59,7 @@ def test_create_request(monkeypatch):
             "package": "round-1",
             "root_data_dir": root_data_dir,
             "root_proc_dir": root_proc_dir,
-            "workflow_basename": suite_id,
+            "workflow_basename": f"{cdds_run_identifier}_{suite_id}",
         },
         "conversion": {
             "cylc_args": "--no-detach -v",
