@@ -1,8 +1,12 @@
 # (C) Crown Copyright 2026, Met Office.
 # The LICENSE.md file contains full licensing details.
 import argparse
-from create_variables_file import create_variables_file
-from create_request_file import create_request_file
+from cmewpy.configure_standardise.create_variables_file import (
+    create_variables_file,
+)
+from cmewpy.configure_standardise.create_request_file import (
+    create_request_file,
+)
 
 
 def parse_args_for_create_variables_file(arguments):

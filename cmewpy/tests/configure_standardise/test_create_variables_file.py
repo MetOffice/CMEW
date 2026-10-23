@@ -6,7 +6,7 @@ Unit tests for create_variables_file.py
 """
 import pytest
 
-from create_variables_file import (
+from cmewpy.configure_standardise.create_variables_file import (
     determine_unique_variables,
     add_stream_to_variables,
 )

@@ -148,17 +148,6 @@ An overview of the workflow
      Runs for every recipe defined in the workflow,
      after the completion of the ``run_recipe`` job
 
-``unittest``
-  :Description:
-     Locates and runs unit tests for the python scripts inside the ``app`` directory
-  :Runs on:
-     Localhost
-  :Executes:
-     ``pytest`` from the |Rose| app
-  :Details:
-     Runs on its own when ``-O unittest`` command is invoked, or runs alongside the
-     full workflow when running with ``-O test``.
-
 The |AutoAssess| assessments use the following steps:
 
 ``install_autoassess``

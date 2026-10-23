@@ -12,46 +12,44 @@
     UTC mode = True
 
 [task parameters]
+    package = autoassess, cmewpy
     dataset = {{ datasets }}
     recipe = radiation_budget
-{%- if not UNITTEST and AUTOASSESS %}
+{%- if AUTOASSESS %}
     autoassess_area = aerosols, africa, australia, enso, globaltrop, hydrocycle, land_surface, mjo, monsoon, stratosphere
 {%- endif %}
 
 [scheduling]
     [[graph]]
         R1 = """
-{%- if UNITTEST or TEST %}
-            install_env_file => unittest
-{%- endif %}
-{%- if USE_ESMVALTOOL_BRANCH %}
-            install_env_file => get_esmval_branch => configure_recipe & copy_datasets
-{%- endif %}
-{%- if not UNITTEST and not SKIP_CDDS %}
-            install_env_file => configure_recipe & copy_datasets
-            copy_datasets => configure_for<recipe>
-            configure_for<recipe> => configure_standardise<recipe,dataset>
-                => standardise_model_data<dataset> => restructure_dirs
-            configure_recipe & restructure_dirs => run_recipe<recipe>
-                => housekeeping
-
-    {%- if TEST %}
-            run_recipe<recipe> => compare<recipe>
-        {%- if AUTOASSESS %}
-            html_page<autoassess_area> => compare<autoassess_area>
-        {%- endif %}
-    {%- endif %}
-{%- endif %}
-{%- if SKIP_CDDS %}
-    {%- if USE_ESMVALTOOL_BRANCH %}
-            install_env_file => get_esmval_branch => configure_recipe & copy_datasets
-    {%- endif %}
             install_env_file
+            => install_package<package=cmewpy>
+{%- if USE_ESMVALTOOL_BRANCH %}
+            install_package<package=cmewpy>
+            => get_esmval_branch
             => configure_recipe & copy_datasets
+{%- else %}
+            install_package<package=cmewpy>
+            => configure_recipe & copy_datasets
+{%- endif %}
+{%- if not SKIP_CDDS %}
+            copy_datasets
+            => configure_for<recipe>
+            => configure_standardise<recipe,dataset>
+            => standardise_model_data<dataset>
+            => restructure_dirs
+            configure_recipe & restructure_dirs
+            => run_recipe<recipe>
+            => housekeeping
+{%- else %}
+            copy_datasets
             => configure_for<recipe>
             => symlink_standardised_data
             => run_recipe<recipe>
             => housekeeping
+{%- endif %}
+{%- if TEST %}
+            run_recipe<recipe> => compare<recipe>
 {%- endif %}
         """
 
@@ -106,6 +104,11 @@
     [[install_env_file]]
         [[[environment]]]
             SITE = {{ SITE }}
+
+    [[install_package<package>]]
+        [[[environment]]]
+            ROSE_TASK_APP = install_package
+            ROSE_APP_OPT_CONF_KEYS = ($CYLC_TASK_PARAM_package)
 
     [[configure_recipe]]
         [[[environment]]]
@@ -162,14 +165,11 @@
     [[housekeeping]]
 
 {% include "site/" ~ SITE ~ ".cylc" %}
-{%- if TEST or UNITTEST %}
-    {% include "inc/unittest.cylc" %}
-    {%- if TEST %}
-        {% include "inc/test.cylc" %}
-    {%- endif %}
+{%- if TEST  %}
+    {% include "inc/test.cylc" %}
 {%- endif %}
 
-{%- if not UNITTEST and AUTOASSESS %}
+{%- if AUTOASSESS %}
     {% include "site/" ~ SITE ~ "_autoassess.cylc" %}
     {% include "inc/autoassess.cylc" %}
 {%- endif %}
