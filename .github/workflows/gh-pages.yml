@@ -46,7 +46,7 @@ jobs:
         uses: actions/configure-pages@v5
 
       - name: Create environment
-      - uses: mamba-org/setup-micromamba@v3
+        uses: mamba-org/setup-micromamba@v3
         with:
           environment-file: .github/workflows/cmew-env/cmew-env.lock
           environment-name: cmew-env
