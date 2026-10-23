@@ -1,0 +1,66 @@
+#!jinja2
+# (C) Crown Copyright 2026, Met Office.
+# The LICENSE.md file contains full licensing details.
+# dataset.cylc
+
+{% from "__python__.subprocess" import run %}
+{% from "__python__.re" import search %}
+
+# For ESMValTool:
+# Store all unique dataset identifiers (the value of the 'suite_id' option)
+# from all the dataset sections in the 'rose-suite.conf' file
+# in the 'dataset_ids' variable.
+{% set dataset_ids = [] %}
+
+# For AutoAssess:
+# Store all unique dataset identifiers (the value of the 'suite_id' option)
+# and all plot labels (the value of the 'label_for_plots' option)
+# from all the dataset sections in the 'rose-suite.conf' file
+# in the 'datasets_metadata' variable in the form
+# '{dataset_name: {"suite_id": value1, "label_for_plots": value2}}'.
+{% set datasets_metadata = {} %}
+
+# Use the Rose CLI ('rose config') to read the 'rose-suite.conf' file:
+# https://metomi.github.io/rose/doc/html/api/configuration/api.html#cli.
+# '--keys' prints all the sections in the 'rose-suite.conf' file.
+{% set command = ["rose", "config", "--file=rose-suite.conf", "--keys"] %}
+
+# Use subprocess to run the 'rose config' command.
+# The encoding is needed so that 'stdout' is returned as a string
+# rather than a bytes-like object.
+# The 'run' command returns a 'CompletedProcess' object:
+# https://docs.python.org/3/library/subprocess.html#subprocess.CompletedProcess.
+{% set completed_process = run(command, capture_output=True, encoding="utf8") %}
+
+# 'stdout' is a string containing the name of each section
+# separated with a new line.
+{% set sections = completed_process.stdout.strip("\n").split("\n") %}
+
+# Determine which sections are the dataset sections.
+# This may be fragile as it assumes the dataset sections have the form
+# '<word>:<word>_<word>(<word>)', e.g. 'namelist:model_runs(reference)':
+{% for section in sections %}
+    {% set dataset_metadata = {} %}
+    # Special characters must be double-escaped in Jinja2:
+    {% set match = search(".*\\:([a-zA-Z0-9]*)_[a-zA-Z0-9]*\\((.*)\\)", section) %}
+    {% if match %}
+        {% set dataset_name = "_".join(match.group(1, 2)) %}
+        {% for option in ["suite_id", "label_for_plots"] %}
+            {% set command = ["rose", "config", "--file=rose-suite.conf", section, option] %}
+            {% set completed_process = run(command, capture_output=True, encoding="utf8") %}
+            {% set raw_value = completed_process.stdout %}
+            {% if raw_value %}
+                {% set value = raw_value.strip("\n").strip('"') %}
+                {% do dataset_metadata.update({option: value.strip("\n").strip("\"")}) %}
+                {% if option == "suite_id" %}
+                    {% do dataset_ids.append(value) %}
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+        {% do datasets_metadata.update({dataset_name: dataset_metadata}) %}
+    {% endif %}
+{% endfor %}
+
+# For the unique dataset identifiers to be used in parameterisation,
+# 'datasets' must be a string of comma-separated items.
+{% set datasets = ", ".join(dataset_ids) %}

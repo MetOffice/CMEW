@@ -12,7 +12,6 @@ then writes those dictionaries to YAML files in the share directory.
 """
 import os
 import yaml
-from scrape_ini import find_ref
 import sys
 import logging
 
@@ -219,24 +218,6 @@ def use_facet_as_key(data, key_facet):
     return new_dict
 
 
-def add_reference_key(dataset_dict, ref_dataset):
-    """
-    Add a "benchmark_dataset" key with the value "true" to a dictionary.
-
-    The section to which the key is added is determined by the function
-    `find_ref` in CMEW/lib/python/scrape_ini.py.
-
-    Parameters
-    ----------
-    dataset_dict: dict
-        The dictionary to have the key added.
-    ref_dataset: str
-        The suite ID of the reference dataset.
-    """
-    # Add the extra key and re-save the file
-    dataset_dict[ref_dataset]["benchmark_dataset"] = True
-
-
 def process_naml_content(
     naml_content, start_year, number_of_years, institute, project=None
 ):
@@ -302,7 +283,6 @@ def add_datasets_to_share(
     start_year,
     number_of_years,
     institute,
-    rose_suite_fp,
 ):
     """
     Copy the datasets defined in namelist files into YAML files.
@@ -319,9 +299,6 @@ def add_datasets_to_share(
         The number of years to extract for each dataset.
     institute: str
         The institution ID to add to the datasets.
-    rose_suite_fp: str
-        The full path to the file where the
-        suite configuration variables are written.
     """
     # Create the target directory if it doesn't exist
     os.makedirs(target_dir, exist_ok=True)
@@ -353,13 +330,6 @@ def add_datasets_to_share(
 
             # Reformat list as a dictionary, keyed by suite ID
             dict_to_write = use_facet_as_key(datasets, "suite_id")
-
-            # Add the reference identifier
-            logger.info("Adding benchmarking key to model runs YAML")
-            # Find the reference suite ID in the `rose-suite.conf` file
-            ref_dataset = find_ref(rose_suite_fp)
-            logger.info("Reference dataset: %s", ref_dataset)
-            add_reference_key(dict_to_write, ref_dataset)
 
             # Write to file
             logger.info("Writing model runs YAML")
