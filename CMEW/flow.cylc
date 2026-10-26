@@ -28,10 +28,10 @@
 {%- if USE_ESMVALTOOL_BRANCH %}
             install_package<package=cmewpy>
             => get_esmval_branch
-            => configure_recipe & copy_datasets
+            => create_esmvaltool_config & copy_datasets
 {%- else %}
             install_package<package=cmewpy>
-            => configure_recipe & copy_datasets
+            => create_esmvaltool_config & copy_datasets
 {%- endif %}
 {%- if not SKIP_CDDS %}
             copy_datasets
@@ -39,7 +39,7 @@
             => configure_standardise<recipe,dataset>
             => standardise_model_data<dataset>
             => restructure_dirs
-            configure_recipe & restructure_dirs
+            create_esmvaltool_config & restructure_dirs
             => run_recipe<recipe>
             => housekeeping
 {%- else %}
@@ -111,7 +111,7 @@
             ROSE_TASK_APP = install_package
             ROSE_APP_OPT_CONF_KEYS = ($CYLC_TASK_PARAM_package)
 
-    [[configure_recipe]]
+    [[create_esmvaltool_config]]
         [[[environment]]]
             CMEW_DATA_FOR_ESMVAL_DIR = ${ROOT_RESTRUCTURED_DIR}/GCModelDev
             DRS_CMIP6 = {{ DRS_CMIP6 }}

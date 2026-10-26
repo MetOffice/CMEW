@@ -32,14 +32,14 @@ An overview of the workflow
   :Details:
      Runs once.
 
-``configure_recipe``
+``create_esmvaltool_config``
   :Description:
      Creates and modifies the |ESMValTool| user and developer configuration files,
      and writes them to the cylc workflow ``share/etc`` directory.
   :Runs on:
      Localhost
   :Executes:
-     The ``configure_recipe.py`` script from the |Rose| app.
+     The ``create_esmvaltool_config.py`` script from the |Rose| app.
   :Details:
      Runs immediately after the successful completion of the ``install_env_file`` job.
      Temporarily, creates ESMValTool developer configuration file at ``share/etc`` directory in the installed workflow.
@@ -133,7 +133,7 @@ An overview of the workflow
   :Details:
      Runs once for each recipe,
      after the successful completion of the ``standardise_model_data``
-     and the ``configure_recipe`` jobs.
+     and the ``create_esmvaltool_config`` jobs.
   :Families:
      ``COMPUTE``, ``RECIPE``
 

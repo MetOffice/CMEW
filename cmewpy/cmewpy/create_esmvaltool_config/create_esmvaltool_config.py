@@ -227,7 +227,7 @@ def write_yaml(file_path, contents):
         )
 
 
-def configure_recipe(
+def create_esmvaltool_config(
     cmew_data_for_esmval_dir,
     dev_config_path,
     drs_cmip6,
