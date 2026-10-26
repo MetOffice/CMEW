@@ -76,7 +76,7 @@
             USER_CONFIG_PATH = ${ESMVALTOOL_CONFIG_DIR}/config-user.yml
             DEV_CONFIG_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/config-developer.yml
             # OUTPUT_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/cycle/${CYLC_TASK_CYCLE_POINT}
-            OUTPUT_DIR = /home/users/jonathan.lillis/esmvaltool_output
+            OUTPUT_DIR = ${HOME}/esmvaltool_output
             PYTHONPATH_PREPEND = ${ESMVALTOOL_DIR}
             SHARE_DATA_CDDS = ${CYLC_WORKFLOW_SHARE_DIR}/data/cdds
             ROOT_PROC_DIR = ${SHARE_DATA_CDDS}/proc

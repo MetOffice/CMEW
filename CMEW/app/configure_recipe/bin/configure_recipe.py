@@ -183,7 +183,7 @@ def create_user_config(
             "ESMVal": "BADC",
         },
         "max_parallel_tasks": max_parallel_tasks,
-        "output_dir": output_dir,
+        "output_dir": os.path.expandvars(output_dir),
         "projects": {
             "ESMVal": {
                 "cmor_table": {
