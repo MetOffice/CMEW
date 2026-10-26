@@ -17,13 +17,14 @@
 
 {%- if annual_datasets %}
     [[standardise_model_data_annual<annual_dataset>]]
+        execution time limit = PT3H
         [[[directives]]]
-            --mem = 8G
+            --mem = 64G
 {%- endif %}
 
 {%- if not TEST and RECIPE == "ocean_quadmap" %}
     [[run_recipe<recipe=ocean_quadmap>]]
-        execution time limit = PT10M
+        execution time limit = PT3H
         [[[directives]]]
             --mem = 8G
 {%- endif %}

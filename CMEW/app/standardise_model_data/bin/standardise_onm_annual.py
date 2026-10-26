@@ -40,6 +40,75 @@ logger = logging.getLogger(filename)
 # and the workflow-local GCModelDev_Oyr table.
 ANNUAL_VARIABLES = ["tos", "sos", "thetao", "so"]
 
+ORCA1_GRID = (
+    "Native eORCA1 tripolar primarily 1 deg with meridional "
+    "refinement down to 1/3 degree in the tropics; "
+    "360 x 330 longitude/latitude"
+)
+
+NATIVE_VARIABLE_SETS = {
+    "orca1": ("tos", "sos", "thetao", "so"),
+    "orca025": ("tos_con", "sos_abs", "thetao_con", "so_abs"),
+}
+
+NATIVE_GRID_CONFIG = {
+    "orca1": {
+        "grid": ORCA1_GRID,
+        "nominal_resolution": "100 km",
+        "halo_removal": "1:-1,1:-1",
+        "replacement_coordinate_files": None,
+    },
+    "orca025": {
+        "grid": (
+            "Native eORCA025 tripolar primarily 0.25 deg; "
+            "1440 x 1205 longitude/latitude"
+        ),
+        "nominal_resolution": "25 km",
+        "halo_removal": "1:,:",
+        # TODO: Move this site-specific coordinate file into workflow
+        # configuration once ORCA025 ancillary selection is generalised.
+        "replacement_coordinate_files": (
+            "/home/users/cdds/etc/horizontal_coordinates/"
+            "cice_eORCA025_coords.nc"
+        ),
+    },
+}
+
+
+def detect_native_variable_convention(file_path):
+    """Detect the supported native NEMO variable naming convention.
+
+    The established ORCA1 data use ``tos``, ``sos``, ``thetao`` and ``so``.
+    The eORCA025 data tested by CMEW use conservative-temperature and
+    absolute-salinity names: ``tos_con``, ``sos_abs``, ``thetao_con`` and
+    ``so_abs``.
+    """
+    result = subprocess.run(
+        ["ncdump", "-h", file_path],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    header = result.stdout
+
+    for convention, variable_names in NATIVE_VARIABLE_SETS.items():
+        if all(" {}(".format(name) in header for name in variable_names):
+            logger.info(
+                "Detected native NEMO variable convention %s in %s",
+                convention,
+                file_path,
+            )
+            return convention
+
+    raise ValueError(
+        "Could not identify a supported native NEMO variable convention "
+        "in {!r}; expected either {} or {}.".format(
+            file_path,
+            ", ".join(NATIVE_VARIABLE_SETS["orca1"]),
+            ", ".join(NATIVE_VARIABLE_SETS["orca025"]),
+        )
+    )
+
 
 def annual_variables_from_recipe(recipe_variables_file):
     """Return supported annual variable names required by a recipe.
@@ -132,7 +201,7 @@ mip = ESMVal
 mip_era = GCModelDev
 model_id = {model_id}
 model_type = AGCM AER
-nominal_resolution = 100 km
+nominal_resolution = {nominal_resolution}
 output_dir = {output_dir}
 sub_experiment_id = none
 variant_label = {variant_label}
@@ -159,7 +228,7 @@ suite_id = {suite_id}
 further_info_url = dummy_url
 
 [halo_removal]
-stream_onm = 1:-1,1:-1
+stream_onm = {halo_removal}
 
 [stream_onm_grid-T]
 GCModelDev_Oyr = {variables}
@@ -309,7 +378,7 @@ def write_mip_convert_cfg(cfg_path, **template_values):
     return contents
 
 
-def run_standalone_mip_convert(cfg_path, datestamp):
+def run_standalone_mip_convert(cfg_path, datestamp, native_convention):
     """
     Run standalone mip_convert against the generated cfg file.
 
@@ -322,7 +391,14 @@ def run_standalone_mip_convert(cfg_path, datestamp):
     datestamp : str
         The datestamp to pass to mip_convert's ``--datestamp`` option.
     """
-    logger.info("Running standalone mip_convert for the annual onm route")
+    logger.info(
+        "Running standalone mip_convert for the annual onm route "
+        "using native convention %s",
+        native_convention,
+    )
+    environment = os.environ.copy()
+    environment["CMEW_ONM_NATIVE_CONVENTION"] = native_convention
+
     subprocess.run(
         [
             "mip_convert",
@@ -339,6 +415,7 @@ def run_standalone_mip_convert(cfg_path, datestamp):
             "--relaxed_cmor",
         ],
         check=True,
+        env=environment,
     )
 
 
@@ -402,11 +479,7 @@ def parse_args(arguments):
     parser.add_argument("--institution-id", default="MOHC")
     parser.add_argument(
         "--grid",
-        default=(
-            "Native eORCA1 tripolar primarily 1 deg with meridional "
-            "refinement down to 1/3 degree in the tropics; "
-            "360 x 330 longitude/latitude"
-        ),
+        default=ORCA1_GRID,
     )
     parser.add_argument("--grid-label", default="gn")
     parser.add_argument(
@@ -579,6 +652,39 @@ def main(arguments=None):
             args.retrieval_dir,
         )
 
+        native_convention = detect_native_variable_convention(
+            retrieved_files[0]
+        )
+        grid_config = NATIVE_GRID_CONFIG[native_convention]
+
+        grid = args.grid
+        if native_convention != "orca1" and grid == ORCA1_GRID:
+            grid = grid_config["grid"]
+
+        year_replacement_coordinate_files = replacement_coordinate_files
+        convention_coordinate_files = grid_config[
+            "replacement_coordinate_files"
+        ]
+        if convention_coordinate_files:
+            year_replacement_coordinate_files = convention_coordinate_files
+
+        if not os.path.isfile(year_replacement_coordinate_files):
+            raise ValueError(
+                "Replacement coordinate file does not exist: {!r}".format(
+                    year_replacement_coordinate_files
+                )
+            )
+
+        logger.info(
+            "Using %s grid metadata: grid=%r, nominal_resolution=%s, "
+            "halo_removal=%s, replacement_coordinate_files=%s",
+            native_convention,
+            grid,
+            grid_config["nominal_resolution"],
+            grid_config["halo_removal"],
+            year_replacement_coordinate_files,
+        )
+
         for file_path in retrieved_files:
             logger.info("Repairing monthly time metadata in %s", file_path)
             repair_nemo_time_metadata.repair_file(file_path)
@@ -592,11 +698,12 @@ def main(arguments=None):
             mip_table_dir=args.mip_table_dir,
             calendar="gregorian",
             experiment_id=experiment_id,
-            grid=args.grid,
+            grid=grid,
             grid_label=args.grid_label,
             institution_id=args.institution_id,
             license=args.license,
             model_id=model_id,
+            nominal_resolution=grid_config["nominal_resolution"],
             output_dir=args.output_dir,
             variant_label=variant_label,
             ancil_files=ancil_files,
@@ -604,15 +711,20 @@ def main(arguments=None):
             hybrid_heights_files=hybrid_heights_files,
             plugin_location=args.plugin_location,
             model_output_dir=args.model_output_dir,
-            replacement_coordinate_files=replacement_coordinate_files,
+            replacement_coordinate_files=year_replacement_coordinate_files,
             run_bounds_start=run_bounds_start,
             run_bounds_end=run_bounds_end,
             sites_file=sites_file,
             suite_id=args.suite_id,
+            halo_removal=grid_config["halo_removal"],
             variables=" ".join(annual_variables),
         )
 
-        run_standalone_mip_convert(args.cfg_path, args.datestamp)
+        run_standalone_mip_convert(
+            args.cfg_path,
+            args.datestamp,
+            native_convention,
+        )
 
         for file_path in retrieved_files:
             logger.info("Removing staged monthly file %s", file_path)

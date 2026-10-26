@@ -54,8 +54,8 @@ def test_retrieve_monthly_files_builds_calendar_month_names(
 def test_run_standalone_mip_convert_uses_onm_stream(monkeypatch):
     commands = []
 
-    def fake_run(command, check):
-        commands.append(command)
+    def fake_run(command, check, env=None):
+        commands.append((command, env))
 
     monkeypatch.setattr(
         standardise_onm_annual.subprocess,
@@ -66,9 +66,11 @@ def test_run_standalone_mip_convert_uses_onm_stream(monkeypatch):
     standardise_onm_annual.run_standalone_mip_convert(
         "/tmp/test.cfg",
         "2026-10-15T1200Z",
+        "orca025",
     )
 
-    command = commands[0]
+    command, environment = commands[0]
+    assert environment["CMEW_ONM_NATIVE_CONVENTION"] == "orca025"
     assert "-s" in command
     assert command[command.index("-s") + 1] == "onm"
 
@@ -106,7 +108,8 @@ def test_main_processes_each_year_and_cleans_after_success(
         )
         events.append(("cfg", int(values["run_bounds_start"][:4])))
 
-    def fake_convert(cfg_path, datestamp):
+    def fake_convert(cfg_path, datestamp, native_convention):
+        assert native_convention == "orca1"
         year = int(cfg_bounds[-1][0][:4])
         events.append(("convert", year))
 
@@ -114,6 +117,11 @@ def test_main_processes_each_year_and_cleans_after_success(
         standardise_onm_annual,
         "retrieve_monthly_files",
         fake_retrieve,
+    )
+    monkeypatch.setattr(
+        standardise_onm_annual,
+        "detect_native_variable_convention",
+        lambda path: "orca1",
     )
     monkeypatch.setattr(
         standardise_onm_annual.repair_nemo_time_metadata,
@@ -139,17 +147,20 @@ def test_main_processes_each_year_and_cleans_after_success(
         "  variant_label: r1i1p1f1\n"
     )
 
+    coords = tmp_path / "coords.nc"
+    coords.write_text("coords")
+
     ancillaries = tmp_path / "ancillaries.json"
     ancillaries.write_text(
         """{
   "UKESM1-0-LL": {
     "ancil_files": "ancil",
     "hybrid_heights_files": "hybrid",
-    "replacement_coordinate_files": "coords",
+    "replacement_coordinate_files": "%s",
     "sites_file": "sites"
   }
 }
-"""
+""" % coords
     )
 
     variables = tmp_path / "variables.txt"
@@ -212,6 +223,11 @@ def test_main_keeps_staged_files_if_conversion_fails(tmp_path, monkeypatch):
         fake_retrieve,
     )
     monkeypatch.setattr(
+        standardise_onm_annual,
+        "detect_native_variable_convention",
+        lambda path: "orca1",
+    )
+    monkeypatch.setattr(
         standardise_onm_annual.repair_nemo_time_metadata,
         "repair_file",
         lambda path: None,
@@ -239,17 +255,20 @@ def test_main_keeps_staged_files_if_conversion_fails(tmp_path, monkeypatch):
         "  variant_label: r1i1p1f1\n"
     )
 
+    coords = tmp_path / "coords.nc"
+    coords.write_text("coords")
+
     ancillaries = tmp_path / "ancillaries.json"
     ancillaries.write_text(
         """{
   "UKESM1-0-LL": {
     "ancil_files": "ancil",
     "hybrid_heights_files": "hybrid",
-    "replacement_coordinate_files": "coords",
+    "replacement_coordinate_files": "%s",
     "sites_file": "sites"
   }
 }
-"""
+""" % coords
     )
 
     variables = tmp_path / "variables.txt"
@@ -286,3 +305,18 @@ def test_main_keeps_staged_files_if_conversion_fails(tmp_path, monkeypatch):
         )
 
     assert all(path.exists() for path in staged)
+
+
+def test_orca025_grid_configuration():
+    config = standardise_onm_annual.NATIVE_GRID_CONFIG["orca025"]
+
+    assert config["grid"] == (
+        "Native eORCA025 tripolar primarily 0.25 deg; "
+        "1440 x 1205 longitude/latitude"
+    )
+    assert config["nominal_resolution"] == "25 km"
+    assert config["halo_removal"] == "1:,:"
+    assert config["replacement_coordinate_files"] == (
+        "/home/users/cdds/etc/horizontal_coordinates/"
+        "cice_eORCA025_coords.nc"
+    )
