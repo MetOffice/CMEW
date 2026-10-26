@@ -44,7 +44,7 @@ An overview of the workflow
      Runs immediately after the successful completion of the ``install_env_file`` job.
      Temporarily, creates ESMValTool developer configuration file at ``share/etc`` directory in the installed workflow.
 
-``configure_for``
+``update_esmvaltool_recipe``
   :Description:
      Copies an updated version of the |ESMValTool| recipe
      into the Cylc workflow ``share/etc`` directory
@@ -85,7 +85,7 @@ An overview of the workflow
      The ``configure_standardise.sh`` script from the |Rose| app.
   :Details:
      Runs once for each recipe, immediately after the successful
-     completion of the ``configure_for`` job.
+     completion of the ``update_esmvaltool_recipe`` job.
      Generates |CDDS| request metadata for each model run (reference and evaluation):
      ``request_ref.json``, ``request_eval.json``.
      Generates a list of variables to standardise for each model run

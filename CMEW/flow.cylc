@@ -35,7 +35,7 @@
 {%- endif %}
 {%- if not SKIP_CDDS %}
             copy_datasets
-            => configure_for<recipe>
+            => update_esmvaltool_recipe<recipe>
             => configure_standardise<recipe,dataset>
             => standardise_model_data<dataset>
             => restructure_dirs
@@ -44,7 +44,7 @@
             => housekeeping
 {%- else %}
             copy_datasets
-            => configure_for<recipe>
+            => update_esmvaltool_recipe<recipe>
             => symlink_standardised_data
             => run_recipe<recipe>
             => housekeeping
@@ -121,10 +121,10 @@
             ROOTPATH_CMIP6 = {{ ROOTPATH_CMIP6 }}
             ROOTPATH_OBS4MIPS = {{ ROOTPATH_OBS4MIPS }}
 
-    [[configure_for<recipe>]]
+    [[update_esmvaltool_recipe<recipe>]]
         inherit = None, RECIPE, MODEL_RUNS
         [[[environment]]]
-            ROSE_TASK_APP = configure_for
+            ROSE_TASK_APP = update_esmvaltool_recipe
 
     [[configure_standardise<recipe,dataset>]]
         inherit = STANDARDISE, RECIPE, MODEL_RUNS, DATASET
