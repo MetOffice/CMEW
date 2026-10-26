@@ -1,5 +1,5 @@
 #!jinja2
-# (C) Crown Copyright 2022-2025, Met Office.
+# (C) Crown Copyright 2022-2026, Met Office.
 # The LICENSE.md file contains full licensing details.
 # metoffice.cylc
 [runtime]
@@ -9,11 +9,16 @@
 
     [[COMPUTE]]
         platform = spice
+        execution time limit = PT5M
         [[[directives]]]
             --wckey = CMEW
+            --mem = 1G
             --ntasks = {{ MAX_PARALLEL_TASKS }}
 
     [[run_recipe<recipe=radiation_budget>]]
+        execution time limit = PT2M
         [[[directives]]]
-            --time = 2
             --mem = 3G
+
+    [[standardise_model_data<dataset>]]
+        execution time limit = PT10M
