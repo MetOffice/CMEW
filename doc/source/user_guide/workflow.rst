@@ -20,7 +20,7 @@ An overview of the workflow
   :Details:
      Runs once at the start of the workflow.
 
-``copy_datasets``
+``centralise_evaluation_metadata``
   :Description:
      Reads the namelist files in the top level of the cylc workflow,
      then copies these details to YAML files

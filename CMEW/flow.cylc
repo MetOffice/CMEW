@@ -28,13 +28,13 @@
 {%- if USE_ESMVALTOOL_BRANCH %}
             install_package<package=cmewpy>
             => get_esmval_branch
-            => create_esmvaltool_config & copy_datasets
+            => create_esmvaltool_config & centralise_evaluation_metadata
 {%- else %}
             install_package<package=cmewpy>
-            => create_esmvaltool_config & copy_datasets
+            => create_esmvaltool_config & centralise_evaluation_metadata
 {%- endif %}
 {%- if not SKIP_CDDS %}
-            copy_datasets
+            centralise_evaluation_metadata
             => update_esmvaltool_recipe<recipe>
             => create_cdds_config<recipe,dataset>
             => standardise_model_data<dataset>
@@ -43,7 +43,7 @@
             => run_recipe<recipe>
             => housekeeping
 {%- else %}
-            copy_datasets
+            centralise_evaluation_metadata
             => update_esmvaltool_recipe<recipe>
             => symlink_standardised_data
             => run_recipe<recipe>
@@ -149,10 +149,10 @@
         [[[environment]]]
             ROSE_TASK_APP = run_recipe
 
-    [[copy_datasets]]
+    [[centralise_evaluation_metadata]]
         inherit = MODEL_RUNS
         [[[environment]]]
-            ROSE_TASK_APP = copy_datasets
+            ROSE_TASK_APP = centralise_evaluation_metadata
 
     [[get_esmval_branch]]
         [[[environment]]]

@@ -5,7 +5,7 @@ name = "cmewpy"
 dynamic = ["version"]
 
 [project.scripts]
-add_datasets_to_share = "cmewpy.copy_datasets.command_line:main_for_add_datasets_to_share"
+add_datasets_to_share = "cmewpy.centralise_evaluation_metadata.command_line:main_for_add_datasets_to_share"
 create_esmvaltool_config = "cmewpy.create_esmvaltool_config.command_line:main_for_create_esmvaltool_config"
 create_request_file = "cmewpy.create_cdds_config.command_line:main_for_create_request_file"
 create_variables_file = "cmewpy.create_cdds_config.command_line:main_for_create_variables_file"
