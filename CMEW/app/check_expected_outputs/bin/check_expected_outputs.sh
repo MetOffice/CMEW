@@ -1,5 +1,5 @@
 #!/bin/bash
-# (C) Crown Copyright 2022-2025, Met Office.
+# (C) Crown Copyright 2022-2026, Met Office.
 # The LICENSE.md file contains full licensing details.
 #
 # USAGE check_expected_outputs.sh
