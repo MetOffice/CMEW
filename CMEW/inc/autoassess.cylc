@@ -74,7 +74,7 @@
             AREA = $CYLC_TASK_PARAM_autoassess_area
 
     [[run_evaluation_tool<evaluation_tool=autoassess><autoassess_area>]]
-        inherit = None, AUTOASSESS, SITE_AA_RUN_AREA
+        inherit = AUTOASSESS, SITE_AA_RUN_AREA
         [[[environment]]]
             ROSE_TASK_APP = run_evaluation_tool
             ROSE_APP_OPT_CONF_KEYS = autoassess ($CYLC_TASK_PARAM_autoassess_area)
