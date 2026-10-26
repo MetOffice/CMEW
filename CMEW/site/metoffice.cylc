@@ -4,16 +4,14 @@
 # metoffice.cylc
 [runtime]
     [[root]]
-        [[[environment]]]
-            INSTITUTION_ID="MOHC"
-
-    [[COMPUTE]]
         platform = spice
         execution time limit = PT5M
         [[[directives]]]
             --wckey = CMEW
             --mem = 1G
             --ntasks = {{ MAX_PARALLEL_TASKS }}
+        [[[environment]]]
+            INSTITUTION_ID="MOHC"
 
     [[run_recipe<recipe=radiation_budget>]]
         execution time limit = PT2M
