@@ -1,5 +1,21 @@
-# (C) Crown Copyright 2024-2025, Met Office.
+# (C) Crown Copyright 2024-2026, Met Office.
 # The LICENSE.md file contains full licensing details.
+[project]
+name = "cmewpy"
+dynamic = ["version"]
+
+[project.scripts]
+add_datasets_to_share = "cmewpy.copy_datasets.command_line:main_for_add_datasets_to_share"
+configure_recipe = "cmewpy.configure_recipe.command_line:main_for_configure_recipe"
+create_request_file = "cmewpy.configure_standardise.command_line:main_for_create_request_file"
+create_variables_file = "cmewpy.configure_standardise.command_line:main_for_create_variables_file"
+get_variables_from_recipe = "cmewpy.configure_for.command_line:main_for_get_variables_from_recipe"
+update_recipe_file = "cmewpy.configure_for.command_line:main_for_update_recipe_file"
+
+[build-system]
+requires = ["setuptools >= 80.0.0"]
+build-backend = "setuptools.build_meta"
+
 # Configure black.
 [tool.black]
 line-length = 79
@@ -18,6 +34,8 @@ exclude = '''
 
 # Configure pytest.
 [tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
 filterwarnings = [
     # Ignore deprecation warnings from webob, esmpy and pkg_resources:
     "ignore:'cgi' is deprecated and slated for removal in Python 3.13:DeprecationWarning",

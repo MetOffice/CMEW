@@ -1,7 +1,7 @@
 # (C) Crown Copyright 2026, Met Office.
 # The LICENSE.md file contains full licensing details.
 import argparse
-from add_datasets_to_share import add_datasets_to_share
+from cmewpy.copy_datasets.add_datasets_to_share import add_datasets_to_share
 
 
 def parse_args_for_add_datasets_to_share(arguments):

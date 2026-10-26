@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # (C) Crown Copyright 2026, Met Office.
 # The LICENSE.md file contains full licensing details.
+import pytest
+
+
+@pytest.fixture
 def datasets():
     return [
         {
@@ -54,6 +58,7 @@ def datasets():
     ]
 
 
+@pytest.fixture
 def model_datasets():
     return {
         "u-az513": {
@@ -102,6 +107,7 @@ def model_datasets():
     }
 
 
+@pytest.fixture
 def cmip6_datasets():
     return {
         "ACCESS-CM2": {
@@ -118,10 +124,11 @@ def cmip6_datasets():
     }
 
 
-def recipe_with_datasets():
+@pytest.fixture
+def recipe_with_datasets(datasets):
     return {
         "documentation": {"key1": "value1", "key2": "value2"},
-        "datasets": datasets(),
+        "datasets": datasets,
         "preprocessors": {"key3": "value3"},
         "diagnostics": {
             "my_diagnostic_name": {
@@ -133,6 +140,7 @@ def recipe_with_datasets():
     }
 
 
+@pytest.fixture
 def recipe_without_datasets():
     return {
         "documentation": {"key1": "value1", "key2": "value2"},
@@ -148,10 +156,11 @@ def recipe_without_datasets():
     }
 
 
-def recipe_without_additional_datasets():
+@pytest.fixture
+def recipe_without_additional_datasets(datasets):
     return {
         "documentation": {"key1": "value1", "key2": "value2"},
-        "datasets": datasets(),
+        "datasets": datasets,
         "preprocessors": {"key3": "value3"},
         "diagnostics": {
             "my_diagnostic_name": {

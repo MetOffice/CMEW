@@ -2,7 +2,7 @@
 # The LICENSE.md file contains full licensing details.
 import argparse
 
-from configure_recipe import configure_recipe
+from cmewpy.configure_recipe.configure_recipe import configure_recipe
 
 
 def parse_args_for_configure_recipe(arguments):
