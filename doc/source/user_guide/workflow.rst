@@ -208,7 +208,7 @@ The |AutoAssess| assessments use the following steps:
   :Runs on:
      Localhost
   :Executes:
-     The |AutoAssess| ``aa_create_nac_plots`` script from the ``aa_nac_plot`` |Rose| app.
+     The |AutoAssess| ``aa_create_nac_plots`` script from the ``create_nac_plot`` |Rose| app.
      There is an optional configuration for the Validation Note that effectively skips
      this task as no NAC plots need to be produced.
   :Details:
