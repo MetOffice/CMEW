@@ -13,6 +13,7 @@
 
 [task parameters]
     package = autoassess, cmewpy
+    evaluation_tool = autoassess, esmvaltool
     dataset = {{ datasets }}
     recipe = radiation_budget
 {%- if AUTOASSESS %}
@@ -40,17 +41,17 @@
             => standardise_model_data<dataset>
             => restructure_dirs
             configure_recipe & restructure_dirs
-            => run_evaluation_tool<recipe>
+            => run_evaluation_tool<evaluation_tool=esmvaltool><recipe>
             => housekeeping
 {%- else %}
             copy_datasets
             => configure_for<recipe>
             => symlink_standardised_data
-            => run_evaluation_tool<recipe>
+            => run_evaluation_tool<evaluation_tool=esmvaltool><recipe>
             => housekeeping
 {%- endif %}
 {%- if TEST %}
-            run_evaluation_tool<recipe> => compare<recipe>
+            run_evaluation_tool<evaluation_tool=esmvaltool><recipe> => compare<recipe>
 {%- endif %}
         """
 
@@ -144,7 +145,7 @@
         [[[environment]]]
             SITE = {{ SITE }}
 
-    [[run_evaluation_tool<recipe>]]
+    [[run_evaluation_tool<evaluation_tool=esmvaltool><recipe>]]
         inherit = None, COMPUTE, RECIPE
         [[[environment]]]
             ROSE_TASK_APP = run_evaluation_tool
