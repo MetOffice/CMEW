@@ -25,7 +25,7 @@
             => html_page<autoassess_area>
             => html_page_overview
 {%- if TEST %}
-            html_page<autoassess_area> => compare<autoassess_area>
+            html_page<autoassess_area> => check_expected_outputs<autoassess_area>
 {%- endif %}
         """
 

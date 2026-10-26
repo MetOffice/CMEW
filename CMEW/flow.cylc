@@ -50,7 +50,7 @@
             => housekeeping
 {%- endif %}
 {%- if TEST %}
-            run_recipe<recipe> => compare<recipe>
+            run_recipe<recipe> => check_expected_outputs<recipe>
 {%- endif %}
         """
 
