@@ -5,9 +5,9 @@ Climate Model Monitor proof of concept
 
 This branch is an experimental port of the Climate Model Monitor (CMM),
 combining the CMEW workflow and CDDS data standardisation with ESMValTool
-monitoring diagnostics. The selected recipe, ``recipe_cmm``, was developed
-during this project using ESMValTool's ``recipe_monitor`` as a starting
-point.
+monitoring diagnostics. The selected recipe, ``recipe_mo_model_monitor``,
+was developed during this project using ESMValTool's ``recipe_monitor`` as
+a starting point.
 
 Project recipe
 --------------
@@ -20,10 +20,11 @@ for 3150-3159 against CMIP6 reference data. Its diagnostics include:
 * Arctic and Antarctic climatology maps and mixed-layer-depth summaries;
 * monthly sea-ice-concentration climatologies.
 
-Branch implementation
----------------------
+Implementation
+--------------
 
-The Cylc graph selects ``recipe_cmm`` and runs the following main stages:
+The Cylc graph selects ``recipe_mo_model_monitor`` and runs the following main
+stages:
 
 * retrieve the recipe from the configured ESMValTool installation and add the
   model-run and CMIP6 dataset definitions;
