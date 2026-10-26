@@ -128,6 +128,20 @@ def remove_extract_time(recipe):
     return recipe
 
 
+def enable_ocean_quadmap_regrid_cache(recipe):
+    """Enable reuse of regridding weights in ocean quadmap preprocessors."""
+    for preprocessor_name in ("prep_quad_map", "prep_quad_map_depth"):
+        preprocessor = recipe.get("preprocessors", {}).get(preprocessor_name)
+        if preprocessor is None:
+            continue
+
+        regrid = preprocessor.get("regrid")
+        if regrid is not None:
+            regrid["cache_weights"] = True
+
+    return recipe
+
+
 def update_ocean_quadmap_model_selectors(recipe, model_runs):
     """
     Update ocean quadmap control and experiment model selectors.
@@ -336,6 +350,9 @@ def update_recipe_file(
         # The upstream recipe fixes the analysis period to 2000-2003,
         # which is incompatible with CMEW's user-configured model period.
         recipe = remove_extract_time(recipe)
+
+        # Reuse expensive regridding weights for datasets on the same grid.
+        recipe = enable_ocean_quadmap_regrid_cache(recipe)
 
         # Replace the upstream hard-coded model selectors with selectors
         # derived from the model runs configured for this CMEW workflow.

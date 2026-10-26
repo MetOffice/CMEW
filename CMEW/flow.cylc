@@ -3,6 +3,7 @@
 # The LICENSE.md file contains full licensing details.
 # flow.cylc
 {% set SITE = SITE | default("") %}
+{% set PYTHONPATH_OVERRIDE = PYTHONPATH_OVERRIDE | default("") %}
 {{ assert(
     SITE != "",
     "SITE must be set. Specify a site using '-O <site>', e.g. 'cylc vip -O metoffice'."
@@ -202,6 +203,9 @@
         inherit = None, COMPUTE, RECIPE
         [[[environment]]]
             ROSE_TASK_APP = run_recipe
+{% if PYTHONPATH_OVERRIDE %}
+            PYTHONPATH_PREPEND = {{ PYTHONPATH_OVERRIDE }}:${ESMVALTOOL_DIR}
+{% endif %}
 
     [[copy_datasets]]
         inherit = MODEL_RUNS

@@ -4,6 +4,7 @@
 Unit tests for 'update_recipe_file.py'.
 """
 from update_recipe_file import (
+    enable_ocean_quadmap_regrid_cache,
     remove_datasets_contents,
     remove_additional_datasets,
     remove_extract_time,
@@ -340,3 +341,36 @@ def test_ocean_quadmap_model_selectors_keep_variable_level_mip():
         ]
         == "Omon"
     )
+
+
+def test_enable_ocean_quadmap_regrid_cache():
+    recipe = {
+        "preprocessors": {
+            "prep_quad_map": {
+                "climate_statistics": {"operator": "mean"},
+                "regrid": {
+                    "scheme": "nearest",
+                    "target_grid": "WOA",
+                },
+            },
+            "prep_quad_map_depth": {
+                "extract_levels": {
+                    "levels": [100.0, 200.0],
+                    "scheme": "linear",
+                },
+                "regrid": {
+                    "scheme": "nearest",
+                    "target_grid": "WOA",
+                },
+            },
+        }
+    }
+
+    actual = enable_ocean_quadmap_regrid_cache(recipe)
+
+    assert actual["preprocessors"]["prep_quad_map"]["regrid"][
+        "cache_weights"
+    ] is True
+    assert actual["preprocessors"]["prep_quad_map_depth"]["regrid"][
+        "cache_weights"
+    ] is True
