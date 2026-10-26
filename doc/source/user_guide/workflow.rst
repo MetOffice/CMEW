@@ -95,7 +95,7 @@ An overview of the workflow
      multiple |CDDS| standardisation workflows
      within the same |CMEW| cycle.
 
-``standardise_model_data``
+``run_cdds``
   :Description:
      Launches the CDDS workflow and converts both model runs into |CMIP|-compliant
      datasets suitable for |ESMValTool| evaluation.
@@ -114,13 +114,13 @@ An overview of the workflow
 ``housekeeping``
   :Description:
      Removes any intermediate files from the cylc run directory that were
-     created by the |CDDS| workflow in ``standardise_model_data``
+     created by the |CDDS| workflow in ``run_cdds``
   :Runs on:
      Localhost
   :Executes:
      The |rose_prune|_ application
   :Details:
-     Runs after the successful completion of the ``standardise_model_data`` job
+     Runs after the successful completion of the ``run_cdds`` job
 
 ``run_recipe``
   :Description:
@@ -132,7 +132,7 @@ An overview of the workflow
      The |ESMValTool| command line script
   :Details:
      Runs once for each recipe,
-     after the successful completion of the ``standardise_model_data``
+     after the successful completion of the ``run_cdds``
      and the ``create_esmvaltool_config`` jobs.
   :Families:
      ``COMPUTE``, ``RECIPE``
