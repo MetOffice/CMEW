@@ -72,17 +72,17 @@ An overview of the workflow
   :Families:
      ``RECIPE``
 
-``configure_standardise``
+``create_cdds_config``
   :Description:
      Creates the |CDDS| request metadata
      and variables list required to standardise two model development runs,
      then prepares the |CDDS| directory structure.
      If previously saved raw data is being used,
-     the raw data will be symlinked to the this task's work directory.
+     the raw data will be symlinked to this task's work directory.
   :Runs on:
      Localhost
   :Executes:
-     The ``configure_standardise.sh`` script from the |Rose| app.
+     The ``create_cdds_config.sh`` script from the |Rose| app.
   :Details:
      Runs once for each recipe, immediately after the successful
      completion of the ``update_esmvaltool_recipe`` job.
@@ -106,7 +106,7 @@ An overview of the workflow
      The ``cdds_convert`` command and the ``restructure_dirs.sh`` script
      from the |Rose| app.
   :Details:
-     Runs after the successful completion of the ``configure_standardise`` job.
+     Runs after the successful completion of the ``create_cdds_config`` job.
      Executes |CDDS| standardisation for both the reference and evaluation model run
      to produces |CMIP|-compliant output for each.
      Uses ``restructure_dirs.sh`` to move standardised data into a BADC DRS structure.

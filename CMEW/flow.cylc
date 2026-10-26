@@ -36,7 +36,7 @@
 {%- if not SKIP_CDDS %}
             copy_datasets
             => update_esmvaltool_recipe<recipe>
-            => configure_standardise<recipe,dataset>
+            => create_cdds_config<recipe,dataset>
             => standardise_model_data<dataset>
             => restructure_dirs
             create_esmvaltool_config & restructure_dirs
@@ -126,10 +126,10 @@
         [[[environment]]]
             ROSE_TASK_APP = update_esmvaltool_recipe
 
-    [[configure_standardise<recipe,dataset>]]
+    [[create_cdds_config<recipe,dataset>]]
         inherit = STANDARDISE, RECIPE, MODEL_RUNS, DATASET
         [[[environment]]]
-            ROSE_TASK_APP = configure_standardise
+            ROSE_TASK_APP = create_cdds_config
             START_YEAR = {{ START_YEAR }}
             NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
             MIP_TABLE_DIR = {{ MIP_TABLE_DIR }}
