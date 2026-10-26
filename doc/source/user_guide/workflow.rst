@@ -169,7 +169,7 @@ The |AutoAssess| assessments use the following steps:
   :Runs on:
      Localhost
   :Executes:
-     The |AutoAssess| ``aa_retriever`` script from the ``aa_retrieve_data`` |Rose| app.
+     The |AutoAssess| ``aa_retriever`` script from the ``extract_data`` |Rose| app.
      There is an optional configuration for retrieving data for the Validation Note that
      uses the ``aa_mksuper`` script.
   :Details:
