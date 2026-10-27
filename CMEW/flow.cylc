@@ -148,6 +148,7 @@
         inherit = RECIPE
         [[[environment]]]
             ROSE_TASK_APP = run_evaluation_tool
+            ROSE_APP_OPT_CONF_KEYS = esmvaltool
 
     [[copy_datasets]]
         inherit = MODEL_RUNS
