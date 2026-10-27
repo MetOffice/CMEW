@@ -2,8 +2,7 @@
 set -euxo pipefail
 
 # Wrapper to fetch, locate, move and update the ESMValTool recipe for the configure_for
-# Rose app. Uses environment variables provided by Cylc/Rose (e.g. CYLC_TASK_PARAM_recipe,
-# RECIPE_PATH, DATASETS_LIST_DIR, RECIPE_VARIABLES_PATH).
+# Rose app.
 
 ESMVALTOOL_RECIPE_PATH=$(cmew-esmvaltool-env esmvaltool recipes list | grep "$CYLC_TASK_PARAM_recipe.yml" | tail -n 1 | sed "s/^ • //" | sed 's/:.*$//') || true
 cmew-esmvaltool-env esmvaltool recipes get "$ESMVALTOOL_RECIPE_PATH"
