@@ -59,7 +59,6 @@
     [[root]]
         script = rose task-run
         env-script = "eval $(rose task-env)"
-        platform = localhost
         [[[environment]]]
             ESMVALTOOL_DIR = ${CYLC_WORKFLOW_RUN_DIR}/lib/python/ESMValTool
             ESMVALTOOL_MODULE_NAME = {{ ESMVALTOOL_MODULE_NAME }}
@@ -123,7 +122,7 @@
             ROOTPATH_OBS4MIPS = {{ ROOTPATH_OBS4MIPS }}
 
     [[configure_for<recipe>]]
-        inherit = None, RECIPE, MODEL_RUNS
+        inherit = RECIPE, MODEL_RUNS
         [[[environment]]]
             ROSE_TASK_APP = configure_for
 
@@ -146,7 +145,7 @@
             SITE = {{ SITE }}
 
     [[run_evaluation_tool<evaluation_tool=esmvaltool><recipe>]]
-        inherit = None, COMPUTE, RECIPE
+        inherit = RECIPE
         [[[environment]]]
             ROSE_TASK_APP = run_evaluation_tool
 
