@@ -12,46 +12,46 @@
     UTC mode = True
 
 [task parameters]
+    package = autoassess, cmewpy
+    evaluation_tool = autoassess, esmvaltool
     dataset = {{ datasets }}
     recipe = radiation_budget
-{%- if not UNITTEST and AUTOASSESS %}
-    autoassess_area = aerosols, africa, australia, enso, globaltrop, hydrocycle, land_surface, mjo, monsoon, stratosphere
+{%- if AUTOASSESS %}
+    autoassess_area = valnote, aerosols, africa, australia, enso, globaltrop, \
+                        hydrocycle, land_surface, mjo, monsoon, stratosphere
 {%- endif %}
 
 [scheduling]
     [[graph]]
         R1 = """
-{%- if UNITTEST or TEST %}
-            install_env_file => unittest
-{%- endif %}
-{%- if USE_ESMVALTOOL_BRANCH %}
-            install_env_file => get_esmval_branch => configure_recipe & copy_datasets
-{%- endif %}
-{%- if not UNITTEST and not SKIP_CDDS %}
-            install_env_file => configure_recipe & copy_datasets
-            copy_datasets => configure_for<recipe>
-            configure_for<recipe> => configure_standardise<recipe,dataset>
-                => standardise_model_data<dataset> => restructure_dirs
-            configure_recipe & restructure_dirs => run_recipe<recipe>
-                => html_page & housekeeping
-
-    {%- if TEST %}
-            run_recipe<recipe> => compare<recipe>
-        {%- if AUTOASSESS %}
-            html_page<autoassess_area> => compare<autoassess_area>
-        {%- endif %}
-    {%- endif %}
-{%- endif %}
-{%- if SKIP_CDDS %}
-    {%- if USE_ESMVALTOOL_BRANCH %}
-            install_env_file => get_esmval_branch => configure_recipe & copy_datasets
-    {%- endif %}
             install_env_file
+            => install_package<package=cmewpy>
+{%- if USE_ESMVALTOOL_BRANCH %}
+            install_package<package=cmewpy>
+            => get_esmval_branch
             => configure_recipe & copy_datasets
+{%- else %}
+            install_package<package=cmewpy>
+            => configure_recipe & copy_datasets
+{%- endif %}
+{%- if not SKIP_CDDS %}
+            copy_datasets
+            => configure_for<recipe>
+            => configure_standardise<recipe,dataset>
+            => standardise_model_data<dataset>
+            => restructure_dirs
+            configure_recipe & restructure_dirs
+            => run_evaluation_tool<evaluation_tool=esmvaltool><recipe>
+            => html_page & housekeeping
+{%- else %}
+            copy_datasets
             => configure_for<recipe>
             => symlink_standardised_data
-            => run_recipe<recipe>
+            => run_evaluation_tool<evaluation_tool=esmvaltool><recipe>
             => html_page & housekeeping
+{%- endif %}
+{%- if TEST %}
+            run_evaluation_tool<evaluation_tool=esmvaltool><recipe> => compare<recipe>
 {%- endif %}
         """
 
@@ -59,7 +59,6 @@
     [[root]]
         script = rose task-run
         env-script = "eval $(rose task-env)"
-        platform = localhost
         [[[environment]]]
             ESMVALTOOL_DIR = ${CYLC_WORKFLOW_RUN_DIR}/lib/python/ESMValTool
             ESMVALTOOL_MODULE_NAME = {{ ESMVALTOOL_MODULE_NAME }}
@@ -72,6 +71,8 @@
             ROOT_PROC_DIR = ${SHARE_DATA_CDDS}/proc
             ROOT_DATA_DIR = ${SHARE_DATA_CDDS}/cdds_data
             ROOT_RESTRUCTURED_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/work
+            START_YEAR = {{ START_YEAR }}
+            NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
 
     [[RECIPE]]
         [[[environment]]]
@@ -100,12 +101,15 @@
         [[[environment]]]
             # Directory containing dataset lists as YAML files
             DATASETS_LIST_DIR = "${CYLC_WORKFLOW_SHARE_DIR}/dataset_lists"
-            START_YEAR = {{ START_YEAR }}
-            NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
 
     [[install_env_file]]
         [[[environment]]]
             SITE = {{ SITE }}
+
+    [[install_package<package>]]
+        [[[environment]]]
+            ROSE_TASK_APP = install_package
+            ROSE_APP_OPT_CONF_KEYS = ($CYLC_TASK_PARAM_package)
 
     [[configure_recipe]]
         [[[environment]]]
@@ -118,7 +122,7 @@
             ROOTPATH_OBS4MIPS = {{ ROOTPATH_OBS4MIPS }}
 
     [[configure_for<recipe>]]
-        inherit = None, RECIPE, MODEL_RUNS
+        inherit = RECIPE, MODEL_RUNS
         [[[environment]]]
             ROSE_TASK_APP = configure_for
 
@@ -140,8 +144,8 @@
         [[[environment]]]
             SITE = {{ SITE }}
 
-    [[run_recipe<recipe>]]
-        inherit = None, COMPUTE, RECIPE
+    [[run_evaluation_tool<evaluation_tool=esmvaltool><recipe>]]
+        inherit = RECIPE
         post-script = """
             # Symbolic link to output to deal with add date and time
             # - Is it better to just rename the directory?
@@ -149,7 +153,8 @@
                 $OUTPUT_DIR/recipe_${CYLC_TASK_PARAM_recipe}
         """
         [[[environment]]]
-            ROSE_TASK_APP = run_recipe
+            ROSE_TASK_APP = run_evaluation_tool
+            ROSE_APP_OPT_CONF_KEYS = esmvaltool
 
     [[copy_datasets]]
         inherit = MODEL_RUNS
@@ -177,14 +182,11 @@
     [[housekeeping]]
 
 {% include "site/" ~ SITE ~ ".cylc" %}
-{%- if TEST or UNITTEST %}
-    {% include "inc/unittest.cylc" %}
-    {%- if TEST %}
-        {% include "inc/test.cylc" %}
-    {%- endif %}
+{%- if TEST  %}
+    {% include "inc/test.cylc" %}
 {%- endif %}
 
-{%- if not UNITTEST and AUTOASSESS %}
+{%- if AUTOASSESS %}
     {% include "site/" ~ SITE ~ "_autoassess.cylc" %}
     {% include "inc/autoassess.cylc" %}
 {%- endif %}
