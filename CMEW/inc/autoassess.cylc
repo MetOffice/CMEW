@@ -18,10 +18,10 @@
         R1 = """
             install_env_file
             => install_package<package=autoassess>
-            => retrieve_data<autoassess_area><aa_dataset>
+            => extract_data<autoassess_area><aa_dataset>
             => index_data<autoassess_area><aa_dataset>
             => run_area<autoassess_area>
-            => nac_plot<autoassess_area>
+            => create_nac_plot<autoassess_area>
             => html_page<autoassess_area>
             => html_page_overview
 {%- if TEST %}
@@ -33,7 +33,7 @@
         # Don't want to be hammering MASS!
         [[[mass_retrieval]]]
             limit = 4
-            members = SITE_AA_RETRIEVAL
+            members = SITE_EXTRACT_DATA
 
 
 [runtime]
@@ -57,8 +57,8 @@
     [[install_package<package=autoassess>]]
         inherit = AUTOASSESS, SITE_AA_INSTALL
 
-    [[retrieve_data<autoassess_area><aa_dataset>]]
-        inherit = AUTOASSESS, SITE_AA_RETRIEVAL
+    [[extract_data<autoassess_area><aa_dataset>]]
+        inherit = AUTOASSESS, SITE_EXTRACT_DATA
         [[[environment]]]
             ROSE_TASK_APP = extract_data
             ROSE_APP_OPT_CONF_KEYS = ($CYLC_TASK_PARAM_autoassess_area)
@@ -80,8 +80,8 @@
             ROSE_APP_OPT_CONF_KEYS = ($CYLC_TASK_PARAM_autoassess_area)
             AREA = $CYLC_TASK_PARAM_autoassess_area
 
-    [[nac_plot<autoassess_area>]]
-        inherit = AUTOASSESS, SITE_AA_NAC_PLOT
+    [[create_nac_plot<autoassess_area>]]
+        inherit = AUTOASSESS, SITE_CREATE_NAC_PLOT
         [[[environment]]]
             ROSE_TASK_APP = create_nac_plot
             ROSE_APP_OPT_CONF_KEYS = ($CYLC_TASK_PARAM_autoassess_area)
