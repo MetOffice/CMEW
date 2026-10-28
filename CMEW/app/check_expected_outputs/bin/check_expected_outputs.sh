@@ -5,18 +5,17 @@
 # USAGE check_expected_outputs.sh
 #
 # ENVIRONMENT
-#   OUTPUT_DIR    The full path to the output directory
-#                 for the 'run_recipe' task
+#   OUTPUT_DIR    The full path to the directory
+#                 containing the output files produced by the metric
 #   METRIC_DIR    The name of the directory in OUTPUT_DIR
 #                 containing the METRIC_FILES
-#   METRIC_FILES  The files expected to be produced
-#                 by the 'run_recipe' task for the metric
+#   METRIC_FILES  The files expected to be produced by the metric
 
 # Send the output from 'set -x' to 'stdout' rather than 'stderr'.
 BASH_XTRACEFD=1
 set -eux
 
-# Ensure the files produced by the 'run_recipe' task for the metric
+# Ensure the output files produced by the metric
 # match the expected files.
 for metric_file in ${METRIC_FILES}
     do
