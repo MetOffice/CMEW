@@ -21,7 +21,7 @@
             => extract_data<autoassess_area><aa_dataset>
             => index_data<autoassess_area><aa_dataset>
             => run_evaluation_tool<evaluation_tool=autoassess><autoassess_area>
-            => nac_plot<autoassess_area>
+            => create_nac_plot<autoassess_area>
             => html_page<autoassess_area>
             => html_page_overview
 {%- if TEST %}
