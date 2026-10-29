@@ -24,7 +24,7 @@
     "valnote": "autoassess"} %}
 {# Create a list of recipes for each tool based on what has been selected #}
 {% set split_recipes = {"autoassess": [], "esmvaltool": []} %}
-{% for recipe in RECIPES.split(",") %}
+{% for recipe in RECIPES %}
     {% set tool = SOURCE_RECIPES[recipe] %}
     {% do split_recipes[tool].append(recipe) %}
 {% endfor %}
