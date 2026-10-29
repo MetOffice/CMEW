@@ -197,4 +197,4 @@
 {%- if AUTOASSESS %}
     {% include "site/" ~ SITE ~ "_autoassess.cylc" %}
     {% include "inc/autoassess.cylc" %}
-{% endif %}
+{%- endif %}
