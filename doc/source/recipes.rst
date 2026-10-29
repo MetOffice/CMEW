@@ -18,6 +18,7 @@ Implemented in |AutoAssess|:
 .. toctree::
    :maxdepth: 1
 
+   areas/valnote/valnote.rst
    areas/aerosols/aerosols.rst
    areas/africa/africa.rst
    areas/australia/australia.rst
