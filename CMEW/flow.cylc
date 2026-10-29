@@ -22,22 +22,24 @@
     "radiation_budget": "esmvaltool",
     "stratosphere": "autoassess",
 } %}
+{# Create a list of recipes for each tool based on what has been selected #}
+{% set split_recipes = {"autoassess": [], "esmvaltool": []} %}
+{% for recipe in RECIPES.split(",") %}
+    {% set tool = SOURCE_RECIPES[recipe] %}
+    {% do split_recipes[tool].append(recipe) %}
+{% endfor %}
+{# Create helper boolean to indicate if an autoassess area has been selected #}
+{% set AUTOASSESS = split_recipes["autoassess"] | length > 0 %}
 
-{# List selected recipes using ESMValTool or AutoAssess #}
-{% from "utility" import select_recipes %}
-{% set esmvaltool_recipes = select_recipes(RECIPES, SOURCE_RECIPES, "esmvaltool") %}
-{% set autoassess_recipes = select_recipes(RECIPES, SOURCE_RECIPES, "autoassess") %}
-{# Create helper boolean to indicate an autoassess area has been selected #}
-{% set AUTOASSESS = autoassess_recipes | length > 0 %}
 
 [scheduler]
     UTC mode = True
 
 [task parameters]
     dataset = {{ datasets }}
-    recipe = {{ esmvaltool_recipes }}
+    recipe = {{ split_recipes["esmvaltool"] | join(",") }}
     {% if not UNITTEST and AUTOASSESS %}
-    autoassess_area = {{ autoassess_recipes }}
+    autoassess_area = {{ split_recipes["autoassess"] | join(",") }}
     {% endif %}
 
 [scheduling]
@@ -88,7 +90,7 @@
         env-script = "eval $(rose task-env)"
         platform = localhost
         [[[environment]]]
-            ESMVALTOOL_DIR=${CYLC_WORKFLOW_RUN_DIR}/lib/python/ESMValTool
+            ESMVALTOOL_DIR = ${CYLC_WORKFLOW_RUN_DIR}/lib/python/ESMValTool
             ESMVALTOOL_MODULE_NAME = {{ ESMVALTOOL_MODULE_NAME }}
             ESMVALTOOL_CONFIG_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/etc/esmvaltool_config
             USER_CONFIG_PATH = ${ESMVALTOOL_CONFIG_DIR}/config-user.yml
