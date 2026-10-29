@@ -2,7 +2,7 @@
 # (C) Crown Copyright 2022-2026, Met Office.
 # The LICENSE.md file contains full licensing details.
 #
-# USAGE compare.sh
+# USAGE check_expected_outputs.sh
 #
 # ENVIRONMENT
 #   OUTPUT_DIR    The full path to the directory

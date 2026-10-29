@@ -160,7 +160,7 @@ def write_yaml(file_path, contents):
         )
 
 
-def configure_recipe(
+def create_esmvaltool_config(
     site_config_defaults_filepath,
     user_config_defaults_filepath,
     site_local_data_key,

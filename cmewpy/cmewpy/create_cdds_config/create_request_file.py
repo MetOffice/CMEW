@@ -9,7 +9,7 @@ import os
 import sys
 import yaml
 import logging
-from cmewpy.configure_standardise.config_configure_standardise import (
+from cmewpy.create_cdds_config.config_create_cdds_config import (
     request_defaults,
 )
 
