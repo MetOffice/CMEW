@@ -21,8 +21,7 @@
     "monsoon": "autoassess",
     "radiation_budget": "esmvaltool",
     "stratosphere": "autoassess",
-    "valnote": "autoassess",
-} %}
+    "valnote": "autoassess"} %}
 {# Create a list of recipes for each tool based on what has been selected #}
 {% set split_recipes = {"autoassess": [], "esmvaltool": []} %}
 {% for recipe in RECIPES.split(",") %}
