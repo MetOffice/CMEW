@@ -18,7 +18,7 @@ An overview of the workflow
   :Details:
      Runs once at the start of the workflow.
 
-``copy_datasets``
+``centralise_evaluation_metadata``
   :Description:
      Reads the namelist files in the top level of the cylc workflow,
      then copies these details to YAML files
@@ -28,17 +28,17 @@ An overview of the workflow
   :Details:
      Runs once.
 
-``configure_recipe``
+``create_esmvaltool_config``
   :Description:
      Creates and modifies the |ESMValTool| user and developer configuration files,
      and writes them to the cylc workflow ``share/etc`` directory.
   :Executes:
-     The ``configure_recipe.py`` script from the |Rose| app.
+     The ``create_esmvaltool_config.py`` script from the |Rose| app.
   :Details:
      Runs immediately after the successful completion of the ``install_env_file`` job.
      Temporarily, creates ESMValTool developer configuration file at ``share/etc`` directory in the installed workflow.
 
-``configure_for``
+``update_esmvaltool_recipe``
   :Description:
      Copies an updated version of the |ESMValTool| recipe
      into the Cylc workflow ``share/etc`` directory
@@ -64,7 +64,7 @@ An overview of the workflow
   :Families:
      ``RECIPE``
 
-``configure_standardise``
+``create_cdds_config``
   :Description:
      Creates the |CDDS| request metadata
      and variables list required to standardise two model development runs,
@@ -72,10 +72,10 @@ An overview of the workflow
      If previously saved raw data is being used,
      the raw data will be symlinked to the this task's work directory.
   :Executes:
-     The ``configure_standardise.sh`` script from the |Rose| app.
+     The ``create_cdds_config.sh`` script from the |Rose| app.
   :Details:
      Runs once for each recipe, immediately after the successful
-     completion of the ``configure_for`` job.
+     completion of the ``update_esmvaltool_recipe`` job.
      Generates |CDDS| request metadata for each model run (reference and evaluation):
      ``request_ref.json``, ``request_eval.json``.
      Generates a list of variables to standardise for each model run
@@ -85,7 +85,7 @@ An overview of the workflow
      multiple |CDDS| standardisation workflows
      within the same |CMEW| cycle.
 
-``standardise_model_data``
+``run_cdds``
   :Description:
      Launches the CDDS workflow and converts both model runs into |CMIP|-compliant
      datasets suitable for |ESMValTool| evaluation.
@@ -94,7 +94,7 @@ An overview of the workflow
      The ``cdds_convert`` command and the ``restructure_dirs.sh`` script
      from the |Rose| app.
   :Details:
-     Runs after the successful completion of the ``configure_standardise`` job.
+     Runs after the successful completion of the ``create_cdds_config`` job.
      Executes |CDDS| standardisation for both the reference and evaluation model run
      to produces |CMIP|-compliant output for each.
      Uses ``restructure_dirs.sh`` to move standardised data into a BADC DRS structure.
@@ -102,11 +102,11 @@ An overview of the workflow
 ``housekeeping``
   :Description:
      Removes any intermediate files from the cylc run directory that were
-     created by the |CDDS| workflow in ``standardise_model_data``
+     created by the |CDDS| workflow in ``run_cdds``
   :Executes:
      The |rose_prune|_ application
   :Details:
-     Runs after the successful completion of the ``standardise_model_data`` job
+     Runs after the successful completion of the ``run_cdds`` job
 
 ``run_evaluation_tool``
   :Description:
@@ -115,17 +115,17 @@ An overview of the workflow
      The |ESMValTool| command line script
   :Details:
      Runs once for each recipe,
-     after the successful completion of the ``standardise_model_data``
-     and the ``configure_recipe`` jobs.
+     after the successful completion of the ``run_cdds``
+     and the ``create_esmvaltool_config`` jobs.
   :Families:
      ``RECIPE``
 
-``compare``
+``check_expected_outputs``
   :Description:
      Ensures the expected output files are generated
      by the ``run_evaluation_tool`` jobs
   :Executes:
-     The ``compare.sh`` script from the |Rose| app
+     The ``check_expected_outputs.sh`` script from the |Rose| app
   :Details:
      Runs only in test mode (``-O test``)
      for the ESMValTool recipe ``radiation_budget``
@@ -149,7 +149,7 @@ The |AutoAssess| assessments use the following steps:
   :Description:
      Retrieves UM model data from MASS in PP format
   :Executes:
-     The |AutoAssess| ``aa_retriever`` script from the ``aa_retrieve_data`` |Rose| app.
+     The |AutoAssess| ``aa_retriever`` script from the ``extract_data`` |Rose| app.
      There is an optional configuration for retrieving data for the Validation Note that
      uses the ``aa_mksuper`` script.
   :Details:
@@ -182,7 +182,7 @@ The |AutoAssess| assessments use the following steps:
      Produces a Normalised Assessment Criteria (NAC) plot based on the calculated
      metrics in the ``run_area<area>`` task
   :Executes:
-     The |AutoAssess| ``aa_create_nac_plots`` script from the ``aa_nac_plot`` |Rose| app.
+     The |AutoAssess| ``aa_create_nac_plots`` script from the ``create_nac_plot`` |Rose| app.
      There is an optional configuration for the Validation Note that effectively skips
      this task as no NAC plots need to be produced.
   :Details:
