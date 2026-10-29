@@ -39,8 +39,8 @@
             => configure_for<recipe>
             => configure_standardise<recipe,dataset>
             => standardise_model_data<dataset>
-            => reorganise_data_directories
-            configure_recipe & reorganise_data_directories
+            => reorganise_data_directories<evaluation_tool=esmvaltool>
+            configure_recipe & reorganise_data_directories<evaluation_tool=esmvaltool>
             => run_evaluation_tool<evaluation_tool=esmvaltool><recipe>
             => housekeeping
 {%- else %}
@@ -139,9 +139,11 @@
         [[[environment]]]
             ROSE_TASK_APP = standardise_model_data
 
-    [[reorganise_data_directories]]
+    [[reorganise_data_directories<evaluation_tool=esmvaltool>]]
         inherit = STANDARDISE
         [[[environment]]]
+            ROSE_TASK_APP = reorganise_data_directories
+            ROSE_APP_OPT_CONF_KEYS = esmvaltool
             SITE = {{ SITE }}
 
     [[run_evaluation_tool<evaluation_tool=esmvaltool><recipe>]]

@@ -19,7 +19,7 @@
             install_env_file
             => install_package<package=autoassess>
             => retrieve_data<autoassess_area><aa_dataset>
-            => index_data<autoassess_area><aa_dataset>
+            => reorganise_data_directories<evaluation_tool=autoassess><autoassess_area><aa_dataset>
             => run_evaluation_tool<evaluation_tool=autoassess><autoassess_area>
             => nac_plot<autoassess_area>
             => html_page<autoassess_area>
@@ -65,11 +65,11 @@
             SUITE_ID = $CYLC_TASK_PARAM_aa_dataset
             AREA = $CYLC_TASK_PARAM_autoassess_area
 
-    [[index_data<autoassess_area><aa_dataset>]]
-        inherit = AUTOASSESS, SITE_AA_DATA_INDEXING
+    [[reorganise_data_directories<evaluation_tool=autoassess><autoassess_area><aa_dataset>]]
+        inherit = AUTOASSESS, SITE_REORGANISE_DATA_DIRECTORIES
         [[[environment]]]
-            ROSE_TASK_APP = aa_index_data
-            ROSE_APP_OPT_CONF_KEYS = ($CYLC_TASK_PARAM_autoassess_area)
+            ROSE_TASK_APP = reorganise_data_directories
+            ROSE_APP_OPT_CONF_KEYS = autoassess ($CYLC_TASK_PARAM_autoassess_area)
             SUITE_ID = $CYLC_TASK_PARAM_aa_dataset
             AREA = $CYLC_TASK_PARAM_autoassess_area
 
