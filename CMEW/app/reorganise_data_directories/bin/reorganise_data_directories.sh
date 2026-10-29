@@ -5,6 +5,6 @@
 BASH_XTRACEFD=1
 set -eux
 
-RESTRUCTURE_COMMAND=${CDDS_SOFTWARE_DIR}/ceda-mip-tools/bin/restructure_for_cmip6
+COMMAND=${CDDS_SOFTWARE_DIR}/ceda-mip-tools/bin/restructure_for_cmip6
 
-${RESTRUCTURE_COMMAND} -d "${ROOT_RESTRUCTURED_DIR}" "${ROOT_DATA_DIR}"
+${COMMAND} -d "${ROOT_REORGANISED_DIR}" "${ROOT_DATA_DIR}"
