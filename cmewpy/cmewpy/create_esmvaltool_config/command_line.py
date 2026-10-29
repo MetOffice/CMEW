@@ -2,13 +2,15 @@
 # The LICENSE.md file contains full licensing details.
 import argparse
 
-from cmewpy.configure_recipe.configure_recipe import configure_recipe
+from cmewpy.create_esmvaltool_config.create_esmvaltool_config import (
+    create_esmvaltool_config,
+)
 
 
-def parse_args_for_configure_recipe(arguments):
+def parse_args_for_create_esmvaltool_config(arguments):
     """
     Return the names and values of the command line arguments for
-    :func:`main_for_configure_recipe`.
+    :func:`main_for_create_esmvaltool_config`.
 
     Parameters
     ----------
@@ -75,7 +77,7 @@ def parse_args_for_configure_recipe(arguments):
     return parser.parse_args(arguments)
 
 
-def main_for_configure_recipe(arguments=None):
+def main_for_create_esmvaltool_config(arguments=None):
     """
     Setup the configuration for ESMValTool.
 
@@ -85,7 +87,7 @@ def main_for_configure_recipe(arguments=None):
         The command line arguments to be parsed.
     """
     # Parse the arguments.
-    args = parse_args_for_configure_recipe(arguments)
+    args = parse_args_for_create_esmvaltool_config(arguments)
 
     # Run the code.
     print(f"cmew_data_for_esmval_dir: {args.cmew_data_for_esmval_dir}")
@@ -98,7 +100,7 @@ def main_for_configure_recipe(arguments=None):
     print(f"rootpath_cmip6: {args.rootpath_cmip6}")
     print(f"rootpath_obs4mips: {args.rootpath_obs4mips}")
     print(f"user_config_path: {args.user_config_path}")
-    configure_recipe(
+    create_esmvaltool_config(
         args.cmew_data_for_esmval_dir,
         args.dev_config_path,
         args.drs_cmip6,

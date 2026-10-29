@@ -5,12 +5,12 @@ name = "cmewpy"
 dynamic = ["version"]
 
 [project.scripts]
-add_datasets_to_share = "cmewpy.copy_datasets.command_line:main_for_add_datasets_to_share"
-configure_recipe = "cmewpy.configure_recipe.command_line:main_for_configure_recipe"
-create_request_file = "cmewpy.configure_standardise.command_line:main_for_create_request_file"
-create_variables_file = "cmewpy.configure_standardise.command_line:main_for_create_variables_file"
-get_variables_from_recipe = "cmewpy.configure_for.command_line:main_for_get_variables_from_recipe"
-update_recipe_file = "cmewpy.configure_for.command_line:main_for_update_recipe_file"
+add_datasets_to_share = "cmewpy.centralise_evaluation_metadata.command_line:main_for_add_datasets_to_share"
+create_esmvaltool_config = "cmewpy.create_esmvaltool_config.command_line:main_for_create_esmvaltool_config"
+create_request_file = "cmewpy.create_cdds_config.command_line:main_for_create_request_file"
+create_variables_file = "cmewpy.create_cdds_config.command_line:main_for_create_variables_file"
+get_variables_from_recipe = "cmewpy.update_esmvaltool_recipe.command_line:main_for_get_variables_from_recipe"
+update_recipe_file = "cmewpy.update_esmvaltool_recipe.command_line:main_for_update_recipe_file"
 
 [build-system]
 requires = ["setuptools >= 80.0.0"]

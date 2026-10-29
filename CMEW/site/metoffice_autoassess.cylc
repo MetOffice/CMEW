@@ -14,7 +14,7 @@
             --mem=2GB
             --ntasks=1
 
-    [[SITE_AA_RETRIEVAL]]
+    [[SITE_EXTRACT_DATA]]
         execution time limit = PT5H
         [[[directives]]]
             --mem=5GB
@@ -32,7 +32,7 @@
             --mem=5GB
             --ntasks=1
 
-    [[SITE_AA_NAC_PLOT]]
+    [[SITE_CREATE_NAC_PLOT]]
         execution time limit = PT10M
         [[[directives]]]
             --mem=250MB
