@@ -9,35 +9,30 @@
             ANCIL_PATH = /data/users/gc_eval/autoassess/ancil
 
     [[SITE_AA_INSTALL]]
-        inherit = COMPUTE
         execution time limit = PT5M
         [[[directives]]]
             --mem=2GB
             --ntasks=1
 
-    [[SITE_AA_RETRIEVAL]]
-        inherit = COMPUTE
+    [[SITE_EXTRACT_DATA]]
         execution time limit = PT5H
         [[[directives]]]
-            --mem=2GB
+            --mem=5GB
             --ntasks=1
 
     [[SITE_AA_DATA_INDEXING]]
-        inherit = COMPUTE
         execution time limit = PT2H
         [[[directives]]]
             --mem=10GB
             --ntasks=1
 
     [[SITE_AA_RUN_AREA]]
-        inherit = COMPUTE
         execution time limit = PT5H
         [[[directives]]]
             --mem=5GB
             --ntasks=1
 
-    [[SITE_AA_NAC_PLOT]]
-        inherit = COMPUTE
+    [[SITE_CREATE_NAC_PLOT]]
         execution time limit = PT10M
         [[[directives]]]
             --mem=250MB
