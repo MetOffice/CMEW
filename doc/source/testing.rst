@@ -11,7 +11,7 @@ Testing
 * **End-to-end tests**.
   |CMEW| end-to-end tests verify whether the evaluation tools
   produce the expected output files.
-  These checks are performed via the ``compare`` task.
+  These checks are performed via the ``check_expected_outputs`` task.
   They do not check the contents of those files.
   Content checking is performed separately by the Recipe Test Workflow,
   using outputs produced by that workflow.

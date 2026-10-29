@@ -3,7 +3,7 @@
 """
 Unit tests for 'update_recipe_file.py'.
 """
-from cmewpy.configure_for.update_recipe_file import (
+from cmewpy.update_esmvaltool_recipe.update_recipe_file import (
     remove_datasets_contents,
     remove_additional_datasets,
     construct_datasets_contents,

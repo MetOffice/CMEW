@@ -7,7 +7,7 @@ Create a variables file to standardise model data with CDDS.
 import os
 import sys
 import logging
-from cmewpy.configure_standardise.config_configure_standardise import (
+from cmewpy.create_cdds_config.config_create_cdds_config import (
     streams_dict,
 )
 

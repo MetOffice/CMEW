@@ -18,5 +18,5 @@
         [[[directives]]]
             --mem = 3G
 
-    [[standardise_model_data<dataset>]]
+    [[run_cdds<dataset>]]
         execution time limit = PT10M
