@@ -11,6 +11,7 @@ create_request_file = "cmewpy.configure_standardise.command_line:main_for_create
 create_variables_file = "cmewpy.configure_standardise.command_line:main_for_create_variables_file"
 get_variables_from_recipe = "cmewpy.configure_for.command_line:main_for_get_variables_from_recipe"
 update_recipe_file = "cmewpy.configure_for.command_line:main_for_update_recipe_file"
+create_html_page = "cmewpy.html_page.command_line:main_for_create_html_page"
 
 [build-system]
 requires = ["setuptools >= 80.0.0"]

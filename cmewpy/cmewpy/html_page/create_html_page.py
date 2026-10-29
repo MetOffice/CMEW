@@ -1,15 +1,18 @@
 #!/usr/bin/env python
-# (C) Crown Copyright 2022-2025, Met Office.
+# (C) Crown Copyright 2026, Met Office.
 # The LICENSE.md file contains full licensing details.
 
 """
 Script to produce an HTML file using a jinja2 template file.
 """
 
-import argparse
 from jinja2 import Environment, FileSystemLoader, Template
 import os
 from pathlib import Path
+
+logging.basicConfig(level=logging.INFO, stream=sys.stdout)
+filename = os.path.basename(__file__)
+logger = logging.getLogger(filename)
 
 
 def load_template(template_path: Path) -> Template:
@@ -21,6 +24,7 @@ def load_template(template_path: Path) -> Template:
     Returns:
         Template: Jinja2 template
     """
+    logging.info(f"Reading template file {template_path}")
     env = Environment(loader=FileSystemLoader(template_path.parent))
     return env.get_template(template_path.name)
 
@@ -31,6 +35,11 @@ def load_data(data_path: Path | None) -> dict:
     Currently just reading environment variables to match existing API, could
     be set up to read a YAML, XML or config file?
     """
+    logging.info("Using predefined environment variables to create data")
+    logging.info(f"ASSESSMENT_TITLE = {os.environ['ASSESSMENT_TITLE']}")
+    logging.info(f"DATASETS = {os.environ['DATASETS'}")
+    logging.info(f"START_YEAR = {os.environ['START_YEAR']} ")
+    logging.info(f"NUMBER_OF_YEARS = {os.environ['NUMBER_OF_YEARS']}")
     return {
         "title": os.environ["ASSESSMENT_TITLE"],
         "datasets": os.environ["DATASETS"],
@@ -58,47 +67,9 @@ def produce_html(
     template = load_template(template_path)
     data = load_data(data_path)
 
+    logging.info("Rendering jinja2 template with data")
     result = template.render(**data)
 
+    logging.info(f"Creating HTML file: {html_path}")
     with open(html_path, "w") as fout:
         fout.writelines(result)
-
-
-def read_args() -> argparse.Namespace:
-    """Reading command line inputs."""
-
-    # Create argument parser
-    parser = argparse.ArgumentParser(
-        formatter_class=argparse.RawDescriptionHelpFormatter
-    )
-
-    # Add arguments
-    parser.add_argument(
-        "template",
-        type=Path,
-        help="Jinja2 template file.",
-    )
-    parser.add_argument(
-        "html_page",
-        type=Path,
-        help="File to write output to.",
-    )
-    parser.add_argument(
-        "-d",
-        "--data",
-        type=Path,
-        default=None,
-        help="Data file.",
-    )
-
-    # Return parsed arguments
-    return parser.parse_args()
-
-
-def main():
-    args = read_args()
-    produce_html(args.template, args.html_page, args.data)
-
-
-if __name__ == "__main__":
-    main()
