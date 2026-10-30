@@ -15,7 +15,6 @@ except ImportError:
 
 
 try:
-    from rose.config_editor.valuewidget.choice import ChoicesValueWidget
+    from rose.config_editor.valuewidget.choice import ChoicesValueWidget  # noqa: F401
 except ImportError:
-    from metomi.rose.config_editor.valuewidget.choice import ChoicesValueWidget
-
+    from metomi.rose.config_editor.valuewidget.choice import ChoicesValueWidget  # noqa: F401
