@@ -9,6 +9,7 @@ import os
 import yaml
 import sys
 import logging
+from copy import deepcopy
 
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 filename = os.path.basename(__file__)
@@ -63,27 +64,20 @@ def amend_site_config(
     """
     site_config_file_contents = site_config_defaults
 
-    # Add a section for finding CMEW data
-    site_config_file_contents["projects"].setdefault("ESMVal", {}).setdefault(
-        "data", {}
-    )["local"] = {}
-
     # There is an assumption that the string from
     # {"badc","bsc","dkrz-era5-grib","dkrz","ipsl","mo","nci"},
     # i.e. the string used in the `data-hpc-<key>.yml` filename,
     # will be the fourth-level key here,
     # and that the type and filename templates are the same as for CMIP6 data.
-    for key in site_config_file_contents["projects"]["CMIP6"]["data"][
-        site_local_data_key
-    ]:
-        if key != "rootpath" and key != "dirname_template":
-            site_config_file_contents["projects"]["ESMVal"]["data"]["local"][
-                key
-            ] = site_config_file_contents["projects"]["CMIP6"]["data"][
+
+    # Add a section for finding CMEW data
+    site_config_file_contents["projects"].setdefault("ESMVal", {})["data"] = {
+        "local": deepcopy(
+            site_config_file_contents["projects"]["CMIP6"]["data"][
                 site_local_data_key
-            ][
-                key
             ]
+        )
+    }
 
     # But CMEW data is stored locally to the CMEW workflow
     site_config_file_contents["projects"]["ESMVal"]["data"]["local"][
