@@ -177,7 +177,7 @@ The |AutoAssess| assessments use the following steps:
   :Details:
      This task runs on a per area basis.
 
-``nac_plot<area>``
+``create_nac_plot<area>``
   :Description:
      Produces a Normalised Assessment Criteria (NAC) plot based on the calculated
      metrics in the ``run_area<area>`` task
@@ -190,28 +190,36 @@ The |AutoAssess| assessments use the following steps:
      inputs are csv files containing metric values generated from the
      ``run_area<area>`` task.
 
-``html_page<area>``
+``create_webpage<area>``
   :Description:
-     Produces an HTML page containing the results of the area assessment
+     Produces an HTML page containing
+     the results of each assessment area
   :Executes:
-     The |AutoAssess| ``aa_create_page`` script from the ``aa_html_page`` |Rose| app.
-     There is an optional configuration for the Validation Note that effectively skips
-     this task as an html page does not need to be produced.
+     The |AutoAssess| ``aa_create_page`` script
+     from the ``create_webpage`` |Rose| app
   :Details:
-     This task runs on a per area basis, and runs after the ``nac_plot<area>``
-     task. It uses a jinja2 template from the |AutoAssess| code base along with
-     information on the assessment period and the datasets being assessed.
+     Runs once for each assessment area,
+     after the successful completion of the ``create_nac_plot`` jobs.
+     This task uses a Jinja2 template from the |AutoAssess| code base
+     along with information on the assessment period
+     and the datasets being assessed.
+     The ``valnote`` optional configuration
+     effectively skips this task
+     as a webpage does not need to be produced.
 
-``html_page_overview``
+``create_webpage_overview``
   :Description:
-     Produces an HTML page containing an overview of the area assessments that
-     have been run
+     Produces an HTML page containing
+     an overview of the assessment areas that have been run
   :Executes:
-     The |AutoAssess| ``aa_create_page`` script from the ``aa_html_page`` |Rose| app
+     The |AutoAssess| ``aa_create_page`` script
+     from the ``create_webpage`` |Rose| app
   :Details:
-     This task runs the ``template`` optional configuration for the app in order
-     to use the specified jinja2 template file rather than the centrally held
-     |AutoAssess| template files.
+     Runs once after the successful completion
+     of the ``create_webpage<area>`` jobs.
+     The ``overview`` optional configuration
+     uses a bespoke jinja2 template file
+     rather than the centrally held |AutoAssess| template files.
 
 Design considerations
 ---------------------
