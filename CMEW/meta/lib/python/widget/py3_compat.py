@@ -17,9 +17,9 @@ import os
 import sys
 
 print(sys.path)
-print(os.listdir("/home/runner/micromamba/envs/cmew-env/lib/python3.11"))
-print(os.listdir("/home/runner/micromamba/envs/cmew-env/lib/python3.11/lib-dynload"))
 print(os.listdir("/home/runner/micromamba/envs/cmew-env/lib/python3.11/site-packages"))
+print(os.listdir("/home/runner/micromamba/envs/cmew-env/lib/python3.11/site-packages/metomi"))
+print(os.listdir("/home/runner/micromamba/envs/cmew-env/lib/python3.11/site-packages/metomi/rose"))
 
 
 try:
