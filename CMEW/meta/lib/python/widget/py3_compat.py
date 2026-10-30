@@ -13,7 +13,19 @@ except ImportError:
 
 """
 
+import sys
+
+print(sys.path)
+
+
 try:
     from rose.config_editor.valuewidget.choice import ChoicesValueWidget
 except ImportError:
+    print("Cannot import from rose.config_editor")
+
+try:
     from metomi.rose.config_editor.valuewidget.choice import ChoicesValueWidget
+except ImportError:
+    print("Cannot import from metomi.rose.config_editor")
+
+sys.exit(1)
