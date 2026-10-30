@@ -8,6 +8,30 @@
 
 {% from "inc/dataset.cylc" import datasets, datasets_metadata %}
 
+{# What tool is running a recipe, ESMValTool or AutoAssess? #}
+{% set SOURCE_RECIPES = {
+    "aerosols": "autoassess",
+    "africa": "autoassess",
+    "australia": "autoassess",
+    "enso": "autoassess",
+    "globaltrop": "autoassess",
+    "hydrocycle": "autoassess",
+    "land_surface": "autoassess",
+    "mjo": "autoassess",
+    "monsoon": "autoassess",
+    "radiation_budget": "esmvaltool",
+    "stratosphere": "autoassess",
+    "valnote": "autoassess"} %}
+{# Create a list of recipes for each tool based on what has been selected #}
+{% set split_recipes = {"autoassess": [], "esmvaltool": []} %}
+{% for recipe in RECIPES %}
+    {% set tool = SOURCE_RECIPES[recipe] %}
+    {% do split_recipes[tool].append(recipe) %}
+{% endfor %}
+{# Create helper boolean to indicate if an autoassess area has been selected #}
+{% set AUTOASSESS = split_recipes["autoassess"] | length > 0 %}
+
+
 [scheduler]
     UTC mode = True
 
@@ -15,10 +39,9 @@
     package = autoassess, cmewpy
     evaluation_tool = autoassess, esmvaltool
     dataset = {{ datasets }}
-    recipe = radiation_budget
+    recipe = {{ split_recipes["esmvaltool"] | join(",") }}
 {%- if AUTOASSESS %}
-    autoassess_area = valnote, aerosols, africa, australia, enso, globaltrop, \
-                        hydrocycle, land_surface, mjo, monsoon, stratosphere
+    autoassess_area = {{ split_recipes["autoassess"] | join(",") }}
 {%- endif %}
 
 [scheduling]
