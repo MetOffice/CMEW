@@ -22,10 +22,10 @@
             => index_data<autoassess_area><aa_dataset>
             => run_evaluation_tool<evaluation_tool=autoassess><autoassess_area>
             => create_nac_plot<autoassess_area>
-            => html_page<autoassess_area>
-            => html_page_overview
+            => create_webpage<autoassess_area>
+            => create_webpage_overview
 {%- if TEST %}
-            html_page<autoassess_area> => check_expected_outputs<autoassess_area>
+            create_nac_plot<autoassess_area> => check_expected_outputs<autoassess_area>
 {%- endif %}
         """
 
@@ -87,17 +87,17 @@
             ROSE_APP_OPT_CONF_KEYS = ($CYLC_TASK_PARAM_autoassess_area)
             AREA = $CYLC_TASK_PARAM_autoassess_area
 
-    [[html_page<autoassess_area>]]
-        inherit = AUTOASSESS, SITE_AA_HTML_PAGE
+    [[create_webpage<autoassess_area>]]
+        inherit = AUTOASSESS, SITE_CREATE_WEBPAGE
         [[[environment]]]
-            ROSE_TASK_APP = aa_html_page
+            ROSE_TASK_APP = create_webpage
             ROSE_APP_OPT_CONF_KEYS = ($CYLC_TASK_PARAM_autoassess_area)
             AREA = $CYLC_TASK_PARAM_autoassess_area
 
-    [[html_page_overview]]
-        inherit = AUTOASSESS, SITE_AA_HTML_PAGE
+    [[create_webpage_overview]]
+        inherit = AUTOASSESS, SITE_CREATE_WEBPAGE
         [[[environment]]]
-            ROSE_TASK_APP = aa_html_page
-            ROSE_APP_OPT_CONF_KEYS = template
+            ROSE_TASK_APP = create_webpage
+            ROSE_APP_OPT_CONF_KEYS = overview
             J2_TEMPLATE_FILE = top_level_template.jinja
             OUTPUT_FILE = ${AUTOASSESS_OUTPUT_DIR}/index.html

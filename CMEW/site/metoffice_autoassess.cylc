@@ -38,5 +38,5 @@
             --mem=250MB
             --ntasks=1
 
-    [[SITE_AA_HTML_PAGE]]
+    [[SITE_CREATE_WEBPAGE]]
         execution time limit = PT2M
