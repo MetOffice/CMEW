@@ -5,7 +5,7 @@
 BASH_XTRACEFD=1
 set -eux
 
-echo "Running configure_standardise"
+echo "Running create_cdds_config"
 
 # Create CDDS directory structure and variables list.
 cmew-standardise-env create_cdds_directory_structure "${REQUEST_PATH}"

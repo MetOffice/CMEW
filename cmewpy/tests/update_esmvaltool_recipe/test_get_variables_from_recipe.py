@@ -2,7 +2,7 @@
 # (C) Crown Copyright 2026, Met Office.
 # The LICENSE.md file contains full licensing details.
 """Unit tests for output_variables.py"""
-from cmewpy.configure_for.get_variables_from_recipe import (
+from cmewpy.update_esmvaltool_recipe.get_variables_from_recipe import (
     parse_variables_from_recipe,
 )
 

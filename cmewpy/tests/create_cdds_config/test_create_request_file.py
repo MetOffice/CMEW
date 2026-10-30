@@ -5,8 +5,8 @@ Unit tests for create_request_file.
 """
 import os
 
-from cmewpy.configure_standardise import create_request_file
-from cmewpy.configure_standardise.config_configure_standardise import (
+from cmewpy.create_cdds_config import create_request_file
+from cmewpy.create_cdds_config.config_create_cdds_config import (
     request_defaults,
 )
 
