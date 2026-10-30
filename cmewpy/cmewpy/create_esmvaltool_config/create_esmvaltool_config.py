@@ -66,7 +66,11 @@ def amend_site_config(
         "data", {}
     )["local"] = {}
 
-    # The type and filename templates are the same as for CMIP6 data
+    # There is an assumption that the string from
+    # {"badc","bsc","dkrz-era5-grib","dkrz","ipsl","mo","nci"},
+    # i.e. the string used in the `data-hpc-<key>.yml` filename,
+    # will be the fourth-level key here,
+    # and that the type and filename templates are the same as for CMIP6 data.
     for key in site_config_file_contents["projects"]["CMIP6"]["data"][
         site_local_data_key
     ]:
