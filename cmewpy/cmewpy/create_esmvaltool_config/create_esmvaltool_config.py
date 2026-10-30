@@ -41,7 +41,9 @@ def amend_site_config(
     cmew_data_for_esmval_dir,
 ):
     """
-    Amend the contents of the site configuration file.
+    Add a section for CMEW data to the site configuration file.
+
+    The new section is titled "ESMVal" and copies facets from the CMIP6 entry.
 
     Parameters
     ----------
