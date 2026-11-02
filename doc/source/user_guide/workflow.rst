@@ -91,13 +91,30 @@ An overview of the workflow
      datasets suitable for |ESMValTool| evaluation.
      Saves new raw data if required.
   :Executes:
-     The ``cdds_convert`` command and the ``restructure_dirs.sh`` script
-     from the |Rose| app.
+     The ``cdds_convert`` command from the |Rose| app.
   :Details:
      Runs after the successful completion of the ``create_cdds_config`` job.
      Executes |CDDS| standardisation for both the reference and evaluation model run
      to produces |CMIP|-compliant output for each.
-     Uses ``restructure_dirs.sh`` to move standardised data into a BADC DRS structure.
+
+``reorganise_data_directories``
+  :Description:
+     Reorganises data directories.
+  :Executes:
+     For |ESMValTool|:
+     The ``reorganise_data_directories.sh`` script from the |Rose| app.
+     For |AutoAssess|:
+     The ``aa_data_indexer`` command line script from the |Rose| app.
+  :Details:
+     For |ESMValTool|:
+     Runs after the successful completion
+     of the ``standardise_model_data`` job.
+     For |AutoAssess|:
+     Runs for each area and dataset,
+     after the successful completion of the ``retrieve_data`` job.
+     There is an optional configuration for the Aerosols area
+     to invoke the ``--ncconv`` option,
+     which forces conversion to netCDF before indexing.
 
 ``housekeeping``
   :Description:
@@ -110,9 +127,9 @@ An overview of the workflow
 
 ``run_evaluation_tool``
   :Description:
-     Runs the evaluation tool
+     Runs the evaluation tool.
   :Executes:
-     The |ESMValTool| command line script
+     Either |ESMValTool| or |AutoAssess|.
   :Details:
      Runs once for each recipe,
      after the successful completion of the ``run_cdds``
@@ -154,16 +171,6 @@ The |AutoAssess| assessments use the following steps:
      uses the ``aa_mksuper`` script.
   :Details:
      This task runs on a per area and per dataset basis
-
-``index_data<area><dataset>``
-  :Description:
-     Prepares the retrieved model data in a form that can be more quickly read by Iris
-  :Executes:
-     The |AutoAssess| ``aa_data_indexer`` script from the ``aa_index_data`` |Rose| app.
-  :Details:
-     This task runs on a per area and per dataset basis. There is an optional
-     configuation for the Aerosols area to invoke the ``--ncconv`` option that
-     forces conversion to netcdf before indexing.
 
 ``run_area<area>``
   :Description:

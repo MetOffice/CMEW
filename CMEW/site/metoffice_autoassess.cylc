@@ -20,7 +20,7 @@
             --mem=5GB
             --ntasks=1
 
-    [[SITE_AA_DATA_INDEXING]]
+    [[SITE_REORGANISE_DATA_DIRECTORIES]]
         execution time limit = PT2H
         [[[directives]]]
             --mem=10GB
