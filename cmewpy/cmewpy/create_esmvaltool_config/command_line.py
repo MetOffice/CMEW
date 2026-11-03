@@ -30,14 +30,14 @@ def parse_args_for_create_esmvaltool_config(arguments):
         "--site_config_defaults_filepath",
         help=(
             "The full path to the YAML file containing the "
-            "site-specific configuration for ESMValTool."
+            "default site-specific configuration for ESMValTool."
         ),
     )
     parser.add_argument(
         "--user_config_defaults_filepath",
         help=(
             "The full path to the YAML file containing the "
-            "user-specific configuration for ESMValTool."
+            "default user-specific configuration for ESMValTool."
         ),
     )
     parser.add_argument(

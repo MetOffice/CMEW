@@ -173,10 +173,10 @@ def create_esmvaltool_config(
     ----------
     site_config_defaults_filepath : str
         The full path to the YAML file containing the
-        contents of ESMValTool's configuration file for the site.
+        default site-specific configuration for ESMValTool.
     user_config_defaults_filepath : str
         The full path to the YAML file containing the
-        contents of ESMValTool's default user configuration file.
+        default user-specific configuration for ESMValTool.
     site_local_data_key : str
         The site-specific fourth-level key in the ESMValTool
         site configuration file, occurring between 'data' and 'rootpath'.
