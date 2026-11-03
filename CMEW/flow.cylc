@@ -12,37 +12,15 @@
 {% set SKIP_CDDS = SKIP_CDDS | default(false) %}
 {% set selected_recipe = "radiation_budget" if TEST else RECIPE %}
 
-{% from "scrape_ini" import list_datasets, facet_per_dataset %}
+{% from "scrape_ini" import list_datasets %}
 {% set datasets = list_datasets("rose-suite.conf") %}
-
-# archive_stream describes the native model-data source, while
-# standardisation_frequency describes the requested CMEW output cadence.
-# Both monthly Omon and annual Oyr routes can therefore use native "onm"
-# data without overloading archive_stream to control workflow routing.
-{% set standardisation_frequencies = facet_per_dataset("rose-suite.conf", "standardisation_frequency", "monthly") %}
-{# list_datasets() returns a comma-separated string, not a list. #}
-{% set datasets_list = datasets.split(", ") if datasets else [] %}
-{% set annual_datasets = [] %}
-{% set monthly_datasets = [] %}
-{%- for dataset in datasets_list %}
-{%- if standardisation_frequencies.get(dataset, "monthly") == "annual" %}
-{%- set _ = annual_datasets.append(dataset) %}
-{%- else %}
-{%- set _ = monthly_datasets.append(dataset) %}
-{%- endif %}
-{%- endfor %}
 
 [scheduler]
     UTC mode = True
 
 [task parameters]
-{%- if monthly_datasets %}
-    dataset = {{ monthly_datasets | join(", ") }}
-{%- endif %}
+    dataset = {{ datasets }}
     recipe = {{ selected_recipe }}
-{%- if annual_datasets %}
-    annual_dataset = {{ annual_datasets | join(", ") }}
-{%- endif %}
 {%- if not UNITTEST and AUTOASSESS %}
     autoassess_area = monsoon, africa
 {%- endif %}
@@ -59,20 +37,10 @@
 {%- if not UNITTEST and not SKIP_CDDS %}
             install_env_file => configure_recipe & copy_datasets
             copy_datasets => configure_for<recipe>
-    {%- if monthly_datasets %}
             configure_for<recipe> => configure_standardise<recipe,dataset>
                 => standardise_model_data<dataset> => restructure_dirs
-    {%- endif %}
             configure_recipe & restructure_dirs => run_recipe<recipe>
                 => housekeeping
-    {%- if annual_datasets %}
-            # Opt-in annual Oyr route for the subset of model runs in
-            # annual_dataset. It derives annual fields from native monthly
-            # onm data and writes into ROOT_DATA_DIR for restructuring.
-            configure_for<recipe>
-                => standardise_model_data_annual<annual_dataset>
-                => restructure_dirs
-    {%- endif %}
 
     {%- if TEST %}
             run_recipe<recipe> => compare<recipe>
@@ -136,16 +104,6 @@
             VARIABLES_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/variables_${CYLC_TASK_PARAM_dataset}.txt
             RAW_DATA_DIR_SUITE = {{ RAW_DATA_DIR | default("") }}"/$CYLC_TASK_PARAM_dataset"
 
-    [[ANNUAL_DATASET]]
-        [[[environment]]]
-            ANNUAL_END_YEAR = {{ START_YEAR + NUMBER_OF_YEARS - 1 }}
-            # Model-specific ancillary/coordinate file paths are owned by
-            # this JSON file (keyed by model_id), not hardcoded here, so
-            # new annual model configurations don't require a flow.cylc
-            # change.
-            MODEL_ANCILLARIES_FP = ${CYLC_WORKFLOW_RUN_DIR}/app/standardise_model_data/model_ancillaries.json
-            RECIPE_VARIABLES_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/variables_lists/{{ selected_recipe }}_variables.txt
-
     [[MODEL_RUNS]]
         [[[environment]]]
             # Directory containing dataset lists as YAML files
@@ -172,7 +130,6 @@
         [[[environment]]]
             ROSE_TASK_APP = configure_for
 
-{%- if monthly_datasets %}
     [[configure_standardise<recipe,dataset>]]
         inherit = STANDARDISE, RECIPE, MODEL_RUNS, DATASET
         [[[environment]]]
@@ -185,14 +142,6 @@
         inherit = STANDARDISE, DATASET
         [[[environment]]]
             ROSE_TASK_APP = standardise_model_data
-{%- endif %}
-
-{%- if annual_datasets %}
-    [[standardise_model_data_annual<annual_dataset>]]
-        inherit = STANDARDISE, MODEL_RUNS, ANNUAL_DATASET, COMPUTE
-        [[[environment]]]
-            ROSE_TASK_APP = standardise_model_data_onm_annual
-{%- endif %}
 
     [[restructure_dirs]]
         inherit = STANDARDISE
