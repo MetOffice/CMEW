@@ -66,7 +66,7 @@ def test_amend_site_config():
             },
             "ESMVal": {
                 "data": {
-                    "local": {
+                    "mock_local_key": {
                         "type": "type.to.copy",
                         "filename_template": (
                             "{template}_{to}_{be}_{copied}*.nc"

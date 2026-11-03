@@ -71,23 +71,19 @@ def amend_site_config(
     # and that the type and filename templates are the same as for CMIP6 data.
 
     # Add a section for finding CMEW data
-    site_config_file_contents["projects"].setdefault("ESMVal", {})["data"] = {
-        "local": deepcopy(
-            site_config_file_contents["projects"]["CMIP6"]["data"][
-                site_local_data_key
-            ]
-        )
-    }
+    site_config_file_contents["projects"]["ESMVal"] = deepcopy(
+        site_config_file_contents["projects"]["CMIP6"]
+    )
 
     # But CMEW data is stored locally to the CMEW workflow
-    site_config_file_contents["projects"]["ESMVal"]["data"]["local"][
-        "rootpath"
-    ] = cmew_data_for_esmval_dir
+    site_config_file_contents["projects"]["ESMVal"]["data"][
+        site_local_data_key
+    ]["rootpath"] = cmew_data_for_esmval_dir
 
     # And the directory structure template misses the 'activity' level
-    site_config_file_contents["projects"]["ESMVal"]["data"]["local"][
-        "dirname_template"
-    ] = (
+    site_config_file_contents["projects"]["ESMVal"]["data"][
+        site_local_data_key
+    ]["dirname_template"] = (
         "{project}/{institute}/{dataset}/{exp}/"
         "{ensemble}/{mip}/{short_name}/{grid}/{version}"
     )
