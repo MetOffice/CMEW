@@ -54,8 +54,8 @@ def amend_site_config(
         The site-specific fourth-level key in the ESMValTool
         site configuration file, occurring between 'data' and 'rootpath'.
     cmew_data_for_esmval_dir : str
-        The full path to the directory
-        where data processed with CMEW will be stored.
+        The full path to the parent directory where data processed with CDDS
+        will be stored for passing to ESMValTool.
 
     Returns
     -------
@@ -181,8 +181,8 @@ def create_esmvaltool_config(
         The site-specific fourth-level key in the ESMValTool
         site configuration file, occurring between 'data' and 'rootpath'.
     cmew_data_for_esmval_dir : str
-        The full path to the directory
-        where data processed with CMEW will be stored.
+        The full path to the parent directory where data processed with CDDS
+        will be stored for passing to ESMValTool.
     max_parallel_tasks : str
         A parallelisation option to feed to ESMValTool.
     output_dir : str

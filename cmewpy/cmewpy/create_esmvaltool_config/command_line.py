@@ -51,8 +51,9 @@ def parse_args_for_create_esmvaltool_config(arguments):
     parser.add_argument(
         "--cmew_data_for_esmval_dir",
         help=(
-            "The full path to the directory where data "
-            "processed with CMEW will be stored."
+            "The full path to the parent directory "
+            "where data processed with CDDS "
+            "will be stored for passing to ESMValTool."
         ),
     )
     parser.add_argument(
