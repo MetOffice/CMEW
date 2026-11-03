@@ -17,6 +17,7 @@
 
 [task parameters]
     package = autoassess, cmewpy
+    evaluation_tool = autoassess, esmvaltool
     dataset = {{ datasets }}
     recipe = radiation_budget
 {%- if AUTOASSESS %}
@@ -32,29 +33,29 @@
 {%- if USE_ESMVALTOOL_BRANCH %}
             install_package<package=cmewpy>
             => get_esmval_branch
-            => configure_recipe & copy_datasets
+            => create_esmvaltool_config & centralise_evaluation_metadata
 {%- else %}
             install_package<package=cmewpy>
-            => configure_recipe & copy_datasets
+            => create_esmvaltool_config & centralise_evaluation_metadata
 {%- endif %}
 {%- if not SKIP_CDDS %}
-            copy_datasets
-            => configure_for<recipe>
-            => configure_standardise<recipe,dataset>
-            => standardise_model_data<dataset>
-            => restructure_dirs
-            configure_recipe & restructure_dirs
-            => run_recipe<recipe>
+            centralise_evaluation_metadata
+            => update_esmvaltool_recipe<recipe>
+            => create_cdds_config<recipe,dataset>
+            => run_cdds<dataset>
+            => reorganise_data_directories<evaluation_tool=esmvaltool>
+            create_esmvaltool_config & reorganise_data_directories<evaluation_tool=esmvaltool>
+            => run_evaluation_tool<evaluation_tool=esmvaltool><recipe>
             => housekeeping
 {%- else %}
-            copy_datasets
-            => configure_for<recipe>
+            centralise_evaluation_metadata
+            => update_esmvaltool_recipe<recipe>
             => symlink_standardised_data
-            => run_recipe<recipe>
+            => run_evaluation_tool<evaluation_tool=esmvaltool><recipe>
             => housekeeping
 {%- endif %}
 {%- if TEST %}
-            run_recipe<recipe> => compare<recipe>
+            run_evaluation_tool<evaluation_tool=esmvaltool><recipe> => check_expected_outputs<recipe>
 {%- endif %}
         """
 
@@ -62,7 +63,6 @@
     [[root]]
         script = rose task-run
         env-script = "eval $(rose task-env)"
-        platform = localhost
         [[[environment]]]
             ESMVALTOOL_DIR = ${CYLC_WORKFLOW_RUN_DIR}/lib/python/ESMValTool
             ESMVALTOOL_MODULE_NAME = {{ ESMVALTOOL_MODULE_NAME }}
@@ -74,7 +74,7 @@
             SHARE_DATA_CDDS = ${CYLC_WORKFLOW_SHARE_DIR}/data/cdds
             ROOT_PROC_DIR = ${SHARE_DATA_CDDS}/proc
             ROOT_DATA_DIR = ${SHARE_DATA_CDDS}/cdds_data
-            ROOT_RESTRUCTURED_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/work
+            ROOT_REORGANISED_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/work
             START_YEAR = {{ START_YEAR }}
             NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
 
@@ -115,9 +115,9 @@
             ROSE_TASK_APP = install_package
             ROSE_APP_OPT_CONF_KEYS = ($CYLC_TASK_PARAM_package)
 
-    [[configure_recipe]]
+    [[create_esmvaltool_config]]
         [[[environment]]]
-            CMEW_DATA_FOR_ESMVAL_DIR = ${ROOT_RESTRUCTURED_DIR}/GCModelDev
+            CMEW_DATA_FOR_ESMVAL_DIR = ${ROOT_REORGANISED_DIR}/GCModelDev
             DRS_CMIP6 = {{ DRS_CMIP6 }}
             DRS_OBS4MIPS = {{ DRS_OBS4MIPS }}
             MAX_PARALLEL_TASKS = {{ MAX_PARALLEL_TASKS }}
@@ -125,38 +125,41 @@
             ROOTPATH_CMIP6 = {{ ROOTPATH_CMIP6 }}
             ROOTPATH_OBS4MIPS = {{ ROOTPATH_OBS4MIPS }}
 
-    [[configure_for<recipe>]]
-        inherit = None, RECIPE, MODEL_RUNS
+    [[update_esmvaltool_recipe<recipe>]]
+        inherit = RECIPE, MODEL_RUNS
         [[[environment]]]
-            ROSE_TASK_APP = configure_for
+            ROSE_TASK_APP = update_esmvaltool_recipe
 
-    [[configure_standardise<recipe,dataset>]]
+    [[create_cdds_config<recipe,dataset>]]
         inherit = STANDARDISE, RECIPE, MODEL_RUNS, DATASET
         [[[environment]]]
-            ROSE_TASK_APP = configure_standardise
+            ROSE_TASK_APP = create_cdds_config
             START_YEAR = {{ START_YEAR }}
             NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
             MIP_TABLE_DIR = {{ MIP_TABLE_DIR }}
 
-    [[standardise_model_data<dataset>]]
+    [[run_cdds<dataset>]]
         inherit = STANDARDISE, DATASET
         [[[environment]]]
-            ROSE_TASK_APP = standardise_model_data
+            ROSE_TASK_APP = run_cdds
 
-    [[restructure_dirs]]
+    [[reorganise_data_directories<evaluation_tool=esmvaltool>]]
         inherit = STANDARDISE
         [[[environment]]]
+            ROSE_TASK_APP = reorganise_data_directories
+            ROSE_APP_OPT_CONF_KEYS = esmvaltool
             SITE = {{ SITE }}
 
-    [[run_recipe<recipe>]]
-        inherit = None, COMPUTE, RECIPE
+    [[run_evaluation_tool<evaluation_tool=esmvaltool><recipe>]]
+        inherit = RECIPE
         [[[environment]]]
-            ROSE_TASK_APP = run_recipe
+            ROSE_TASK_APP = run_evaluation_tool
+            ROSE_APP_OPT_CONF_KEYS = esmvaltool
 
-    [[copy_datasets]]
+    [[centralise_evaluation_metadata]]
         inherit = MODEL_RUNS
         [[[environment]]]
-            ROSE_TASK_APP = copy_datasets
+            ROSE_TASK_APP = centralise_evaluation_metadata
 
     [[get_esmval_branch]]
         [[[environment]]]
