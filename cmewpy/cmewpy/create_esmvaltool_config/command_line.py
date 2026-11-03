@@ -43,9 +43,13 @@ def parse_args_for_create_esmvaltool_config(arguments):
     parser.add_argument(
         "--site_local_data_key",
         help=(
-            "The site-specific fourth-level key "
-            "in the ESMValTool site configuration file, "
-            "occurring between 'data' and 'rootpath'."
+            "The site-specific identifier "
+            "in the ESMValCore configuration file "
+            "`data-hpc-<site_local_data_key>.yml` "
+            "in `ESMValCore/esmvalcore/config/configurations` "
+            "and also used as a key in the dictionary "
+            "[projects][<project>][data][<site_local_data_key>] "
+            "in said configuration file."
         ),
     )
     parser.add_argument(
