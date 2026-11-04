@@ -179,6 +179,8 @@ def add_common_facets(
         dataset_dict["activity"] = "ESMVal"
         dataset_dict["grid"] = "gn"
         dataset_dict["institute"] = institute
+        # This has no meaning for model runs but is needed by ESMValTool
+        dataset_dict["variant_label"] = "r1i1p1f1"
 
     return dataset_dict
 
