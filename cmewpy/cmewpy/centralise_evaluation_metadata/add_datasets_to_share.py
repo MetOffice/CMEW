@@ -326,9 +326,7 @@ def add_datasets_to_share(
             )
             # Update the experiment to encode the suite ID
             for dataset in datasets:
-                dataset["experiment_id"] = (
-                    f"{dataset['experiment_id']}-{dataset['suite_id']}"
-                )
+                dataset["experiment_id"] = f"development-{dataset['suite_id']}"
 
             # Reformat list as a dictionary, keyed by suite ID
             dict_to_write = use_facet_as_key(datasets, "suite_id")
