@@ -50,7 +50,7 @@ for section in sections:
             raw_value = completed_process.stdout
             if raw_value:
                 value = raw_value.strip("\n").strip('"')
-                dataset_metadata.update({option: value.strip("\n").strip("\"")})
+                dataset_metadata.update({option: value.strip("\n").strip('"')})
                 if option == "suite_id":
                     dataset_ids.append(value)
         datasets_metadata.update({dataset_name: dataset_metadata})
