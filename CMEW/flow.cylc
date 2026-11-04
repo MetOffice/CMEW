@@ -32,7 +32,7 @@
             => install_package<package=cmewpy>
 {%- if USE_ESMVALTOOL_BRANCH %}
             install_package<package=cmewpy>
-            => get_esmval_branch
+            => checkout_esmvaltool
             => create_esmvaltool_config & centralise_evaluation_metadata
 {%- else %}
             install_package<package=cmewpy>
@@ -164,7 +164,7 @@
         [[[environment]]]
             ROSE_TASK_APP = centralise_evaluation_metadata
 
-    [[get_esmval_branch]]
+    [[checkout_esmvaltool]]
         [[[environment]]]
             ESMVALTOOL_BRANCH = {{ ESMVALTOOL_BRANCH | default("") }}
 
