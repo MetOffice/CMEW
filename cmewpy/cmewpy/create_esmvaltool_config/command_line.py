@@ -74,15 +74,15 @@ def parse_args_for_create_esmvaltool_config(arguments):
     parser.add_argument(
         "--site_config_output_path",
         help=(
-            "The full path to the file where the "
-            "site config file for ESMValTool will be written."
+            "The full path to the YAML file where the "
+            "site-specific configuration for ESMValTool will be written."
         ),
     )
     parser.add_argument(
         "--user_config_output_path",
         help=(
-            "The full path to the file where the "
-            "user config file for ESMValTool will be written."
+            "The full path to the YAML file where the "
+            "user-specific configuration for ESMValTool will be written."
         ),
     )
 

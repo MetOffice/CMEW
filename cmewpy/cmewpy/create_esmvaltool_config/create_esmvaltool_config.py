@@ -42,14 +42,16 @@ def amend_site_config(
     cmew_data_for_esmval_dir,
 ):
     """
-    Add a section for CMEW data to the site configuration file.
+    Return the updated site site-specific configuration for ESMValTool.
 
-    The new section is titled "ESMVal" and copies facets from the CMIP6 entry.
+    A new section titled "ESMVal" is added
+    and is a copy of the facets from the CMIP6 entry.
 
     Parameters
     ----------
     site_config_defaults:
-        The contents of ESMValTool's configuration file for the site.
+        The contents of the
+        default site-specific configuration for ESMValTool.
     site_local_data_key : str
         The site-specific identifier in the ESMValCore configuration file
         `data-hpc-<site_local_data_key>.yml`
@@ -64,7 +66,7 @@ def amend_site_config(
     Returns
     -------
     dict
-        Site configuration content.
+        The updated site-specific configuration for ESMValTool.
     """
     site_config_file_contents = site_config_defaults
 
@@ -102,12 +104,13 @@ def amend_user_config(
     output_dir,
 ):
     """
-    Return the updated version of the user configuration file.
+    Return the updated user-specific configuration for ESMValTool.
 
     Parameters
     ----------
     user_config_defaults : dict
-        The contents of ESMValTool's default user configuration file.
+        The contents of the
+        user-specific configuration for ESMValTool.
     max_parallel_tasks : str
         A parallelisation option to feed to ESMValTool.
     output_dir : str
@@ -196,11 +199,11 @@ def create_esmvaltool_config(
     output_dir : str
         The full path to the directory for ESMValTool to write its output.
     site_config_output_path : str
-        The full path to the file where the site config file
-        for ESMValTool will be written.
+        The full path to the YAML file where the
+        site-specific configuration for ESMValTool will be written.
     user_config_output_path : str
-        The full path to the file where the user config file
-        for ESMValTool will be written.
+        The full path to the YAML file where the
+        user-specific configuration for ESMValTool will be written.
     """
     logger.info("Creating ESMValTool site config")
     site_config_defaults = load_yaml(site_config_defaults_filepath)
@@ -208,7 +211,7 @@ def create_esmvaltool_config(
         site_config_defaults, site_local_data_key, cmew_data_for_esmval_dir
     )
     ensure_parent_dir(site_config_output_path)
-    logger.info("Writing developer config to %s", site_config_output_path)
+    logger.info("Writing site config to %s", site_config_output_path)
     write_yaml(site_config_output_path, site_config_contents)
 
     logger.info("Creating ESMValTool user config")
