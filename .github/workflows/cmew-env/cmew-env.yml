@@ -8,7 +8,7 @@ channels:
 dependencies:
   - cylc-flow
   - cylc-rose
-  - metomi-rose
+  - metomi-rose >= 2.7
   - sphinx
   - sphinx_rtd_theme
   - pre-commit

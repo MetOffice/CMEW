@@ -44,10 +44,10 @@ jobs:
       - name: Create environment
         uses: mamba-org/setup-micromamba@v3
         with:
-          environment-file: .github/workflows/cmew-env/cmew-env.lock
+          environment-file: .github/workflows/cmew-env/cmew-env.yml
           environment-name: cmew-env
           cache-environment: true
-          cache-environment-key: env-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('.github/workflows/cmew-env/cmew-env.lock') }}
+          cache-environment-key: env-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('.github/workflows/cmew-env/cmew-env.yml') }}
 
       - name: Validate Cylc workflow
         run: |
