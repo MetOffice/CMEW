@@ -361,6 +361,7 @@ def add_datasets_to_share(
                 naml_content, start_year, number_of_years, institute, "ESMVal"
             )
 
+            # Add model development run facets
             for dataset in datasets:
                 # Update the experiment to encode the suite ID
                 dataset["experiment_id"] = f"development-{dataset['suite_id']}"
