@@ -109,7 +109,7 @@ def test_add_common_facets():
 
 def test_determine_model_id():
     mock_dataset_dict = {
-        "base_model": "GC6",
+        "model_configuration": "GC6",
         "resolution": "medium",
         "suite_id": "u-aa000",
         "other_facet": "value",

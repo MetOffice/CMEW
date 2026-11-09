@@ -190,7 +190,7 @@ def determine_model_id(dataset_dict):
     Add a model ID to a dataset dictionary.
 
     The model ID is based on the combination of facets
-    `base_model` and `resolution`.
+    `model_configuration` and `resolution`.
 
     Parameters
     ----------
@@ -201,12 +201,12 @@ def determine_model_id(dataset_dict):
     -------
     dataset_dict: dict
         The input dataset dictionary with a `model_id` facet added
-        and the `base_model` and `resolution` facets removed.
+        and the `model_configuration` and `resolution` facets removed.
     """
     logger.debug(
         "Determining model ID for % with %s %s resolution data",
         dataset_dict["suite_id"],
-        dataset_dict["base_model"],
+        dataset_dict["model_configuration"],
         dataset_dict["resolution"],
     )
     model_ids = {
@@ -219,9 +219,12 @@ def determine_model_id(dataset_dict):
         ("medium", "GC5"): "HadGEM3-GC5E-MM",
         ("medium", "GC6"): "HadGEM3-GC5c-N216ORCA025",
     }
-    if (dataset_dict["resolution"], dataset_dict["base_model"]) in model_ids:
+    if (
+        dataset_dict["resolution"],
+        dataset_dict["model_configuration"],
+    ) in model_ids:
         dataset_dict["model_id"] = model_ids[
-            (dataset_dict["resolution"], dataset_dict["base_model"])
+            (dataset_dict["resolution"], dataset_dict["model_configuration"])
         ]
     else:
         raise ValueError("Unknown base model and resolution combination.")
@@ -233,7 +236,7 @@ def determine_model_id(dataset_dict):
 
     # Now delete the old keys as not needed
     del dataset_dict["resolution"]
-    del dataset_dict["base_model"]
+    del dataset_dict["model_configuration"]
 
     return dataset_dict
 
