@@ -32,8 +32,9 @@
     {% set tool = SOURCE_RECIPES[recipe] %}
     {% do split_recipes[tool].append(recipe) %}
 {% endfor %}
-{# Create helper boolean to indicate if an autoassess area has been selected #}
+{# Create helper booleans to indicate if recipes for particular tools have been selected #}
 {% set AUTOASSESS = split_recipes["autoassess"] | length > 0 %}
+{% set ESMVALTOOL = split_recipes["esmvaltool"] | length > 0 %}
 
 
 [scheduler]
@@ -43,7 +44,9 @@
     package = autoassess, cmewpy
     evaluation_tool = autoassess, esmvaltool
     dataset = {{ datasets }}
+{%- if ESMVALTOOL %}
     recipe = {{ split_recipes["esmvaltool"] | join(",") }}
+{%- endif %}
 {%- if AUTOASSESS %}
     autoassess_area = {{ split_recipes["autoassess"] | join(",") }}
 {%- endif %}
@@ -53,6 +56,7 @@
         R1 = """
             install_env_file
             => install_package<package=cmewpy>
+{%- if ESMVALTOOL %}
 {%- if USE_ESMVALTOOL_BRANCH %}
             install_package<package=cmewpy>
             => checkout_esmvaltool
@@ -79,6 +83,7 @@
 {%- endif %}
 {%- if TEST %}
             run_evaluation_tool<evaluation_tool=esmvaltool><recipe> => check_expected_outputs<recipe>
+{%- endif %}
 {%- endif %}
         """
 
@@ -141,6 +146,7 @@
             ROSE_TASK_APP = install_package
             ROSE_APP_OPT_CONF_KEYS = ($CYLC_TASK_PARAM_package)
 
+{%- if ESMVALTOOL %}
     [[create_esmvaltool_config]]
         [[[environment]]]
             CMEW_DATA_FOR_ESMVAL_DIR = ${ROOT_REORGANISED_DIR}/GCModelDev
@@ -195,6 +201,7 @@
         inherit = STANDARDISE
         [[[environment]]]
             STANDARDISED_DATA_DIR = {{ STANDARDISED_DATA_DIR | default("") }}
+{%- endif %}
 
     [[housekeeping]]
 
