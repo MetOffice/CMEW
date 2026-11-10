@@ -103,12 +103,27 @@ In the GUI we need to click
 
 .. image:: images/amending_number_of_years.png
    :alt: An image of the Rose GUI showing the "suite conf",
-         with the "Datasets" section expanded,
-         the "Model runs to assess" section selected,
-         and a pop-up menu over the second entry.
+         with the "Options" section expanded,
+         the "Required" section selected,
+         and a "2" next to variable NUMBER_OF_YEARS.
    :width: 600px
 
 **ii) Change the experiment dataset details**
+
+A typical |CMEW| user should already know what model run they would like to assess.
+For the purposes of this tutorial,
+we are going to evaluate model run ``u-cw673``.
+Information about this model run can be found at the following address:
+https://code.metoffice.gov.uk/trac/roses-u/browser/c/w/6/7/3/trunk/rose-suite.info
+
+Here is a copy of the information, for ease of reference:
+
+.. image:: images/u-cw673_suite_info.png
+   :alt: An image of the Rose GUI showing the "suite conf",
+         with the "Datasets" section expanded,
+         the "Model runs to assess" section selected,
+         and a pop-up menu over the "experiment" entry.
+   :width: 600px
 
 Now in the GUI we need to click
  - the arrow next to **Datasets**, then
@@ -116,11 +131,65 @@ Now in the GUI we need to click
  - the section labelled **experiment**.
 
 .. image:: images/editing_experiment_dataset.png
-   :alt: An image of the Rose GUI showing the "suite conf",
-         with the "Datasets" section expanded,
-         the "Model runs to assess" section selected,
-         and a pop-up menu over the second entry.
+   :alt: An image of a webpage showing the following lines of code:
+         1	awarning=FOR MET OFFICE AND MONSOON USERS ONLY:
+         2	        =
+         3	        =**** THIS SUITE WILL ARCHIVE NON-DUPLEXED DATA TO MOOSE.
+         4	        =FOR CRITICAL MODEL RUNS SWITCH TO DUPLEXED IN:
+         5	        =postproc --> Post Processing - common settings --> Moose Archiving --> non_duplexed_set
+         6	        =Follow guidance in http://www-twiki/Main/MassNonDuplexPolicy
+         7	description=Copy of u-cw653/trunk@256293
+         8	owner=dancopsey
+         9	project=Coupled Climate
+         10	title=GC5 N96 ORCA1 UM13.1 YR2000 pesent day control run
    :width: 600px
 
 Overwrite the experiment dataset with the following details:
- - s
+
+**suite_id**
+
+This is the main identifier of the model run to assess,
+informing where the data on MASS will be extracted from.
+
+*Enter the value*
+ - ``u-cw673``
+
+**label_for_plots**
+
+This is a short description of the model run,
+for example you might describe the parametrization changes.
+
+*Enter the value*
+ - ``CMEW tutorial model run``
+
+**model_configuration**
+
+Line 10 of the information about the model run starts ``title=GC5 ...``.
+
+*Select the option*
+ - ``"GC5"``
+
+**resolution**
+
+Line 10 of the information about the model run continues ``... N96 ORCA1 ...``.
+By clicking the help button for resolution,
+we can see that this counts as low resolution data.
+
+.. image:: images/resolution_help_button.png
+   :alt: An image of a Rose GUI help page, displaying the following text:
+         This is used to determine a model ID.
+         N96 ORCA1 is low resolution.
+         N215 ORCA025 is medium resolution.
+   :width: 800px
+
+*Select the option*
+ - ``"low"``
+
+**calendar**
+
+I THINK WE SHOULD HIDE ALL THE FOLLOWING DETAILS:
+``moo_ppfp -tim :/crum/u-cw673/apm.pp/cw673a.pm1993jan.pp``
+12**1** means Gregorian.
+
+*Select the option*
+ - ``"gregorian"``
