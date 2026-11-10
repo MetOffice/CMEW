@@ -21,19 +21,25 @@ def parse_args_for_create_html_page(arguments):
         The names and values of the command line arguments.
     """
     parser = argparse.ArgumentParser(
-        description=(
-            "Produce an HTML page using a jinja2 template."
-        ),
+        description=("Produce an HTML page using a jinja2 template."),
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     parser.add_argument(
-        "--template", type=Path, help="Jinja2 template file.",
+        "--template",
+        type=Path,
+        help="Jinja2 template file.",
     )
     parser.add_argument(
-        "--html-page", type=Path, help="File to write output to.",
+        "--html-page",
+        type=Path,
+        help="File to write output to.",
     )
     parser.add_argument(
-        "-d", "--data", type=Path, default=None, help="Data file with inputs.",
+        "-d",
+        "--data",
+        type=Path,
+        default=None,
+        help="Data file with inputs.",
     )
     return parser.parse_args(arguments)
 
@@ -60,4 +66,3 @@ def main_for_create_html_page(arguments=None):
         args.html_page,
         args.data,
     )
-

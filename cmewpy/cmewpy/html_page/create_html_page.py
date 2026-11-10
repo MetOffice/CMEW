@@ -7,8 +7,10 @@ Script to produce an HTML file using a jinja2 template file.
 """
 
 from jinja2 import Environment, FileSystemLoader, Template
+import logging
 import os
 from pathlib import Path
+import sys
 
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 filename = os.path.basename(__file__)
@@ -37,7 +39,7 @@ def load_data(data_path: Path | None) -> dict:
     """
     logging.info("Using predefined environment variables to create data")
     logging.info(f"ASSESSMENT_TITLE = {os.environ['ASSESSMENT_TITLE']}")
-    logging.info(f"DATASETS = {os.environ['DATASETS'}")
+    logging.info(f"DATASETS = {os.environ['DATASETS']}")
     logging.info(f"START_YEAR = {os.environ['START_YEAR']} ")
     logging.info(f"NUMBER_OF_YEARS = {os.environ['NUMBER_OF_YEARS']}")
     return {
