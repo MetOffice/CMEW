@@ -1,20 +1,32 @@
-# (C) Crown Copyright 2022-2025, Met Office.
+# (C) Crown Copyright 2022-2026, Met Office.
 # The LICENSE.md file contains full licensing details.
-# This workflow creates the required Conda environment, performs various
-# validation steps for Cylc and Rose, and builds and checks the documentation.
+# This workflow creates the required Conda environment,
+# performs various validation steps for Cylc and Rose,
+# and builds and checks the documentation.
 name: default
 
-# Controls when the action will run
+# Controls when the workflow will run.
 on:
-  # Triggers the workflow on push or pull request events
-  push:
+  # Explicitly specifying the types below, just in case the defaults change:
+  # https://docs.github.com/en/enterprise-cloud@latest/actions/
+  # writing-workflows/choosing-when-your-workflow-runs/
+  # events-that-trigger-workflows#pull_request.
+  # Triggers the workflow when a pull request is created,
+  # and every time changes are pushed to the feature branch
+  # after the pull request is created.
   pull_request:
+    types: [opened, synchronize, reopened]
 
-  # Allows you to run this workflow manually from the Actions tab
+  # Allows you to run this workflow manually from the Actions tab.
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run
-# sequentially or in parallel
+# Use a login shell so the Conda environment is activated.
+defaults:
+  run:
+    shell: bash -leo pipefail {0}
+
+# A workflow run is made up of one or more jobs
+# that can run sequentially or in parallel.
 jobs:
   # This workflow contains a single job called "build"
   build:
@@ -24,75 +36,56 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part
     # of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job
-      # can access it
-      - uses: actions/checkout@v4
+      # Checks-out your repository under $GITHUB_WORKSPACE,
+      # so your job can access it.
+      - name: Checkout repository
+        uses: actions/checkout@v6
 
       - name: Create environment
-        run: |
-          conda update conda
-          conda create --name cmew --file .github/workflows/cmew-env/cmew-env.lock
-          eval "$(conda shell.bash hook)"
-          conda activate cmew
+        uses: mamba-org/setup-micromamba@v3
+        with:
+          environment-file: .github/workflows/cmew-env/cmew-env.lock
+          environment-name: cmew-env
+          cache-environment: true
+          cache-environment-key: env-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('.github/workflows/cmew-env/cmew-env.lock') }}
 
       - name: Validate Cylc workflow
         run: |
-          eval "$(conda shell.bash hook)"
-          conda activate cmew
           cd CMEW
           cylc validate -O metoffice .
 
       - name: Run Cylc configuration linter
         run: |
-          eval "$(conda shell.bash hook)"
-          conda activate cmew
           cd CMEW
           cylc lint
 
       - name: Run all Rose validator macros against Rose configuration files
         run: |
-          eval "$(conda shell.bash hook)"
-          conda activate cmew
           cd CMEW
           rose macro -V
 
       - name: Validate format of Rose configuration files
         run: |
-          eval "$(conda shell.bash hook)"
-          conda activate cmew
           cd CMEW
           output="$(rose config-dump)"
           msg="Run 'rose config-dump' to re-dump the Rose configuration files"
           msg="${msg} in the common format, then commit the changes."
           # The '-z' option returns true if 'output' is empty.
-          if [[ -z "${output}" ]]; then exit 0; else echo "${msg}" && exit 1; fi
+          if ! [[ -z "${output}" ]]; then echo "${msg}" && exit 1; fi
 
       - name: Validate Rose configuration metadata
         run: |
-          eval "$(conda shell.bash hook)"
-          conda activate cmew
           cd CMEW
           rose metadata-check -C meta/
 
-      - name: Build documentation
-        run: |
-          eval "$(conda shell.bash hook)"
-          conda activate cmew
-          cd doc
-          make html
+      - name: Build documentation using Sphinx
+        run: make --directory=doc html
 
       - name: Check for broken links in the documentation
-        run: |
-          eval "$(conda shell.bash hook)"
-          conda activate cmew
-          cd doc
-          make linkcheck
+        run: make --directory=doc linkcheck
 
       - name: Run pre-commit hooks
-        run: |
-          eval "$(conda shell.bash hook)"
-          conda activate cmew
-          pre-commit run --all-files
+        run: pre-commit run --all-files
 
       # Find all bash scripts (files with an 'sh' extension)
       # and explicitly include the `env` files (which have no extension).

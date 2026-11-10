@@ -8,12 +8,12 @@
     autoassess_area = monsoon
 
 [runtime]
-    [[compare<recipe>]]
+    [[check_expected_outputs<recipe>]]
         [[[environment]]]
-            ROSE_TASK_APP = compare
+            ROSE_TASK_APP = check_expected_outputs
             ROSE_APP_OPT_CONF_KEYS=${CYLC_TASK_PARAM_recipe}
 
-    [[compare<autoassess_area>]]
+    [[check_expected_outputs<autoassess_area>]]
         [[[environment]]]
-            ROSE_TASK_APP = compare
+            ROSE_TASK_APP = check_expected_outputs
             ROSE_APP_OPT_CONF_KEYS=${CYLC_TASK_PARAM_autoassess_area}

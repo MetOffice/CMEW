@@ -1,30 +1,48 @@
-.. (C) Crown Copyright 2024-2025, Met Office.
+.. (C) Crown Copyright 2024-2026, Met Office.
 .. The LICENSE.md file contains full licensing details.
 
-*******
 Testing
-*******
+=======
 
 .. include:: common.txt
 
-Testing in |CMEW| can be done in one of two ways. Acceptance tests which run
-in the ``compare`` task verify if the correct outputs are produced by the
-workflow (ESMValTool tests, e.g. the Recipe Test Workflow, ensures
-the contents of the output files are as expected). Unit tests which are run
-inside the ``unittest`` task run ``pytest`` over existing python scripts in the
-workflow.
+|CMEW| contains two types of tests:
 
-The process to run the tests is as follows:
+* **End-to-end tests**.
+  |CMEW| end-to-end tests verify whether the evaluation tools
+  produce the expected output files.
+  These checks are performed via the ``check_expected_outputs`` task.
+  They do not check the contents of those files.
+  Content checking is performed separately by the Recipe Test Workflow,
+  using outputs produced by that workflow.
+* **Unit tests**.
+  |CMEW| unit tests ensure key functions
+  in the ``cmewpy`` Python package behave as expected.
+  These tests are run using ``pytest``.
 
- * Navigate to the workflow directory,
-   e.g. ``cd <desired_repository_location>/CMEW/CMEW``
+How to run tests in |CMEW|
+--------------------------
 
- * Run either the workflow end-to-end (acceptance) tests or Python unit tests
+Run the end-to-end tests
+~~~~~~~~~~~~~~~~~~~~~~~~
 
-   * Run the full |CMEW| workflow at the Met Office, with all tests enabled,
-     using the command ``cylc vip -O metoffice -O test``
+* Navigate to the workflow directory::
 
-   * Run only the unit tests at the Met Office,
-     using the command ``cylc vip -O metoffice -O unittest``
+    cd <desired_repository_location>/CMEW/CMEW
 
- * Ensure the tests pass. One way to do this is to check `Cylc Review`_
+* Run |CMEW| at the Met Office, with the end-to-end tests enabled::
+
+    cylc vip -O metoffice -O test
+
+* Ensure the tests pass. One way to do this is to check `Cylc Review`_.
+
+Run the unit tests from the command line
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* Navigate to the ``cmewpy`` directory::
+
+    cd <desired_repository_location>/CMEW/cmewpy
+
+* Run the unit tests::
+
+    pytest
