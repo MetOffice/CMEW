@@ -23,6 +23,9 @@ streams_dict = {
     ],
     "onm/grid-T": [
         "Omon/tos",
+        "Omon/sos",
+        "Omon/thetao",
+        "Omon/so",
     ],
 }
 
