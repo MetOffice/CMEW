@@ -11,6 +11,12 @@ Comparing the radiation budget and monsoon assessment areas of a GC5 model run t
 
 .. include:: ../common.txt
 
+In this tutorial,
+we will put a copy of the |CMEW| workflow onto our local machine
+and use it to compare model run **u-cw673** to model run **u-bv546**
+with regards to radiation budget and monsoon metrics.
+
+
 0. Prerequisites
 ----------------
 
@@ -20,8 +26,7 @@ b) `moo hello`
 1. Clone the |CMEW| repository from GitHub
 ------------------------------------------
 
-In this tutorial,
-we will put a copy of the |CMEW| workflow onto our local machine,
+We will copy |CMEW| from GitHub
 into a directory called ``cmew_tutorial`` on the home space.
 
 **a) Create a new directory for the |CMEW| repository**
@@ -55,15 +60,28 @@ We can confirm that the following have been created inside our directory `cmew_t
  - ``LICENSE.md`` (a document)
  - ``SECURITY.md`` (a document)
 
-**c) Navigate to the directory containing the** ``flow.cylc`` **file**
+
+2. Configure the datasets for our |CMEW| run
+--------------------------------------------
+
+|CMEW| is set up to take a reference (known) model run,
+and compare an evaluation run to this reference.
+Other model runs may also be added,
+but that is beyond the scope of this tutorial.
+
+**a) Navigate to the directory containing the** ``rose-suite.conf`` **file**
 
 All of the code and configuration relating to the workflow is in the directory ``CMEW``.
-Let's inspect this directory::
-
-    ls CMEW
-
-We can confirm that files listed include ``flow.cylc`` and ``rose-suite.conf``.
-To |Cylc| workflow,
-we must be in the directory containing these files to edit and start the workflow.
+Navigate to the directory ``CMEW``::
 
     cd CMEW
+    ls
+
+We can confirm that files listed include ``flow.cylc`` and ``rose-suite.conf``.
+
+**b) Change the evaluation dataset details**
+
+This is done using the Rose GUI.
+Open the Rose GUI::
+
+    rose edit
