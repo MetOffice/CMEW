@@ -21,12 +21,12 @@ with regards to radiation budget and monsoon metrics.
 ----------------
 
 a) SSH access to GitHub
-b) `moo hello`
+b) ``moo hello``
 
 1. Clone the |CMEW| repository from GitHub
 ------------------------------------------
 
-We will copy |CMEW| from GitHub
+In this section, we will copy |CMEW| from GitHub
 into a directory called ``cmew_tutorial`` on the home space.
 
 **a) Create a new directory for the |CMEW| repository**
@@ -64,10 +64,11 @@ We can confirm that the following have been created inside our directory `cmew_t
 2. Configure the datasets for our |CMEW| run
 --------------------------------------------
 
-|CMEW| is set up to take a reference (known) model run,
+|CMEW| is set up to take a reference (control) model run,
 and compare an evaluation run to this reference.
-Other model runs may also be added,
-but that is beyond the scope of this tutorial.
+
+In this section, we will use the default control run,
+but replace the evaluation run with a new dataset.
 
 **a) Navigate to the directory containing the** ``rose-suite.conf`` **file**
 
@@ -79,9 +80,25 @@ Navigate to the directory ``CMEW``::
 
 We can confirm that files listed include ``flow.cylc`` and ``rose-suite.conf``.
 
-**b) Change the evaluation dataset details**
+**b) Configure the workflow**
 
 This is done using the Rose GUI.
 Open the Rose GUI::
 
     rose edit
+
+
+**b)i) Change the evaluation dataset details**
+
+In the GUI we need to click the arrows next to
+ - **suite conf**, then
+ - **Datasets**, then
+ - **Model runs to assess**, and finally on
+ - **experiment**
+
+.. image:: images/editing_experiment.png
+   :alt: An image of the Rose GUI showing the "suite conf",
+         with the "Datasets" section expanded,
+         the "Model runs to assess" section selected,
+         and a pop-up menu over the second entry.
+   :width: 800px
