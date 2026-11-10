@@ -14,7 +14,7 @@ Comparing the radiation budget and monsoon assessment areas of a GC5 model run t
 0. Prerequisites
 ----------------
 
-a) Met Office access to GitHub
+a) Access to GitHub
 b) `moo hello`
 
 1. Clone the |CMEW| repository from GitHub
