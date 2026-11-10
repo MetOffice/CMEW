@@ -2,7 +2,11 @@
 # (C) Crown Copyright 2022-2026, Met Office.
 # The LICENSE.md file contains full licensing details.
 # flow.cylc
-{{ assert(SITE != "", "SITE must be set to something other than an empty string") }}
+{% set SITE = SITE | default("") %}
+{{ assert(
+    SITE != "",
+    "SITE must be set to something other than an empty string. Specify a site using '-O <site>', e.g. 'cylc vip -O metoffice'."
+    ) }}
 {{ assert(ESMVALTOOL_MODULE_NAME != "", "ESMVALTOOL_MODULE_NAME must be set to something other than an empty string") }}
 {% set SKIP_CDDS = SKIP_CDDS | default(false) %}
 
@@ -29,7 +33,7 @@
             => install_package<package=cmewpy>
 {%- if USE_ESMVALTOOL_BRANCH %}
             install_package<package=cmewpy>
-            => get_esmval_branch
+            => checkout_esmvaltool
             => create_esmvaltool_config & centralise_evaluation_metadata
 {%- else %}
             install_package<package=cmewpy>
@@ -40,8 +44,8 @@
             => update_esmvaltool_recipe<recipe>
             => create_cdds_config<recipe,dataset>
             => run_cdds<dataset>
-            => restructure_dirs
-            create_esmvaltool_config & restructure_dirs
+            => reorganise_data_directories<evaluation_tool=esmvaltool>
+            create_esmvaltool_config & reorganise_data_directories<evaluation_tool=esmvaltool>
             => run_evaluation_tool<evaluation_tool=esmvaltool><recipe>
             => housekeeping
 {%- else %}
@@ -64,14 +68,17 @@
             ESMVALTOOL_DIR = ${CYLC_WORKFLOW_RUN_DIR}/lib/python/ESMValTool
             ESMVALTOOL_MODULE_NAME = {{ ESMVALTOOL_MODULE_NAME }}
             ESMVALTOOL_CONFIG_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/etc/esmvaltool_config
-            USER_CONFIG_PATH = ${ESMVALTOOL_CONFIG_DIR}/config-user.yml
-            DEV_CONFIG_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/config-developer.yml
+            ESMVALTOOL_USER_CONFIG = config-user.yml
+            ESMVALTOOL_SITE_DATA_KEY = {{ ESMVALTOOL_SITE_DATA_KEY }}
+            ESMVALTOOL_SITE_CONFIG = data-hpc-${ESMVALTOOL_SITE_DATA_KEY}.yml
+            USER_CONFIG_PATH = ${ESMVALTOOL_CONFIG_DIR}/${ESMVALTOOL_USER_CONFIG}
+            SITE_CONFIG_PATH = ${ESMVALTOOL_CONFIG_DIR}/${ESMVALTOOL_SITE_CONFIG}
             OUTPUT_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/cycle/${CYLC_TASK_CYCLE_POINT}
             PYTHONPATH_PREPEND = ${ESMVALTOOL_DIR}
             SHARE_DATA_CDDS = ${CYLC_WORKFLOW_SHARE_DIR}/data/cdds
             ROOT_PROC_DIR = ${SHARE_DATA_CDDS}/proc
             ROOT_DATA_DIR = ${SHARE_DATA_CDDS}/cdds_data
-            ROOT_RESTRUCTURED_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/work
+            ROOT_REORGANISED_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/work
             START_YEAR = {{ START_YEAR }}
             NUMBER_OF_YEARS = {{ NUMBER_OF_YEARS }}
 
@@ -114,7 +121,7 @@
 
     [[create_esmvaltool_config]]
         [[[environment]]]
-            CMEW_DATA_FOR_ESMVAL_DIR = ${ROOT_RESTRUCTURED_DIR}/GCModelDev
+            CMEW_DATA_FOR_ESMVAL_DIR = ${ROOT_REORGANISED_DIR}/GCModelDev
             DRS_CMIP6 = {{ DRS_CMIP6 }}
             DRS_OBS4MIPS = {{ DRS_OBS4MIPS }}
             MAX_PARALLEL_TASKS = {{ MAX_PARALLEL_TASKS }}
@@ -140,9 +147,11 @@
         [[[environment]]]
             ROSE_TASK_APP = run_cdds
 
-    [[restructure_dirs]]
+    [[reorganise_data_directories<evaluation_tool=esmvaltool>]]
         inherit = STANDARDISE
         [[[environment]]]
+            ROSE_TASK_APP = reorganise_data_directories
+            ROSE_APP_OPT_CONF_KEYS = esmvaltool
             SITE = {{ SITE }}
 
     [[run_evaluation_tool<evaluation_tool=esmvaltool><recipe>]]
@@ -156,7 +165,7 @@
         [[[environment]]]
             ROSE_TASK_APP = centralise_evaluation_metadata
 
-    [[get_esmval_branch]]
+    [[checkout_esmvaltool]]
         [[[environment]]]
             ESMVALTOOL_BRANCH = {{ ESMVALTOOL_BRANCH | default("") }}
 
