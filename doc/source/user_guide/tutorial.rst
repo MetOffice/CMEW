@@ -9,7 +9,7 @@ Evaluating a model run with |CMEW|
 Comparing the radiation budget and monsoon assessment areas of a GC5 model run to a GC3 model run
 -------------------------------------------------------------------------------------------------
 
-.. include:: common.txt
+.. include:: ../common.txt
 
 0. Prerequisites
 ----------------

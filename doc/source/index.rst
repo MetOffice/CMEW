@@ -13,6 +13,7 @@ Welcome to the Climate Model Evaluation Workflow's documentation!
    :caption: Contents
 
    about
+   Tutorial <user_guide/tutorial>
    recipes
    user_guide/index.rst
    testing
