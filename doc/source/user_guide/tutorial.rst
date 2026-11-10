@@ -65,10 +65,10 @@ We can confirm that the following have been created inside our directory `cmew_t
 --------------------------------------------
 
 |CMEW| is set up to take a reference (control) model run,
-and compare an evaluation run to this reference.
+and compare an evaluation (experiment) run to this reference.
 
 In this section, we will use the default control run,
-but replace the evaluation run with a new dataset.
+but replace the experiment run with a new dataset.
 
 **a) Navigate to the directory containing the** ``rose-suite.conf`` **file**
 
@@ -87,18 +87,40 @@ Open the Rose GUI::
 
     rose edit
 
+Now we will use the GUI to change some options.
 
-**b)i) Change the evaluation dataset details**
+**i) Change the number of years**
 
-In the GUI we need to click the arrows next to
- - **suite conf**, then
- - **Datasets**, then
- - **Model runs to assess**, and finally on
- - **experiment**
+Some |CMEW| assessment areas require a minimum of five years' of data to run.
+For this tutorial, we will pick areas that only need two years' worth of data to run.
+In order to make our tutorial run quicker, we will reduce the number of years to 2.
 
-.. image:: images/editing_experiment.png
+In the GUI we need to click
+ - the arrow next to **suite conf**, then
+ - the arrow next to **Options**, then
+ - the section labelled **Required**, then
+ - the down arrow, until **2** is displayed.
+
+.. image:: images/amending_number_of_years.png
    :alt: An image of the Rose GUI showing the "suite conf",
          with the "Datasets" section expanded,
          the "Model runs to assess" section selected,
          and a pop-up menu over the second entry.
-   :width: 800px
+   :width: 600px
+
+**ii) Change the experiment dataset details**
+
+Now in the GUI we need to click
+ - the arrow next to **Datasets**, then
+ - the arrow next to **Model runs to assess**, then
+ - the section labelled **experiment**.
+
+.. image:: images/editing_experiment_dataset.png
+   :alt: An image of the Rose GUI showing the "suite conf",
+         with the "Datasets" section expanded,
+         the "Model runs to assess" section selected,
+         and a pop-up menu over the second entry.
+   :width: 600px
+
+Overwrite the experiment dataset with the following details:
+ - s
