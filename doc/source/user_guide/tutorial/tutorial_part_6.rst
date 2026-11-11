@@ -3,9 +3,9 @@
 
 .. include:: ../../common.txt
 
-=====================
-Inspecting the output
-=====================
+==================
+Inspect the output
+==================
 
 |CMEW| outputs images to webpages.
 The style of the pages will be determined by whether the assessment tool was AutoAssess or ESMValTool.

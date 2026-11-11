@@ -3,9 +3,9 @@
 
 .. include:: ../../common.txt
 
-=======================
-Monitoring the workflow
-=======================
+====================
+Monitor the workflow
+====================
 
 Depending on the assessment areas, number of years,
 model resolution, and state of the data on MASS,
