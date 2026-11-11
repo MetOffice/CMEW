@@ -4,13 +4,14 @@
 .. include:: ../../common.txt
 
 Configure our |CMEW| run
-------------------------
+========================
 
 CMEW can evaluate data from different time periods.
 In this section, we will learn where the start year is determined,
 and change the number of years to evaluate.
 
-**1) Navigate to the directory containing the** ``rose-suite.conf`` **file**
+1) Navigate to the directory containing the ``rose-suite.conf`` file
+--------------------------------------------------------------------
 
 All of the code and configuration relating to the workflow is in the directory ``CMEW``.
 Within the same terminal window, whish is currently pointing to ``~/cmew_tutorial``,
@@ -24,7 +25,8 @@ Inspect the content of the ``CMEW`` directory::
 
 We can confirm that files listed include ``flow.cylc`` and ``rose-suite.conf``.
 
-**b) Configure the workflow**
+2) Configure the workflow
+-------------------------
 
 This is done using the Rose GUI.
 Open the Rose GUI::
@@ -33,7 +35,14 @@ Open the Rose GUI::
 
 Now we will use the GUI to change the time period options.
 
-**2) Change the number of years**
+Note the start year
+^^^^^^^^^^^^^^^^^^^
+
+This is currently set to 1993.
+This date is sufficient for this tutorial, and we will not amend it.
+
+Change the number of years
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Some |CMEW| assessment areas require a minimum of five years' worth of data to run.
 In order to make our tutorial quicker to run,
@@ -53,6 +62,8 @@ In the GUI we need to click
          and a "2" next to variable NUMBER_OF_YEARS.
    :width: 600px
 
-**3) Note the value of the variable ``OUTPUT_WEBPAGE_TITLE``**
+Note the value of the variable ``OUTPUT_WEBPAGE_TITLE``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+This is set to *A comparison of my model run against a previous version*.
 We will find this value on our outputs later on.

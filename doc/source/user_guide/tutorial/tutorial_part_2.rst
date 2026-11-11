@@ -4,7 +4,7 @@
 .. include:: ../../common.txt
 
 Change the dataset details
---------------------------
+==========================
 
 |CMEW| is set up to take a reference (control) model run,
 and compare an evaluation (experiment) run to this reference.
@@ -18,19 +18,23 @@ For the purposes of this tutorial,
 we are going to leave the reference run as it is (dataset ``u-bv526``), and
 evaluate model run ``u-cw673`` as the experiment.
 
-Information about this model run can be found at the following address:
-https://code.metoffice.gov.uk/trac/roses-u/browser/c/w/6/7/3/trunk/rose-suite.info
+.. dropdown:: Information about model run ``u-cw673`` is in this dropdown.
 
-Here is a copy of the information, for ease of reference:
+   This information was obtained from the following address:
+   https://code.metoffice.gov.uk/trac/roses-u/browser/c/w/6/7/3/trunk/rose-suite.info
+   Here is a copy of the information, for ease of reference:
 
-.. image:: images/u-cw673_suite_info.png
-   :alt: An image of the Rose GUI showing the "suite conf",
-         with the "Datasets" section expanded,
-         the "Model runs to assess" section selected,
-         and a pop-up menu over the "experiment" entry.
-   :width: 600px
+   .. image:: images/u-cw673_suite_info.png
+      :alt: An image of the Rose GUI showing the "suite conf",
+            with the "Datasets" section expanded,
+            the "Model runs to assess" section selected,
+            and a pop-up menu over the "experiment" entry.
+      :width: 600px
 
-Now in the GUI we need to click
+1) Navigate to the dataset information in the Rose GUI
+------------------------------------------------------
+
+We need to click
  - the arrow next to **Datasets**, then
  - the arrow next to **Model runs to assess**, then
  - the section labelled **experiment**.
@@ -51,15 +55,16 @@ Now in the GUI we need to click
 
 Overwrite the experiment dataset with the following details:
 
-**suite_id**
+Change the suite ID
+^^^^^^^^^^^^^^^^^^^
 
 This is the main identifier of the model run to assess,
 informing where the data on MASS will be extracted from.
 
-*Enter the value*
- - ``u-cw673``
+**Overwrite the default value of ``suite_id`` with ``u-cw673``**
 
-**label_for_plots**
+Change the label for plots
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This is a short description of the model run,
 for example you might describe the parametrization changes.
@@ -67,14 +72,16 @@ for example you might describe the parametrization changes.
 *Enter the value*
  - ``CMEW tutorial model run``
 
-**model_configuration**
+Change the model configuration
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Line 10 of the information about the model run starts ``title=GC5 ...``.
 
 *Select the option*
  - ``"GC5"``
 
-**resolution**
+Check the resolution
+^^^^^^^^^^^^^^^^^^^^
 
 Line 10 of the information about the model run continues ``... N96 ORCA1 ...``.
 
@@ -93,9 +100,10 @@ Line 10 of the information about the model run continues ``... N96 ORCA1 ...``.
 *Select the option*
  - ``"low"``
 
-**calendar**
+Change the calendar
+^^^^^^^^^^^^^^^^^^^
 
-This model run was set up to use a 360 day calendar.
+Model run ``u-cw673`` was set up to use a 360 day calendar.
 
 .. dropdown:: How do we find the calendar details?
 

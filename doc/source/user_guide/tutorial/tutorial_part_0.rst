@@ -9,18 +9,20 @@ and use it to compare model run **u-cw673** to model run **u-bv546**
 with regards to radiation budget and monsoon metrics.
 
 
-**Prerequisites**
+Prerequisites
+=============
 
 a) SSH access to GitHub
 b) ``moo hello``
 
 Clone the |CMEW| repository from GitHub
----------------------------------------
+=======================================
 
 In this section, we will copy |CMEW| from GitHub
 into a directory called ``cmew_tutorial`` on the home space.
 
-**1) Create a new directory for the |CMEW| repository**
+1) Create a new directory for the |CMEW| repository
+---------------------------------------------------
 
 Type the following commands into a terminal window::
 
@@ -28,7 +30,8 @@ Type the following commands into a terminal window::
     mkdir cmew_tutorial
     cd cmew_tutorial
 
-**2) Obtain the |CMEW| repository from GitHub**
+2) Obtain the |CMEW| repository from GitHub
+-------------------------------------------
 
 In your terminal, type::
 
@@ -36,7 +39,8 @@ In your terminal, type::
 
 We now have a copy of CMEW that we can inspect and run.
 
-**3) Inspect our new repository**
+3) Inspect our new repository
+-----------------------------
 
 Let's investigate at the |CMEW| repository.
 Within the same terminal window, type::
