@@ -91,6 +91,7 @@ def create_request(
     variables_file,
     raw_data_dir_mode,
     cdds_run_identifier,
+    model_params_dir,
     request_defaults=request_defaults,
 ):
     """
@@ -113,6 +114,8 @@ def create_request(
         Whether to save or reuse raw CDDS data files.
     cdds_run_identifier
         A string to identify which CMEW run spawned the CDDS workflow.
+    model_params_dir : str
+        The directory containing CDDS model parameter overrides.
     request_defaults : dict
         A dictionary containing the CDDS request default values.
 
@@ -153,6 +156,7 @@ def create_request(
     }
     request["misc"] = dict(defaults["misc"])
     request["conversion"] = dict(defaults["conversion"])
+    request["conversion"]["model_params_dir"] = model_params_dir
     if raw_data_dir_mode == "use_saved":
         request["conversion"]["skip_extract"] = True
     request["netcdf_global_attributes"] = dict(
@@ -194,6 +198,7 @@ def create_request_file(
     variables_file,
     raw_data_dir_mode,
     cdds_run_identifier,
+    model_params_dir,
 ):
     """
     Create a request file to standardise model data with CDDS.
@@ -220,6 +225,8 @@ def create_request_file(
         Whether to save or reuse raw CDDS data files.
     cdds_run_identifier : str
         A string to identify which CMEW run spawned the CDDS workflow.
+    model_params_dir : str
+        The directory containing CDDS model parameter overrides.
     """
     logger.info("Creating CDDS request for dataset %s", dataset)
 
@@ -233,5 +240,6 @@ def create_request_file(
         variables_file,
         raw_data_dir_mode,
         cdds_run_identifier,
+        model_params_dir,
     )
     write_request(request, output_filepath)
