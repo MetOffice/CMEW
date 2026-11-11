@@ -1,4 +1,4 @@
-.. (C) Crown Copyright 2024-2025, Met Office.
+.. (C) Crown Copyright 2024-2026, Met Office.
 .. The LICENSE.md file contains full licensing details.
 .. Climate Model Evaluation Workflow (CMEW) documentation master file, created
    by sphinx-quickstart on Fri Aug  5 14:53:16 2022.
