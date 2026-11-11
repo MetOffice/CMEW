@@ -12,8 +12,8 @@
 
 {% from "inc/dataset.cylc" import datasets, datasets_metadata %}
 
-{# What tool is running a recipe, ESMValTool or AutoAssess? #}
-{% set SOURCE_RECIPES = {
+{# What tool is running an area assessment, ESMValTool or AutoAssess? #}
+{% set SOURCE_ASSESSMENT_AREAS = {
     "aerosols": "autoassess",
     "africa": "autoassess",
     "australia": "autoassess",
@@ -26,15 +26,15 @@
     "radiation_budget": "esmvaltool",
     "stratosphere": "autoassess",
     "valnote": "autoassess"} %}
-{# Create a list of recipes for each tool based on what has been selected #}
-{% set split_recipes = {"autoassess": [], "esmvaltool": []} %}
-{% for recipe in RECIPES %}
-    {% set tool = SOURCE_RECIPES[recipe] %}
-    {% do split_recipes[tool].append(recipe) %}
+{# Create a list of area assessments for each tool based on what has been selected #}
+{% set split_areas = {"autoassess": [], "esmvaltool": []} %}
+{% for area in ASSESSMENT_AREAS %}
+    {% set tool = SOURCE_ASSESSMENT_AREAS[area] %}
+    {% do split_areas[tool].append(area) %}
 {% endfor %}
-{# Create helper booleans to indicate if recipes for particular tools have been selected #}
-{% set AUTOASSESS = split_recipes["autoassess"] | length > 0 %}
-{% set ESMVALTOOL = split_recipes["esmvaltool"] | length > 0 %}
+{# Create helper booleans to indicate if area assessments for particular tools have been selected #}
+{% set AUTOASSESS = split_areas["autoassess"] | length > 0 %}
+{% set ESMVALTOOL = split_areas["esmvaltool"] | length > 0 %}
 
 
 [scheduler]
@@ -45,10 +45,10 @@
     evaluation_tool = autoassess, esmvaltool
     dataset = {{ datasets }}
 {%- if ESMVALTOOL %}
-    recipe = {{ split_recipes["esmvaltool"] | join(",") }}
+    recipe = {{ split_areas["esmvaltool"] | join(",") }}
 {%- endif %}
 {%- if AUTOASSESS %}
-    autoassess_area = {{ split_recipes["autoassess"] | join(",") }}
+    autoassess_area = {{ split_areas["autoassess"] | join(",") }}
 {%- endif %}
 
 [scheduling]
