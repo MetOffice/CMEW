@@ -1,14 +1,6 @@
 .. (C) Crown Copyright 2026, Met Office.
 .. The LICENSE.md file contains full licensing details.
 
-**********************************
-Evaluating a model run with |CMEW|
-**********************************
-
--------------------------------------------------------------------------------------------------
-Comparing the radiation budget and monsoon assessment areas of a GC5 model run to a GC3 model run
--------------------------------------------------------------------------------------------------
-
 .. include:: ../../common.txt
 
 In this tutorial,
@@ -17,14 +9,13 @@ and use it to compare model run **u-cw673** to model run **u-bv546**
 with regards to radiation budget and monsoon metrics.
 
 
-0. Prerequisites
-----------------
+**Prerequisites**
 
 a) SSH access to GitHub
 b) ``moo hello``
 
-1. Clone the |CMEW| repository from GitHub
-------------------------------------------
+Clone the |CMEW| repository from GitHub
+---------------------------------------
 
 In this section, we will copy |CMEW| from GitHub
 into a directory called ``cmew_tutorial`` on the home space.

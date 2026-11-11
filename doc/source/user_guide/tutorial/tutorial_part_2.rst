@@ -1,21 +1,22 @@
 .. (C) Crown Copyright 2026, Met Office.
 .. The LICENSE.md file contains full licensing details.
 
-**********************************
-Evaluating a model run with |CMEW|
-**********************************
-
--------------------------------------------------------------------------------------------------
-Comparing the radiation budget and monsoon assessment areas of a GC5 model run to a GC3 model run
--------------------------------------------------------------------------------------------------
-
 .. include:: ../../common.txt
 
-**ii) Change the experiment dataset details**
+Change the dataset details
+--------------------------
+
+|CMEW| is set up to take a reference (control) model run,
+and compare an evaluation (experiment) run to this reference.
+
+In this section, we will use the default control run,
+but replace the experiment run with a new dataset.
 
 A typical |CMEW| user should already know what model run they would like to assess.
 For the purposes of this tutorial,
-we are going to evaluate model run ``u-cw673``.
+we are going to leave the reference run as it is (dataset ``u-bv526``), and
+evaluate model run ``u-cw673`` as the experiment.
+
 Information about this model run can be found at the following address:
 https://code.metoffice.gov.uk/trac/roses-u/browser/c/w/6/7/3/trunk/rose-suite.info
 

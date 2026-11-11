@@ -9,7 +9,7 @@ User Guide
    :maxdepth: 1
 
    Prerequisites <prerequisites_metoffice>
-   Tutorial <tutorial/tutorial.rst>
+   Tutorial <tutorial/index.rst>
    quick_start
    workflow
    Configuring datasets <configuring_datasets>
