@@ -187,10 +187,11 @@ def add_common_facets(
 
 def determine_model_id(dataset_dict):
     """
-    Add a model ID to a dataset dictionary.
+    Return the updated metadata for a model development run dataset.
 
-    The model ID is based on the combination of facets
+    The `model_id` facet is added based on the combination of facets
     `model_configuration` and `resolution`.
+    The `model_configuration` and `resolution` facets are removed.
 
     Parameters
     ----------
@@ -200,8 +201,7 @@ def determine_model_id(dataset_dict):
     Returns
     -------
     dataset_dict: dict
-        The input dataset dictionary with a `model_id` facet added
-        and the `model_configuration` and `resolution` facets removed.
+        The updated metadata for a model development run dataset.
     """
     logger.debug(
         "Determining model ID for % with %s %s resolution data",
