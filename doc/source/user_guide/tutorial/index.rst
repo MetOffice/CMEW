@@ -17,3 +17,5 @@ Comparing the radiation budget and monsoon assessment areas of a GC5 model run t
    tutorial_part_0
    tutorial_part_1
    tutorial_part_2
+   tutorial_part_3
+   tutorial_part_4

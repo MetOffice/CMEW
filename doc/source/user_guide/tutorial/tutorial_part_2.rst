@@ -3,6 +3,7 @@
 
 .. include:: ../../common.txt
 
+==========================
 Change the dataset details
 ==========================
 
@@ -31,6 +32,7 @@ evaluate model run ``u-cw673`` as the experiment.
             and a pop-up menu over the "experiment" entry.
       :width: 600px
 
+------------------------------------------------------
 1) Navigate to the dataset information in the Rose GUI
 ------------------------------------------------------
 
@@ -53,6 +55,10 @@ We need to click
          10	title=GC5 N96 ORCA1 UM13.1 YR2000 pesent day control run
    :width: 600px
 
+--------------------------------
+2) Enter our dataset information
+--------------------------------
+
 Overwrite the experiment dataset with the following details:
 
 Change the suite ID
@@ -61,7 +67,11 @@ Change the suite ID
 This is the main identifier of the model run to assess,
 informing where the data on MASS will be extracted from.
 
-**Overwrite the default value of ``suite_id`` with ``u-cw673``**
+============  =============  ====================
+Variable      Default (old)  Value to enter (new)
+============  =============  ====================
+``suite_id``  ``u-az513``    ``u-cw673``
+============  =============  ====================
 
 Change the label for plots
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -69,20 +79,28 @@ Change the label for plots
 This is a short description of the model run,
 for example you might describe the parametrization changes.
 
-*Enter the value*
- - ``CMEW tutorial model run``
+===================  =============================  ===========================
+Variable             Default (old)                  Value to enter (new)
+===================  =============================  ===========================
+``label_for_plots``  ``My run with model changes``  ``CMEW tutorial model run``
+===================  =============================  ===========================
 
 Change the model configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Line 10 of the information about the model run starts ``title=GC5 ...``.
+This is used for variable mappings by |CDDS|.
+In our dataset information, we can see that line 10 starts ``title=GC5 ...``.
 
-*Select the option*
- - ``"GC5"``
+=======================  =============  ====================
+Variable                 Default (old)  Value to enter (new)
+=======================  =============  ====================
+``model_configuration``  ``"UKESM"``      ``"GC5"``
+=======================  =============  ====================
 
 Check the resolution
 ^^^^^^^^^^^^^^^^^^^^
 
+This is used to determine mempry requirements by |CDDS|.
 Line 10 of the information about the model run continues ``... N96 ORCA1 ...``.
 
 .. dropdown:: How do we know that this is low resolution?
@@ -97,12 +115,16 @@ Line 10 of the information about the model run continues ``... N96 ORCA1 ...``.
             N215 ORCA025 is medium resolution.
       :width: 800px
 
-*Select the option*
- - ``"low"``
+==============  =============  ====================
+Variable        Default (old)  Value to enter (new)
+==============  =============  ====================
+``resolution``  `"low"``       ``"low"``
+==============  =============  ====================
 
 Change the calendar
 ^^^^^^^^^^^^^^^^^^^
 
+The calendar is determined by the set-up of the original model run.
 Model run ``u-cw673`` was set up to use a 360 day calendar.
 
 .. dropdown:: How do we find the calendar details?
@@ -116,13 +138,36 @@ Model run ``u-cw673`` was set up to use a 360 day calendar.
    The value of the **last** digit, here a 1,
    tells us that the calendar is **Gregorian**.
 
-   0 = "model time", i.e. only day number, hour and minute are set.
-   1 = Proleptic Gregorian
-   2 = 360-day calendar
-   3 = "model time", i.e. only day number, hour and minute are set.
-   4 = 365-day calendar
+   ==========  ============================================================
+   Last digit  Calendar meaning
+   ==========  ============================================================
+   0           "model time", i.e. only day number, hour and minute are set.
+   1           Proleptic Gregorian
+   2           360-day calendar
+   3           "model time", i.e. only day number, hour and minute are set.
+   4           365-day calendar
+   ==========  ============================================================
 
    |CMEW| currently only supports Gregorian and 360 day calendars.
 
-*Select the option*
- - ``"gregorian"``
+============  =============  ====================
+Variable      Default (old)  Value to enter (new)
+============  =============  ====================
+``calendar``  ``"360_day"``  ``"gregorian"``
+============  =============  ====================
+
+Confirm the dataset details
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+We have now entered new values for the variables
+
+ - ``suite_id``,
+ - ``label_for_plots``,
+ - ``model_configuration``, and
+ - ``calendar``
+
+and we have confirmed that the value for
+
+ - ``resolution``
+
+is correct.
