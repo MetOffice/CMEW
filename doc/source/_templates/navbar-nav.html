@@ -1,0 +1,30 @@
+{#
+  Displays links to fixed top-level TOCtree elements, in the header navbar.
+  Overrides https://github.com/pydata/pydata-sphinx-theme/blob/main/src/pydata_sphinx_theme/theme/pydata_sphinx_theme/components/navbar-nav.html
+  Defining a fixed header navbar allows top-level TOCtree elements to be added,
+  without impacting the header navbar.
+#}
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    <li class="nav-item {% if pagename.startswith('tutorials/') %}current active{% endif %}">
+      <a class="nav-link nav-internal" href="{{ pathto('tutorials/index') }}">
+        📚 Tutorials
+      </a>
+    </li>
+    <li class="nav-item {% if pagename.startswith('how-to_guides/') %}current active{% endif %}">
+      <a class="nav-link nav-internal" href="{{ pathto('how-to_guides/index') }}">
+        🛠️ How-to guides
+      </a>
+    </li>
+    <li class="nav-item {% if pagename.startswith('reference_materials/') %}current active{% endif %}">
+      <a class="nav-link nav-internal" href="{{ pathto('reference_materials/index') }}">
+        📖 Reference materials
+      </a>
+    </li>
+    <li class="nav-item {% if pagename.startswith('explanations/') %}current active{% endif %}">
+      <a class="nav-link nav-internal" href="{{ pathto('explanations/index') }}">
+        💡 Explanations
+      </a>
+    </li>
+  </ul>
+</nav>

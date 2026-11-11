@@ -1,0 +1,10 @@
+{# Displays a link to the support page in the GitHub repository. #}
+{% set repo_url_items = [github_url, github_user, github_repo] %}
+{% set url_items = repo_url_items + ["blob", github_version, "SUPPORT.md"] %}
+{% set url = url_items|join("/") %}
+<div class="tocsection userdocs">
+  <a href="{{ userdocs_index }}">
+    <i class="fa-solid fa-question"></i>
+      {% trans %}Get support{% endtrans %}
+  </a>
+</div>

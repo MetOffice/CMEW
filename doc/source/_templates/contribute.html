@@ -1,0 +1,14 @@
+{# Displays a link to the contributing guidelines of the GitHub repository. #}
+{% if theme_use_edit_page_button==true %}
+  {% set repo_url_items = [github_url, github_user, github_repo] %}
+  {% set url_items = repo_url_items + ["blob", github_version, "CONTRIBUTING.md"] %}
+  {% set url = url_items|join("/") %}
+  <div class="tocsection userdocs">
+    <a href="{{ userdocs_index }}">
+      <i class="fa-solid fa-pencil"></i>
+      {% block edit_this_page_text %}
+        {% trans %}Contributions are welcome!{% endtrans %}
+      {% endblock %}
+    </a>
+  </div>
+{% endif %}
