@@ -5,8 +5,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to CMEW's documentation!
-================================
+The Climate Model Evaluation Workflow
+=====================================
 
 The Climate Model Evaluation Workflow (|CMEW|)
 is a |Cylc| workflow that is used to evaluate climate models

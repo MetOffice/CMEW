@@ -53,7 +53,7 @@ rst_epilog = RST_EPILOG
 # a list of builtin themes.
 #
 # https://pydata-sphinx-theme.readthedocs.io/en/stable/user_guide/layout.html#primary-sidebar-left
-html_sidebars = {"index": ["sidebar-nav"]}
+html_sidebars = {"**": ["sidebar-nav"]}
 html_context = {
     "github_url": "https://github.com",
     "github_user": "MetOffice",
