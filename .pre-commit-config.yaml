@@ -21,7 +21,7 @@ repos:
         # using settings from pyproject.toml
         pass_filenames: false
         always_run: true
-        args: [--config=./cmewpy/pyproject.toml, .]
+        args: [--config=./CMEW/cmewpy/pyproject.toml, .]
         # Black uses pre-commit's default_language_version, see
         # https://pre-commit.com/#top_level-default_language_version
 

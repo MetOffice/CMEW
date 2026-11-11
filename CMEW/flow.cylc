@@ -32,7 +32,7 @@
             => install_package<package=cmewpy>
 {%- if USE_ESMVALTOOL_BRANCH %}
             install_package<package=cmewpy>
-            => get_esmval_branch
+            => checkout_esmvaltool
             => create_esmvaltool_config & centralise_evaluation_metadata
 {%- else %}
             install_package<package=cmewpy>
@@ -67,8 +67,11 @@
             ESMVALTOOL_DIR = ${CYLC_WORKFLOW_RUN_DIR}/lib/python/ESMValTool
             ESMVALTOOL_MODULE_NAME = {{ ESMVALTOOL_MODULE_NAME }}
             ESMVALTOOL_CONFIG_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/etc/esmvaltool_config
-            USER_CONFIG_PATH = ${ESMVALTOOL_CONFIG_DIR}/config-user.yml
-            DEV_CONFIG_PATH = ${CYLC_WORKFLOW_SHARE_DIR}/etc/config-developer.yml
+            ESMVALTOOL_USER_CONFIG = config-user.yml
+            ESMVALTOOL_SITE_DATA_KEY = {{ ESMVALTOOL_SITE_DATA_KEY }}
+            ESMVALTOOL_SITE_CONFIG = data-hpc-${ESMVALTOOL_SITE_DATA_KEY}.yml
+            USER_CONFIG_PATH = ${ESMVALTOOL_CONFIG_DIR}/${ESMVALTOOL_USER_CONFIG}
+            SITE_CONFIG_PATH = ${ESMVALTOOL_CONFIG_DIR}/${ESMVALTOOL_SITE_CONFIG}
             OUTPUT_DIR = ${CYLC_WORKFLOW_SHARE_DIR}/cycle/${CYLC_TASK_CYCLE_POINT}
             PYTHONPATH_PREPEND = ${ESMVALTOOL_DIR}
             SHARE_DATA_CDDS = ${CYLC_WORKFLOW_SHARE_DIR}/data/cdds
@@ -161,7 +164,7 @@
         [[[environment]]]
             ROSE_TASK_APP = centralise_evaluation_metadata
 
-    [[get_esmval_branch]]
+    [[checkout_esmvaltool]]
         [[[environment]]]
             ESMVALTOOL_BRANCH = {{ ESMVALTOOL_BRANCH | default("") }}
 
