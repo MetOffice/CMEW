@@ -9,12 +9,14 @@ and use it to compare model run **u-cw673** to model run **u-bv546**
 with regards to radiation budget and monsoon metrics.
 
 We will use a single terminal and a single instance of the Rose GUI.
+At some steps, the terminal will also open our internet browser.
 
 Prerequisites
 =============
 
 a) SSH access to GitHub
 b) ``moo hello``
+c) No named runs of |CMEW| in ``cylc_run``
 
 Clone the |CMEW| repository from GitHub
 =======================================

@@ -27,10 +27,13 @@ we will confirm that we are still in the directory containing the ``flow.cylc`` 
 
     pwd
 
-We will see the value ``<your home directory>/cmew_tutorial/CMEW`` returned.
+This will return the value ``<your home directory>/cmew_tutorial/CMEW``.
 
 In the same terminal, type the command::
 
     cylc vip -O metoffice
+
+This will print messages from cylc about validating and installing the workflow,
+and some ``[INFO]`` about the workflow.
 
 Congratulations, we have now set the |CMEW| workflow running.
