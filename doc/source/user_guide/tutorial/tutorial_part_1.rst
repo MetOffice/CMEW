@@ -13,9 +13,13 @@ and change the number of years to evaluate.
 **1) Navigate to the directory containing the** ``rose-suite.conf`` **file**
 
 All of the code and configuration relating to the workflow is in the directory ``CMEW``.
-Navigate to the directory ``CMEW``::
+Within the same terminal window, whish is currently pointing to ``~/cmew_tutorial``,
+navigate to the directory ``CMEW``::
 
     cd CMEW
+
+Inspect the content of the ``CMEW`` directory::
+
     ls
 
 We can confirm that files listed include ``flow.cylc`` and ``rose-suite.conf``.

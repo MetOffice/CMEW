@@ -20,7 +20,7 @@ Clone the |CMEW| repository from GitHub
 In this section, we will copy |CMEW| from GitHub
 into a directory called ``cmew_tutorial`` on the home space.
 
-**a) Create a new directory for the |CMEW| repository**
+**1) Create a new directory for the |CMEW| repository**
 
 Type the following commands into a terminal window::
 
@@ -28,7 +28,7 @@ Type the following commands into a terminal window::
     mkdir cmew_tutorial
     cd cmew_tutorial
 
-**b) Obtain the |CMEW| repository from GitHub**
+**2) Obtain the |CMEW| repository from GitHub**
 
 In your terminal, type::
 
@@ -36,7 +36,9 @@ In your terminal, type::
 
 We now have a copy of CMEW that we can inspect and run.
 
-Let's look at the |CMEW| repository.
+**3) Inspect our new repository**
+
+Let's investigate at the |CMEW| repository.
 Within the same terminal window, type::
 
     ls
@@ -50,3 +52,8 @@ We can confirm that the following have been created inside our directory `cmew_t
  - ``CONTRIBUTING.md`` (a document)
  - ``LICENSE.md`` (a document)
  - ``SECURITY.md`` (a document)
+
+.. note::
+   Cloning the CMEW repository does not have to be done every time a user wishes to run |CMEW|.
+   However, as it is likely that |CMEW| will undergo further development,
+   we recommend periodically updating the repository from GitHub.

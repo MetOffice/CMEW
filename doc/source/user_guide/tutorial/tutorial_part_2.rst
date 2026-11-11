@@ -12,7 +12,8 @@ and compare an evaluation (experiment) run to this reference.
 In this section, we will use the default control run,
 but replace the experiment run with a new dataset.
 
-A typical |CMEW| user should already know what model run they would like to assess.
+A typical |CMEW| user will already know what model run they would like to assess.
+
 For the purposes of this tutorial,
 we are going to leave the reference run as it is (dataset ``u-bv526``), and
 evaluate model run ``u-cw673`` as the experiment.
@@ -76,26 +77,44 @@ Line 10 of the information about the model run starts ``title=GC5 ...``.
 **resolution**
 
 Line 10 of the information about the model run continues ``... N96 ORCA1 ...``.
-By clicking the help button for resolution,
-we can see that this counts as low resolution data.
 
-.. image:: images/resolution_help_button.png
-   :alt: An image of a Rose GUI help page, displaying the following text:
-         This is used to determine a model ID.
-         N96 ORCA1 is low resolution.
-         N215 ORCA025 is medium resolution.
-   :width: 800px
+.. dropdown:: How do we know that this is low resolution?
+
+   By clicking the help button for resolution,
+   we can see that this counts as low resolution data.
+
+   .. image:: images/resolution_help_button.png
+      :alt: An image of a Rose GUI help page, displaying the following text:
+            This is used to determine a model ID.
+            N96 ORCA1 is low resolution.
+            N215 ORCA025 is medium resolution.
+      :width: 800px
 
 *Select the option*
  - ``"low"``
 
 **calendar**
 
-I THINK WE SHOULD HIDE ALL THE FOLLOWING DETAILS:
+This model run was set up to use a 360 day calendar.
 
-``moo_ppfp -tim :/crum/u-cw673/apm.pp/cw673a.pm1993jan.pp``
+.. dropdown:: How do we find the calendar details?
 
-12**1** means Gregorian.
+   These details can be determined directly via MASS,
+   using ``moo_ppfp`` with the ``-tim`` flag, e.g.
+   ``moo_ppfp -tim :/crum/u-cw673/apm.pp/cw673a.pm1993jan.pp``.
+
+   This returns many thousands of lines of the value ``121``.
+
+   The value of the **last** digit, here a 1,
+   tells us that the calendar is **Gregorian**.
+
+   0 = "model time", i.e. only day number, hour and minute are set.
+   1 = Proleptic Gregorian
+   2 = 360-day calendar
+   3 = "model time", i.e. only day number, hour and minute are set.
+   4 = 365-day calendar
+
+   |CMEW| currently only supports Gregorian and 360 day calendars.
 
 *Select the option*
  - ``"gregorian"``
