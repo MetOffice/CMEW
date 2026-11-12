@@ -25,6 +25,7 @@
             => create_webpage<autoassess_area>
             => create_webpage_overview
             => create_webpage_top
+            => housekeeping
 {%- if TEST %}
             create_nac_plot<autoassess_area> => check_expected_outputs<autoassess_area>
 {%- endif %}

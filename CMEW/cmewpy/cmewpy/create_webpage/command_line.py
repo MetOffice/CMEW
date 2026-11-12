@@ -2,10 +2,10 @@
 # The LICENSE.md file contains full licensing details.
 import argparse
 from pathlib import Path
-from cmewpy.html_page.create_html_page import produce_html_page
+from cmewpy.create_webpage.create_webpage import produce_webpage
 
 
-def parse_args_for_create_html_page(arguments):
+def parse_args_for_create_webpage(arguments):
     """
     Return the names and values of the command line arguments for
     :func:`main_for_create_html_page`.
@@ -44,7 +44,7 @@ def parse_args_for_create_html_page(arguments):
     return parser.parse_args(arguments)
 
 
-def main_for_create_html_page(arguments=None):
+def main_for_create_webpage(arguments=None):
     """
     Produce an HTML web page using the defined inputs and jinja2
 
@@ -54,14 +54,14 @@ def main_for_create_html_page(arguments=None):
         The command line arguments to be parsed.
     """
     # Parse the arguments.
-    args = parse_args_for_create_html_page(arguments)
+    args = parse_args_for_create_webpage(arguments)
 
     # Run the code.
     print("Copying the datasets defined in namelist files into YAML files.")
     print(f"Template file for jinja2: {args.template}")
     print(f"Output HTML path: {args.html_page}")
     print(f"Data Path: {args.data}")
-    produce_html_page(
+    produce_webpage(
         args.template,
         args.html_page,
         args.data,

@@ -46,13 +46,15 @@
             => reorganise_data_directories<evaluation_tool=esmvaltool>
             create_esmvaltool_config & reorganise_data_directories<evaluation_tool=esmvaltool>
             => run_evaluation_tool<evaluation_tool=esmvaltool><recipe>
-            => create_webpage_top & housekeeping
+            => create_webpage_top
+            => housekeeping
 {%- else %}
             centralise_evaluation_metadata
             => update_esmvaltool_recipe<recipe>
             => symlink_standardised_data
             => run_evaluation_tool<evaluation_tool=esmvaltool><recipe>
-            => create_webpage_top & housekeeping
+            => create_webpage_top
+            => housekeeping
 {%- endif %}
 {%- if TEST %}
             run_evaluation_tool<evaluation_tool=esmvaltool><recipe> => check_expected_outputs<recipe>

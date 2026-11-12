@@ -50,7 +50,7 @@ def load_data(data_path: Path | None) -> dict:
     }
 
 
-def produce_html(
+def produce_webpage(
     template_path: Path, html_path: Path, data_path: Path | None
 ) -> None:
     """Main routine to produce html page.
