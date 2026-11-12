@@ -12,6 +12,31 @@
 
 {% from "inc/dataset.cylc" import datasets, datasets_metadata %}
 
+{# What tool is running an area assessment, ESMValTool or AutoAssess? #}
+{% set SOURCE_ASSESSMENT_AREAS = {
+    "aerosols": "autoassess",
+    "africa": "autoassess",
+    "australia": "autoassess",
+    "enso": "autoassess",
+    "globaltrop": "autoassess",
+    "hydrocycle": "autoassess",
+    "land_surface": "autoassess",
+    "mjo": "autoassess",
+    "monsoon": "autoassess",
+    "radiation_budget": "esmvaltool",
+    "stratosphere": "autoassess",
+    "valnote": "autoassess"} %}
+{# Create a list of area assessments for each tool based on what has been selected #}
+{% set split_areas = {"autoassess": [], "esmvaltool": []} %}
+{% for area in ASSESSMENT_AREAS %}
+    {% set tool = SOURCE_ASSESSMENT_AREAS[area] %}
+    {% do split_areas[tool].append(area) %}
+{% endfor %}
+{# Create helper booleans to indicate if area assessments for particular tools have been selected #}
+{% set AUTOASSESS = split_areas["autoassess"] | length > 0 %}
+{% set ESMVALTOOL = split_areas["esmvaltool"] | length > 0 %}
+
+
 [scheduler]
     UTC mode = True
 
@@ -19,10 +44,11 @@
     package = autoassess, cmewpy
     evaluation_tool = autoassess, esmvaltool
     dataset = {{ datasets }}
-    recipe = radiation_budget
+{%- if ESMVALTOOL %}
+    recipe = {{ split_areas["esmvaltool"] | join(",") }}
+{%- endif %}
 {%- if AUTOASSESS %}
-    autoassess_area = valnote, aerosols, africa, australia, enso, globaltrop, \
-                        hydrocycle, land_surface, mjo, monsoon, stratosphere
+    autoassess_area = {{ split_areas["autoassess"] | join(",") }}
 {%- endif %}
 
 [scheduling]
@@ -30,6 +56,7 @@
         R1 = """
             install_env_file
             => install_package<package=cmewpy>
+{%- if ESMVALTOOL %}
 {%- if USE_ESMVALTOOL_BRANCH %}
             install_package<package=cmewpy>
             => checkout_esmvaltool
@@ -56,6 +83,7 @@
 {%- endif %}
 {%- if TEST %}
             run_evaluation_tool<evaluation_tool=esmvaltool><recipe> => check_expected_outputs<recipe>
+{%- endif %}
 {%- endif %}
         """
 
@@ -118,6 +146,7 @@
             ROSE_TASK_APP = install_package
             ROSE_APP_OPT_CONF_KEYS = ($CYLC_TASK_PARAM_package)
 
+{%- if ESMVALTOOL %}
     [[create_esmvaltool_config]]
         [[[environment]]]
             CMEW_DATA_FOR_ESMVAL_DIR = ${ROOT_REORGANISED_DIR}/GCModelDev
@@ -172,6 +201,7 @@
         inherit = STANDARDISE
         [[[environment]]]
             STANDARDISED_DATA_DIR = {{ STANDARDISED_DATA_DIR | default("") }}
+{%- endif %}
 
     [[housekeeping]]
 
