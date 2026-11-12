@@ -1,0 +1,53 @@
+# (C) Crown Copyright 2022-2026, Met Office.
+# The LICENSE.md file contains full licensing details.
+# flake8: noqa: E501
+"""
+Glossary substitutions and common links.
+
+Add in alphabetical order.
+
+Glossary substitutions make it easier
+to refer to pluralised / capitalised glossary terms.
+
+Add links in the form '.. _`<website>: <title>`: <url>'
+(the backticks enable the use of the colon in link text).
+"""
+
+GLOSSARY = """
+.. |AutoAssess| replace:: :term:`AutoAssess`
+.. |CDDS| replace:: :term:`CDDS`
+.. |CMEW| replace:: :term:`CMEW`
+.. |CMIP| replace:: :term:`CMIP`
+.. |Cylc| replace:: :term:`Cylc`
+.. |ESM| replace:: :term:`ESM`
+.. |ESMs| replace:: :term:`ESMs <ESM>`
+.. |ESMValTool| replace:: :term:`ESMValTool`
+.. |Metric| replace:: :term:`Metric`
+.. |Metrics| replace:: :term:`Metrics <Metric>`
+.. |MIAO| replace:: :term:`MIAO`
+.. |NAC Plot| replace:: :term:`NAC Plot`
+.. |Recipe| replace:: :term:`Recipe`
+.. |Recipes| replace:: :term:`Recipes <Recipe>`
+.. |Rose| replace:: :term:`Rose`
+.. |Rose Edit GUI| replace:: ``Rose Edit GUI``
+.. |rose_prune| replace:: ``rose_prune``
+"""
+
+LINKS = """
+.. Links
+
+.. _AutoAssess: https://github.com/MetOffice/AutoAssess
+.. _CMIP Documentation: https://wcrp-cmip.org/
+.. _Cylc Documentation: https://cylc.github.io/cylc-doc/stable/html/index.html
+.. _families: https://cylc.github.io/cylc-doc/stable/html/tutorial/runtime/configuration-consolidation/families.html
+.. _Cylc Review: https://cylc.github.io/cylc-doc/7.9.3/html/tutorial.html#viewing-suite-logs-in-a-web-browser-cylc-review
+.. _ESMValTool Documentation: https://esmvaltool.org/
+.. _Radiation budget: https://docs.esmvaltool.org/en/latest/recipes/recipe_radiation_budget.html
+.. _Rose Documentation: https://metomi.github.io/rose/doc/html/index.html
+.. _Rose Edit GUI: https://metomi.github.io/rose/doc/html/api/command-reference.html#rose-config-edit
+.. _rose_prune: https://metomi.github.io/rose/doc/html/api/built-in/rose_prune.html
+.. _Stratosphere: https://docs.esmvaltool.org/en/latest/recipes/recipe_autoassess_stratosphere.html
+.. _Land-surface Permafrost: https://docs.esmvaltool.org/en/latest/recipes/recipe_autoassess_landsurface_permafrost.html
+.. _Land-surface Surface Radiation: https://docs.esmvaltool.org/en/latest/recipes/recipe_autoassess_landsurface_surfrad.html
+.. _Land-surface Soil Moisture: https://docs.esmvaltool.org/en/latest/recipes/recipe_autoassess_landsurface_soilmoisture.html
+"""
