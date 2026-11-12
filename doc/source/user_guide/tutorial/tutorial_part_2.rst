@@ -101,7 +101,7 @@ Variable                 Default (old)  Value to enter (new)
 Check the resolution
 ^^^^^^^^^^^^^^^^^^^^
 
-This is used to determine mempry requirements by |CDDS|.
+This is used to determine memory requirements by |CDDS|.
 Line 10 of the information about the model run continues ``... N96 ORCA1 ...``.
 
 .. dropdown:: How do we know that this is low resolution?
@@ -119,7 +119,7 @@ Line 10 of the information about the model run continues ``... N96 ORCA1 ...``.
 ==============  =============  ====================
 Variable        Default (old)  Value to enter (new)
 ==============  =============  ====================
-``resolution``  `"low"``       ``"low"``
+``resolution``  ``"low"``       ``"low"``
 ==============  =============  ====================
 
 Change the calendar
