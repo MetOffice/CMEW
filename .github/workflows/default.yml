@@ -52,7 +52,7 @@ jobs:
       - name: Validate Cylc workflow
         run: |
           cd CMEW
-          cylc validate -O metoffice .
+          cylc validate -O metoffice -O test .
 
       - name: Run Cylc configuration linter
         run: |
