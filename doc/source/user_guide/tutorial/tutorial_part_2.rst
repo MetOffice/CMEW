@@ -37,6 +37,7 @@ evaluate model run ``u-cw673`` as the experiment.
 ------------------------------------------------------
 
 We need to click
+
  - the arrow next to **Datasets**, then
  - the arrow next to **Model runs to assess**, then
  - the section labelled **experiment**.
