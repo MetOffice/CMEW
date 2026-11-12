@@ -1,4 +1,4 @@
-# (C) Crown Copyright 2024-2025, Met Office.
+# (C) Crown Copyright 2024-2026, Met Office.
 # The LICENSE.md file contains full licensing details.
 name: cmew
 
@@ -8,7 +8,9 @@ channels:
 dependencies:
   - cylc-flow
   - cylc-rose
-  - metomi-rose
-  - sphinx
-  - sphinx_rtd_theme
+  - metomi-rose >= 2.7
   - pre-commit
+  - pydata-sphinx-theme
+  - sphinx
+  - sphinx-design
+  - sphinx-tabs

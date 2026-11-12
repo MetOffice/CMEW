@@ -11,18 +11,21 @@
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-#
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
 
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path("../../").resolve()))
+from doc.source.common import GLOSSARY, LINKS  # noqa: E402
+
+RST_EPILOG = f"{GLOSSARY}{LINKS}"
 
 # -- Project information -----------------------------------------------------
 
 project = "Climate Model Evaluation Workflow (CMEW)"
 copyright = "Crown Copyright 2022-2026, Met Office"
-author = "Emma Hogan"
-version = "0.1.0dev"
+author = "CMEW developers"
+version = "0.2.0dev"
 
 
 # -- General configuration ---------------------------------------------------
@@ -30,7 +33,9 @@ version = "0.1.0dev"
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = []
+extensions = [
+    "sphinx_design",
+]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
@@ -40,12 +45,59 @@ templates_path = ["_templates"]
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = []
 
+rst_epilog = RST_EPILOG
+
 # -- Options for HTML output -------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "sphinx_rtd_theme"
+# https://pydata-sphinx-theme.readthedocs.io/en/stable/user_guide/layout.html#primary-sidebar-left
+html_sidebars = {"**": ["sidebar-nav"]}
+html_context = {
+    "github_url": "https://github.com",
+    "github_user": "MetOffice",
+    "github_repo": "CMEW",
+    "github_version": "main",
+    "doc_path": "doc/source",
+}
+html_theme = "pydata_sphinx_theme"
+html_theme_options = {
+    # https://pydata-sphinx-theme.readthedocs.io/en/stable/user_guide/layout.html#footer
+    "footer_start": ["copyright", "last-updated"],
+    "footer_end": ["sphinx-version", "theme-version"],
+    # https://pydata-sphinx-theme.readthedocs.io/en/stable/user_guide/header-links.html#icon-links
+    "icon_links": [
+        {
+            "name": "GitHub Discussions",
+            "url": "https://github.com/MetOffice/CMEW/discussions",
+            "icon": "fa fa-comments fa-fw",
+        },
+        {
+            "name": "GitHub Issues",
+            "url": "https://github.com/MetOffice/CMEW/issues",
+            "icon": "fa-brands fa-square-github fa-fw",
+        },
+    ],
+    "icon_links_label": "Quick Links",
+    # https://pydata-sphinx-theme.readthedocs.io/en/stable/user_guide/branding.html#logo-title-and-alternative-text
+    "logo": {
+        "text": "CMEW",
+    },
+    # https://pydata-sphinx-theme.readthedocs.io/en/stable/user_guide/layout.html#secondary-sidebar-right
+    "secondary_sidebar_items": [
+        "page-toc",
+        "sourcelink",
+        "support",
+        "contribute",
+    ],
+    # https://pydata-sphinx-theme.readthedocs.io/en/stable/user_guide/navigation.html#control-how-many-navigation-levels-are-shown-by-default
+    "show_nav_level": 1,
+    # https://pydata-sphinx-theme.readthedocs.io/en/stable/user_guide/source-buttons.html#add-an-edit-button
+    "use_edit_page_button": True,
+}
+# https://pydata-sphinx-theme.readthedocs.io/en/stable/user_guide/layout.html#build-date
+html_last_updated_fmt = ""
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
