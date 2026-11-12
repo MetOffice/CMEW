@@ -5,6 +5,7 @@ from cmewpy.centralise_evaluation_metadata.add_datasets_to_share import (
     extract_sections_from_naml_content,
     convert_str_to_facets,
     add_common_facets,
+    determine_model_id,
     process_naml_content,
     list_files,
     use_facet_as_key,
@@ -84,23 +85,41 @@ def test_add_common_facets():
         "label_for_plots": "HadGEM3-GC5E-LL N96ORCA1",
         "model_id": "HadGEM3-GC5E-LL",
         "suite_id": "u-cw673",
-        "variant_label": "r1i1p1f1",
     }
 
     expected = {
+        "activity": "ESMVal",
         "calendar": "gregorian",
+        "grid": "gn",
+        "institute": "mock_institute",
         "label_for_plots": "HadGEM3-GC5E-LL N96ORCA1",
         "model_id": "HadGEM3-GC5E-LL",
         "suite_id": "u-cw673",
         "variant_label": "r1i1p1f1",
         "start_year": 1993,
         "end_year": 2002,
-        "project": "CMIP6",
+        "project": "ESMVal",
     }
 
     actual = add_common_facets(
-        START_YEAR, NUMBER_OF_YEARS, dataset_dict, INSTITUTE, "CMIP6"
+        START_YEAR, NUMBER_OF_YEARS, dataset_dict, INSTITUTE, "ESMVal"
     )
+    assert actual == expected
+
+
+def test_determine_model_id():
+    mock_dataset_dict = {
+        "model_configuration": "GC6",
+        "resolution": "medium",
+        "suite_id": "u-aa000",
+        "other_facet": "value",
+    }
+    expected = {
+        "model_id": "HadGEM3-GC5c-N216ORCA025",
+        "suite_id": "u-aa000",
+        "other_facet": "value",
+    }
+    actual = determine_model_id(mock_dataset_dict)
     assert actual == expected
 
 
