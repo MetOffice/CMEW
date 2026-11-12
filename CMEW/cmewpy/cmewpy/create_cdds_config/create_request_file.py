@@ -156,6 +156,8 @@ def create_request(
     }
     request["misc"] = dict(defaults["misc"])
     request["conversion"] = dict(defaults["conversion"])
+    # Use CMEW model parameters so CDDS can apply model-specific overrides,
+    # including the NEMO bounds configuration required by UKESM1-0-LL.
     request["conversion"]["model_params_dir"] = model_params_dir
     if raw_data_dir_mode == "use_saved":
         request["conversion"]["skip_extract"] = True
