@@ -29,7 +29,7 @@ We need to click
 -------------------------------------
 
 In this tutorial, we will use AutoAssess for the assessment area **monsoon**
-and ESMValTool for the assessment are **radiation budget**.
+and ESMValTool for the assessment area **radiation budget**.
 
 Under the heading ``Available``, tick the boxes next to
 
