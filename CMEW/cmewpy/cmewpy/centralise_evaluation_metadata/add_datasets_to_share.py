@@ -179,6 +179,64 @@ def add_common_facets(
         dataset_dict["activity"] = "ESMVal"
         dataset_dict["grid"] = "gn"
         dataset_dict["institute"] = institute
+        # This has no meaning for model runs but is needed by ESMValTool
+        dataset_dict["variant_label"] = "r1i1p1f1"
+
+    return dataset_dict
+
+
+def determine_model_id(dataset_dict):
+    """
+    Return the updated metadata for a model development run dataset.
+
+    The `model_id` facet is added based on the combination of facets
+    `model_configuration` and `resolution`.
+    The `model_configuration` and `resolution` facets are removed.
+
+    Parameters
+    ----------
+    dataset_dict: dict
+        A dictionary containing the facets of a dataset.
+
+    Returns
+    -------
+    dataset_dict: dict
+        The updated metadata for a model development run dataset.
+    """
+    logger.debug(
+        "Determining model ID for % with %s %s resolution data",
+        dataset_dict["suite_id"],
+        dataset_dict["model_configuration"],
+        dataset_dict["resolution"],
+    )
+    model_ids = {
+        ("low", "UKESM"): "UKESM1-0-LL",
+        ("low", "GC3"): "HadGEM3-GC31-LL",
+        ("low", "GC5"): "HadGEM3-GC5E-LL",
+        ("low", "GC6"): "HadGEM3-GC5c-N96ORCA1",
+        ("medium", "UKESM"): "UKESM1-0-LL",  # There isn't a UKESM1-0-MM
+        ("medium", "GC3"): "HadGEM3-GC31-MM",
+        ("medium", "GC5"): "HadGEM3-GC5E-MM",
+        ("medium", "GC6"): "HadGEM3-GC5c-N216ORCA025",
+    }
+    if (
+        dataset_dict["resolution"],
+        dataset_dict["model_configuration"],
+    ) in model_ids:
+        dataset_dict["model_id"] = model_ids[
+            (dataset_dict["resolution"], dataset_dict["model_configuration"])
+        ]
+    else:
+        raise ValueError("Unknown base model and resolution combination.")
+    logger.info(
+        "Found model ID %s for dataset %s",
+        dataset_dict["model_id"],
+        dataset_dict["suite_id"],
+    )
+
+    # Now delete the old keys as not needed
+    del dataset_dict["resolution"]
+    del dataset_dict["model_configuration"]
 
     return dataset_dict
 
@@ -322,11 +380,14 @@ def add_datasets_to_share(
             datasets = process_naml_content(
                 naml_content, start_year, number_of_years, institute, "ESMVal"
             )
-            # Update the experiment to encode the suite ID
+
+            # Add model development run facets
             for dataset in datasets:
-                dataset["experiment_id"] = (
-                    f"{dataset['experiment_id']}-{dataset['suite_id']}"
-                )
+                # Update the experiment to encode the suite ID
+                dataset["experiment_id"] = f"development-{dataset['suite_id']}"
+
+                # Add the model ID for use by CDDS and ESMValTool
+                determine_model_id(dataset)
 
             # Reformat list as a dictionary, keyed by suite ID
             dict_to_write = use_facet_as_key(datasets, "suite_id")
