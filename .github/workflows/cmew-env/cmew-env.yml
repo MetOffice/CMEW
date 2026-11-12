@@ -9,6 +9,8 @@ dependencies:
   - cylc-flow
   - cylc-rose
   - metomi-rose >= 2.7
-  - sphinx
-  - sphinx_rtd_theme
   - pre-commit
+  - pydata-sphinx-theme
+  - sphinx
+  - sphinx-design
+  - sphinx-tabs
