@@ -81,7 +81,8 @@
     [[extract_data<autoassess_area=radiation><aa_fdbk_dataset>]]
         inherit = AUTOASSESS, SITE_EXTRACT_DATA
         [[[environment]]]
-            ROSE_TASK_APP = aa_retrieve_data
+            ROSE_TASK_APP = extract_data
+            ROSE_APP_OPT_CONF_KEYS = ($CYLC_TASK_PARAM_autoassess_area)
             SUITE_ID = $CYLC_TASK_PARAM_aa_fdbk_dataset
             AREA = $CYLC_TASK_PARAM_autoassess_area
 
@@ -96,7 +97,8 @@
     [[reorganise_data_directories<evaluation_tool=autoassess><autoassess_area=radiation><aa_fdbk_dataset>]]
         inherit = AUTOASSESS, SITE_REORGANISE_DATA_DIRECTORIES
         [[[environment]]]
-            ROSE_TASK_APP = aa_index_data
+            ROSE_TASK_APP = reorganise_data_directories
+            ROSE_APP_OPT_CONF_KEYS = autoassess ($CYLC_TASK_PARAM_autoassess_area)
             SUITE_ID = $CYLC_TASK_PARAM_aa_fdbk_dataset
             AREA = $CYLC_TASK_PARAM_autoassess_area
 
