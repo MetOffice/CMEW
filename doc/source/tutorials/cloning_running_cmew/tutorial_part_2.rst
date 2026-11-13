@@ -12,8 +12,8 @@ and change the number of years to evaluate.
 --------------------------------------------------------------------
 
 All of the code and configuration relating to the workflow is in the directory ``CMEW``.
-Within the same terminal window, which is currently pointing to ``~/cmew_tutorial``,
-navigate to the directory ``CMEW``::
+On the command line, from the ``~/cmew_tutorial`` directory,
+navigate to the ``CMEW`` directory::
 
     cd CMEW
 
@@ -31,7 +31,7 @@ Open the Rose GUI::
 
     rose edit
 
-Now we will use the GUI to change the time period options.
+Now we will use the Rose GUI to change the time period options.
 
 Note the start year
 ^^^^^^^^^^^^^^^^^^^
@@ -47,7 +47,7 @@ In order to make our tutorial quicker to run,
 we will reduce the number of years to 2
 and choose assessment areas that only need two years' worth of data to run.
 
-In the GUI we need to click
+In the Rose GUI we need to click
  - the arrow next to **suite conf**, then
  - the arrow next to **Options**, then
  - the section labelled **Required**, then

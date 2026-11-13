@@ -5,10 +5,10 @@
 Change the dataset details
 ==========================
 
-|CMEW| is set up to take a reference (control) model run,
+|CMEW| is set up to take a control (reference) model run,
 and compare an evaluation (experiment) run to this reference.
 
-In this section, we will use the default control run,
+In this section, we will use the default reference run,
 but replace the experiment run with a new dataset.
 
 A typical |CMEW| user will already know what model run they would like to assess.
@@ -55,8 +55,7 @@ Overwrite the experiment dataset as follows:
 Change the suite ID
 ^^^^^^^^^^^^^^^^^^^
 
-This is the main identifier of the model run to assess,
-informing where the data on MASS will be extracted from.
+This is the unique identifier of the model run to assess.
 
 ============  =============  ====================
 Variable      Default (old)  Value to enter (new)
@@ -116,7 +115,7 @@ Change the calendar
 ^^^^^^^^^^^^^^^^^^^
 
 The calendar is determined by the set-up of the original model run.
-Model run ``u-cw673`` was set up to use a 360 day calendar.
+Model run ``u-cw673`` was set up to use a Gregorian calendar.
 
 .. dropdown:: How do we find the calendar details?
 

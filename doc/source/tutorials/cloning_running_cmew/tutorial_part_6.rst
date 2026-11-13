@@ -15,7 +15,7 @@ In this section, we will use the Cylc GUI to monitor the progress of |CMEW|.
 1) Open the Cylc GUI
 --------------------
 
-In your terminal, type the command::
+On the command line, type the command::
 
    cylc gui
 
@@ -24,7 +24,8 @@ Unless you are already logged in, you will be prompted to enter your username an
 
 Your username is of the form **firstname.lastname**.
 
-Your password is the password you use to log on to your laptop and the VDI.
+At the Met Office,
+your password is the password you use to log on to your laptop and the VDI.
 
 Once these details have been entered, a dashboard will display all running Cylc workflows.
 

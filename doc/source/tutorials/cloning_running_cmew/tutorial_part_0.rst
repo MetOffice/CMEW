@@ -3,8 +3,8 @@
 
 In this tutorial,
 we will put a copy of the |CMEW| workflow onto our local machine
-and use it to compare model run **u-cw673** to model run **u-bv546**
-with regards to radiation budget and monsoon metrics.
+and run the radiation budget and monsoon areas,
+using the model development runs **u-cw673** and **u-bv546**.
 
 We will use a single terminal, which will at times open the Rose GUI.
 At some steps, the terminal will also open our internet browser.

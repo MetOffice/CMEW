@@ -5,21 +5,21 @@ Clone the |CMEW| repository from GitHub
 =======================================
 
 In this section, we will copy |CMEW| from GitHub
-into a directory called ``cmew_tutorial`` on the home space.
+into a directory called ``cmew_tutorial`` in your home area.
 
 1) Create a new directory for the |CMEW| repository
 ---------------------------------------------------
 
-Type the following commands into a terminal window::
+Type the following on the command line::
 
-    cd ~
+    cd
     mkdir cmew_tutorial
     cd cmew_tutorial
 
 2) Obtain the |CMEW| repository from GitHub
 -------------------------------------------
 
-In your terminal, type::
+On the command line, type::
 
     git clone git@github.com:MetOffice/CMEW.git .
 
@@ -29,7 +29,7 @@ We now have a copy of CMEW that we can inspect and run.
 -----------------------------
 
 Let's investigate the |CMEW| repository.
-Within the same terminal window, type::
+On the command line, type::
 
     ls
 

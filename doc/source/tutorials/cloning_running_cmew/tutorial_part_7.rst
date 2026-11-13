@@ -9,12 +9,12 @@ Inspect the output
 The style of the pages will be determined by whether the assessment tool was AutoAssess or ESMValTool.
 
 -------------------------------------
-1) Explore the ``cylc_run`` directory
+1) Explore the ``cylc-run`` directory
 -------------------------------------
 
-In your terminal, type the commands::
+On the command line, type the commands::
 
-   cd ~/cylc_run/CMEW/GC5_vs_GC3/
+   cd ~/cylc-run/CMEW/GC5_vs_GC3/
    ls
 
 This takes us to the directory for our tutorial run of |CMEW|,
@@ -45,7 +45,7 @@ In your terminal, type the command::
 This will open an internet browser window,
 displaying output for the AutoAssess area ``monsoon``.
 No images show in the other areas,
-because we did not select them in the "Assessment Areas" section of the GUI earlier on.
+because we did not select them in the "Assessment Areas" section of the Rose GUI earlier on.
 
 .. image:: images/autoassess_output.png
    :alt: An image of a webpage with the title
@@ -98,7 +98,7 @@ Navigate to the dataset information in the Rose GUI:
  - click the arrow next to **Extra CMIP6 datasets for ESMValTool**, then
  - select the option **1**.
 
-We can confirm that dataset for the ACCESS-CM2 dataset was also present in our suite configuration.
+We can confirm that dataset for the ACCESS-CM2 dataset was also present in the configuration.
 Currently, |CMEW| will only successfully include a CMIP6 dataset in an ESMValTool recipe
 if all the necessary data already exists locally.
 The data for running the radiation budget recipe for the CMIP6 model ACCESS-CM2
