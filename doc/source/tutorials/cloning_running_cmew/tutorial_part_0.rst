@@ -6,8 +6,8 @@ we will put a copy of the |CMEW| workflow onto our local machine
 and run the radiation budget and monsoon areas,
 using the model development runs **u-cw673** and **u-bv546**.
 
-We will use a single terminal, which will at times open the Rose GUI.
-At some steps, the terminal will also open our internet browser.
+We will use the command line to run commands,
+some of these commands will open the Rose GUI and our internet browser.
 
 Prerequisites
 -------------
