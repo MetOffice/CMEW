@@ -1,37 +1,35 @@
 .. (C) Crown Copyright 2026, Met Office.
 .. The LICENSE.md file contains full licensing details.
 
-=========================
-Start the |CMEW| workflow
-=========================
+===========================
+Choose the assessment areas
+===========================
 
-Now we have configured |CMEW|, we are ready to set the workflow running.
+|CMEW| can assess multiple areas, using either ESMValTool or AutoAssess.
+In this section, we will choose one assessment area from each of these tools.
 
-------------------------------
-1) Save and close the Rose GUI
-------------------------------
+-----------------------------------------------------------
+1) Navigate to the Assessment Areas section in the Rose GUI
+-----------------------------------------------------------
 
-Click the X in the top right of the Rose GUI to close the window.
-A pop-up will appear asking whether to save the changes.
-**Click the button that says "Yes"**,
-this is the rightmost button.
+We need to click
+ - the section labelled **Assessment Areas**.
 
--------------------------------
-2) Use Cylc to run the workflow
--------------------------------
+.. image:: images/selecting_two_recipes.png
+   :alt: An image of the Rose GUI showing the "suite conf",
+         with the "Assessment areas" section selected,
+         "monsoon" and "radiation_budget" showing under the heading "Included",
+         and ticks next to "monsoon" and "radiation_budget" under the heading "Available".
+   :width: 600px
 
-Using our terminal window from earlier in the tutorial,
-we will confirm that we are still in the directory containing the ``flow.cylc`` file::
+-------------------------------------
+2) Select the Assessment Areas to run
+-------------------------------------
 
-    pwd
+In this tutorial, we will use AutoAssess for the assessment area **monsoon**
+and ESMValTool for the assessment area **radiation budget**.
 
-This will return the value ``<your home directory>/cmew_tutorial/CMEW``.
+Under the heading ``Available``, tick the boxes next to
 
-In the same terminal, type the command::
-
-    cylc vip -O metoffice
-
-This will print messages from cylc about validating and installing the workflow,
-and some ``[INFO]`` about the workflow.
-
-Congratulations, we have now set the |CMEW| workflow running.
+ - ``monsoon``, and
+ - ``radiation_budget``.

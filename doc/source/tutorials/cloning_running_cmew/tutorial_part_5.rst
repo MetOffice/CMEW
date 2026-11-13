@@ -1,53 +1,37 @@
 .. (C) Crown Copyright 2026, Met Office.
 .. The LICENSE.md file contains full licensing details.
 
-====================
-Monitor the workflow
-====================
+=========================
+Start the |CMEW| workflow
+=========================
 
-Depending on the assessment areas, number of years,
-model resolution, and state of the data on MASS,
-|CMEW| may take anywhere from a few minutes to well over an hour to run.
-
-In this section, we will use the Cylc GUI to monitor the progress of |CMEW|.
-
---------------------
-1) Open the Cylc GUI
---------------------
-
-In your terminal, type the command::
-
-   cylc gui
-
-After a few seconds, an internet browser window will open.
-Unless you are already logged in, you will be prompted to enter your username and password.
-
-Your username is of the form **firstname.lastname**.
-
-Your password is the password you use to log on to your laptop and the VDI.
-
-Once these details have been entered, a dashboard will display all running Cylc workflows.
+Now we have configured |CMEW|, we are ready to set the workflow running.
 
 ------------------------------
-2) Inspect the |CMEW| workflow
+1) Save and close the Rose GUI
 ------------------------------
 
-On the left hand side, you will notice a workflow called "CMEW/run<X>",
-where X is likely the digit 1.
+Click the X in the top right of the Rose GUI to close the window.
+A pop-up will appear asking whether to save the changes.
+**Click the button that says "Yes"**,
+this is the rightmost button.
 
-.. image:: images/cylc_gui_cmew_run.png
-   :alt: An image of the Workflows panel
-         of the Cylc GUI
-         showing the text "CMEW/run1", and,
-         under the heading "cdds_CMEW",
-         the text "run1_u-bv526"
-         and "run1_u-cw673".
-   :width: 200px
+-------------------------------
+2) Use Cylc to run the workflow
+-------------------------------
 
-The "play" arrow [triangle] to the left of the workflow name indicates that the workflow is still running.
+Using our terminal window from earlier in the tutorial,
+we will confirm that we are still in the directory containing the ``flow.cylc`` file::
 
-If we click the text of the workflow name,
-we will notice various tasks starting, running and finishing.
+    pwd
 
-We can tell that the whole workflow is complete once a "stop" square replaces the triangle.
-We will also notice that the text "CMEW/run<X>" turns grey rather than black at this time.
+This will return the value ``<your home directory>/cmew_tutorial/CMEW``.
+
+In the same terminal, type the command::
+
+    cylc vip -O metoffice
+
+This will print messages from cylc about validating and installing the workflow,
+and some ``[INFO]`` about the workflow.
+
+Congratulations, we have now set the |CMEW| workflow running.

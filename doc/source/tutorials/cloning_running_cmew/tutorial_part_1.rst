@@ -1,67 +1,49 @@
 .. (C) Crown Copyright 2026, Met Office.
 .. The LICENSE.md file contains full licensing details.
 
-Configure our |CMEW| run
-========================
+Clone the |CMEW| repository from GitHub
+=======================================
 
-CMEW can evaluate data from different time periods.
-In this section, we will learn where the start year is determined,
-and change the number of years to evaluate.
+In this section, we will copy |CMEW| from GitHub
+into a directory called ``cmew_tutorial`` on the home space.
 
-1) Navigate to the directory containing the ``rose-suite.conf`` file
---------------------------------------------------------------------
+1) Create a new directory for the |CMEW| repository
+---------------------------------------------------
 
-All of the code and configuration relating to the workflow is in the directory ``CMEW``.
-Within the same terminal window, whish is currently pointing to ``~/cmew_tutorial``,
-navigate to the directory ``CMEW``::
+Type the following commands into a terminal window::
 
-    cd CMEW
+    cd ~
+    mkdir cmew_tutorial
+    cd cmew_tutorial
 
-Inspect the content of the ``CMEW`` directory::
+2) Obtain the |CMEW| repository from GitHub
+-------------------------------------------
+
+In your terminal, type::
+
+    git clone git@github.com:MetOffice/CMEW.git .
+
+We now have a copy of CMEW that we can inspect and run.
+
+3) Inspect our new repository
+-----------------------------
+
+Let's investigate at the |CMEW| repository.
+Within the same terminal window, type::
 
     ls
 
-We can confirm that files listed include ``flow.cylc`` and ``rose-suite.conf``.
+We can confirm that the following have been created inside our directory `cmew_tutorial`:
+ - ``CMEW`` (a directory)
+ - ``CODE_OF_CONDUCT.md`` (a document)
+ - ``doc`` (a directory)
+ - ``README.md`` (a document)
+ - ``SUPPORT.md`` (a document)
+ - ``CONTRIBUTING.md`` (a document)
+ - ``LICENSE.md`` (a document)
+ - ``SECURITY.md`` (a document)
 
-2) Configure the workflow
--------------------------
-
-This is done using the Rose GUI.
-Open the Rose GUI::
-
-    rose edit
-
-Now we will use the GUI to change the time period options.
-
-Note the start year
-^^^^^^^^^^^^^^^^^^^
-
-This is currently set to 1993.
-This date is sufficient for this tutorial, and we will not amend it.
-
-Change the number of years
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Some |CMEW| assessment areas require a minimum of five years' worth of data to run.
-In order to make our tutorial quicker to run,
-we will reduce the number of years to 2
-and choose assessment areas that only need two years' worth of data to run.
-
-In the GUI we need to click
- - the arrow next to **suite conf**, then
- - the arrow next to **Options**, then
- - the section labelled **Required**, then
- - the down arrow, until **2** is displayed.
-
-.. image:: images/amending_number_of_years.png
-   :alt: An image of the Rose GUI showing the "suite conf",
-         with the "Options" section expanded,
-         the "Required" section selected,
-         and a "2" next to variable NUMBER_OF_YEARS.
-   :width: 600px
-
-Note the value of the variable ``OUTPUT_WEBPAGE_TITLE``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-This is set to *A comparison of my model run against a previous version*.
-We will find this value on our outputs later on.
+.. note::
+   Cloning the CMEW repository does not have to be done every time a user wishes to run |CMEW|.
+   However, as it is likely that |CMEW| will undergo further development,
+   we recommend periodically updating the repository from GitHub.

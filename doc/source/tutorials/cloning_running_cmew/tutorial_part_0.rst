@@ -14,51 +14,19 @@ Prerequisites
 
 a) SSH access to GitHub
 b) ``moo login``
-c) No named runs of |CMEW| in ``cylc_run``
+c) No previous runs of |CMEW| in ``cylc-run``
 
-Clone the |CMEW| repository from GitHub
-=======================================
+.. dropdown:: What if I do have previous runs of CMEW?
 
-In this section, we will copy |CMEW| from GitHub
-into a directory called ``cmew_tutorial`` on the home space.
+   We are going to use a named run of |CMEW| in this tutorial.
+   |Cylc| will not allow a mixture of named and numbered runs of the same workflow.
+   |Cylc| will also not allow the same workflow to be run from different locations,
+   and this tutorial installs |CMEW| into a new directory.
 
-1) Create a new directory for the |CMEW| repository
----------------------------------------------------
+   If the above apply,
+   then in order to follow the steps in this tutorial,
+   you will have to clean all previous runs of |CMEW|.
 
-Type the following commands into a terminal window::
+   To do this, clean all workflow containing "CMEW" with the command::
 
-    cd ~
-    mkdir cmew_tutorial
-    cd cmew_tutorial
-
-2) Obtain the |CMEW| repository from GitHub
--------------------------------------------
-
-In your terminal, type::
-
-    git clone git@github.com:MetOffice/CMEW.git .
-
-We now have a copy of CMEW that we can inspect and run.
-
-3) Inspect our new repository
------------------------------
-
-Let's investigate at the |CMEW| repository.
-Within the same terminal window, type::
-
-    ls
-
-We can confirm that the following have been created inside our directory `cmew_tutorial`:
- - ``CMEW`` (a directory)
- - ``CODE_OF_CONDUCT.md`` (a document)
- - ``doc`` (a directory)
- - ``README.md`` (a document)
- - ``SUPPORT.md`` (a document)
- - ``CONTRIBUTING.md`` (a document)
- - ``LICENSE.md`` (a document)
- - ``SECURITY.md`` (a document)
-
-.. note::
-   Cloning the CMEW repository does not have to be done every time a user wishes to run |CMEW|.
-   However, as it is likely that |CMEW| will undergo further development,
-   we recommend periodically updating the repository from GitHub.
+       cylc clean '*CMEW*'
