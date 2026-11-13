@@ -5,8 +5,8 @@ Monitor the workflow
 --------------------
 
 Depending on the assessment areas, number of years,
-model resolution, and state of the data on MASS,
-|CMEW| may take anywhere from a few minutes to well over an hour to run.
+model resolution, and various other factors,
+|CMEW| may take anywhere from a few minutes to several hours to run.
 
 In this section, we will use the Cylc GUI to monitor the progress of |CMEW|.
 
