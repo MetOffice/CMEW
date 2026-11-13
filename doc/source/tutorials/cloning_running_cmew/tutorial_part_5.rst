@@ -26,7 +26,7 @@ click the filing cabinet to save the changes to the suite.
 
 Using our terminal window from earlier in the tutorial,
 which is still pointing to ``~/cmew_tutorial/CMEW``
-(the directory containing the ``flow.cylc`` file,
+(the directory containing the ``flow.cylc`` file),
 type the command::
 
     cylc vip -O metoffice --run-name GC5_vs_GC3

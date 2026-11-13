@@ -32,22 +32,21 @@ Once these details have been entered, a dashboard will display all running Cylc 
 2) Inspect the |CMEW| workflow
 ------------------------------
 
-On the left hand side, you will notice a workflow called "CMEW/run<X>",
-where X is likely the digit 1.
+On the left hand side, you will notice a workflow called "CMEW/GC5_vs_GC3".
 
 .. image:: images/cylc_gui_cmew_run.png
    :alt: An image of the Workflows panel
-         of the Cylc GUI
-         showing the text "CMEW/run1", and,
+         of the Cylc GUI showing,
          under the heading "cdds_CMEW",
-         the text "run1_u-bv526"
-         and "run1_u-cw673".
+         the text "GC5_vs_GC3_u-bv526"
+         and "GC5_vs_GC3_u-cw673",
+         all above the text "CMEW/GC5_vs_GC3".
    :width: 200px
 
 The "play" arrow [triangle] to the left of the workflow name indicates that the workflow is still running.
 
-If we click the text of the workflow name,
+If we click the text of the workflow name
 we will notice various tasks starting, running and finishing.
 
 We can tell that the whole workflow is complete once a "stop" square replaces the triangle.
-We will also notice that the text "CMEW/run<X>" turns grey rather than black at this time.
+We will also notice that the text "CMEW/GC5_vs_GC3" turns grey rather than black at this time.

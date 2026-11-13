@@ -14,10 +14,10 @@ The style of the pages will be determined by whether the assessment tool was Aut
 
 In your terminal, type the commands::
 
-   cd ~/cylc_run/CMEW/runN/
+   cd ~/cylc_run/CMEW/GC5_vs_GC3/
    ls
 
-This takes us to the directory for the most recent run of |CMEW|,
+This takes us to the directory for our tutorial run of |CMEW|,
 and displays the contents.
 
 All of the output is in subdirectories of the shared directory for the cycle.
@@ -93,14 +93,8 @@ Here we will notice an *extra* graph, for dataset "ACCESS-CM2",
 that we did not enter into our datasets section earlier on.
 Let's find out where the instruction to include this dataset came from.
 
-In your terminal, bring up the Rose GUI::
-
-   cd ~/cmew_tutorial/CMEW
-   rose edit
-
 Navigate to the dataset information in the Rose GUI:
- - click the arrow next to **suite conf**, then
- - click the arrow next to **Datasets**, then
+ - under the section **Datasets**,
  - click the arrow next to **Extra CMIP6 datasets for ESMValTool**, then
  - select the option **1**.
 
