@@ -1,16 +1,14 @@
 .. (C) Crown Copyright 2026, Met Office.
 .. The LICENSE.md file contains full licensing details.
 
-==================
 Inspect the output
-==================
+------------------
 
 |CMEW| outputs images to webpages.
 The style of the pages will be determined by whether the assessment tool was AutoAssess or ESMValTool.
 
--------------------------------------
 1) Explore the ``cylc-run`` directory
--------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 On the command line, type the commands::
 
@@ -34,9 +32,8 @@ We will find two subdirectories at this level:
 The first of these contains our output for the ESMValTool recipe ``radiation_budget``,
 and the second contains all AutoAssess output.
 
-------------------------------
 2) Open the AutoAssess results
-------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In your terminal, type the command::
 
@@ -65,9 +62,8 @@ We can also note that a link has been created to the Validation Note ("ValNote")
 but as we did not select ``valnote`` as an assessment area earlier,
 this will not lead us to any further output.
 
-------------------------------
 3) Open the ESMValTool results
-------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In your internet browser,
 remove ``u-cw673_vs_u-bv526/index.html`` from the end of the address and press enter.

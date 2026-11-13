@@ -2,13 +2,13 @@
 .. The LICENSE.md file contains full licensing details.
 
 Clone the |CMEW| repository from GitHub
-=======================================
+---------------------------------------
 
 In this section, we will copy |CMEW| from GitHub
 into a directory called ``cmew_tutorial`` in your home area.
 
 1) Create a new directory for the |CMEW| repository
----------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Type the following on the command line::
 
@@ -17,7 +17,7 @@ Type the following on the command line::
     cd cmew_tutorial
 
 2) Obtain the |CMEW| repository from GitHub
--------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 On the command line, type::
 
@@ -26,7 +26,7 @@ On the command line, type::
 We now have a copy of CMEW that we can inspect and run.
 
 3) Inspect our new repository
------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Let's investigate the |CMEW| repository.
 On the command line, type::

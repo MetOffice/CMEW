@@ -10,7 +10,7 @@ We will use a single terminal, which will at times open the Rose GUI.
 At some steps, the terminal will also open our internet browser.
 
 Prerequisites
-=============
+-------------
 
 a) SSH access to GitHub.
 b) Access to MASS. Type ``moo login`` to confirm you are logged in.

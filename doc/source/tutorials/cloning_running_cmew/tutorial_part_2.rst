@@ -2,14 +2,14 @@
 .. The LICENSE.md file contains full licensing details.
 
 Configure our |CMEW| run
-========================
+------------------------
 
 CMEW can evaluate data from different time periods.
 In this section, we will learn where the start year is determined,
 and change the number of years to evaluate.
 
 1) Navigate to the directory containing the ``rose-suite.conf`` file
---------------------------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 All of the code and configuration relating to the workflow is in the directory ``CMEW``.
 On the command line, from the ``~/cmew_tutorial`` directory,
@@ -24,7 +24,7 @@ Inspect the content of the ``CMEW`` directory::
 We can confirm that files listed include ``flow.cylc`` and ``rose-suite.conf``.
 
 2) Configure the workflow
--------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This is done using the Rose GUI.
 Open the Rose GUI::

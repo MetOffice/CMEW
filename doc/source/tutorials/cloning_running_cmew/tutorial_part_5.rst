@@ -1,15 +1,13 @@
 .. (C) Crown Copyright 2026, Met Office.
 .. The LICENSE.md file contains full licensing details.
 
-=========================
 Start the |CMEW| workflow
-=========================
+-------------------------
 
 Now we have configured |CMEW|, we are ready to set the workflow running.
 
------------------------------------
 1) Save the changes in the Rose GUI
------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In the top left corner of the Rose GUI,
 click the filing cabinet icon to save the changes to the configuration.
@@ -20,9 +18,8 @@ click the filing cabinet icon to save the changes to the configuration.
          which is displaying the pop-up text "save".
    :width: 250px
 
--------------------------------
 2) Use Cylc to run the workflow
--------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 On the command line, from the ``~/cmew_tutorial/CMEW`` directory
 (the directory containing the ``flow.cylc`` file),

@@ -1,9 +1,8 @@
 .. (C) Crown Copyright 2026, Met Office.
 .. The LICENSE.md file contains full licensing details.
 
-==========================
 Change the dataset details
-==========================
+--------------------------
 
 |CMEW| is set up to take a control (reference) model run,
 and compare an evaluation (experiment) run to this reference.
@@ -29,9 +28,8 @@ evaluate model run ``u-cw673`` as the experiment.
             "title = GC5 N96 ORCA1 UM13.1 YR2000 present day control run".
       :width: 600px
 
-------------------------------------------------------
 1) Navigate to the dataset information in the Rose GUI
-------------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We need to click
 
@@ -46,9 +44,8 @@ We need to click
          and a pop-up menu over the "experiment" entry.
    :width: 600px
 
---------------------------------
 2) Enter our dataset information
---------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Overwrite the experiment dataset as follows:
 

@@ -1,9 +1,8 @@
 .. (C) Crown Copyright 2026, Met Office.
 .. The LICENSE.md file contains full licensing details.
 
-====================
 Monitor the workflow
-====================
+--------------------
 
 Depending on the assessment areas, number of years,
 model resolution, and state of the data on MASS,
@@ -11,9 +10,8 @@ model resolution, and state of the data on MASS,
 
 In this section, we will use the Cylc GUI to monitor the progress of |CMEW|.
 
---------------------
 1) Open the Cylc GUI
---------------------
+~~~~~~~~~~~~~~~~~~~~
 
 On the command line, type the command::
 
@@ -29,9 +27,8 @@ your password is the password you use to log on to your laptop and the VDI.
 
 Once these details have been entered, a dashboard will display all running Cylc workflows.
 
-------------------------------
 2) Inspect the |CMEW| workflow
-------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 On the left hand side, you will notice a workflow called "CMEW/GC5_vs_GC3".
 
