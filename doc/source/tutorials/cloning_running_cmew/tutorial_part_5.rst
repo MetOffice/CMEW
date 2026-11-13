@@ -21,6 +21,9 @@ click the filing cabinet icon to save the changes to the configuration.
 2) Use Cylc to run the workflow
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+We will name this run of CMEW "GC5_vs_GC3",
+so that we can easily identify it even among among multiple future runs of |CMEW|.
+
 On the command line, from the ``~/cmew_tutorial/CMEW`` directory
 (the directory containing the ``flow.cylc`` file),
 type the command::
