@@ -28,7 +28,7 @@ We now have a copy of CMEW that we can inspect and run.
 3) Inspect our new repository
 -----------------------------
 
-Let's investigate at the |CMEW| repository.
+Let's investigate the |CMEW| repository.
 Within the same terminal window, type::
 
     ls

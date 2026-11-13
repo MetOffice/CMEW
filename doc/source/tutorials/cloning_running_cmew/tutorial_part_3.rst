@@ -24,10 +24,9 @@ evaluate model run ``u-cw673`` as the experiment.
    Here is a copy of the information, for ease of reference:
 
    .. image:: images/u-cw673_suite_info.png
-      :alt: An image of the Rose GUI showing the "suite conf",
-            with the "Datasets" section expanded,
-            the "Model runs to assess" section selected,
-            and a pop-up menu over the "experiment" entry.
+      :alt: An image of a webpage showing 10 lines of code.
+            The tenth line reads
+            "title = GC5 N96 ORCA1 UM13.1 YR2000 present day control run".
       :width: 600px
 
 ------------------------------------------------------
@@ -41,24 +40,17 @@ We need to click
  - the section labelled **experiment**.
 
 .. image:: images/editing_experiment_dataset.png
-   :alt: An image of a webpage showing the following lines of code:
-         1	awarning=FOR MET OFFICE AND MONSOON USERS ONLY:
-         2	        =
-         3	        =**** THIS SUITE WILL ARCHIVE NON-DUPLEXED DATA TO MOOSE.
-         4	        =FOR CRITICAL MODEL RUNS SWITCH TO DUPLEXED IN:
-         5	        =postproc --> Post Processing - common settings --> Moose Archiving --> non_duplexed_set
-         6	        =Follow guidance in http://www-twiki/Main/MassNonDuplexPolicy
-         7	description=Copy of u-cw653/trunk@256293
-         8	owner=dancopsey
-         9	project=Coupled Climate
-         10	title=GC5 N96 ORCA1 UM13.1 YR2000 pesent day control run
+   :alt: An image of the Rose GUI showing the "suite conf",
+         with the "Datasets" section expanded,
+         the "Model runs to assess" section selected,
+         and a pop-up menu over the "experiment" entry.
    :width: 600px
 
 --------------------------------
 2) Enter our dataset information
 --------------------------------
 
-Overwrite the experiment dataset with the following details:
+Overwrite the experiment dataset as follows:
 
 Change the suite ID
 ^^^^^^^^^^^^^^^^^^^

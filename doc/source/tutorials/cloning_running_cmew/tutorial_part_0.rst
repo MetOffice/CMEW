@@ -12,9 +12,9 @@ At some steps, the terminal will also open our internet browser.
 Prerequisites
 =============
 
-a) SSH access to GitHub
-b) ``moo login``
-c) No previous runs of |CMEW| in ``cylc-run``
+a) SSH access to GitHub.
+b) Access to MASS. Type ``moo login`` to confirm you are logged in.
+c) No previous runs of |CMEW| in ``cylc-run``.
 
 .. dropdown:: What if I do have previous runs of CMEW?
 

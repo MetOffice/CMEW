@@ -12,7 +12,7 @@ and change the number of years to evaluate.
 --------------------------------------------------------------------
 
 All of the code and configuration relating to the workflow is in the directory ``CMEW``.
-Within the same terminal window, whish is currently pointing to ``~/cmew_tutorial``,
+Within the same terminal window, which is currently pointing to ``~/cmew_tutorial``,
 navigate to the directory ``CMEW``::
 
     cd CMEW
