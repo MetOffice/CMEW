@@ -14,7 +14,7 @@
             INSTITUTION_ID="MOHC"
 
 {%- if ESMVALTOOL %}
-    [[run_evaluation_tool<evaluation_tool=esmvaltool><recipe=radiation_budget>]]
+    [[run_evaluation_tool<evaluation_tool=esmvaltool><recipe>]]
         execution time limit = PT2M
         [[[directives]]]
             --mem = 3G

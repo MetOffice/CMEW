@@ -41,6 +41,7 @@ def test_create_request(monkeypatch):
     variables_file = "/path/to/variables.txt"
     raw_data_dir_mode = "use_saved"
     cdds_run_identifier = "CMEW_run1"
+    model_params_dir = "/path/to/model_params"
 
     actual = create_request_file.create_request(
         mip_table_dir,
@@ -50,6 +51,7 @@ def test_create_request(monkeypatch):
         variables_file,
         raw_data_dir_mode,
         cdds_run_identifier,
+        model_params_dir,
         request_defaults,
     )
     expected = {
@@ -64,6 +66,7 @@ def test_create_request(monkeypatch):
         "conversion": {
             "cylc_args": "--no-detach -v",
             "mip_convert_plugin": "HadGEM3",
+            "model_params_dir": model_params_dir,
             "skip_archive": True,
             "skip_extract": True,
         },
