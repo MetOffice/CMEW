@@ -13,7 +13,7 @@ Prerequisites
 =============
 
 a) SSH access to GitHub
-b) ``moo hello``
+b) ``moo login``
 c) No named runs of |CMEW| in ``cylc_run``
 
 Clone the |CMEW| repository from GitHub
