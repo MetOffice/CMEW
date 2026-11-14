@@ -39,7 +39,7 @@ An overview of the workflow
 
 ``update_esmvaltool_recipe``
   :Description:
-     Copies an updated version of the |ESMValTool| recipe
+     Copies an updated version of the |ESMValTool| |recipe|
      into the Cylc workflow ``share/etc`` directory
      in the installed workflow and configures it
      to use standardised model data.
@@ -47,15 +47,15 @@ An overview of the workflow
      and writes these to a folder in the Cylc workflow ``share/etc`` directory
      for use later in the workflow.
   :Executes:
-     For the required recipe,
+     For the required |recipe|,
      executes the ``esmvaltool recipes get`` command
      followed by the ``update_recipe_file.py`` and ``output_variables.py``
      scripts from the |Rose| app.
   :Details:
-     Runs once for each recipe,
+     Runs once for each |recipe|,
      immediately after the successful completion
      of the ``install_env_file`` job.
-     The recipe is updated with CMEW required variables
+     The |recipe| is updated with CMEW required variables
      (e.g. "Activity": "ESMVal")
      and also with user configurable variables
      from the |Rose Edit GUI|_/``rose-suite.conf``,
@@ -73,12 +73,12 @@ An overview of the workflow
   :Executes:
      The ``create_cdds_config.sh`` script from the |Rose| app.
   :Details:
-     Runs once for each recipe, immediately after the successful
+     Runs once for each |recipe|, immediately after the successful
      completion of the ``update_esmvaltool_recipe`` job.
      Generates |CDDS| request metadata for each model run (reference and evaluation):
      ``request_ref.json``, ``request_eval.json``.
      Generates a list of variables to standardise for each model run
-     based on the lists of variables required for each recipe.
+     based on the lists of variables required for each |recipe|.
      Reads model-specific values from the workflow environment.
      Creates the required directory structure to support
      multiple |CDDS| standardisation workflows
@@ -130,7 +130,7 @@ An overview of the workflow
   :Executes:
      Either |ESMValTool| or |AutoAssess|.
   :Details:
-     Runs once for each recipe,
+     Runs once for each |recipe|,
      after the successful completion of the ``run_cdds``
      and the ``create_esmvaltool_config`` jobs.
   :Families:
@@ -144,7 +144,7 @@ An overview of the workflow
      The ``check_expected_outputs.sh`` script from the |Rose| app
   :Details:
      Runs only in test mode (``-O test``)
-     for the ESMValTool recipe ``radiation_budget``
+     for the ESMValTool |recipe| ``radiation_budget``
      and the AutoAssess area ``monsoon``,
      after the completion of the ``run_evaluation_tool`` job
 
@@ -185,8 +185,8 @@ The |AutoAssess| assessments use the following steps:
 
 ``create_nac_plot<area>``
   :Description:
-     Produces a Normalised Assessment Criteria (NAC) plot based on the calculated
-     metrics in the ``run_area<area>`` task
+     Produces a |NAC plot| based on the calculated metrics in the
+     ``run_area<area>`` task
   :Executes:
      The |AutoAssess| ``aa_create_nac_plots`` script from the ``create_nac_plot`` |Rose| app.
      There is an optional configuration for the Validation Note that effectively skips
@@ -259,7 +259,7 @@ The following families are used in the workflow:
 
 ``RECIPE``
   A family that is inherited by tasks that run
-  for each recipe independently
+  for each |recipe| independently
 
 Metadata
 ~~~~~~~~
@@ -273,6 +273,6 @@ Resources
 
 The resources used by the ``run_evaluation_tool`` jobs
 are defined in the ``site/<site>.cylc`` file,
-allowing the jobs to be configured by ``SITE`` as well as by recipe.
+allowing the jobs to be configured by ``SITE`` as well as by |recipe|.
 This ensures only the required resources are requested
 when running each of the ``run_evaluation_tool`` jobs.

@@ -22,7 +22,12 @@ GLOSSARY = """
 .. |ESM| replace:: :term:`ESM`
 .. |ESMs| replace:: :term:`ESMs <ESM>`
 .. |ESMValTool| replace:: :term:`ESMValTool`
+.. |Metric| replace:: :term:`Metric`
+.. |Metrics| replace:: :term:`Metrics <Metric>`
 .. |MIAO| replace:: :term:`MIAO`
+.. |NAC Plot| replace:: :term:`NAC Plot`
+.. |Recipe| replace:: :term:`Recipe`
+.. |Recipes| replace:: :term:`Recipes <Recipe>`
 .. |Rose| replace:: :term:`Rose`
 .. |Rose Edit GUI| replace:: ``Rose Edit GUI``
 .. |rose_prune| replace:: ``rose_prune``
