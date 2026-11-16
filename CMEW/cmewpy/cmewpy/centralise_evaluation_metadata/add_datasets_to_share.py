@@ -10,6 +10,7 @@ This application reads the namelist files,
 converts the contents to a dictionary of datasets and their facets,
 then writes those dictionaries to YAML files in the share directory.
 """
+
 import os
 import yaml
 import sys
@@ -296,8 +297,7 @@ def find_reference_suite_id(rose_suite_fp):
                 return stripped.split("=", 1)[1].strip().replace('"', "")
 
     raise ValueError(
-        "Could not find suite_id in "
-        "[namelist:model_runs(reference)]"
+        "Could not find suite_id in " "[namelist:model_runs(reference)]"
     )
 
 

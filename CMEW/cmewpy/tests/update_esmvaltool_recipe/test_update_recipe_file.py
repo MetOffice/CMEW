@@ -3,6 +3,7 @@
 """
 Unit tests for 'update_recipe_file.py'.
 """
+
 from cmewpy.update_esmvaltool_recipe.update_recipe_file import (
     remove_datasets_contents,
     remove_additional_datasets,
@@ -40,7 +41,6 @@ def test_add_datasets_contents(
     actual = add_datasets_contents(recipe_without_datasets, datasets)
     expected = recipe_with_datasets
     assert actual == expected
-
 
 
 def test_update_ocean_quadmap_model_selectors():

@@ -1,6 +1,7 @@
 # (C) Crown Copyright 2026, Met Office.
 # The LICENSE.md file contains full licensing details.
 """Unit tests for add_datasets_to_share.py"""
+
 from cmewpy.centralise_evaluation_metadata.add_datasets_to_share import (
     extract_sections_from_naml_content,
     convert_str_to_facets,
@@ -22,8 +23,7 @@ INSTITUTE = "mock_institute"
 
 
 def test_extract_sections_from_naml_content():
-    naml_content_to_input = dedent(
-        """
+    naml_content_to_input = dedent("""
         &model_runs
         calendar=gregorian,
         label_for_plots=HadGEM3-GC5E-LL N96ORCA1,
@@ -38,8 +38,7 @@ def test_extract_sections_from_naml_content():
         suite_id=u-bv526,
         variant_label=r5i1p1f3,
         /
-    """
-    )
+    """)
     expected = [
         (
             "calendar=gregorian,"
@@ -126,8 +125,7 @@ def test_determine_model_id():
 
 
 def test_process_naml_content():
-    naml_content_to_input = dedent(
-        """
+    naml_content_to_input = dedent("""
         &model_runs
         calendar=gregorian,
         label_for_plots=HadGEM3-GC5E-LL N96ORCA1,
@@ -142,8 +140,7 @@ def test_process_naml_content():
         suite_id=u-bv526,
         variant_label=r5i1p1f3,
         /
-    """
-    )
+    """)
 
     expected = [
         {
@@ -232,11 +229,9 @@ def test_use_facet_as_key():
     assert actual == expected
 
 
-
 def test_find_reference_suite_id(tmp_path):
     rose_suite_fp = tmp_path / "rose-suite.conf"
-    rose_suite_fp.write_text(
-        """
+    rose_suite_fp.write_text("""
 [namelist:model_runs(1)]
 suite_id="u-eb021"
 
@@ -245,8 +240,7 @@ suite_id="u-eb014"
 
 [template variables]
 RECIPE="ocean_quadmap"
-"""
-    )
+""")
 
     actual = find_reference_suite_id(rose_suite_fp)
 
