@@ -68,17 +68,19 @@ Add content here.
 * Consider including diagrams to support the text.
 * Use any free icons from `Font Awesome`_ via an ``:fa:`` directive.
 * Use admonitions from `PyData Theme documentation: Admonitions`_.
-* Link to other files within the documentation:
 
-  * Link to pages via ``:doc:`/develop/recipe```
-    (renders as :doc:`/develop/recipe`).
-  * Link to sections via ``:ref:`diagnostic_from_example```
-    (renders as :ref:`diagnostic_from_example`).
+.. These links need amending to suit CMEW
+   * Link to other files within the documentation:
 
-* Include other files within the documentation:
+     * Link to pages via ``:doc:`/develop/recipe```
+       (renders as :doc:`/develop/recipe`).
+     * Link to sections via ``:ref:`diagnostic_from_example```
+       (renders as :ref:`diagnostic_from_example`).
 
-  .. include:: files/esmvaltool_output_header.txt
-     :code: text
+   * Include other files within the documentation:
+
+     .. include:: files/esmvaltool_output_header.txt
+        :code: text
 
 Question 2
 ----------
