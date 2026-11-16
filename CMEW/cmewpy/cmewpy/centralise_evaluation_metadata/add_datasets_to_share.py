@@ -276,6 +276,41 @@ def use_facet_as_key(data, key_facet):
     return new_dict
 
 
+def find_reference_suite_id(rose_suite_fp):
+    """Return the suite ID configured as the reference model run."""
+    section = "[namelist:model_runs(reference)]"
+    in_reference_section = False
+
+    with open(rose_suite_fp, "r") as file_handle:
+        for line in file_handle:
+            stripped = line.strip()
+
+            if stripped == section:
+                in_reference_section = True
+                continue
+
+            if in_reference_section and stripped.startswith("["):
+                break
+
+            if in_reference_section and stripped.startswith("suite_id="):
+                return stripped.split("=", 1)[1].strip().replace('"', "")
+
+    raise ValueError(
+        "Could not find suite_id in "
+        "[namelist:model_runs(reference)]"
+    )
+
+
+def add_reference_key(dataset_dict, ref_dataset):
+    """Mark the configured reference run as the benchmark dataset."""
+    if ref_dataset not in dataset_dict:
+        raise ValueError(
+            f"Reference dataset {ref_dataset!r} was not found in model runs"
+        )
+
+    dataset_dict[ref_dataset]["benchmark_dataset"] = True
+
+
 def process_naml_content(
     naml_content, start_year, number_of_years, institute, project=None
 ):
@@ -341,6 +376,7 @@ def add_datasets_to_share(
     start_year,
     number_of_years,
     institute,
+    rose_suite_fp,
 ):
     """
     Copy the datasets defined in namelist files into YAML files.
@@ -391,6 +427,11 @@ def add_datasets_to_share(
 
             # Reformat list as a dictionary, keyed by suite ID
             dict_to_write = use_facet_as_key(datasets, "suite_id")
+
+            # Mark the Rose-configured reference run.
+            ref_dataset = find_reference_suite_id(rose_suite_fp)
+            logger.info("Reference dataset: %s", ref_dataset)
+            add_reference_key(dict_to_write, ref_dataset)
 
             # Write to file
             logger.info("Writing model runs YAML")

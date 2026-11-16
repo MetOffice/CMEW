@@ -9,6 +9,8 @@ from cmewpy.centralise_evaluation_metadata.add_datasets_to_share import (
     process_naml_content,
     list_files,
     use_facet_as_key,
+    find_reference_suite_id,
+    add_reference_key,
 )
 import pytest
 from unittest.mock import patch
@@ -228,3 +230,36 @@ def test_use_facet_as_key():
     }
     actual = use_facet_as_key(list_to_input, "chosen_key")
     assert actual == expected
+
+
+
+def test_find_reference_suite_id(tmp_path):
+    rose_suite_fp = tmp_path / "rose-suite.conf"
+    rose_suite_fp.write_text(
+        """
+[namelist:model_runs(1)]
+suite_id="u-eb021"
+
+[namelist:model_runs(reference)]
+suite_id="u-eb014"
+
+[template variables]
+RECIPE="ocean_quadmap"
+"""
+    )
+
+    actual = find_reference_suite_id(rose_suite_fp)
+
+    assert actual == "u-eb014"
+
+
+def test_add_reference_key():
+    model_runs = {
+        "u-eb014": {"suite_id": "u-eb014"},
+        "u-eb021": {"suite_id": "u-eb021"},
+    }
+
+    add_reference_key(model_runs, "u-eb014")
+
+    assert model_runs["u-eb014"]["benchmark_dataset"] is True
+    assert "benchmark_dataset" not in model_runs["u-eb021"]
