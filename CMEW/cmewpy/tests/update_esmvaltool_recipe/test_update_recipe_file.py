@@ -7,6 +7,7 @@ Unit tests for 'update_recipe_file.py'.
 from cmewpy.update_esmvaltool_recipe.update_recipe_file import (
     remove_datasets_contents,
     remove_additional_datasets,
+    remove_extract_time,
     update_ocean_quadmap_model_selectors,
     construct_datasets_contents,
     add_datasets_contents,
@@ -147,3 +148,41 @@ def test_update_ocean_quadmap_model_selectors_ignores_other_scripts():
     actual = update_ocean_quadmap_model_selectors(recipe, model_runs)
 
     assert actual == expected
+
+
+def test_remove_extract_time():
+    recipe = {
+        "preprocessors": {
+            "prep_quad_map": {
+                "climate_statistics": {"operator": "mean"},
+                "extract_time": {
+                    "start_year": 2000,
+                    "end_year": 2003,
+                },
+                "regrid": {
+                    "target_grid": "WOA",
+                    "scheme": "nearest",
+                },
+            },
+            "prep_quad_map_depth": {
+                "climate_statistics": {"operator": "mean"},
+                "extract_levels": {
+                    "levels": [100.0, 200.0],
+                    "scheme": "linear",
+                },
+                "extract_time": {
+                    "start_year": 2000,
+                    "end_year": 2003,
+                },
+            },
+        }
+    }
+
+    result = remove_extract_time(recipe)
+
+    assert "extract_time" not in result["preprocessors"]["prep_quad_map"]
+    assert "extract_time" not in result["preprocessors"]["prep_quad_map_depth"]
+    assert result["preprocessors"]["prep_quad_map"]["climate_statistics"] == {
+        "operator": "mean"
+    }
+    assert "extract_levels" in result["preprocessors"]["prep_quad_map_depth"]

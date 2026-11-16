@@ -87,6 +87,13 @@ def remove_additional_datasets(recipe):
     return recipe
 
 
+def remove_extract_time(recipe):
+    """Remove hard-coded extract_time preprocessors from a recipe."""
+    for preprocessor in recipe.get("preprocessors", {}).values():
+        preprocessor.pop("extract_time", None)
+    return recipe
+
+
 def update_ocean_quadmap_model_selectors(recipe, model_runs):
     """
     Update ocean quadmap control and experiment model selectors.
@@ -257,6 +264,7 @@ def update_recipe_file(
     if recipe_id == "correlation":
         recipe = remove_additional_datasets(recipe)
     if recipe_id == "ocean_quadmap":
+        recipe = remove_extract_time(recipe)
         recipe = update_ocean_quadmap_model_selectors(recipe, model_runs)
 
     datasets = construct_datasets_contents([model_runs, cmip6_datasets])
