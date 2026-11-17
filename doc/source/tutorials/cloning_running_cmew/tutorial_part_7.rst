@@ -35,7 +35,7 @@ and the second contains all AutoAssess output.
 2) Open the AutoAssess results
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In your terminal, type the command::
+On the command line, type::
 
    gio open u-cw673_vs_u-bv526/index.html
 
@@ -73,7 +73,7 @@ Click on the folder name ``recipe_radiation_budget_<date and time>``,
 then on ``index.html``.
 
 The browser now displays outputs for the ESMValTool recipe ``radiation_budget``.
-To view the plots produced, we must scroll about two thirds of the way down the page.
+To display the plots produced, we must scroll about two thirds of the way down the page.
 
 .. image:: images/esmvaltool_output.png
    :alt: An image of a webpage section with the title

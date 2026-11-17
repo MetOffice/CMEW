@@ -76,7 +76,7 @@ Change the model configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This is used for variable mappings by |CDDS|.
-In our dataset information, we can see that line 10 starts ``title=GC5 ...``.
+In our dataset information, we note that line 10 starts ``title=GC5 ...``.
 
 =======================  =============  ====================
 Variable                 Default (old)  Value to enter (new)
@@ -92,8 +92,8 @@ Line 10 of the information about the model run continues ``... N96 ORCA1 ...``.
 
 .. dropdown:: How do we know that this is low resolution?
 
-   By clicking the help button for resolution,
-   we can see that this counts as low resolution data.
+   Clicking the help button for resolution
+   tells us that this counts as low resolution data:
 
    .. image:: images/resolution_help_button.png
       :alt: An image of a Rose GUI help page, displaying the following text:
