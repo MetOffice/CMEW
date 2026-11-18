@@ -43,8 +43,6 @@ and the second contains all AutoAssess output.
 2) Open the AutoAssess results
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-These are displayed as a webpage.
-
 .. admonition:: On the command line, type
    :class: admonition-todo
 

@@ -23,11 +23,11 @@ and ESMValTool for the assessment area **radiation budget**.
 
 All assessment areas are listed under the heading ``Available``.
 
-.. admonition:: In the Rose GUI, tick the boxes next to
+.. admonition:: In the Rose GUI, click
    :class: admonition-todo
 
-   * ``monsoon``, and
-   * ``radiation_budget``.
+   * the box next to ``monsoon``, and
+   * the box next to ``radiation_budget``.
 
 .. image:: images/selecting_two_recipes.png
    :alt: An image of the Rose GUI showing the "suite conf",
