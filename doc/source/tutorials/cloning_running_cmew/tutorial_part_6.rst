@@ -13,19 +13,22 @@ In this section, we will use the Cylc GUI to monitor the progress of |CMEW|.
 1) Open the Cylc GUI
 ~~~~~~~~~~~~~~~~~~~~
 
-On the command line, type the command::
+.. admonition:: On the command line, type
+   :class: admonition-todo
 
-   cylc gui
+   .. code-block::
+
+      cylc gui
 
 After a few seconds, an internet browser window will open.
 Unless you are already logged in, you will be prompted to enter your username and password.
 
-Your username is of the form **firstname.lastname**.
-
 At the Met Office,
-your password is the password you use to log on to your laptop and the VDI.
 
-Once these details have been entered, a dashboard will display all running Cylc workflows.
+* your username is of the form **firstname.lastname**.
+* your password is the password you use to log on to your laptop and the VDI.
+
+Once these details have been entered, a dashboard will display all running |Cylc| workflows.
 
 2) Inspect the |CMEW| workflow
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -43,8 +46,12 @@ On the left hand side, you will notice a workflow called "CMEW/GC5_vs_GC3".
 
 The "play" arrow [triangle] to the left of the workflow name indicates that the workflow is still running.
 
-If we click the text of the workflow name
-we will notice various tasks starting, running and finishing.
+.. admonition:: In the Cylc GUI, click
+   :class: admonition-todo
+
+   * the text "CMEW/GC5_vs_GC3".
+
+We will notice various tasks starting, running and finishing.
 
 We can tell that the whole workflow is complete once a "stop" square replaces the triangle.
 We will also notice that the text "CMEW/GC5_vs_GC3" turns grey rather than black at this time.

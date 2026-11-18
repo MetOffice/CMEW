@@ -9,8 +9,10 @@ Now we have configured |CMEW|, we are ready to set the workflow running.
 1) Save the changes in the Rose GUI
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In the top left corner of the Rose GUI,
-click the filing cabinet icon to save the changes to the configuration.
+.. admonition:: In the Rose GUI, click
+   :class: admonition-todo
+
+   * the filing cabinet icon in the top left.
 
 .. image:: images/rose_gui_save_button.png
    :alt: An image of the top left of the Rose GUI
@@ -24,11 +26,15 @@ click the filing cabinet icon to save the changes to the configuration.
 We will name this run of CMEW "GC5_vs_GC3",
 so that we can easily identify it even among among multiple future runs of |CMEW|.
 
-On the command line, from the ``~/cmew_tutorial/CMEW`` directory
-(the directory containing the ``flow.cylc`` file),
-type the command::
+Note that we are still in ``~/cmew_tutorial/CMEW``,
+the directory containing the ``flow.cylc`` file.
 
-    cylc vip -O metoffice --run-name GC5_vs_GC3
+.. admonition:: On the command line, type
+   :class: admonition-todo
+
+   .. code-block::
+
+      cylc vip -O metoffice --run-name GC5_vs_GC3
 
 This will print messages from cylc about validating and installing the workflow,
 and some ``[INFO]`` about the workflow.

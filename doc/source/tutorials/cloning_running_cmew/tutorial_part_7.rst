@@ -10,24 +10,32 @@ The style of the pages will be determined by whether the assessment tool was Aut
 1) Explore the ``cylc-run`` directory
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-On the command line, type the commands::
+.. admonition:: On the command line, type
+   :class: admonition-todo
 
-   cd ~/cylc-run/CMEW/GC5_vs_GC3/
-   ls
+   .. code-block::
+
+      cd ~/cylc-run/CMEW/GC5_vs_GC3/
+      ls
 
 This takes us to the directory for our tutorial run of |CMEW|,
 and displays the contents.
 
 All of the output is in subdirectories of the shared directory for the cycle.
-Navigate further into this directory::
+Navigate further into this directory:
 
-   cd share/cycle/1/
-   ls
+.. admonition:: On the command line, type
+   :class: admonition-todo
+
+   .. code-block::
+
+      cd share/cycle/1/
+      ls
 
 We will find two subdirectories at this level:
 
- - ``recipe_radiation_budget_<date and time>``, and
- - ``u-cw673_vs_u-bv526``.
+* ``recipe_radiation_budget_<date and time>``, and
+* ``u-cw673_vs_u-bv526``.
 
 The first of these contains our output for the ESMValTool recipe ``radiation_budget``,
 and the second contains all AutoAssess output.
@@ -35,9 +43,14 @@ and the second contains all AutoAssess output.
 2) Open the AutoAssess results
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-On the command line, type::
+These are displayed as a webpage.
 
-   gio open u-cw673_vs_u-bv526/index.html
+.. admonition:: On the command line, type
+   :class: admonition-todo
+
+   .. code-block::
+
+      gio open u-cw673_vs_u-bv526/index.html
 
 This will open an internet browser window,
 displaying output for the AutoAssess area ``monsoon``.
@@ -65,12 +78,19 @@ this will not lead us to any further output.
 3) Open the ESMValTool results
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In your internet browser,
-remove ``u-cw673_vs_u-bv526/index.html`` from the end of the address and press enter.
+.. admonition:: In your internet browser,
+   :class: admonition-todo
+
+   * remove ``u-cw673_vs_u-bv526/index.html`` from the end of the address, then
+   * press enter.
+
 Now the browser will display both subfolders.
 
-Click on the folder name ``recipe_radiation_budget_<date and time>``,
-then on ``index.html``.
+.. admonition:: In your internet browser, click
+   :class: admonition-todo
+
+   * the folder name ``recipe_radiation_budget_<date and time>``, then
+   * ``index.html``.
 
 The browser now displays outputs for the ESMValTool recipe ``radiation_budget``.
 To display the plots produced, we must scroll about two thirds of the way down the page.
@@ -89,12 +109,16 @@ Here we will notice an *extra* graph, for dataset "ACCESS-CM2",
 that we did not enter into our datasets section earlier on.
 Let's find out where the instruction to include this dataset came from.
 
-Navigate to the dataset information in the Rose GUI:
- - under the section **Datasets**,
- - click the arrow next to **Extra CMIP6 datasets for ESMValTool**, then
- - select the option **1**.
+Now we will navigate to the CMIP6 dataset information in the Rose GUI.
+Under the section **Datasets**:
 
-We can confirm that dataset for the ACCESS-CM2 dataset was also present in the configuration.
+.. admonition:: In the Rose GUI, click
+   :class: admonition-todo
+
+   * the arrow next to **Extra CMIP6 datasets for ESMValTool**, then
+   * the option **1**.
+
+We can confirm that details for the ACCESS-CM2 dataset were also present in the configuration.
 Currently, |CMEW| will only successfully include a CMIP6 dataset in an ESMValTool recipe
 if all the necessary data already exists locally.
 The data for running the radiation budget recipe for the CMIP6 model ACCESS-CM2

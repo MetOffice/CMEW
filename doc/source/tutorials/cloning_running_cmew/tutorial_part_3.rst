@@ -31,11 +31,12 @@ evaluate model run ``u-cw673`` as the experiment.
 1) Navigate to the dataset information in the Rose GUI
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-We need to click
+.. admonition:: In the Rose GUI, click
+   :class: admonition-todo
 
- - the arrow next to **Datasets**, then
- - the arrow next to **Model runs to assess**, then
- - the section labelled **experiment**.
+   * the arrow next to **Datasets**, then
+   * the arrow next to **Model runs to assess**, then
+   * the section labelled **experiment**.
 
 .. image:: images/editing_experiment_dataset.png
    :alt: An image of the Rose GUI showing the "suite conf",
@@ -54,11 +55,14 @@ Change the suite ID
 
 This is the unique identifier of the model run to assess.
 
-============  =============  ====================
-Variable      Default (old)  Value to enter (new)
-============  =============  ====================
-``suite_id``  ``u-az513``    ``u-cw673``
-============  =============  ====================
+.. admonition:: Change the value of the variable
+   :class: admonition-todo
+
+   ============  =============  ====================
+   Variable      Default (old)  Value to enter (new)
+   ============  =============  ====================
+   ``suite_id``  ``u-az513``    ``u-cw673``
+   ============  =============  ====================
 
 Change the label for plots
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -66,11 +70,14 @@ Change the label for plots
 This is a short description of the model run,
 for example you might describe the parametrization changes.
 
-===================  =============================  ===========================
-Variable             Default (old)                  Value to enter (new)
-===================  =============================  ===========================
-``label_for_plots``  ``My run with model changes``  ``CMEW tutorial model run``
-===================  =============================  ===========================
+.. admonition:: Change the value of the variable
+   :class: admonition-todo
+
+   ===================  =============================  ===========================
+   Variable             Default (old)                  Value to enter (new)
+   ===================  =============================  ===========================
+   ``label_for_plots``  ``My run with model changes``  ``CMEW tutorial model run``
+   ===================  =============================  ===========================
 
 Change the model configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -78,11 +85,14 @@ Change the model configuration
 This is used for variable mappings by |CDDS|.
 In our dataset information, we note that line 10 starts ``title=GC5 ...``.
 
-=======================  =============  ====================
-Variable                 Default (old)  Value to enter (new)
-=======================  =============  ====================
-``model_configuration``  ``"UKESM"``      ``"GC5"``
-=======================  =============  ====================
+.. admonition:: Change the value of the variable
+   :class: admonition-todo
+
+   =======================  =============  ====================
+   Variable                 Default (old)  Value to enter (new)
+   =======================  =============  ====================
+   ``model_configuration``  ``"UKESM"``      ``"GC5"``
+   =======================  =============  ====================
 
 Check the resolution
 ^^^^^^^^^^^^^^^^^^^^
@@ -137,24 +147,27 @@ Model run ``u-cw673`` was set up to use a Gregorian calendar.
 
    |CMEW| currently only supports Gregorian and 360 day calendars.
 
-============  =============  ====================
-Variable      Default (old)  Value to enter (new)
-============  =============  ====================
-``calendar``  ``"360_day"``  ``"gregorian"``
-============  =============  ====================
+.. admonition:: Change the value of the variable
+   :class: admonition-todo
+
+   ============  =============  ====================
+   Variable      Default (old)  Value to enter (new)
+   ============  =============  ====================
+   ``calendar``  ``"360_day"``  ``"gregorian"``
+   ============  =============  ====================
 
 Confirm the dataset details
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 We have now entered new values for the variables
 
- - ``suite_id``,
- - ``label_for_plots``,
- - ``model_configuration``, and
- - ``calendar``
+* ``suite_id``,
+* ``label_for_plots``,
+* ``model_configuration``, and
+* ``calendar``
 
 and we have confirmed that the value for
 
- - ``resolution``
+* ``resolution``
 
 is correct.
