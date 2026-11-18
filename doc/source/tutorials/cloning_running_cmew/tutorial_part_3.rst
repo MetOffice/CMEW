@@ -55,7 +55,7 @@ Change the suite ID
 
 This is the unique identifier of the model run to assess.
 
-.. admonition:: Change the value of the variable
+.. admonition:: In the Rose GUI, change
    :class: admonition-todo
 
    ============  =============  ====================
@@ -70,7 +70,7 @@ Change the label for plots
 This is a short description of the model run,
 for example you might describe the parametrization changes.
 
-.. admonition:: Change the value of the variable
+.. admonition:: In the Rose GUI, change
    :class: admonition-todo
 
    ===================  =============================  ===========================
@@ -85,7 +85,7 @@ Change the model configuration
 This is used for variable mappings by |CDDS|.
 In our dataset information, we note that line 10 starts ``title=GC5 ...``.
 
-.. admonition:: Change the value of the variable
+.. admonition:: In the Rose GUI, change
    :class: admonition-todo
 
    =======================  =============  ====================
@@ -147,7 +147,7 @@ Model run ``u-cw673`` was set up to use a Gregorian calendar.
 
    |CMEW| currently only supports Gregorian and 360 day calendars.
 
-.. admonition:: Change the value of the variable
+.. admonition:: In the Rose GUI, change
    :class: admonition-todo
 
    ============  =============  ====================
