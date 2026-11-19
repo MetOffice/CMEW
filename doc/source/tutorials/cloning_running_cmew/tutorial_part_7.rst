@@ -116,10 +116,21 @@ Under the section **Datasets**:
    * the arrow next to **Extra CMIP6 datasets for ESMValTool**, then
    * the option **1**.
 
+   .. dropdown:: Where is this option?
+
+      .. image:: images/extra_cmip6_dataset.png
+         :alt: An image of the Rose GUI showing the "suite conf" expanded,
+               the "Datasets" section expanded,
+               the "Extra CMIP6 datasets for ESMValTool" section selected,
+               and the section "1" highlighted.
+         :width: 600px
+
 We can confirm that details for the ACCESS-CM2 dataset were also present in the configuration.
-Currently, |CMEW| will only successfully include a CMIP6 dataset in an ESMValTool recipe
-if all the necessary data already exists locally.
-The data for running the radiation budget recipe for the CMIP6 model ACCESS-CM2
-had already been added to drives at the Met Office.
+
+.. note::
+   Currently, |CMEW| will only successfully include a CMIP6 dataset in an ESMValTool recipe
+   if all the necessary data already exists locally.
+   The data for running the radiation budget recipe for the CMIP6 model ACCESS-CM2
+   had already been added to drives at the Met Office.
 
 **Congratulations, you have now finished the CMEW tutorial!**
