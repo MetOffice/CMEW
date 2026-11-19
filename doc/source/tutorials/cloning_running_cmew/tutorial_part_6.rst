@@ -51,7 +51,8 @@ The "play" arrow [triangle] to the left of the workflow name indicates that the 
 
    * the text "CMEW/GC5_vs_GC3".
 
-We will notice various tasks starting, running and finishing.
+On the main panel of the |Cylc| GUI (on the right hand side of the page)
+we will notice various tasks starting, running and finishing.
 
 We can tell that the whole workflow is complete once a "stop" square replaces the triangle.
 We will also notice that the text "CMEW/GC5_vs_GC3" turns grey rather than black at this time.

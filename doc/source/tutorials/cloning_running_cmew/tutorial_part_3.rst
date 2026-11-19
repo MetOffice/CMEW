@@ -20,6 +20,7 @@ evaluate model run ``u-cw673`` as the experiment.
 
    This information was obtained from the following address:
    https://code.metoffice.gov.uk/trac/roses-u/browser/c/w/6/7/3/trunk/rose-suite.info
+
    Here is a copy of the information, for ease of reference:
 
    .. image:: images/u-cw673_suite_info.png
