@@ -1,32 +1,53 @@
 .. (C) Crown Copyright 2026, Met Office.
 .. The LICENSE.md file contains full licensing details.
 
-In this tutorial,
-we will put a copy of the |CMEW| workflow onto our local machine
-and run the radiation budget and monsoon areas,
-using the model development runs **u-cw673** and **u-bv546**.
+Overview and Prerequisites
+--------------------------
 
-We will use the command line to run commands,
-some of these commands will open the Rose GUI and our internet browser.
+.. admonition:: Overview
+   :class: note
 
-Prerequisites
--------------
+   .. card:: Learning
 
-a) SSH access to GitHub.
-b) Access to MASS. Type ``moo login`` to confirm you are logged in.
-c) No previous runs of |CMEW| in ``cylc-run``.
+      In this tutorial,
+      we will put a copy of the |CMEW| workflow onto our local machine
+      and run the radiation budget and monsoon areas,
+      using the model development runs **u-cw673** and **u-bv546**.
 
-.. dropdown:: What if I do have previous runs of CMEW?
+      We will use the command line to run commands,
+      some of these commands will open the Rose GUI and our internet browser.
 
-   We are going to use a named run of |CMEW| in this tutorial.
-   |Cylc| will not allow a mixture of named and numbered runs of the same workflow.
-   |Cylc| will also not allow the same workflow to be run from different locations,
-   and this tutorial installs |CMEW| into a new directory.
+   .. card:: Prerequisites
 
-   If the above apply,
-   then in order to follow the steps in this tutorial,
-   you will have to clean all previous runs of |CMEW|.
+      a) SSH access to GitHub.
+      b) Access to MASS. Type ``moo login`` to confirm you are logged in.
+      c) No previous runs of |CMEW| in ``cylc-run``.
 
-   To do this, clean all workflow containing "CMEW" with the command::
+      .. dropdown:: What if I do have previous runs of CMEW?
 
-       cylc clean '*CMEW*'
+         We are going to use a named run of |CMEW| in this tutorial.
+         |Cylc| will not allow a mixture of named and numbered runs of the same workflow.
+         |Cylc| will also not allow the same workflow to be run from different locations,
+         and this tutorial installs |CMEW| into a new directory.
+
+         If the above apply,
+         then in order to follow the steps in this tutorial,
+         you will have to clean all previous runs of |CMEW|.
+
+         To do this, clean all workflow containing "CMEW" with the command::
+
+            cylc clean '*CMEW*'
+
+
+   .. card:: Timings
+
+      We expect this tutorial to take around 45 minutes.
+
+   .. card:: Format
+
+      Instructions are in boxes like this.
+
+      .. admonition:: This is something to *do*
+         :class: admonition-todo
+
+         These may be commands to type or descriptions of buttons to click.
