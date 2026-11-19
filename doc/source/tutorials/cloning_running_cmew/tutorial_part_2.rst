@@ -22,7 +22,7 @@ navigate to the ``CMEW`` directory:
 
       cd CMEW
 
-Inspect the content of the ``CMEW`` directory:
+Inspect the contents of the ``CMEW`` directory:
 
 .. admonition:: On the command line, type
    :class: admonition-todo
