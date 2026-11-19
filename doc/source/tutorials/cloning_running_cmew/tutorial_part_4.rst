@@ -10,15 +10,10 @@ In this section, we will choose one assessment area from each of these tools.
 1) Navigate to the Assessment Areas section in the Rose GUI
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-We need to click
- - the section labelled **Assessment Areas**.
+.. admonition:: In the Rose GUI, click
+   :class: admonition-todo
 
-.. image:: images/selecting_two_recipes.png
-   :alt: An image of the Rose GUI showing the "suite conf",
-         with the "Assessment areas" section selected,
-         "monsoon" and "radiation_budget" showing under the heading "Included",
-         and ticks next to "monsoon" and "radiation_budget" under the heading "Available".
-   :width: 600px
+   * the section labelled **Assessment Areas**.
 
 2) Select the Assessment Areas to run
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -26,7 +21,17 @@ We need to click
 In this tutorial, we will use AutoAssess for the assessment area **monsoon**
 and ESMValTool for the assessment area **radiation budget**.
 
-Under the heading ``Available``, tick the boxes next to
+All assessment areas are listed under the heading ``Available``.
 
- - ``monsoon``, and
- - ``radiation_budget``.
+.. admonition:: In the Rose GUI, click
+   :class: admonition-todo
+
+   * the box next to ``monsoon``, and
+   * the box next to ``radiation_budget``.
+
+.. image:: images/selecting_two_recipes.png
+   :alt: An image of the Rose GUI showing the "suite conf",
+         with the "Assessment areas" section selected,
+         "monsoon" and "radiation_budget" showing under the heading "Included",
+         and ticks next to "monsoon" and "radiation_budget" under the heading "Available".
+   :width: 600px

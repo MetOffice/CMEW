@@ -13,13 +13,23 @@ and change the number of years to evaluate.
 
 All of the code and configuration relating to the workflow is in the directory ``CMEW``.
 On the command line, from the ``~/cmew_tutorial`` directory,
-navigate to the ``CMEW`` directory::
+navigate to the ``CMEW`` directory:
 
-    cd CMEW
+.. admonition:: On the command line, type
+   :class: admonition-todo
 
-Inspect the content of the ``CMEW`` directory::
+   .. code-block::
 
-    ls
+      cd CMEW
+
+Inspect the contents of the ``CMEW`` directory:
+
+.. admonition:: On the command line, type
+   :class: admonition-todo
+
+   .. code-block::
+
+      ls
 
 We can confirm that files listed include ``flow.cylc`` and ``rose-suite.conf``.
 
@@ -27,9 +37,14 @@ We can confirm that files listed include ``flow.cylc`` and ``rose-suite.conf``.
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This is done using the Rose GUI.
-Open the Rose GUI::
+Open the Rose GUI:
 
-    rose edit
+.. admonition:: On the command line, type
+   :class: admonition-todo
+
+   .. code-block::
+
+      rose edit
 
 Now we will use the Rose GUI to change the time period options.
 
@@ -47,11 +62,13 @@ In order to make our tutorial quicker to run,
 we will reduce the number of years to 2
 and choose assessment areas that only need two years' worth of data to run.
 
-In the Rose GUI we need to click
- - the arrow next to **suite conf**, then
- - the arrow next to **Options**, then
- - the section labelled **Required**, then
- - the down arrow, until **2** is displayed.
+.. admonition:: In the Rose GUI, click
+   :class: admonition-todo
+
+   * the arrow next to **suite conf**, then
+   * the arrow next to **Options**, then
+   * the section labelled **Required**, then
+   * the down arrow, until **2** is displayed.
 
 .. image:: images/amending_number_of_years.png
    :alt: An image of the Rose GUI showing the "suite conf",
