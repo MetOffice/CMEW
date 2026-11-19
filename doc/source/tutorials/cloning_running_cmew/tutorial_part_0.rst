@@ -1,7 +1,7 @@
 .. (C) Crown Copyright 2026, Met Office.
 .. The LICENSE.md file contains full licensing details.
 
-Overview and Prerequisites
+Overview and prerequisites
 --------------------------
 
 .. admonition:: Overview
