@@ -9,9 +9,12 @@
 {% set eval_dataset = datasets_metadata["model_experiment"]["suite_id"] %}
 {% set ref_label = datasets_metadata["model_reference"]["label_for_plots"] %}
 {% set eval_label = datasets_metadata["model_experiment"]["label_for_plots"] %}
+{% set ref_fdbk_dataset = datasets_metadata["model_reference"]["suite_fdbk_id"] %}
+{% set eval_fdbk_dataset = datasets_metadata["model_experiment"]["suite_fdbk_id"] %}
 
 [task parameters]
     aa_dataset = {{ [ref_dataset, eval_dataset] | join(", ") }}
+    aa_fdbk_dataset = {{ [ref_fdbk_dataset, eval_fdbk_dataset] | join(", ") }}
 
 [scheduling]
     [[graph]]
@@ -24,6 +27,13 @@
             => create_nac_plot<autoassess_area>
             => create_webpage<autoassess_area>
             => create_webpage_overview
+            # Deal with extra models for radiation assessment
+            # - Will this be ignored if radiation not in list of assessments
+            # - What if feedback model ids not specified?
+            install_package<package=autoassess>
+            => extract_data<autoassess_area=radiation><aa_fdbk_dataset>
+            => reorganise_data_directories<evaluation_tool=autoassess><autoassess_area=radiation><aa_fdbk_dataset>
+            => run_evaluation_tool<evaluation_tool=autoassess><autoassess_area=radiation>
 {%- if TEST %}
             create_nac_plot<autoassess_area> => check_expected_outputs<autoassess_area>
 {%- endif %}
@@ -40,9 +50,12 @@
     [[root]]
         [[[environment]]]
             REF_SUITE_ID = {{ ref_dataset }}
+            REF_SUITE_FDBK_ID = {{ ref_fdbk_dataset }}
             REF_SUITE_TITLE = {{ ref_label }}
             SUITE_ID = {{ eval_dataset }}
+            SUITE_FDBK_ID = {{ eval_fdbk_dataset }}
             SUITE_TITLE = {{ eval_label }}
+            FDBK_SCENARIO = "SST+4K"
 
     [[AUTOASSESS]]
         inherit = SITE_AUTOASSESS
@@ -65,12 +78,28 @@
             SUITE_ID = $CYLC_TASK_PARAM_aa_dataset
             AREA = $CYLC_TASK_PARAM_autoassess_area
 
+    [[extract_data<autoassess_area=radiation><aa_fdbk_dataset>]]
+        inherit = AUTOASSESS, SITE_EXTRACT_DATA
+        [[[environment]]]
+            ROSE_TASK_APP = extract_data
+            ROSE_APP_OPT_CONF_KEYS = ($CYLC_TASK_PARAM_autoassess_area)
+            SUITE_ID = $CYLC_TASK_PARAM_aa_fdbk_dataset
+            AREA = $CYLC_TASK_PARAM_autoassess_area
+
     [[reorganise_data_directories<evaluation_tool=autoassess><autoassess_area><aa_dataset>]]
         inherit = AUTOASSESS, SITE_REORGANISE_DATA_DIRECTORIES
         [[[environment]]]
             ROSE_TASK_APP = reorganise_data_directories
             ROSE_APP_OPT_CONF_KEYS = autoassess ($CYLC_TASK_PARAM_autoassess_area)
             SUITE_ID = $CYLC_TASK_PARAM_aa_dataset
+            AREA = $CYLC_TASK_PARAM_autoassess_area
+
+    [[reorganise_data_directories<evaluation_tool=autoassess><autoassess_area=radiation><aa_fdbk_dataset>]]
+        inherit = AUTOASSESS, SITE_REORGANISE_DATA_DIRECTORIES
+        [[[environment]]]
+            ROSE_TASK_APP = reorganise_data_directories
+            ROSE_APP_OPT_CONF_KEYS = autoassess ($CYLC_TASK_PARAM_autoassess_area)
+            SUITE_ID = $CYLC_TASK_PARAM_aa_fdbk_dataset
             AREA = $CYLC_TASK_PARAM_autoassess_area
 
     [[run_evaluation_tool<evaluation_tool=autoassess><autoassess_area>]]
