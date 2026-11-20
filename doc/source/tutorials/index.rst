@@ -6,4 +6,7 @@
 Tutorials
 =========
 
-Coming soon!
+.. toctree::
+   :maxdepth: 1
+
+   cloning_running_cmew/index
