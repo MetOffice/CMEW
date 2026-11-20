@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <title>{{ title }}</title>
+        <style>
+body {font-family: Verdana, Geneva, sans-serif;}
+h1 {text-align: center;}
+h2 {text-align: center;}
+h3 {text-align: center;}
+a {display: inline-block;
+    border-radius: 4px;
+    padding: 5px;
+    transition: 0.3s;}
+a:hover {box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);}
+tr:nth-child(even) {
+    background-color: #F5F5F5;
+}
+.nac_plot {width: 700px;}
+        </style>
+    </head>
+    <body>
+        <h1>{{ title }}</h1>
+        <hr>
+
+        <h1>{{ datasets }}</h1>
+        <h2>Period: {{ number_of_years }} years from {{ start_year }}/12/01</h2>
+        <hr>
+
+        <!-- Link to autoassess output -->
+        <a href="autoassess/index.html">AutoAssess</a>
+
+        <!-- Link to validation note -->
+        <a href="autoassess/valnote/browser.html">Validation Note</a>
+
+        <!-- Link to ESMValTool recipes -->
+        <!-- - Radiation Budget -->
+        <a href="recipe_radiation_budget/index.html">ESMValTool: Radiation Budget</a>
+
+
+    </body>
+</html>
