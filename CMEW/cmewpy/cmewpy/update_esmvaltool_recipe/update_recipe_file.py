@@ -263,7 +263,7 @@ def update_recipe_file(
     recipe = remove_datasets_contents(recipe)
     if recipe_id == "correlation":
         recipe = remove_additional_datasets(recipe)
-    if recipe_id == "ocean_quadmap":
+    if recipe_id in ("ocean_quadmap", "ocean_quadmap_seasonal"):
         recipe = remove_extract_time(recipe)
         recipe = update_ocean_quadmap_model_selectors(recipe, model_runs)
 
