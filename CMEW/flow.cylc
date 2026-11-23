@@ -24,6 +24,7 @@
     "mjo": "autoassess",
     "monsoon": "autoassess",
     "radiation_budget": "esmvaltool",
+    "radiation_budget_autoassess": "autoassess",
     "stratosphere": "autoassess",
     "valnote": "autoassess"} %}
 {# Create a list of area assessments for each tool based on what has been selected #}
