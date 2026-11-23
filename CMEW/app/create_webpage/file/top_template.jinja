@@ -20,23 +20,26 @@ tr:nth-child(even) {
         </style>
     </head>
     <body>
-        <h1>{{ title }}</h1>
+        <h1>{{ assessment_title }}</h1>
         <hr>
 
         <h1>{{ datasets }}</h1>
         <h2>Period: {{ number_of_years }} years from {{ start_year }}/12/01</h2>
         <hr>
 
-        <!-- Link to autoassess output -->
-        <a href="autoassess/index.html">AutoAssess</a>
+        <ul>
 
-        <!-- Link to validation note -->
-        <a href="autoassess/valnote/browser.html">Validation Note</a>
+          <!-- Link to autoassess output -->
+          <li><a href="autoassess/index.html">AutoAssess</a></li>
 
-        <!-- Link to ESMValTool recipes -->
-        <!-- - Radiation Budget -->
-        <a href="recipe_radiation_budget/index.html">ESMValTool: Radiation Budget</a>
+          <!-- Link to validation note -->
+          <li><a href="autoassess/valnote/browser.html">Validation Note</a></li>
 
+          <!-- Link to ESMValTool recipes -->
+          <!-- - Radiation Budget -->
+          <li><a href="recipe_radiation_budget/index.html">ESMValTool: Radiation Budget</a></li>
+
+        </ul>
 
     </body>
 </html>

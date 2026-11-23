@@ -6,10 +6,10 @@
 Script to produce an HTML file using a jinja2 template file.
 """
 
-from jinja2 import Environment, FileSystemLoader, Template
+import configparser
+from jinja2 import Environment, FileSystemLoader
 import logging
 import os
-from pathlib import Path
 import sys
 
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
@@ -17,7 +17,7 @@ filename = os.path.basename(__file__)
 logger = logging.getLogger(filename)
 
 
-def load_template(template_path: Path) -> Template:
+def load_template(template_path):
     """Load and return jinja2 template from the given path.
 
     Args:
@@ -31,28 +31,25 @@ def load_template(template_path: Path) -> Template:
     return env.get_template(template_path.name)
 
 
-def load_data(data_path: Path | None) -> dict:
+def load_data(data_path):
     """Routine to load data required for template
 
-    Currently just reading environment variables to match existing API, could
-    be set up to read a YAML, XML or config file?
+    Currently just reading data from a config/ini style file, could
+    be set up to read a YAML or XML file?
     """
-    logging.info("Using predefined environment variables to create data")
-    logging.info(f"ASSESSMENT_TITLE = {os.environ['ASSESSMENT_TITLE']}")
-    logging.info(f"DATASETS = {os.environ['DATASETS']}")
-    logging.info(f"START_YEAR = {os.environ['START_YEAR']} ")
-    logging.info(f"NUMBER_OF_YEARS = {os.environ['NUMBER_OF_YEARS']}")
-    return {
-        "title": os.environ["ASSESSMENT_TITLE"],
-        "datasets": os.environ["DATASETS"],
-        "start_year": os.environ["START_YEAR"],
-        "number_of_years": os.environ["NUMBER_OF_YEARS"],
-    }
+    logging.info(f"Reading template data from {data_path}")
+    if data_path.suffix == ".conf":
+        # Reading config/ini style input
+        config = configparser.ConfigParser()
+        config.read(data_path)
+        template_data = dict(**config["env"])
+    else:
+        logging.error("This routine can only handle config files at present")
+    logging.info(f"Template data acquired is {template_data}")
+    return template_data
 
 
-def produce_webpage(
-    template_path: Path, html_path: Path, data_path: Path | None
-) -> None:
+def produce_webpage(template_path, html_path, data_path):
     """Main routine to produce html page.
 
     Args:
