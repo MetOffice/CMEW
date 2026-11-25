@@ -12,4 +12,5 @@ Reference materials
    prerequisites_metoffice
    areas
    workflow
+   troubleshooting
    glossary
