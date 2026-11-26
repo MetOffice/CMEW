@@ -1,6 +1,7 @@
-.. _recipes_radiation:
+.. (C) Crown Copyright 2026, Met Office.
+.. The LICENSE.md file contains full licensing details.
 
-.. include:: ../../common.txt
+.. _recipes_radiation:
 
 Radiation
 =========
