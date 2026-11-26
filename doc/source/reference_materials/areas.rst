@@ -26,4 +26,5 @@ Implemented in |AutoAssess|:
    areas/land_surface/land_surface.rst
    areas/mjo/mjo.rst
    areas/monsoon/monsoon.rst
+   areas/radiation/radiation.rst
    areas/stratosphere/stratosphere.rst

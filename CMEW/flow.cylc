@@ -23,6 +23,7 @@
     "land_surface": "autoassess",
     "mjo": "autoassess",
     "monsoon": "autoassess",
+    "radiation": "autoassess",
     "radiation_budget": "esmvaltool",
     "stratosphere": "autoassess",
     "valnote": "autoassess"} %}

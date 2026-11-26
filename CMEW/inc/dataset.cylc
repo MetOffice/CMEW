@@ -45,7 +45,7 @@
     {% set match = search(".*\\:([a-zA-Z0-9]*)_[a-zA-Z0-9]*\\((.*)\\)", section) %}
     {% if match %}
         {% set dataset_name = "_".join(match.group(1, 2)) %}
-        {% for option in ["suite_id", "label_for_plots"] %}
+        {% for option in ["suite_id", "suite_fdbk_id", "label_for_plots"] %}
             {% set command = ["rose", "config", "--file=rose-suite.conf", section, option] %}
             {% set completed_process = run(command, capture_output=True, encoding="utf8") %}
             {% set raw_value = completed_process.stdout %}
