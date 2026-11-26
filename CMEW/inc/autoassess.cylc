@@ -24,6 +24,8 @@
             => create_nac_plot<autoassess_area>
             => create_webpage<autoassess_area>
             => create_webpage_overview
+            => create_webpage_top
+            => housekeeping
 {%- if TEST %}
             create_nac_plot<autoassess_area> => check_expected_outputs<autoassess_area>
 {%- endif %}
@@ -47,7 +49,7 @@
     [[AUTOASSESS]]
         inherit = SITE_AUTOASSESS
         [[[environment]]]
-            AUTOASSESS_OUTPUT_DIR = $OUTPUT_DIR/{{ eval_dataset }}_vs_{{ ref_dataset }}
+            AUTOASSESS_OUTPUT_DIR = $OUTPUT_DIR/autoassess
             AUTOASSESS_DATA_DIR = $CYLC_WORKFLOW_SHARE_DIR/data/autoassess
             ASSESSMENT_TITLE = {{ OUTPUT_WEBPAGE_TITLE }}
             ESMVALTOOL_MODULE_NAME = {{ ESMVALTOOL_MODULE_NAME }}
@@ -99,5 +101,5 @@
         [[[environment]]]
             ROSE_TASK_APP = create_webpage
             ROSE_APP_OPT_CONF_KEYS = overview
-            J2_TEMPLATE_FILE = top_level_template.jinja
+            J2_TEMPLATE_FILE = overview_template.jinja
             OUTPUT_FILE = ${AUTOASSESS_OUTPUT_DIR}/index.html

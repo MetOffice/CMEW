@@ -73,12 +73,14 @@
             => reorganise_data_directories<evaluation_tool=esmvaltool>
             create_esmvaltool_config & reorganise_data_directories<evaluation_tool=esmvaltool>
             => run_evaluation_tool<evaluation_tool=esmvaltool><recipe>
+            => create_webpage_top
             => housekeeping
 {%- else %}
             centralise_evaluation_metadata
             => update_esmvaltool_recipe<recipe>
             => symlink_standardised_data
             => run_evaluation_tool<evaluation_tool=esmvaltool><recipe>
+            => create_webpage_top
             => housekeeping
 {%- endif %}
 {%- if TEST %}
@@ -184,6 +186,12 @@
 
     [[run_evaluation_tool<evaluation_tool=esmvaltool><recipe>]]
         inherit = RECIPE
+        post-script = """
+            # Symbolic link to output to deal with add date and time
+            # - Is it better to just rename the directory?
+            ln -sfT $(ls -1d $OUTPUT_DIR/recipe_${CYLC_TASK_PARAM_recipe}_* | tail -1) \
+                $OUTPUT_DIR/recipe_${CYLC_TASK_PARAM_recipe}
+        """
         [[[environment]]]
             ROSE_TASK_APP = run_evaluation_tool
             ROSE_APP_OPT_CONF_KEYS = esmvaltool
@@ -202,6 +210,15 @@
         [[[environment]]]
             STANDARDISED_DATA_DIR = {{ STANDARDISED_DATA_DIR | default("") }}
 {%- endif %}
+
+    [[create_webpage_top]]
+        [[[environment]]]
+            ROSE_TASK_APP = create_webpage
+            ROSE_APP_OPT_CONF_KEYS = top
+            J2_TEMPLATE_FILE = top_template.jinja
+            OUTPUT_FILE = ${OUTPUT_DIR}/index.html
+            ASSESSMENT_TITLE = {{ OUTPUT_WEBPAGE_TITLE }}
+            DATASETS = {{ datasets }}
 
     [[housekeeping]]
 
