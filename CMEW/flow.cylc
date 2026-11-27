@@ -38,7 +38,7 @@
 {{ assert(
     AUTOASSESS == True or ESMVALTOOL == True,
     "Please select at least one assessment area. "
-    "See https://metoffice.github.io/CMEW/tutorials/cloning_running_cmew/tutorial_part_4.html for help."
+    "Refer to https://metoffice.github.io/CMEW/tutorials/cloning_running_cmew/tutorial_part_4.html for details."
     ) }}
 
 [scheduler]
