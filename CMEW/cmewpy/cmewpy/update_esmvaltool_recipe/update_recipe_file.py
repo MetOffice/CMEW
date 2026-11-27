@@ -87,6 +87,59 @@ def remove_additional_datasets(recipe):
     return recipe
 
 
+def remove_extract_time(recipe):
+    """Remove hard-coded extract_time preprocessors from a recipe."""
+    for preprocessor in recipe.get("preprocessors", {}).values():
+        preprocessor.pop("extract_time", None)
+    return recipe
+
+
+def update_ocean_quadmap_model_selectors(recipe, model_runs):
+    """
+    Update ocean quadmap control and experiment model selectors.
+
+    The upstream recipe hard-codes specific CMIP6 models. CMEW instead
+    derives these selectors from the configured model runs, using the
+    run marked ``benchmark_dataset`` as the control model.
+    """
+    control_runs = [
+        run
+        for run in model_runs.values()
+        if run.get("benchmark_dataset", False)
+    ]
+    experiment_runs = [
+        run
+        for run in model_runs.values()
+        if not run.get("benchmark_dataset", False)
+    ]
+
+    if len(control_runs) != 1 or len(experiment_runs) != 1:
+        raise ValueError(
+            "ocean_quadmap requires exactly one benchmark/control model "
+            "and exactly one experiment model"
+        )
+
+    def model_selector(run):
+        return {
+            "dataset": run["model_id"],
+            "ensemble": run["variant_label"],
+            "exp": run["experiment_id"],
+            "mip": "Omon",
+            "project": run["project"],
+        }
+
+    control_model = model_selector(control_runs[0])
+    exper_model = model_selector(experiment_runs[0])
+
+    for diagnostic in recipe.get("diagnostics", {}).values():
+        for script in diagnostic.get("scripts", {}).values():
+            if script.get("script") == "ocean/diagnostic_maps_quad.py":
+                script["control_model"] = control_model.copy()
+                script["exper_model"] = exper_model.copy()
+
+    return recipe
+
+
 def construct_datasets_contents(datasets):
     """
     Return the contents of a ``datasets`` section
@@ -210,6 +263,9 @@ def update_recipe_file(
     recipe = remove_datasets_contents(recipe)
     if recipe_id == "correlation":
         recipe = remove_additional_datasets(recipe)
+    if recipe_id in ("ocean_quadmap", "ocean_quadmap_seasonal"):
+        recipe = remove_extract_time(recipe)
+        recipe = update_ocean_quadmap_model_selectors(recipe, model_runs)
 
     datasets = construct_datasets_contents([model_runs, cmip6_datasets])
     recipe = add_datasets_contents(recipe, datasets)

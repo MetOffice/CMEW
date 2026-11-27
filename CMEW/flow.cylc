@@ -23,6 +23,8 @@
     "land_surface": "autoassess",
     "mjo": "autoassess",
     "monsoon": "autoassess",
+    "ocean_quadmap": "esmvaltool",
+    "ocean_quadmap_seasonal": "esmvaltool",
     "radiation_budget": "esmvaltool",
     "stratosphere": "autoassess",
     "valnote": "autoassess"} %}
@@ -154,6 +156,7 @@
     [[create_esmvaltool_config]]
         [[[environment]]]
             CMEW_DATA_FOR_ESMVAL_DIR = ${ROOT_REORGANISED_DIR}/GCModelDev
+            WOA23_OBS6_ROOTPATH = "{{ WOA23_OBS6_ROOTPATH | default("") }}"
             DRS_CMIP6 = {{ DRS_CMIP6 }}
             DRS_OBS4MIPS = {{ DRS_OBS4MIPS }}
             MAX_PARALLEL_TASKS = {{ MAX_PARALLEL_TASKS }}
