@@ -35,7 +35,11 @@
 {# Create helper booleans to indicate if area assessments for particular tools have been selected #}
 {% set AUTOASSESS = split_areas["autoassess"] | length > 0 %}
 {% set ESMVALTOOL = split_areas["esmvaltool"] | length > 0 %}
-
+{{ assert(
+    AUTOASSESS == True or ESMVALTOOL == True,
+    "Please select at least one assessment area. "
+    "Refer to https://metoffice.github.io/CMEW/tutorials/cloning_running_cmew/tutorial_part_4.html for details."
+    ) }}
 
 [scheduler]
     UTC mode = True
