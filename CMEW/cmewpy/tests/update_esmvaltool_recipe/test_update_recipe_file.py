@@ -3,9 +3,12 @@
 """
 Unit tests for 'update_recipe_file.py'.
 """
+
 from cmewpy.update_esmvaltool_recipe.update_recipe_file import (
     remove_datasets_contents,
     remove_additional_datasets,
+    remove_extract_time,
+    update_ocean_quadmap_model_selectors,
     construct_datasets_contents,
     add_datasets_contents,
 )
@@ -39,3 +42,147 @@ def test_add_datasets_contents(
     actual = add_datasets_contents(recipe_without_datasets, datasets)
     expected = recipe_with_datasets
     assert actual == expected
+
+
+def test_update_ocean_quadmap_model_selectors():
+    recipe = {
+        "diagnostics": {
+            "sea_surface_temperature": {
+                "scripts": {
+                    "Global_Ocean_map": {
+                        "script": "ocean/diagnostic_maps_quad.py",
+                        "control_model": {
+                            "dataset": "HadGEM3-GC31-LL",
+                            "project": "CMIP6",
+                        },
+                        "exper_model": {
+                            "dataset": "UKESM1-0-LL",
+                            "project": "CMIP6",
+                        },
+                    }
+                }
+            }
+        }
+    }
+
+    model_runs = {
+        "u-eb014": {
+            "benchmark_dataset": True,
+            "model_id": "UKESM1-0-LL",
+            "variant_label": "r1i1p1f1",
+            "experiment_id": "development-u-eb014",
+            "project": "ESMVal",
+        },
+        "u-eb021": {
+            "model_id": "UKESM1-0-LL",
+            "variant_label": "r1i1p1f1",
+            "experiment_id": "development-u-eb021",
+            "project": "ESMVal",
+        },
+    }
+
+    actual = update_ocean_quadmap_model_selectors(recipe, model_runs)
+
+    script = actual["diagnostics"]["sea_surface_temperature"]["scripts"][
+        "Global_Ocean_map"
+    ]
+
+    assert script["control_model"] == {
+        "dataset": "UKESM1-0-LL",
+        "ensemble": "r1i1p1f1",
+        "exp": "development-u-eb014",
+        "mip": "Omon",
+        "project": "ESMVal",
+    }
+
+    assert script["exper_model"] == {
+        "dataset": "UKESM1-0-LL",
+        "ensemble": "r1i1p1f1",
+        "exp": "development-u-eb021",
+        "mip": "Omon",
+        "project": "ESMVal",
+    }
+
+
+def test_update_ocean_quadmap_model_selectors_ignores_other_scripts():
+    recipe = {
+        "diagnostics": {
+            "other_diagnostic": {
+                "scripts": {
+                    "other_script": {
+                        "script": "some/other_diagnostic.py",
+                    }
+                }
+            }
+        }
+    }
+
+    model_runs = {
+        "u-eb014": {
+            "benchmark_dataset": True,
+            "model_id": "UKESM1-0-LL",
+            "variant_label": "r1i1p1f1",
+            "experiment_id": "development-u-eb014",
+            "project": "ESMVal",
+        },
+        "u-eb021": {
+            "model_id": "UKESM1-0-LL",
+            "variant_label": "r1i1p1f1",
+            "experiment_id": "development-u-eb021",
+            "project": "ESMVal",
+        },
+    }
+
+    expected = {
+        "diagnostics": {
+            "other_diagnostic": {
+                "scripts": {
+                    "other_script": {
+                        "script": "some/other_diagnostic.py",
+                    }
+                }
+            }
+        }
+    }
+
+    actual = update_ocean_quadmap_model_selectors(recipe, model_runs)
+
+    assert actual == expected
+
+
+def test_remove_extract_time():
+    recipe = {
+        "preprocessors": {
+            "prep_quad_map": {
+                "climate_statistics": {"operator": "mean"},
+                "extract_time": {
+                    "start_year": 2000,
+                    "end_year": 2003,
+                },
+                "regrid": {
+                    "target_grid": "WOA",
+                    "scheme": "nearest",
+                },
+            },
+            "prep_quad_map_depth": {
+                "climate_statistics": {"operator": "mean"},
+                "extract_levels": {
+                    "levels": [100.0, 200.0],
+                    "scheme": "linear",
+                },
+                "extract_time": {
+                    "start_year": 2000,
+                    "end_year": 2003,
+                },
+            },
+        }
+    }
+
+    result = remove_extract_time(recipe)
+
+    assert "extract_time" not in result["preprocessors"]["prep_quad_map"]
+    assert "extract_time" not in result["preprocessors"]["prep_quad_map_depth"]
+    assert result["preprocessors"]["prep_quad_map"]["climate_statistics"] == {
+        "operator": "mean"
+    }
+    assert "extract_levels" in result["preprocessors"]["prep_quad_map_depth"]

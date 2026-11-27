@@ -143,6 +143,10 @@ def parse_args_for_create_request_file(arguments):
         "--cdds_run_identifier",
         help="A string to identify which CMEW run spawned the CDDS workflow.",
     )
+    parser.add_argument(
+        "--model_params_dir",
+        help="The directory containing CDDS model parameter overrides.",
+    )
     return parser.parse_args(arguments)
 
 
@@ -168,6 +172,7 @@ def main_for_create_request_file(arguments=None):
     print(f"variables_file: {args.variables_file}"),
     print(f"raw_data_dir_mode: {args.raw_data_dir_mode}"),
     print(f"cdds_run_identifier: {args.cdds_run_identifier}"),
+    print(f"model_params_dir: {args.model_params_dir}"),
     create_request_file(
         args.dataset,
         args.output_filepath,
@@ -178,4 +183,5 @@ def main_for_create_request_file(arguments=None):
         args.variables_file,
         args.raw_data_dir_mode,
         args.cdds_run_identifier,
+        args.model_params_dir,
     )
